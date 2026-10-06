@@ -49,3 +49,7 @@ Escala actual DM Sans: título 28–32 px/peso 650, labels 14 px/peso 600, campo
 ### Controles compactos y frase manuscrita
 
 Mi pedido: botón visible de 36 px con área de interacción ampliada a 44 px. Casilla visible Recordarme: 16 px, dentro de label de 44 px. La frase usa Caveat 600, centrada bajo el título (20–28 px apilado y 24–30 px en escritorio), sin fondo propio. Se mantiene DM Sans en el formulario.
+
+### Corrección de posición de la frase
+
+El párrafo mantiene Caveat y se limita a 340 px en escritorio para centrarlo en la zona izquierda clara, sin alcanzar la bolsa. En composición apilada su ancho máximo es 60vw/340px, alineado a la izquierda, sin margen superior, con escala de 19–26 px. No tiene fondo propio.
