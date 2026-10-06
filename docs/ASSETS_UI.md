@@ -2,8 +2,8 @@
 
 ## Recursos del usuario
 
-- `public/images/hero-desktop.webp`: fondo horizontal suministrado, 1672 × 941.
-- `public/images/hero-mobile.webp`: fondo vertical suministrado, 941 × 1672.
+- Fondo PC activo en Cloudinary: https://res.cloudinary.com/y08rn1qr/image/upload/v1791327573/b4146a7f-588e-484e-bdea-040ffa4a6796.png. `public/images/hero-desktop.webp` conserva el recurso local anterior.
+- Fondo móvil activo en Cloudinary: https://res.cloudinary.com/y08rn1qr/image/upload/v1791327513/dae531a5-70f8-4f49-aff5-1ea88aaac133.png. `public/images/hero-mobile.webp` conserva el recurso local anterior.
 - `public/images/logo.webp`: logo suministrado, 2048 × 682, con transparencia.
 
 Se convirtió el formato a WebP para reducir la transferencia, conservando la composición. No se generó una fotografía nueva. Los archivos PNG originales copiados localmente están ignorados por Git.

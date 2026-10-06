@@ -3,8 +3,8 @@ import { SignInCard } from '../features/auth/SignInCard';
 export function SignInPage({ onHelp }: { onHelp: (action: 'register' | 'recover') => void }) {
   return <main className="sign-in-page" id="contenido">
     <picture className="hero-background" aria-hidden="true">
-      <source media="(max-width: 900px), (max-width: 1150px) and (max-aspect-ratio: 3/4)" srcSet="/images/hero-mobile.webp" />
-      <img src="/images/hero-desktop.webp" alt="" width="1672" height="941" fetchPriority="high" />
+      <source media="(max-width: 900px), (max-width: 1150px) and (max-aspect-ratio: 3/4)" srcSet="https://res.cloudinary.com/y08rn1qr/image/upload/v1791327513/dae531a5-70f8-4f49-aff5-1ea88aaac133.png" />
+      <img src="https://res.cloudinary.com/y08rn1qr/image/upload/v1791327573/b4146a7f-588e-484e-bdea-040ffa4a6796.png" alt="" width="1672" height="941" fetchPriority="high" />
     </picture>
     <div className="hero-layout">
       <section className="welcome" aria-labelledby="welcome-title">
