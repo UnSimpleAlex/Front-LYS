@@ -23,3 +23,5 @@ Cada archivo cubre una responsabilidad concreta. Codex debe leer solo los docume
 - `TESTING.md`
 - `VULNERABILIDADES.md`
 - `AGENTES_SKILLS.md`
+- INICIO_SESION_UI.md
+- ASSETS_UI.md
