@@ -21,3 +21,7 @@ Prompt utilizado:
 DM Sans se aloja en `public/fonts/DM-Sans.ttf`, procedente del [repositorio oficial Google Fonts](https://github.com/google/fonts/tree/main/ofl/dmsans), con su licencia SIL OFL en `DM-Sans-OFL.txt`.
 
 Se buscaron y compararon [Brusher](https://www.dafont.com/es/brusher.font), [Knewave](https://www.dafont.com/es/knewave.font), [Edo SZ](https://www.dafont.com/es/edo-sz.font) y [Levi Brush](https://www.dafont.com/es/levibrush.font) en DaFont. Ninguna reprodujo el lettering lo bastante cerca; no se incluyen sus archivos en la aplicación. El título usa el recurso gráfico acompañado de texto accesible.
+
+## Tipografía manuscrita de bienvenida
+
+Caveat variable (400–700), desde https://github.com/google/fonts/tree/main/ofl/caveat, alojada localmente en public/fonts/Caveat.ttf. Licencia SIL OFL 1.1 conservada en Caveat-OFL.txt. Se utiliza solo para la frase del banner. Smile Moon se descartó por decisión del usuario al requerir licencia comercial; no se incorpora al repositorio.
