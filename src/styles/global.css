@@ -1,5 +1,5 @@
 * { box-sizing: border-box; }
-body { margin: 0; min-width: 320px; }
+body { margin: 0; min-width: 240px; }
 #root { min-height: 100dvh; display: flex; flex-direction: column; }
 ::selection { background: #ce00142b; color: #08080b; }
 button, input { font: inherit; }
