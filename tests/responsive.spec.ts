@@ -39,7 +39,7 @@ for (const [width, height] of viewports) {
     expect(geometry.caption.right).toBeLessThanOrEqual(geometry.welcome.right + 1);
     expect(geometry.imagesReady).toBe(true);
     expect(geometry.fontsReady).toBe(true);
-    expect(geometry.inputHeight).toBeGreaterThanOrEqual(48);
+    expect(geometry.inputHeight).toBeGreaterThanOrEqual(46);
     expect(geometry.toggleWidth).toBeGreaterThanOrEqual(44);
     expect(geometry.card.bottom).toBeLessThanOrEqual(geometry.documentHeight);
     expect(Math.abs(geometry.pageBottom - geometry.documentHeight)).toBeLessThanOrEqual(1);

@@ -1,4 +1,4 @@
-.brand img { width: 100%; height: auto; display: block; }
+.brand img { width: 100%; height: 52px; object-fit: contain; display: block; }
 .nav-link { border: 0; background: none; font-size: 19px; color: #384f79; padding: 20px 0; position: relative; white-space: nowrap; }
 .nav-link.active { color: #08080b; font-weight: 750; }
 .nav-link.active::after { content: ''; position: absolute; bottom: 10px; left: 0; right: 0; height: 3px; background: var(--red); }
@@ -12,7 +12,7 @@
 .remember-option input { left: 0; top: 50%; transform: translateY(-50%); z-index: 1; position: absolute; width: 24px; height: 24px; margin: 0; opacity: 0; }
 .remember-option input:focus-visible + .checkbox-mark { pointer-events: none; outline: 3px solid var(--focus); outline-offset: 4px; }
 .google-button:hover { background: #f9fafc; }
-.site-header { border-bottom: 1px solid #e8ded5; box-shadow: 0 3px 14px #452c1710; flex-shrink: 0; display: flex; align-items: center; gap: 24px; height: 76px; padding: 0 2.3%; position: relative; z-index: 2; background: #fff; }
+.site-header { border-bottom: 1px solid #e8ded5; box-shadow: 0 3px 14px #452c1710; flex-shrink: 0; display: flex; align-items: center; gap: 24px; height: 64px; padding: 0 2.3%; position: relative; z-index: 2; background: #fff; }
 .brand { display: block; flex: 0 0 auto; width: clamp(195px, 16vw, 250px); }
 .desktop-nav { flex: 1; display: flex; align-items: center; justify-content: center; gap: clamp(16px, 2vw, 36px); }
 .nav-link, .login-link { font-size: 16px; }
@@ -21,26 +21,26 @@
 .order-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; color: var(--red); background: #fff; border: 1.5px solid var(--red); border-radius: 9px; padding: 8px 22px; min-height: 44px; white-space: nowrap; font-size: 18px; transition: background-color 150ms, transform 150ms; }
 .menu-toggle { display: none; padding: 0; border: 0; background: none; width: 44px; height: 44px; align-items: center; justify-content: center; flex-shrink: 0; }
 .menu-toggle svg { width: 26px; height: 26px; }
-.sign-in-page { position: relative; min-height: calc(100dvh - 76px); overflow: visible; flex: 1; display: grid; }
+.sign-in-page { position: relative; min-height: calc(100dvh - 64px); overflow: visible; flex: 1; display: grid; }
 .hero-background img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: left top; }
 .hero-background::after { content: ""; position: absolute; inset: 0 0 auto; height: min(42%, 380px); background: linear-gradient(#ffffffd9, #ffffffb8 48%, #ffffff00); }
 .hero-layout { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(420px, 520px); gap: clamp(28px, 4vw, 80px); width: 90%; max-width: 1700px; margin: 0 auto; padding-top: 38px; padding-bottom: 65px; padding: clamp(24px, 4vh, 48px) 0; align-items: start; }
 .welcome { padding: 0 0 0 38px; padding-left: 24px; }
 .welcome h1 { margin: 0 0 0 -16px; line-height: 0; }
-.welcome-lettering { width: min(100%, 664px); height: auto; display: block; }
-.welcome p { color: #354964; font-size: clamp(16px, 1.3vw, 21px); font-weight: 500; line-height: 1.5; margin: 18px 0 0; padding: 10px 14px; width: fit-content; max-width: 100%; background: #fff; border-radius: 8px; letter-spacing: normal; }
+.welcome-lettering { width: min(100%, 550px); height: auto; display: block; }
+.welcome p { color: #354964; font-size: clamp(16px, 1.3vw, 21px); font-weight: 500; line-height: 1.5; margin: 12px 0 0; padding: 0; width: fit-content; max-width: 100%; letter-spacing: normal; }
 .sign-in-card { padding: clamp(24px, 2vw, 36px); background: #fff; border-radius: var(--card-radius); box-shadow: 0 12px 36px #241b151c; align-self: start; scroll-margin-top: 24px; width: 100%; animation: card-enter 300ms var(--ease-out); }
 .sign-in-card h2 { font-size: clamp(28px, 2vw, 32px); font-weight: 650; line-height: 1.25; letter-spacing: -.03em; margin: 0 0 30px; margin-bottom: 20px; }
 .fields { display: grid; gap: 16px; }
 .field-group { display: grid; gap: 7px; }
 .field-label { font-size: 14px; font-weight: 600; color: #455775; }
-.input-field { display: flex; align-items: center; gap: 12px; min-height: 50px; border: 2px solid var(--input-border); border-radius: var(--field-radius); padding: 0 17px; color: #687b9c; border-width: 1.5px; padding-inline: 14px; transition: border-color 160ms, background-color 160ms, box-shadow 160ms; }
+.input-field { display: flex; align-items: center; gap: 12px; min-height: 46px; border: 2px solid var(--input-border); border-radius: var(--field-radius); padding: 0 17px; color: #687b9c; border-width: 1px; padding-inline: 14px; transition: border-color 160ms, background-color 160ms, box-shadow 160ms; }
 .input-field:hover { border-color: #a3b0c5; }
 .input-field:has(input:not(:placeholder-shown)) { background: #fafbfe; border-color: #a3b0c5; }
 .input-field:focus-within { border-color: var(--focus); box-shadow: 0 0 0 3px #24487d18; background: #fff; color: var(--focus); }
 .input-field > svg { width: 21px; height: 21px; transition: transform 180ms var(--ease-out); }
 .input-field:focus-within > svg { transform: translateY(-1px); }
-.input-field input { width: 100%; min-width: 0; border: 0; outline: none; background: none; color: #08080b; padding: 15px 0; font-size: 16px; letter-spacing: normal; padding-block: 14px; caret-color: var(--button-red); }
+.input-field input { width: 100%; min-width: 0; border: 0; outline: none; background: none; color: #08080b; padding: 15px 0; font-size: 16px; letter-spacing: normal; padding-block: 8px; caret-color: var(--button-red); }
 .input-field:has(input[aria-invalid=true]) { border-color: var(--button-red); background: #fff8f8; }
 .input-field:has(input:disabled) { background: #f2f4f8; border-color: #dce1ec; color: #8490a3; }
 .input-field input:disabled { color: #69758a; cursor: not-allowed; }
@@ -83,18 +83,19 @@
  .mobile-nav button:hover, .mobile-nav a:hover { background: #fff1f1; }
 }
 @media (max-width: 900px), (min-width: 901px) and (max-width: 1150px) and (max-aspect-ratio: 3/4) {
- .site-header { border-bottom: 1px solid #e8ded5; box-shadow: 0 3px 14px #452c1710; flex-shrink: 0; height: 68px; padding-inline: 5%; gap: 8px; }
+ .site-header { border-bottom: 1px solid #e8ded5; box-shadow: 0 3px 14px #452c1710; flex-shrink: 0; height: 60px; padding-inline: 5%; gap: 8px; }
  .brand { width: clamp(124px, 38vw, 220px); }
+ .brand img { height: 44px; }
  .header-actions { gap: clamp(6px, 2vw, 20px); }
  .order-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-size: clamp(13px, 2vw, 18px); padding-inline: clamp(8px, 2vw, 18px); }
- .sign-in-page { min-height: calc(100dvh - 68px); }
+ .sign-in-page { min-height: calc(100dvh - 60px); }
  .hero-background img { width: 100%; height: auto; object-fit: initial; }
  .hero-background::after { height: min(42vw, 380px); }
  .hero-layout { display: flex; flex-direction: column; width: 90%; padding: 12px 0 24px; gap: 0; }
  .welcome { padding: 0 0 0 5%; min-height: min(77vw, 640px); }
  .welcome h1 { margin: 0; }
  .welcome-lettering { width: min(100%, 66vw, 660px); }
- .welcome p { font-size: clamp(15px, 2.1vw, 19px); margin: 12px 0 0; padding: 8px 10px; }
+ .welcome p { font-size: clamp(15px, 2.1vw, 19px); margin: 10px 0 0; padding: 0; }
  .sign-in-card { max-width: 560px; margin: 0 auto; padding: clamp(22px, 5vw, 36px); }
  .sign-in-card h2 { font-size: clamp(28px, 3.5vw, 32px); }
 }

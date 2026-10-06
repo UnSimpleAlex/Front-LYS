@@ -8,7 +8,7 @@ La UI permanece separada del acceso a datos: `SignInCard → useSignIn → AuthS
 
 ## Referencias y geometría
 
-- Desktop: cabecera de 76 px (68 px en layout apilado), tarjeta de hasta 520 px de ancho a la derecha; altura definida por contenido.
+- Desktop: cabecera de 64 px (60 px en layout apilado), tarjeta de hasta 520 px de ancho a la derecha; altura definida por contenido.
 - Móvil original: 1080 × 1920; logo, pedido y menú en la cabecera, bienvenida y fotografía arriba, tarjeta abajo.
 - Se apila el contenido hasta 900 px de ancho y en viewports verticales hasta 1150 px. La navegación cambia a menú hasta 1250 px para evitar colisiones.
 - Las dimensiones intermedias son fluidas. En pantallas estrechas se conservan inputs y botones utilizables; el formulario puede ocupar más altura que la referencia escalada.
@@ -42,6 +42,6 @@ Comprobaciones: `npm run lint`, `npm run typecheck`, `npm run build`, `npm test`
 
 ### Ajuste de navbar, bienvenida y escala tipográfica
 
-Navbar con línea inferior cálida y sombra tenue; botón «Mi pedido» con carrito SVG. La bienvenida elimina desplazamientos laterales del párrafo y usa una superficie blanca compacta para mantener contraste sobre la fotografía. Su ancho se limita a la columna y se verifica en las 15 resoluciones.
+Navbar con línea inferior cálida y sombra tenue; botón «Mi pedido» con carrito SVG. La bienvenida elimina desplazamientos laterales del párrafo y no tiene fondo propio; el título se limita a 550 px en escritorio para ubicar el párrafo dentro de la zona clara de la imagen. Su ancho se limita a la columna y se verifica en las 15 resoluciones.
 
-Escala actual DM Sans: título 28–32 px/peso 650, labels 14 px/peso 600, campos 16 px, acciones secundarias 14 px y botones 16–17 px. Inputs y botones principales de 50 px de altura; se conserva el control de contraseña de 44 px. Las capturas de esta revisión se generan en `test-results/`; los JPG anteriores corresponden al pulido previo.
+Escala actual DM Sans: título 28–32 px/peso 650, labels 14 px/peso 600, campos 16 px, acciones secundarias 14 px y botones 16–17 px. Inputs de 46 px y botones principales de 50 px de altura; se conserva el control de contraseña de 44 px. Las capturas de esta revisión se generan en `test-results/`; los JPG anteriores corresponden al pulido previo.
