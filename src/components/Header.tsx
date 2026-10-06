@@ -31,7 +31,7 @@ export function Header({ onSection }: { onSection: (section: string) => void }) 
     <div className="header-actions">
       <a className="login-link" href="#iniciar-sesion"><Icon name="user" />Iniciar sesión</a>
       <span className="header-divider" aria-hidden="true" />
-      <button type="button" className="order-button" aria-label="Mi pedido" onClick={() => onSection('Mi pedido')}><Icon name="cart" /><span>Mi pedido</span></button>
+      <button type="button" className="order-button" aria-label="Pedir ahora" onClick={() => onSection('Mi pedido')}><Icon name="cart" /><span>Pedir ahora</span></button>
       <button type="button" className="menu-toggle" aria-expanded={menuOpen} aria-controls="mobile-navigation" aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'} onClick={() => setMenuOpen(!menuOpen)}><Icon name={menuOpen ? 'close' : 'menu'} /></button>
     </div>
     <nav id="mobile-navigation" className="mobile-nav" aria-label="Navegación móvil" hidden={!menuOpen}>

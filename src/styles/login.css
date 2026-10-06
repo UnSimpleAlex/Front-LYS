@@ -4,7 +4,7 @@
 .nav-link.active::after { content: ''; position: absolute; bottom: 10px; left: 0; right: 0; height: 3px; background: var(--red); }
 .login-link { display: flex; align-items: center; gap: 14px; text-decoration: none; font-size: 19px; white-space: nowrap; }
 .header-divider { width: 1px; height: 32px; background: #c0c9da; }
-.order-button:hover { background: #fff3f3; }
+.order-button:hover { background: #b80012; border-color: #b80012; }
 .mobile-nav { display: none; }
 .hero-background { overflow: clip; position: absolute; inset: 0; z-index: 0; pointer-events: none; }
 .input-field input:focus-visible { outline: none; }
@@ -18,7 +18,7 @@
 .nav-link, .login-link { font-size: 16px; }
 .header-actions { display: flex; align-items: center; gap: clamp(16px, 2vw, 32px); }
 .login-link svg { width: 24px; height: 24px; }
-.order-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; color: var(--red); background: #fff; border: 1.5px solid var(--red); border-radius: 9px; padding: 4px 18px; min-height: 36px; position: relative; white-space: nowrap; font-size: 18px; transition: background-color 150ms, transform 150ms; }
+.order-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; color: #fff; background: var(--button-red); border: 1.5px solid var(--button-red); border-radius: 9px; padding: 4px 18px; min-height: 36px; position: relative; white-space: nowrap; font-size: 18px; transition: background-color 150ms, transform 150ms; }
 .menu-toggle { display: none; padding: 0; border: 0; background: none; width: 44px; height: 44px; align-items: center; justify-content: center; flex-shrink: 0; }
 .menu-toggle svg { width: 26px; height: 26px; }
 .sign-in-page { position: relative; min-height: calc(100dvh - 64px); overflow: visible; flex: 1; display: grid; }
@@ -136,6 +136,9 @@ html { scroll-padding-top: 72px; }
  .site-header { position: relative; }
  html { scroll-padding-top: 24px; }
  .mobile-nav:not([hidden]) { max-height: calc(100dvh - 72px); overflow-y: auto; }
+}
+@media (min-width: 281px) and (max-width: 380px) {
+ .brand { width: clamp(104px, 32vw, 124px); }
 }
 @media (max-width: 280px) {
  .brand { width: 104px; }

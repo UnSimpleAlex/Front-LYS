@@ -75,3 +75,5 @@ Validación: 25 pruebas aprobadas, con 19 resoluciones de 240 a 1920 px y navega
 La fila adicional y cabecera sticky se limitan a PC con pantalla de al menos 1280 px y puntero fino con hover, incluso cuando el zoom reduce el viewport. Móvil y tablet recuperan su cabecera de una fila de 60–64 px y menú desplegable. Se verifica cada modalidad con tamaño de pantalla independiente del viewport.
 
 En tablet (600–1150 px), Caveat aumenta a 30–38 px conservando sus dos líneas. Las tablets estrechas reservan separación adicional respecto de la bolsa. En móvil, el bloque de bienvenida baja 10 px y la fotografía acompaña ese desplazamiento para mantener la legibilidad. Validación actual: 27 pruebas, 20 resoluciones incluyendo 600 px, modalidad PC con reflow equivalente a zoom y modalidad móvil/tablet. Lint, typecheck y build aprobados.
+
+El botón de la cabecera muestra «Pedir ahora», con fondo rojo e icono/texto blancos, hover rojo oscuro y altura visible de 36 px. En móviles estrechos se ajusta el ancho del logo para acomodar la etiqueta completa; mantiene el destino de pedidos existente.
