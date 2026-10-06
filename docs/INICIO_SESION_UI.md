@@ -45,3 +45,7 @@ Comprobaciones: `npm run lint`, `npm run typecheck`, `npm run build`, `npm test`
 Navbar con línea inferior cálida y sombra tenue; botón «Mi pedido» con carrito SVG. La bienvenida elimina desplazamientos laterales del párrafo y no tiene fondo propio; el título se limita a 550 px en escritorio para ubicar el párrafo dentro de la zona clara de la imagen. Su ancho se limita a la columna y se verifica en las 15 resoluciones.
 
 Escala actual DM Sans: título 28–32 px/peso 650, labels 14 px/peso 600, campos 16 px, acciones secundarias 14 px y botones 16–17 px. Inputs de 46 px y botones principales de 50 px de altura; se conserva el control de contraseña de 44 px. Las capturas de esta revisión se generan en `test-results/`; los JPG anteriores corresponden al pulido previo.
+
+### Controles compactos y frase manuscrita
+
+Mi pedido: botón visible de 36 px con área de interacción ampliada a 44 px. Casilla visible Recordarme: 16 px, dentro de label de 44 px. La frase usa Caveat 600, centrada bajo el título (20–28 px apilado y 24–30 px en escritorio), sin fondo propio. Se mantiene DM Sans en el formulario.

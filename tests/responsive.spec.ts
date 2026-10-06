@@ -31,7 +31,7 @@ for (const [width, height] of viewports) {
         pageBottom: document.querySelector('.sign-in-page')!.getBoundingClientRect().bottom,
         inputHeight: document.querySelector('.input-field')!.getBoundingClientRect().height,
         toggleWidth: document.querySelector('.password-toggle')!.getBoundingClientRect().width,
-        fontsReady: document.fonts.check('16px "DM Sans"'),
+        fontsReady: document.fonts.check('16px "DM Sans"') && document.fonts.check('24px "Caveat"'),
       };
     });
     expect(geometry.overflow).toBe(false);
