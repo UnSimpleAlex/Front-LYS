@@ -1,7 +1,8 @@
 import type { SVGProps } from 'react';
 
-type IconName = 'mail' | 'lock' | 'eye' | 'eye-off' | 'user' | 'arrow' | 'menu' | 'close' | 'check';
+type IconName = 'mail' | 'lock' | 'eye' | 'eye-off' | 'user' | 'arrow' | 'menu' | 'close' | 'check' | 'cart';
 const paths: Record<IconName, string[]> = {
+  cart: ['M3 3h2l2.5 12h11l2-8H6', 'M9 20a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z', 'M19 20a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z'],
   mail: ['M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z', 'm3 6 9 7 9-7'],
   lock: ['M6 10h12a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2Z', 'M8 10V6a4 4 0 0 1 8 0v4', 'M12 14v3'],
   eye: ['M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z', 'M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z'],
