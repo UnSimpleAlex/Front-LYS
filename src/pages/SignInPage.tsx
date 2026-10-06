@@ -8,8 +8,10 @@ export function SignInPage({ onHelp }: { onHelp: (action: 'register' | 'recover'
     </picture>
     <div className="hero-layout">
       <section className="welcome" aria-labelledby="welcome-title">
-        <h1 id="welcome-title"><span className="sr-only">Bienvenido al sabor de casa</span><img className="welcome-lettering" src="/images/welcome-lettering.webp" alt="" aria-hidden="true" width="2172" height="724" /></h1>
-        <p>Más que un pollo a la brasa,<br />es una tradición que nos une.</p>
+        <div className="welcome-copy">
+          <h1 id="welcome-title"><span className="sr-only">Bienvenido al sabor de casa</span><img className="welcome-lettering" src="/images/welcome-lettering.webp" alt="" aria-hidden="true" width="2172" height="724" /></h1>
+          <p><span>Más que un pollo a la brasa,</span><span>es una tradición que nos une.</span></p>
+        </div>
       </section>
       <SignInCard onHelp={onHelp} />
     </div>

@@ -25,10 +25,12 @@
 .hero-background img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: left top; }
 .hero-background::after { content: ""; position: absolute; inset: 0 0 auto; height: min(42%, 380px); background: linear-gradient(#ffffffd9, #ffffffb8 48%, #ffffff00); }
 .hero-layout { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(420px, 520px); gap: clamp(28px, 4vw, 80px); width: 90%; max-width: 1700px; margin: 0 auto; padding-top: 38px; padding-bottom: 65px; padding: clamp(24px, 4vh, 48px) 0; align-items: start; }
-.welcome { padding: 0 0 0 38px; padding-left: 24px; }
-.welcome h1 { margin: 0 0 0 -16px; line-height: 0; }
-.welcome-lettering { width: min(100%, 550px); height: auto; display: block; }
-.welcome p { font-family: 'Caveat', 'DM Sans', sans-serif; color: #354964; font-size: clamp(24px, 2vw, 30px); font-weight: 600; line-height: 1.15; margin: 12px 0 0; padding: 0; width: min(100%, 340px); max-width: 100%; text-align: center; letter-spacing: normal; }
+.welcome { padding-left: 24px; min-width: 0; width: 100%; }
+.welcome-copy { width: min(100%, 550px); container-type: inline-size; }
+.welcome h1 { margin: 0; line-height: 0; }
+.welcome-lettering { width: 100%; height: auto; display: block; }
+.welcome p { font-family: 'Caveat', 'DM Sans', sans-serif; color: #354964; font-size: clamp(18px, 5cqi, 28px); font-weight: 600; line-height: 1.2; margin: 8px 0 0; padding-inline: 3%; width: 100%; text-align: left; letter-spacing: normal; }
+.welcome p span { display: block; }
 .sign-in-card { padding: clamp(24px, 2vw, 36px); background: #fff; border-radius: var(--card-radius); box-shadow: 0 12px 36px #241b151c; align-self: start; scroll-margin-top: 24px; width: 100%; animation: card-enter 300ms var(--ease-out); }
 .sign-in-card h2 { font-size: clamp(28px, 2vw, 32px); font-weight: 650; line-height: 1.25; letter-spacing: -.03em; margin: 0 0 30px; margin-bottom: 20px; }
 .fields { display: grid; gap: 16px; }
@@ -89,13 +91,12 @@
  .header-actions { gap: clamp(6px, 2vw, 20px); }
  .order-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-size: clamp(13px, 2vw, 18px); padding-inline: clamp(8px, 2vw, 18px); }
  .sign-in-page { min-height: calc(100dvh - 60px); }
+ .hero-background { padding-top: 40px; }
  .hero-background img { width: 100%; height: auto; object-fit: initial; }
  .hero-background::after { height: min(42vw, 380px); }
  .hero-layout { display: flex; flex-direction: column; width: 90%; padding: 12px 0 24px; gap: 0; }
- .welcome { padding: 0 0 0 5%; min-height: min(77vw, 640px); }
- .welcome h1 { margin: 0; }
- .welcome-lettering { width: min(100%, 66vw, 660px); }
- .welcome p { width: min(calc(100% - 8px), 60vw, 340px); font-size: clamp(19px, 2.6vw, 26px); margin: 0 0 0 8px; padding: 0; text-align: left; }
+ .welcome { padding-left: 5%; min-height: min(calc(77vw + 40px), 680px); }
+ .welcome-copy { width: min(100%, 66vw, 600px); }
  .sign-in-card { max-width: 560px; margin: 0 auto; padding: clamp(22px, 5vw, 36px); }
  .sign-in-card h2 { font-size: clamp(28px, 3.5vw, 32px); }
 }
