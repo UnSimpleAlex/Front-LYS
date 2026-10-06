@@ -143,7 +143,7 @@ html { scroll-padding-top: 72px; }
 @media (max-width: 280px) {
  .brand { width: 104px; }
  .order-button { padding-inline: 8px; }
- .order-button span { display: none; }
+ .order-button > span:not(.order-glare) { display: none; }
  .welcome p { font-size: clamp(14px, 8cqi, 18px); }
  .sign-in-card { padding-inline: 16px; }
 }
@@ -151,3 +151,13 @@ html { scroll-padding-top: 72px; }
 .order-button svg { width: 20px; height: 20px; }
 
 .order-button::before { content: ""; position: absolute; inset: -4px 0; }
+.order-glare { position: absolute; inset: 0; border-radius: inherit; overflow: hidden; pointer-events: none; }
+.order-glare::after { content: ""; position: absolute; top: -50%; left: 0; width: 35%; height: 200%; background: linear-gradient(90deg, transparent, #ffffff50, transparent); transform: translateX(-180%) rotate(-25deg); }
+@keyframes order-glare-sweep {
+ from { transform: translateX(-180%) rotate(-25deg); }
+ to { transform: translateX(400%) rotate(-25deg); }
+}
+@media (hover: hover) {
+ .order-button:hover .order-glare::after { animation: order-glare-sweep 600ms ease-out both; }
+}
+.order-button:focus-visible .order-glare::after { animation: order-glare-sweep 600ms ease-out both; }
