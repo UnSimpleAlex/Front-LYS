@@ -1,0 +1,23 @@
+# Procedencia de assets de inicio de sesión
+
+## Recursos del usuario
+
+- `public/images/hero-desktop.webp`: fondo horizontal suministrado, 1672 × 941.
+- `public/images/hero-mobile.webp`: fondo vertical suministrado, 941 × 1672.
+- `public/images/logo.webp`: logo suministrado, 2048 × 682, con transparencia.
+
+Se convirtió el formato a WebP para reducir la transferencia, conservando la composición. No se generó una fotografía nueva. Los archivos PNG originales copiados localmente están ignorados por Git.
+
+## Lettering
+
+`public/images/welcome-lettering.webp` (2172 × 724, alpha) deriva de la referencia desktop mediante la herramienta integrada ImageGen. Se conservó la transparencia y se convirtió a WebP sin pérdida. El archivo PNG generado se conserva localmente y en la salida original de ImageGen.
+
+Prompt utilizado:
+
+> Use case: background-extraction. Asset type: transparent website headline graphic. EDIT TARGET: the supplied screenshot. Extract ONLY the large two-line brush lettering in the upper left, with its red accent rays and red brush underline. Exact text line 1: "Bienvenido" in BLACK. Exact text line 2: "al sabor de casa" in DEEP RED. Preserve the screenshot's exact chunky dry-brush glyph silhouettes, irregular ink edges, baseline, spacing, proportions and black/red colors as closely as possible; do not redesign or substitute smooth connected calligraphy. Include the three red accent strokes to right of Bienvenido and the red brush underline under second line. Remove EVERYTHING else: navbar, logo, mountains, food, bag, supporting paragraph, form, shadows. Output genuine transparent alpha around lettering and in all letter counters. Wide compact landscape canvas around 3:1 aspect, lettering fills canvas with small clear margins, no checkerboard painted, no white background, no extra text. This is ONLY an isolated lettering asset, NOT a whole UI screenshot.
+
+## Tipografía
+
+DM Sans se aloja en `public/fonts/DM-Sans.ttf`, procedente del [repositorio oficial Google Fonts](https://github.com/google/fonts/tree/main/ofl/dmsans), con su licencia SIL OFL en `DM-Sans-OFL.txt`.
+
+Se buscaron y compararon [Brusher](https://www.dafont.com/es/brusher.font), [Knewave](https://www.dafont.com/es/knewave.font), [Edo SZ](https://www.dafont.com/es/edo-sz.font) y [Levi Brush](https://www.dafont.com/es/levibrush.font) en DaFont. Ninguna reprodujo el lettering lo bastante cerca; no se incluyen sus archivos en la aplicación. El título usa el recurso gráfico acompañado de texto accesible.
