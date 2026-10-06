@@ -12,10 +12,12 @@
   --red: #ed0000;
   --button-red: #ce0014;
   --muted: #5d7097;
-  --placeholder: #8b99b6;
+  --placeholder: #667795;
   --input-border: #dce1ec;
   --line: #adbbd4;
   --card-radius: 16px;
   --field-radius: 8px;
   --focus: #24487d;
+  --ease-out: cubic-bezier(.2, 0, 0, 1);
+  --ease-settle: cubic-bezier(.2, .8, .3, 1.15);
 }
