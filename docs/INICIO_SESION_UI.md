@@ -69,3 +69,9 @@ La cabecera permanece visible al hacer scroll. Hasta 1250 px conserva los enlace
 El espaciado superior del contenido se limita a 16–32 px en escritorio y 12 px apilado. El desplazamiento de la fotografía disminuye progresivamente de 40 px en móvil estrecho a 0 px en tablet, manteniendo la frase separada de la bolsa. Se admite reflow hasta 240 px de ancho; en anchos de hasta 280 px el pedido conserva su icono y nombre accesible.
 
 Validación: 25 pruebas aprobadas, con 19 resoluciones de 240 a 1920 px y navegación en anchos equivalentes a zoom de 200%, 300%, 400% y 500% sobre una ventana de 1366 px. Se verifica foco y acceso al último enlace, apertura del destino, cabecera visible al final de la página y ausencia de overflow horizontal. Esta comprobación reproduce el espacio CSS disponible; no modifica el zoom nativo del navegador. Lint, typecheck y build aprobados.
+
+### Alcance de navegación y escala por dispositivo
+
+La fila adicional y cabecera sticky se limitan a PC con pantalla de al menos 1280 px y puntero fino con hover, incluso cuando el zoom reduce el viewport. Móvil y tablet recuperan su cabecera de una fila de 60–64 px y menú desplegable. Se verifica cada modalidad con tamaño de pantalla independiente del viewport.
+
+En tablet (600–1150 px), Caveat aumenta a 30–38 px conservando sus dos líneas. Las tablets estrechas reservan separación adicional respecto de la bolsa. En móvil, el bloque de bienvenida baja 10 px y la fotografía acompaña ese desplazamiento para mantener la legibilidad. Validación actual: 27 pruebas, 20 resoluciones incluyendo 600 px, modalidad PC con reflow equivalente a zoom y modalidad móvil/tablet. Lint, typecheck y build aprobados.

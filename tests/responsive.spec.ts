@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 const viewports = [
   [240, 480], [280, 568],
   [320, 568], [360, 800], [375, 812], [390, 844], [412, 915], [430, 932], [480, 900],
-  [768, 1024], [820, 1180], [912, 1368], [1024, 768], [1080, 1920], [1280, 800], [1366, 768], [1440, 900], [1672, 941], [1920, 1080],
+  [600, 960], [768, 1024], [820, 1180], [912, 1368], [1024, 768], [1080, 1920], [1280, 800], [1366, 768], [1440, 900], [1672, 941], [1920, 1080],
 ];
 
 for (const [width, height] of viewports) {
@@ -67,9 +67,10 @@ for (const [width, height] of viewports) {
   });
 }
 
-test('navegación visible y alcanzable con el espacio equivalente a zoom de 200% a 500%', async ({ page }) => {
+test('navegación de PC visible con el espacio equivalente a zoom de 200% a 500%', async ({ browser }) => {
   for (const width of [683, 455, 342, 273]) {
-    await page.setViewportSize({ width, height: 600 });
+    const context = await browser.newContext({ baseURL: 'http://127.0.0.1:5173', screen: { width: 1366, height: 768 }, viewport: { width, height: 600 } });
+    const page = await context.newPage();
     await page.goto('/');
     const navigation = page.getByRole('navigation', { name: 'Navegación principal', exact: true });
     await expect(navigation).toBeVisible();
@@ -83,5 +84,19 @@ test('navegación visible y alcanzable con el espacio equivalente a zoom de 200%
     await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
     await expect(page.getByRole('banner')).toBeInViewport();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    await context.close();
+  }
+});
+
+test('móvil y tablet conservan la cabecera compacta con menú', async ({ page }) => {
+  for (const width of [390, 820, 1024]) {
+    await page.setViewportSize({ width, height: 1180 });
+    await page.goto('/');
+    await expect(page.getByRole('navigation', { name: 'Navegación principal', exact: true })).not.toBeVisible();
+    const menu = page.getByRole('button', { name: 'Abrir menú' });
+    await menu.click();
+    await expect(page.getByRole('navigation', { name: 'Navegación móvil' }).getByRole('button', { name: 'Contacto' })).toBeVisible();
+    const height = await page.getByRole('banner').evaluate(el => el.getBoundingClientRect().height);
+    expect(height).toBeLessThanOrEqual(64);
   }
 });

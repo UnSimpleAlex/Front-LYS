@@ -109,7 +109,17 @@ html { scroll-padding-top: 72px; }
 @media (max-width: 900px), (min-width: 901px) and (max-width: 1150px) and (max-aspect-ratio: 3/4) {
  .hero-layout { padding-block: 12px 24px; }
 }
-@media (max-width: 1250px) {
+@media (min-width: 600px) and (max-width: 1150px) {
+ .welcome p { font-size: clamp(30px, 6.5cqi, 38px); }
+}
+@media (min-width: 600px) and (max-width: 767px) {
+ .sign-in-page { --photo-offset: clamp(10px, calc(240px - 30vw), 60px); }
+}
+@media (max-width: 599px) {
+ .welcome-copy { margin-top: 10px; }
+ .sign-in-page { --photo-offset: clamp(0px, calc(130px - 25vw), 50px); }
+}
+@media (max-width: 1250px) and (min-device-width: 1280px) and (hover: hover) and (pointer: fine) {
  .site-header { height: 104px; flex-wrap: wrap; gap: 0 12px; padding-block: 8px 4px; }
  .brand img { height: 44px; }
  .desktop-nav { display: flex; order: 3; flex: 0 0 100%; justify-content: flex-start; gap: 24px; overflow-x: auto; scrollbar-width: thin; scrollbar-color: #a3b0c5 #edf0f5; padding-inline: 4px; scroll-padding-inline: 4px; }
@@ -121,6 +131,11 @@ html { scroll-padding-top: 72px; }
  .sign-in-page { min-height: calc(100dvh - 104px); }
  html { scroll-padding-top: 112px; }
  .mobile-nav:not([hidden]) { max-height: calc(100dvh - 112px); overflow-y: auto; }
+}
+@media (max-device-width: 1279px), (hover: none), (pointer: coarse) {
+ .site-header { position: relative; }
+ html { scroll-padding-top: 24px; }
+ .mobile-nav:not([hidden]) { max-height: calc(100dvh - 72px); overflow-y: auto; }
 }
 @media (max-width: 280px) {
  .brand { width: 104px; }
