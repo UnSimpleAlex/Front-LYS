@@ -12,29 +12,29 @@
 .remember-option input { left: 0; top: 50%; transform: translateY(-50%); z-index: 1; position: absolute; width: 24px; height: 24px; margin: 0; opacity: 0; }
 .remember-option input:focus-visible + .checkbox-mark { pointer-events: none; outline: 3px solid var(--focus); outline-offset: 4px; }
 .google-button:hover { background: #f9fafc; }
-.site-header { display: flex; align-items: center; gap: 24px; height: 88px; padding: 0 2.3%; position: relative; z-index: 2; background: #fff; }
-.brand { display: block; flex: 0 0 auto; width: clamp(210px, 17vw, 285px); }
+.site-header { border-bottom: 1px solid #e8ded5; box-shadow: 0 3px 14px #452c1710; flex-shrink: 0; display: flex; align-items: center; gap: 24px; height: 76px; padding: 0 2.3%; position: relative; z-index: 2; background: #fff; }
+.brand { display: block; flex: 0 0 auto; width: clamp(195px, 16vw, 250px); }
 .desktop-nav { flex: 1; display: flex; align-items: center; justify-content: center; gap: clamp(16px, 2vw, 36px); }
 .nav-link, .login-link { font-size: 16px; }
 .header-actions { display: flex; align-items: center; gap: clamp(16px, 2vw, 32px); }
 .login-link svg { width: 24px; height: 24px; }
-.order-button { color: var(--red); background: #fff; border: 1.5px solid var(--red); border-radius: 9px; padding: 8px 22px; min-height: 44px; white-space: nowrap; font-size: 18px; transition: background-color 150ms, transform 150ms; }
+.order-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; color: var(--red); background: #fff; border: 1.5px solid var(--red); border-radius: 9px; padding: 8px 22px; min-height: 44px; white-space: nowrap; font-size: 18px; transition: background-color 150ms, transform 150ms; }
 .menu-toggle { display: none; padding: 0; border: 0; background: none; width: 44px; height: 44px; align-items: center; justify-content: center; flex-shrink: 0; }
 .menu-toggle svg { width: 26px; height: 26px; }
-.sign-in-page { position: relative; min-height: calc(100dvh - 88px); overflow: visible; flex: 1; display: grid; }
+.sign-in-page { position: relative; min-height: calc(100dvh - 76px); overflow: visible; flex: 1; display: grid; }
 .hero-background img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: left top; }
 .hero-background::after { content: ""; position: absolute; inset: 0 0 auto; height: min(42%, 380px); background: linear-gradient(#ffffffd9, #ffffffb8 48%, #ffffff00); }
 .hero-layout { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(420px, 520px); gap: clamp(28px, 4vw, 80px); width: 90%; max-width: 1700px; margin: 0 auto; padding-top: 38px; padding-bottom: 65px; padding: clamp(24px, 4vh, 48px) 0; align-items: start; }
 .welcome { padding: 0 0 0 38px; padding-left: 24px; }
 .welcome h1 { margin: 0 0 0 -16px; line-height: 0; }
 .welcome-lettering { width: min(100%, 664px); height: auto; display: block; }
-.welcome p { color: var(--muted); font-size: clamp(18px, 1.4vw, 23px); font-weight: 500; line-height: 1.4; margin: 24px 0 0 24px; letter-spacing: -.02em; }
+.welcome p { color: #354964; font-size: clamp(16px, 1.3vw, 21px); font-weight: 500; line-height: 1.5; margin: 18px 0 0; padding: 10px 14px; width: fit-content; max-width: 100%; background: #fff; border-radius: 8px; letter-spacing: normal; }
 .sign-in-card { padding: clamp(24px, 2vw, 36px); background: #fff; border-radius: var(--card-radius); box-shadow: 0 12px 36px #241b151c; align-self: start; scroll-margin-top: 24px; width: 100%; animation: card-enter 300ms var(--ease-out); }
-.sign-in-card h2 { font-size: clamp(28px, 2.4vw, 38px); font-weight: 700; line-height: 1.2; letter-spacing: -.03em; margin: 0 0 30px; margin-bottom: 20px; }
+.sign-in-card h2 { font-size: clamp(28px, 2vw, 32px); font-weight: 650; line-height: 1.25; letter-spacing: -.03em; margin: 0 0 30px; margin-bottom: 20px; }
 .fields { display: grid; gap: 16px; }
 .field-group { display: grid; gap: 7px; }
 .field-label { font-size: 14px; font-weight: 600; color: #455775; }
-.input-field { display: flex; align-items: center; gap: 12px; min-height: 54px; border: 2px solid var(--input-border); border-radius: var(--field-radius); padding: 0 17px; color: #687b9c; border-width: 1.5px; padding-inline: 14px; transition: border-color 160ms, background-color 160ms, box-shadow 160ms; }
+.input-field { display: flex; align-items: center; gap: 12px; min-height: 50px; border: 2px solid var(--input-border); border-radius: var(--field-radius); padding: 0 17px; color: #687b9c; border-width: 1.5px; padding-inline: 14px; transition: border-color 160ms, background-color 160ms, box-shadow 160ms; }
 .input-field:hover { border-color: #a3b0c5; }
 .input-field:has(input:not(:placeholder-shown)) { background: #fafbfe; border-color: #a3b0c5; }
 .input-field:focus-within { border-color: var(--focus); box-shadow: 0 0 0 3px #24487d18; background: #fff; color: var(--focus); }
@@ -48,19 +48,19 @@
 .password-toggle { display: grid; place-items: center; width: 44px; height: 44px; margin: 0 -6px 0 0; flex-shrink: 0; border: 0; background: none; color: #7689ad; margin-right: -9px; border-radius: 6px; }
 .password-toggle:hover { background: #edf1f8; color: var(--focus); }
 .password-toggle svg { width: 22px; height: 22px; animation: icon-feedback 180ms var(--ease-out); }
-.form-options { margin: 8px 0 12px; display: flex; align-items: center; justify-content: space-between; gap: 0 12px; min-height: 30px; font-size: 13px; letter-spacing: normal; flex-wrap: wrap; line-height: 1.4; }
+.form-options { margin: 8px 0 12px; display: flex; align-items: center; justify-content: space-between; gap: 0 12px; min-height: 30px; font-size: 14px; letter-spacing: normal; flex-wrap: wrap; line-height: 1.4; }
 .remember-option { display: flex; align-items: center; gap: 8px; cursor: pointer; position: relative; color: var(--muted); min-height: 44px; white-space: normal; }
 .remember-option input, .checkbox-mark { width: 22px; height: 22px; }
 .checkbox-mark { pointer-events: none; display: grid; place-items: center; width: 24px; height: 24px; border: 1px solid var(--input-border); border-radius: 5px; flex-shrink: 0; background: #fff; border-color: #a3b0c5; transition: background-color 140ms; }
 .checkbox-mark svg { width: 18px; height: 18px; visibility: visible; stroke-width: 1.8px; opacity: 0; transform: scale(.7); transition: transform 180ms var(--ease-out), opacity 140ms; }
 .remember-option input:checked + .checkbox-mark { pointer-events: none; background: var(--button-red); color: #fff; border-color: var(--button-red); }
 .remember-option input:checked + .checkbox-mark svg { visibility: visible; opacity: 1; transform: scale(1); }
-.form-options .text-link { min-height: 44px; white-space: normal; font-size: 13px; text-align: left; }
+.form-options .text-link { min-height: 44px; white-space: normal; font-size: 14px; text-align: left; }
 .sign-in-button svg { width: 24px; height: 24px; stroke-width: 1.8px; transition: transform 200ms var(--ease-out); }
 .sign-in-button:hover:not(:disabled) > svg { transform: translateX(3px); }
 .or-divider { display: flex; align-items: center; gap: 16px; margin: 16px 0; color: var(--muted); font-size: 14px; letter-spacing: normal; }
 .or-divider::before, .or-divider::after { content: ''; height: 1px; background: var(--line); flex: 1; }
-.google-button { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; min-height: 54px; border: 1.5px solid #95a4c0; border-radius: var(--field-radius); background: #fff; font-size: 17px; letter-spacing: normal; transition: background-color 150ms, transform 150ms; }
+.google-button { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; min-height: 50px; border: 1.5px solid #95a4c0; border-radius: var(--field-radius); background: #fff; font-size: 16px; letter-spacing: normal; transition: background-color 150ms, transform 150ms; }
 .google-icon { width: 26px; height: 26px; }
 .register-divider { display: flex; justify-content: center; align-items: center; gap: 4px 10px; color: var(--muted); font-size: 14px; margin-top: 8px; letter-spacing: normal; white-space: normal; flex-wrap: wrap; line-height: 1.5; }
 .register-divider::before, .register-divider::after { content: ''; height: 2px; flex: 1; background: #edf0f5; display: none; }
@@ -83,19 +83,21 @@
  .mobile-nav button:hover, .mobile-nav a:hover { background: #fff1f1; }
 }
 @media (max-width: 900px), (min-width: 901px) and (max-width: 1150px) and (max-aspect-ratio: 3/4) {
- .site-header { height: clamp(72px, 12vw, 100px); padding-inline: 5%; gap: 8px; }
- .brand { width: clamp(132px, 40vw, 285px); }
+ .site-header { border-bottom: 1px solid #e8ded5; box-shadow: 0 3px 14px #452c1710; flex-shrink: 0; height: 68px; padding-inline: 5%; gap: 8px; }
+ .brand { width: clamp(124px, 38vw, 220px); }
  .header-actions { gap: clamp(6px, 2vw, 20px); }
- .order-button { font-size: clamp(13px, 2vw, 18px); padding-inline: clamp(8px, 2vw, 18px); }
- .sign-in-page { min-height: calc(100dvh - clamp(72px, 12vw, 100px)); }
+ .order-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-size: clamp(13px, 2vw, 18px); padding-inline: clamp(8px, 2vw, 18px); }
+ .sign-in-page { min-height: calc(100dvh - 68px); }
  .hero-background img { width: 100%; height: auto; object-fit: initial; }
  .hero-background::after { height: min(42vw, 380px); }
  .hero-layout { display: flex; flex-direction: column; width: 90%; padding: 12px 0 24px; gap: 0; }
  .welcome { padding: 0 0 0 5%; min-height: min(77vw, 640px); }
  .welcome h1 { margin: 0; }
  .welcome-lettering { width: min(100%, 66vw, 660px); }
- .welcome p { font-size: clamp(15px, 2.4vw, 22px); margin: 14px 0 0 2%; }
+ .welcome p { font-size: clamp(15px, 2.1vw, 19px); margin: 12px 0 0; padding: 8px 10px; }
  .sign-in-card { max-width: 560px; margin: 0 auto; padding: clamp(22px, 5vw, 36px); }
- .sign-in-card h2 { font-size: clamp(28px, 4vw, 36px); }
+ .sign-in-card h2 { font-size: clamp(28px, 3.5vw, 32px); }
 }
 @media (hover: hover) { .primary-button:hover:not(:disabled), .google-button:hover:not(:disabled), .order-button:hover:not(:disabled) { transform: translateY(-2px); } }
+
+.order-button svg { width: 20px; height: 20px; }

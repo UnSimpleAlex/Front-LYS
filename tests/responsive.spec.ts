@@ -20,8 +20,10 @@ for (const [width, height] of viewports) {
     const geometry = await page.evaluate(() => {
       const card = document.querySelector('.sign-in-card')!.getBoundingClientRect();
       const welcome = document.querySelector('.welcome')!.getBoundingClientRect();
+      const caption = document.querySelector('.welcome p')!.getBoundingClientRect();
       return {
         overflow: document.documentElement.scrollWidth > window.innerWidth,
+        caption: {left:caption.left, right:caption.right},
         card: { x: card.x, y: card.y, width: card.width, bottom: card.bottom },
         welcome: { x: welcome.x, y: welcome.y, right: welcome.right, bottom: welcome.bottom },
         imagesReady: [...document.images].every((image) => image.complete && image.naturalWidth > 0),
@@ -33,6 +35,8 @@ for (const [width, height] of viewports) {
       };
     });
     expect(geometry.overflow).toBe(false);
+    expect(geometry.caption.left).toBeGreaterThanOrEqual(0);
+    expect(geometry.caption.right).toBeLessThanOrEqual(geometry.welcome.right + 1);
     expect(geometry.imagesReady).toBe(true);
     expect(geometry.fontsReady).toBe(true);
     expect(geometry.inputHeight).toBeGreaterThanOrEqual(48);

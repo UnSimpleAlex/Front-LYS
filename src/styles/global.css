@@ -15,7 +15,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 .skip-link { position: fixed; top: 8px; left: 8px; padding: 12px; background: #fff; z-index: 10; transform: translateY(-160%); }
 .skip-link:focus { transform: translateY(0); }
 .text-link { padding: 0; border: 0; background: none; color: var(--red); text-decoration: underline; text-underline-offset: 2px; }
- .primary-button { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; border: 0; border-radius: var(--field-radius); background: var(--button-red); color: #fff; min-height: 54px; font-size: 19px; font-weight: 600; }
+ .primary-button { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; border: 0; border-radius: var(--field-radius); background: var(--button-red); color: #fff; min-height: 50px; font-size: 17px; font-weight: 600; }
 .primary-button:hover:not(:disabled) { background: #b80012; }
 .primary-button, .order-button, .google-button, .password-toggle { transition: transform 220ms var(--ease-settle), background-color 140ms; }
 .primary-button:active:not(:disabled), .order-button:active:not(:disabled), .google-button:active:not(:disabled), .password-toggle:active:not(:disabled) { transform: scale(.98); transition-duration: 90ms; }
