@@ -53,3 +53,11 @@ Mi pedido: botón visible de 36 px con área de interacción ampliada a 44 px. C
 ### Corrección de posición de la frase
 
 El párrafo mantiene Caveat y se limita a 340 px en escritorio para centrarlo en la zona izquierda clara, sin alcanzar la bolsa. En composición apilada su ancho máximo es 60vw/340px, alineado a la izquierda, sin margen superior, con escala de 19–26 px. No tiene fondo propio.
+
+### Alineación común en móvil, tablet y PC
+
+Título y frase comparten un contenedor de ancho fluido: hasta 550 px en escritorio y 66vw/600px en composición apilada. El párrafo se alinea con el borde visible del lettering mediante un margen interior proporcional del 3%; ambas líneas conservan el mismo inicio. Caveat 600 adapta su tamaño al ancho de ese contenedor (18–28 px). No se añade fondo al texto.
+
+En composición apilada se reservan 40 px antes del fondo fotográfico para separar la frase del asa de la bolsa incluso a 320 px. El contenedor de bienvenida tiene ancho explícito para evitar que la contención de tamaño reduzca su ancho en flex.
+
+Validación actual: 22 pruebas aprobadas, con 17 resoluciones de 320 a 1920 px, incluyendo tablets verticales de 820 y 912 px. Las pruebas verifican que las dos líneas no se dividan, compartan borde izquierdo y permanezcan dentro del ancho del título, además de los controles y overflow. Capturas revisadas en móvil estrecho, móvil, tablets y escritorio. Lint, typecheck y build aprobados. Las capturas anteriores en docs/visual corresponden a versiones previas; la evidencia actual se genera en test-results/.

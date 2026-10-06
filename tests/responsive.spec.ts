@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 const viewports = [
   [320, 568], [360, 800], [375, 812], [390, 844], [412, 915], [430, 932], [480, 900],
-  [768, 1024], [1024, 768], [1080, 1920], [1280, 800], [1366, 768], [1440, 900], [1672, 941], [1920, 1080],
+  [768, 1024], [820, 1180], [912, 1368], [1024, 768], [1080, 1920], [1280, 800], [1366, 768], [1440, 900], [1672, 941], [1920, 1080],
 ];
 
 for (const [width, height] of viewports) {
@@ -21,9 +21,16 @@ for (const [width, height] of viewports) {
       const card = document.querySelector('.sign-in-card')!.getBoundingClientRect();
       const welcome = document.querySelector('.welcome')!.getBoundingClientRect();
       const caption = document.querySelector('.welcome p')!.getBoundingClientRect();
+      const lettering = document.querySelector('.welcome-lettering')!.getBoundingClientRect();
+      const lines = [...document.querySelectorAll('.welcome p span')].map(span => {
+        const range = document.createRange(); range.selectNodeContents(span);
+        return [...range.getClientRects()].map(rect => ({left:rect.left, right:rect.right, top:rect.top, bottom:rect.bottom}));
+      });
       return {
         overflow: document.documentElement.scrollWidth > window.innerWidth,
         caption: {left:caption.left, right:caption.right},
+        lettering: {left:lettering.left, right:lettering.right, bottom:lettering.bottom},
+        lines,
         card: { x: card.x, y: card.y, width: card.width, bottom: card.bottom },
         welcome: { x: welcome.x, y: welcome.y, right: welcome.right, bottom: welcome.bottom },
         imagesReady: [...document.images].every((image) => image.complete && image.naturalWidth > 0),
@@ -37,6 +44,13 @@ for (const [width, height] of viewports) {
     expect(geometry.overflow).toBe(false);
     expect(geometry.caption.left).toBeGreaterThanOrEqual(0);
     expect(geometry.caption.right).toBeLessThanOrEqual(geometry.welcome.right + 1);
+    for (const line of geometry.lines) {
+      expect(line).toHaveLength(1);
+      expect(line[0].left).toBeGreaterThanOrEqual(geometry.lettering.left);
+      expect(line[0].right).toBeLessThanOrEqual(geometry.lettering.right);
+    }
+    expect(Math.abs(geometry.lines[0][0].left - geometry.lines[1][0].left)).toBeLessThanOrEqual(1);
+    expect(geometry.lines[0][0].top).toBeGreaterThanOrEqual(geometry.lettering.bottom);
     expect(geometry.imagesReady).toBe(true);
     expect(geometry.fontsReady).toBe(true);
     expect(geometry.inputHeight).toBeGreaterThanOrEqual(46);
@@ -44,7 +58,7 @@ for (const [width, height] of viewports) {
     expect(geometry.card.bottom).toBeLessThanOrEqual(geometry.documentHeight);
     expect(Math.abs(geometry.pageBottom - geometry.documentHeight)).toBeLessThanOrEqual(1);
     if (width >= 1280) expect(geometry.documentHeight).toBeLessThanOrEqual(height + 1);
-    if (width <= 900 || width === 1080) expect(geometry.card.y).toBeGreaterThanOrEqual(geometry.welcome.bottom - 1);
+    if (width <= 900 || width === 912 || width === 1080) expect(geometry.card.y).toBeGreaterThanOrEqual(geometry.welcome.bottom - 1);
     else expect(geometry.card.x).toBeGreaterThanOrEqual(geometry.welcome.right);
     expect(errors).toEqual([]);
     await page.screenshot({ path: testInfo.outputPath(`screen-${width}.png`), fullPage: true });
