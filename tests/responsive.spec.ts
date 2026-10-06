@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 const viewports = [
+  [240, 480], [280, 568],
   [320, 568], [360, 800], [375, 812], [390, 844], [412, 915], [430, 932], [480, 900],
   [768, 1024], [820, 1180], [912, 1368], [1024, 768], [1080, 1920], [1280, 800], [1366, 768], [1440, 900], [1672, 941], [1920, 1080],
 ];
@@ -65,3 +66,22 @@ for (const [width, height] of viewports) {
     await testInfo.attach('geometría', { body: JSON.stringify(geometry, null, 2), contentType: 'application/json' });
   });
 }
+
+test('navegación visible y alcanzable con el espacio equivalente a zoom de 200% a 500%', async ({ page }) => {
+  for (const width of [683, 455, 342, 273]) {
+    await page.setViewportSize({ width, height: 600 });
+    await page.goto('/');
+    const navigation = page.getByRole('navigation', { name: 'Navegación principal', exact: true });
+    await expect(navigation).toBeVisible();
+    await expect(navigation.getByRole('button', { name: 'Inicio', exact: true })).toBeInViewport();
+    const contact = navigation.getByRole('button', { name: 'Contacto', exact: true });
+    await contact.focus();
+    await expect(contact).toBeInViewport();
+    await contact.click();
+    await expect(page.getByRole('dialog')).toBeVisible();
+    await page.keyboard.press('Escape');
+    await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+    await expect(page.getByRole('banner')).toBeInViewport();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  }
+});
