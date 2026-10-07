@@ -2,6 +2,8 @@ import { useState, type FormEvent } from 'react';
 import { Icon, GoogleIcon } from '../../components/Icon';
 import { registrationService } from '../../services/registrationService';
 import { AuthField } from './AuthField';
+import { PhoneCountrySelect } from './PhoneCountrySelect';
+import { validateCellphone, type PhoneCountry } from './phoneCountries';
 import { useAuthRequest } from './useAuthRequest';
 import { initialRegistration, registrationError, type RegistrationField, type RegistrationValues } from './registrationValidation';
 
@@ -10,18 +12,18 @@ const fields: Exclude<RegistrationField, 'terms'>[] = ['name', 'email', 'phone',
 
 export function RegisterCard({ onLogin, onLegal }: Props) {
   const [values, setValues] = useState(initialRegistration);
-  const [dialCode, setDialCode] = useState('+51');
+  const [country, setCountry] = useState<PhoneCountry>('PE');
   const [touched, setTouched] = useState<Partial<Record<RegistrationField, boolean>>>({});
-  const validationValues = { ...values, phone: values.phone.trim() && !values.phone.trim().startsWith('+') ? `${dialCode} ${values.phone.trim()}` : values.phone.trim() };
+  const cellphone = validateCellphone(values.phone, country);
   const { pending, provider, status, message, run } = useAuthRequest('Cuenta creada correctamente.', 'No pudimos crear tu cuenta. Inténtalo nuevamente.');
-  const error = (field: RegistrationField) => touched[field] ? registrationError(field, validationValues) : '';
+  const error = (field: RegistrationField) => touched[field] ? (field === 'phone' ? cellphone.error : registrationError(field, values)) : '';
   function change(field: RegistrationField, value: string | boolean) { setValues(current => ({ ...current, [field]: value }) as RegistrationValues); }
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setTouched(Object.fromEntries([...fields, 'terms'].map(field => [field, true])));
-    const firstInvalid = [...fields, 'terms' as const].find(field => registrationError(field, validationValues));
+    const firstInvalid = [...fields, 'terms' as const].find(field => (field === 'phone' ? cellphone.error : registrationError(field, values)));
     if (firstInvalid) { (event.currentTarget.elements.namedItem(firstInvalid) as HTMLInputElement).focus(); return; }
-    void run(() => registrationService.register({ name: values.name.trim().replace(/\s+/g, ' '), email: values.email.trim(), phone: validationValues.phone, password: values.password, termsAccepted: values.terms }), 'password');
+    void run(() => registrationService.register({ name: values.name.trim().replace(/\s+/g, ' '), email: values.email.trim(), phone: cellphone.number, password: values.password, termsAccepted: values.terms }), 'password');
   }
   const binding = (field: Exclude<RegistrationField, 'terms'>) => ({ id: `register-${field}`, name: field, value: values[field], required: true, disabled: pending, error: error(field), onChange: (event: React.ChangeEvent<HTMLInputElement>) => change(field, event.target.value), onBlur: () => setTouched(current => ({ ...current, [field]: true })) });
 
@@ -34,7 +36,7 @@ export function RegisterCard({ onLogin, onLegal }: Props) {
       <div className="fields">
         <AuthField {...binding('name')} label="Nombres y apellidos" icon="user" placeholder="Tus nombres y apellidos" autoComplete="name" maxLength={120} />
         <AuthField {...binding('email')} label="Correo electrónico" icon="mail" type="email" placeholder="Tu correo electrónico" autoComplete="email" />
-        <AuthField {...binding('phone')} label="Celular" icon="phone" type="tel" inputMode="tel" placeholder="Tu número de teléfono" autoComplete="tel-national" maxLength={25} suffix={<div className="phone-prefix"><span className="phone-country" data-dial={dialCode} aria-hidden="true">{dialCode === '+51' ? '🇵🇪' : dialCode === '+57' ? '🇨🇴' : dialCode === '+56' ? '🇨🇱' : dialCode === '+593' ? '🇪🇨' : '🇺🇸'}</span><select aria-label="Prefijo telefónico" value={dialCode} disabled={pending} onChange={event => setDialCode(event.target.value)}><option value="+51">+51</option><option value="+57">+57</option><option value="+56">+56</option><option value="+593">+593</option><option value="+1">+1</option></select></div>} />
+        <AuthField {...binding('phone')} label="Celular" icon="phone" type="tel" inputMode="tel" placeholder="Tu número de celular" autoComplete="tel-national" maxLength={25} suffix={<PhoneCountrySelect country={country} disabled={pending} onChange={next => { setCountry(next); setTouched(current => ({ ...current, phone: !!values.phone.trim() })); }} />} />
         <AuthField {...binding('password')} label="Contraseña" icon="lock" type="password" placeholder="Tu contraseña" autoComplete="new-password" />
         <AuthField {...binding('confirmation')} label="Confirmar contraseña" icon="lock" type="password" placeholder="Confirma tu contraseña" autoComplete="new-password" success={!!values.confirmation && values.confirmation === values.password} help={values.confirmation && values.confirmation === values.password ? 'Las contraseñas coinciden.' : undefined} />
       </div>

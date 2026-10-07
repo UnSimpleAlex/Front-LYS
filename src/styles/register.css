@@ -16,8 +16,12 @@
 .compact-auth-card .input-field input::placeholder { color: #69717f; }
 .compact-auth-card .field-error, .compact-auth-card .field-help { margin-top: 5px; }
 .phone-prefix { display: flex; align-items: center; gap: 5px; border-left: 1px solid var(--input-border); padding-left: 9px; flex-shrink: 0; }
-.phone-prefix select { min-height: 44px; max-width: 65px; font: inherit; font-size: 13px; border: 0; background: transparent; color: #303846; cursor: pointer; }
-.phone-country[data-dial="+51"] { display: block; width: 18px; height: 12px; font-size: 0; background: linear-gradient(90deg, #d90019 33.33%, #fff 33.33% 66.66%, #d90019 66.66%); }
+.phone-prefix { position: relative; min-height: 44px; padding-right: 16px; }
+.phone-country { width: 20px; height: 14px; flex-shrink: 0; }
+.phone-calling-code { color: #303846; font-size: 13px; }
+.phone-prefix select { position: absolute; inset: 0; width: 100%; opacity: 0; cursor: pointer; }
+.phone-prefix:focus-within { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 4px; }
+.phone-chevron { position: absolute; right: 0; color: #303846; font-size: 16px; }
 .compact-auth-card .sign-in-button { min-height: 46px; position: relative; letter-spacing: .08em; }
 .compact-auth-card .sign-in-button > svg { position: absolute; right: 14px; }
 .compact-auth-card .or-divider { margin: 14px 0; gap: 12px; }

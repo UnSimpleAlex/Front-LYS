@@ -59,8 +59,8 @@ for (const outcome of ['success', 'error'] as const) {
     await page.route('**/src/services/registrationService.ts*', route => route.fulfill({ contentType: 'application/javascript', body: `export const registrationService={register:async(values)=>{window.registrationPhone=values.phone;window.submissions=(window.submissions||0)+1;await new Promise(r=>window.finishSignIn=r);${outcome === 'success' ? 'return {ok:true};' : 'throw new Error("offline");'}},registerWithGoogle:async()=>({ok:false,message:'pendiente'})};` }));
     await page.goto('/registro'); await fillRegistration(page);
     if (outcome === 'success') {
-      await page.getByLabel('Prefijo telefónico').selectOption('+57');
-      await page.getByLabel('Celular', { exact: true }).fill('999 888 777');
+      await page.getByLabel('País y prefijo del celular').selectOption('CO');
+      await page.getByLabel('Celular', { exact: true }).fill('321 123 4567');
     }
     await page.getByRole('button', { name: 'Crear cuenta', exact: true }).click();
     await expect(page.getByRole('button', { name: 'Creando cuenta…' })).toBeDisabled();
@@ -70,7 +70,7 @@ for (const outcome of ['success', 'error'] as const) {
     await page.evaluate(() => window.finishSignIn());
     await expect(page.getByRole(outcome === 'success' ? 'status' : 'alert')).toContainText(outcome === 'success' ? 'Cuenta creada correctamente' : 'Inténtalo nuevamente');
     expect(await page.evaluate(() => window.submissions)).toBe(1);
-    expect(await page.evaluate(() => window.registrationPhone)).toBe(outcome === 'success' ? '+57 999 888 777' : '+51 999 888 777');
+    expect(await page.evaluate(() => window.registrationPhone)).toBe(outcome === 'success' ? '+573211234567' : '+51999888777');
   });
 }
 
