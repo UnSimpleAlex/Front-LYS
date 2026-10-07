@@ -39,3 +39,5 @@ La segunda diapositiva usa el fondo limpio adjunto codex-clipboard-6b777f19-da2a
 Actualización del carrusel 2: fondo codex-clipboard-2b6ab9ea-3f76-4cb7-b7c9-bc1bf564fa67.png (2508×627), WebP 1080/2172. El título se aísla en title-compartir.webp (1400×468, alpha) con ImageGen integrado desde la referencia; texto alternativo semántico en el h1. Prompt y origen en INICIO_ASSETS_GENERADOS.json.
 
 Los banners 1 y 2 comparten las mismas reglas de altura en todos los breakpoints, sin saltos al cambiar de diapositiva. Lettering del segundo ajustado con ImageGen al rojo vivo del primero. Prueba de igualdad de altura a 320, 390, 768, 1440 y 1920 px.
+
+El lettering del segundo carrusel usa un filtro SVG sRGB que lleva su rojo dominante (250,2,1) a (211,1,0), #D30100, según el adjunto codex-clipboard-555edd8d-0f0a-4f08-97a2-fda218df301e.png. Conserva alpha, negro y geometría, sin regenerar ni alterar la imagen original.

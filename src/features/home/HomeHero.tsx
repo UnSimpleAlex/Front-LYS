@@ -23,6 +23,13 @@ export function HomeHero({ onAction }: { onAction: (section: string) => void }) 
     if (Math.abs(distance) > 50) move(distance < 0 ? 1 : -1);
     startX.current = null;
   }}>
+    <svg className="sr-only" aria-hidden="true" focusable="false">
+      <defs>
+        <filter id="sharing-title-red" colorInterpolationFilters="sRGB">
+          <feColorMatrix type="matrix" values="0.844 0 0 0 0  0 0.5 0 0 0  0 0 0 0 0  0 0 0 1 0" />
+        </filter>
+      </defs>
+    </svg>
     <AnimatePresence initial={false}>
       <motion.picture key={slide.image} className={`home-hero-picture slide-${slide.image}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: reduce ? 0 : .35 }}>
         {current === 0 && <source media="(max-width: 650px)" srcSet="/images/home/hero-mobile.webp" />}
