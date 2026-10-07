@@ -2,6 +2,8 @@
 
 ## Recursos del usuario
 
+`public/images/register-lettering.webp`: lettering de registro recreado con ImageGen sobre transparencia (2020×778, convertido a WebP calidad 90). Texto exacto: «Únete al» negro / «sabor de casa» rojo, trazos anchos de pincel, subrayado rojo y tres rayos rojos. Se generó únicamente el título, sin fondo, fotografía ni formulario, aproximando el estilo de las referencias 2.png y Movil/4.png. Los fondos de registro son los mismos Cloudinary del login.
+
 - Fondo PC activo en Cloudinary: https://res.cloudinary.com/y08rn1qr/image/upload/v1791327573/b4146a7f-588e-484e-bdea-040ffa4a6796.png. `public/images/hero-desktop.webp` conserva el recurso local anterior.
 - Fondo móvil activo en Cloudinary: https://res.cloudinary.com/y08rn1qr/image/upload/v1791327513/dae531a5-70f8-4f49-aff5-1ea88aaac133.png. `public/images/hero-mobile.webp` conserva el recurso local anterior.
 - `public/images/logo.webp`: logo suministrado, 2048 × 682, con transparencia.
