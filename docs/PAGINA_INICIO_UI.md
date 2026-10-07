@@ -20,4 +20,6 @@ Home y registro cargan en módulos separados. Build: entrada ~359 kB / 114 kB gz
 
 ## Validación
 
+Promo Familiar usa la imagen roja de 1916×821 suministrada (confirmada con el adjunto `codex-clipboard-518fd0ed-ba2e-4624-bf49-c7767ee524b9.png`), igual en proporción a Parrillera y Dúo. Las tres tarjetas comparten altura incluso cuando se apilan: las filas uniformes y el estiramiento explícito evitan que una línea adicional de texto cambie el tamaño. Las pruebas responsive verifican igualdad de alturas y contenido sin recortes.
+
 Lint, typecheck y build. Suite de 88 casos: 71 regresiones de auth y 17 de Home. Home verificado a 320×568, 360×800, 375×812, 390×844, 412×915, 430×932, 480×900, 768×1024, 1024×768, 1280×800, 1366×768, 1440×900 y 1920×1080: carga de imágenes, sin desbordamiento, consola sin errores de ejecución, carrusel, navegación y reduced motion. Comparación visual de capturas con las referencias, incluyendo corrección de CTA y flechas de tarjetas a 320–375 px; evidencias en `docs/visual/inicio-320.jpg`, `inicio-390.jpg`, `inicio-768.jpg`, `inicio-1920.jpg`.
