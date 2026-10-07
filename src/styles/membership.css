@@ -1,0 +1,59 @@
+.home-membership { background: #fff; padding-block: 56px 38px; overflow: clip; }
+.membership-inner { display: grid; grid-template-columns: 1fr 1fr; column-gap: 8%; align-items: center; }
+.membership-copy h2 { margin: 0; font-size: clamp(28px, 2.6vw, 48px); line-height: 1.1; letter-spacing: -.035em; }
+.membership-copy h2 .home-script { display: block; margin-top: 9px; font-size: 1.15em; }
+.membership-copy > p { max-width: 45ch; font-size: clamp(15px, 1.05vw, 19px); line-height: 1.55; margin: 22px 0; color: #4d4240; }
+.membership-join { min-height: 48px; font-size: 16px; }
+.membership-coming { display: block; margin-top: 12px; font-size: 12px; color: #655854; }
+.membership-showcase { position: relative; padding: 16px 24px 34px; }
+.membership-pass { position: relative; width: min(100%, 440px); aspect-ratio: 1.7; margin: auto; padding: 28px; border-radius: 16px; background: #2b2020; color: #fff4df; box-shadow: 0 18px 32px #44271b26; transform: rotate(-5deg); overflow: hidden; isolation: isolate; transition: background-color 250ms, color 250ms; }
+.membership-pass img { position: relative; width: 155px; height: auto; filter: url('#footer-logo-color'); z-index: 1; }
+.pass-circle { position: absolute; right: -40px; top: -28px; width: 250px; height: 250px; border: 1px solid #ffffff25; border-radius: 50%; display: grid; place-items: center; }
+.pass-circle::after { content: ''; position: absolute; inset: 20px; border: 1px solid #ffffff25; border-radius: 50%; }
+.pass-circle svg { width: 115px; height: 115px; stroke-width: 1; opacity: .35; }
+.pass-rank { position: relative; display: flex; flex-direction: column; margin-top: 22px; }
+.pass-rank > span, .pass-bottom { font-size: 9px; letter-spacing: .14em; }
+.pass-rank strong { font-family: Knewave, cursive; font-size: clamp(38px, 3.4vw, 58px); font-weight: 400; line-height: 1.2; }
+.pass-bottom { display: flex; justify-content: space-between; gap: 12px; margin-top: 20px; font-size: 8px; }
+.pass-chispa { background: #744d39; }
+.pass-brasa { background: #b80b17; }
+.pass-fuego { background: #25221d; color: #f0ca85; }
+.membership-signature { position: relative; display: block; text-align: center; font-size: 27px; margin-top: 22px; color: #4f332b; }
+.membership-journey { grid-column: 1/-1; display: grid; grid-template-columns: 1.1fr 1fr 1fr; gap: 32px; align-items: center; padding-top: 28px; margin-top: 20px; border-top: 1px solid #eadfd8; }
+.membership-steps { display: flex; gap: 8px; }
+.membership-steps button { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 7px; padding: 10px 12px; border: 0; border-bottom: 2px solid #e4dad5; background: transparent; color: #655854; font-size: 16px; font-weight: 700; text-align: left; transition: border-color 180ms, color 180ms; }
+.membership-steps button:hover, .membership-steps button[aria-pressed=true] { color: #ba0013; border-color: #ba0013; }
+.membership-steps button svg { width: 22px; height: 22px; }
+.rank-number { font-size: 10px; font-weight: 500; }
+.membership-rank-detail strong { font-size: 18px; }
+.membership-rank-detail p, .membership-explainer { font-size: 14px; line-height: 1.5; color: #594b46; margin: 5px 0 0; }
+.membership-explainer span { font-size: 12px; }
+@media (max-width: 1100px) {
+  .home-membership { padding-block: 38px 28px; }
+  .membership-inner { column-gap: 3%; }
+  .membership-showcase { padding-inline: 12px; }
+  .membership-pass { padding: 20px; }
+  .membership-pass img { width: 130px; }
+  .pass-rank { margin-top: 14px; }
+  .pass-bottom { margin-top: 14px; font-size: 7px; }
+  .membership-journey { grid-template-columns: 1fr 1fr; gap: 20px; }
+  .membership-explainer { grid-column: 1/-1; }
+}
+@media (max-width: 650px) {
+  .home-membership { padding-block: 30px 24px; }
+  .membership-inner { grid-template-columns: minmax(0, 1fr); }
+  .membership-copy h2 { font-size: clamp(28px, 7vw, 38px); }
+  .membership-copy > p { margin-block: 16px; font-size: 15px; }
+  .membership-join { font-size: 15px; min-height: 44px; padding: 10px 18px; }
+  .membership-showcase { margin-top: 20px; padding: 16px 12px 0; }
+  .membership-pass { padding: 22px; }
+  .pass-rank strong { font-size: 42px; }
+  .pass-circle { width: 200px; height: 200px; }
+  .membership-signature { font-size: 24px; margin-top: 20px; }
+  .membership-journey { grid-template-columns: minmax(0, 1fr); gap: 16px; margin-top: 18px; padding-top: 14px; }
+  .membership-steps button { flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: space-between; padding: 10px 7px; font-size: 15px; }
+  .rank-number { width: 100%; }
+  .membership-steps button svg { width: 18px; height: 18px; }
+  .membership-explainer { grid-column: auto; }
+}
+@media (prefers-reduced-motion: reduce) { .membership-pass, .membership-steps button { transition: none; } }

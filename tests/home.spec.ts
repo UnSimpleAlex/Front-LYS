@@ -1,6 +1,21 @@
 import { test, expect } from '@playwright/test';
 
 const sizes = [[320, 568], [360, 800], [375, 812], [390, 844], [412, 915], [430, 932], [480, 900], [768, 1024], [1024, 768], [1280, 800], [1366, 768], [1440, 900], [1920, 1080]];
+test('membresía permite explorar rangos y abrir el registro', async ({ page }) => {
+  await page.goto('/');
+  const membership = page.getByRole('region', { name: 'Círculo de la Brasa Volver tiene su recompensa.' });
+  await expect(page.getByRole('button', { name: 'Descargar en App Store' })).toHaveCount(0);
+  for (const rank of ['Chispa', 'Brasa', 'Fuego']) {
+    const button = membership.getByRole('button', { name: new RegExp(rank) });
+    await button.click();
+    await expect(button).toHaveAttribute('aria-pressed', 'true');
+    await expect(membership.locator('.pass-rank strong')).toHaveText(rank);
+  }
+  await membership.getByRole('button', { name: 'Quiero ser parte' }).click();
+  await expect(page).toHaveURL(/\/registro$/);
+  await page.goBack();
+  await expect(membership).toBeVisible();
+});
 for (const [width, height] of sizes) {
   test(`inicio ${width} × ${height}: composición, imágenes y navegación`, async ({ page }, testInfo) => {
     const errors: string[] = [];
@@ -8,8 +23,8 @@ for (const [width, height] of sizes) {
     page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
     await page.setViewportSize({ width, height });
     await page.goto('/');
-    await page.evaluate(() => document.fonts.ready);
     await expect(page.getByRole('heading', { level: 1 })).toContainText('Sabor peruano');
+    await page.evaluate(() => document.fonts.ready);
     await page.locator('.home-footer').scrollIntoViewIfNeeded();
     await page.waitForFunction(() => [...document.images].every(image => image.complete && image.naturalWidth > 0));
     await page.evaluate(() => window.scrollTo(0, 0));

@@ -30,13 +30,14 @@ export function App() {
   }
 
   function onSection(section: string) {
+    if (section === 'Afiliarme') { navigate(true); return; }
     const targets: Record<string, string> = { Inicio: 'contenido', Promociones: 'promociones', Contacto: 'contacto' };
     if (home && targets[section]) {
       document.getElementById(targets[section])?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
       return;
     }
     if (section === 'Inicio') { window.history.pushState(null, '', '/'); setRoute('/'); window.scrollTo({ top: 0, behavior: 'instant' }); return; }
-    const message = section === 'Pedir ahora' ? 'Pronto podrás hacer tu pedido desde aquí.' : ['App Store', 'Google Play'].includes(section) ? 'La aplicación estará disponible para descargar próximamente.' : `La sección ${section.toLowerCase()} estará disponible pronto.`;
+    const message = section === 'Pedir ahora' ? 'Pronto podrás hacer tu pedido desde aquí.' : `La sección ${section.toLowerCase()} estará disponible pronto.`;
     setNotice({ title: section, message });
   }
   return <MotionConfig reducedMotion="user">

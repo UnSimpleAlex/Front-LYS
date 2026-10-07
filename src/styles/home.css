@@ -72,26 +72,7 @@
 .promotion-price sup { font-size: .45em; vertical-align: super; }
 .promotion-duo .promotion-copy { color: #16110b; }
 .promotion-duo .promotion-price { color: #e00000; }
-.home-app { background: #fff; overflow: clip; }
-.home-app-inner { display: grid; grid-template-columns: 18% 27% 1fr 13%; gap: 22px; align-items: center; min-height: 205px; }
-.app-heading h2 { font-size: clamp(26px, 2.2vw, 42px); margin: 0; line-height: 1.1; letter-spacing: -.04em; }
-.app-heading .home-script { display: block; margin-top: 4px; }
-.app-heading p { font-size: clamp(14px, 1vw, 19px); margin-bottom: 0; }
-.app-details { padding: 12px 0 12px 28px; border-left: 1px solid #f5c7c1; }
-.app-benefits { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
-.app-benefits .home-benefit { padding-inline: 16px; gap: 12px; align-items: flex-start; }
-.app-pocket { color: #181818; text-align: center; transform: rotate(-9deg); font-size: clamp(24px, 1.8vw, 35px); }
-.app-pocket::after, .footer-phrase::after { content: ''; display: block; height: 3px; width: 60%; margin: 5px auto; background: var(--home-red); transform: rotate(-6deg); }
-.app-phone-scene { align-self: stretch; position: relative; border-radius: 24px 90px 0 24px; background: #e60000; margin-block: 20px 0; height: 190px; }
-.app-phone { position: absolute; width: 145px; height: 235px; bottom: -15px; left: 23%; border: 5px solid #171717; border-radius: 25px; background: white; transform: rotate(-18deg); box-shadow: 0 0 0 2px #ccc; overflow: clip; padding: 20px 8px 0; }
-.phone-notch { position: absolute; top: 0; height: 12px; width: 60%; left: 20%; background: #171717; border-radius: 0 0 8px 8px; }
-.phone-logo { display: block; width: 100%; height: 52px; object-fit: contain; }
-.app-phone > span { display: block; background: var(--home-red); border-radius: 10px; color: white; margin: 6px 0; font-size: 12px; padding: 6px; text-align: center; }
-.phone-food { width: 240%; height: 120px; object-fit: cover; object-position: right; margin-left: -140%; display: block; }
-.store-badges { display: flex; gap: 16px; margin-top: 18px; }
-.store-badge { display: flex; align-items: center; gap: 8px; border: 1px solid #aaa; border-radius: 6px; background: #060606; color: #fff; font-size: clamp(18px, 1.3vw, 25px); padding: 5px 10px; line-height: 1; text-align: left; }
-.store-badge small { display: block; font-size: 9px; line-height: 1.15; }
-.store-badge svg { width: 27px; height: 30px; }
+.footer-phrase::after { content: ''; display: block; height: 3px; width: 60%; margin: 5px auto; background: var(--home-red); transform: rotate(-6deg); }
 .home-footer { background: #20201e; color: #ddd; font-size: 13px; }
 .footer-main { display: grid; grid-template-columns: 17% 31% 20% 13% 1fr; align-items: center; gap: 22px; padding-block: 18px; }
 .footer-main > * + * { border-left: 1px solid #555; padding-left: 22px; }
@@ -108,7 +89,7 @@
 .footer-phrase { font-size: 23px; margin: 0; color: #fff; text-align: center; }
 .footer-bottom { border-top: 1px solid #555; display: flex; justify-content: space-between; gap: 16px; padding-block: 9px; }
 .peru-flag { display: inline-block; width: 21px; height: 13px; background: linear-gradient(to right,#e90000 33%,#fff 33%,#fff 66%,#e90000 66%); margin-left: 12px; }
-@media (max-width: 1450px) and (min-width: 1101px) { .home-header { padding-inline: 4%; gap: 20px; } .home-header .brand { width: 210px; } .home-header .desktop-nav { gap: 22px; } .home-header .login-link { font-size: 14px; } .promotion-copy { padding: 14px 18px; } .specialty-copy { padding: 15px; } .app-phone { left: 15%; } .home-app-inner { grid-template-columns: 17% 30% 1fr; gap: 15px; } .app-pocket { display: none; } }
+@media (max-width: 1450px) and (min-width: 1101px) { .home-header { padding-inline: 4%; gap: 20px; } .home-header .brand { width: 210px; } .home-header .desktop-nav { gap: 22px; } .home-header .login-link { font-size: 14px; } .promotion-copy { padding: 14px 18px; } .specialty-copy { padding: 15px; } }
 @media (max-width: 1100px) {
   .home-header { height: 68px; padding-inline: 5%; }
   .home-header .desktop-nav, .home-header .header-divider, .home-header .order-button { display: none; }
@@ -143,14 +124,6 @@
   .promotion-copy h3 { font-size: 22px; }
   .promotion-copy p { font-size: 19px; }
   .promotion-price { font-size: 64px; }
-  .home-app-inner { grid-template-columns: 25% 1fr; gap: 16px; padding-block: 22px; }
-  .app-phone-scene { grid-row: 1/3; height: 255px; }
-  .app-phone { left: 12%; height: 270px; width: 160px; bottom: 0; }
-  .app-heading h2 { font-size: 32px; }
-  .app-heading p { font-size: 16px; }
-  .app-details { border: 0; padding: 0; }
-  .app-pocket { display: none; }
-  .app-benefits .home-benefit { padding: 0 10px; gap: 8px; }
   .footer-main { grid-template-columns: 28% 1fr; gap: 12px; }
   .footer-contact, .footer-social { border-left: 0 !important; padding-left: 0 !important; }
   .footer-phrase { grid-column: 1/-1; border-left: 0 !important; }
@@ -211,23 +184,6 @@
   .promotion-copy h3 { font-size: clamp(12px, 3.3vw, 20px); margin: 5px 0 0; }
   .promotion-copy p { font-size: clamp(10px, 2.8vw, 16px); }
   .promotion-price { font-size: clamp(25px, 7vw, 43px); margin-top: 2px; }
-  .home-app-inner { grid-template-columns: 27% 1fr; gap: 8px; padding-block: 14px; }
-  .app-phone-scene { height: 150px; margin: 0; border-radius: 12px 55px 0 12px; }
-  .app-phone { width: 77px; height: 148px; left: 10%; border-width: 3px; border-radius: 15px; padding: 12px 4px 0; }
-  .phone-logo { height: 40px; }
-  .phone-notch { height: 6px; }
-  .app-phone > span { font-size: 7px; padding: 4px; margin-block: 3px; }
-  .phone-food { height: 75px; }
-  .app-heading h2 { font-size: clamp(18px, 4.6vw, 27px); }
-  .app-heading p { font-size: 11px; margin-top: 8px; }
-  .app-benefits .home-benefit { display: block; padding-inline: 6px; }
-  .app-benefits .home-benefit > svg { width: 26px; height: 26px; margin-bottom: 4px; }
-  .app-benefits h3 { font-size: 10px; }
-  .app-benefits p { font-size: 9px; }
-  .store-badges { gap: 7px; margin-top: 10px; }
-  .store-badge { font-size: clamp(13px, 3.1vw, 18px); gap: 4px; padding: 4px 5px; }
-  .store-badge svg { width: 18px; height: 22px; }
-  .store-badge small { font-size: 6px; }
   .home-footer { font-size: 10px; }
   .footer-main { grid-template-columns: 28% 1fr; gap: 8px; padding-block: 12px; }
   .footer-main > * + * { padding-left: 10px; }
@@ -249,5 +205,4 @@
   .carousel-arrow.previous { top: 57%; }
   .specialty-card { min-height: 112px; }
   .specialty-copy { width: 50%; }
-  .app-phone { width: 60px; height: 140px; transform: rotate(-12deg); left: 8%; }
 }

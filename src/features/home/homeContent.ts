@@ -19,8 +19,3 @@ export const serviceBenefits: Benefit[] = [
   { icon: 'card', title: 'Pagos rápidos', description: 'Efectivo, tarjeta y Yape' },
   { icon: 'gift', title: 'Promociones exclusivas', description: 'Más sabor, más momentos' },
 ];
-export const appBenefits: Benefit[] = [
-  { icon: 'star', title: 'Acumula puntos', description: 'y disfruta beneficios' },
-  { icon: 'percent', title: 'Accede a promociones', description: 'exclusivas' },
-  { icon: 'mobile', title: 'Pide más rápido', description: 'y sigue tu pedido en tiempo real' },
-];
