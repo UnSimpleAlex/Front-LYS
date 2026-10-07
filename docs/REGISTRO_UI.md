@@ -10,6 +10,8 @@ Términos sin marcar inicialmente, enlaces accesibles y avisos honestos de docum
 
 Entrada y feedback reutilizan CSS y reduced motion; sin nuevas dependencias. El texto semántico del título permanece en h1 y el lettering decorativo tiene alt vacío.
 
+La frase del banner reutiliza Caveat, peso 600 y altura de línea 1.2 del login. Su tamaño responde al ancho del bloque de título, aumenta en tablet y mantiene un ancho limitado con saltos naturales. En la composición apilada se reserva espacio para el texto antes de la fotografía, evitando superposición con la bolsa o el pollo. Ajuste verificado en los 16 tamaños de registro.
+
 Validación: lint, typecheck y build aprobados; 46 pruebas aprobadas (27 de login/navegación y 19 de registro). Registro se verifica en 16 tamaños: 320×568, 360×640, 360×800, 375×667, 390×844, 412×915, 430×932, 480×900, 600×960, 768×1024, 820×1180, 1024×768, 1280×800, 1366×768, 1440×900 y 1920×1080. Capturas en test-results/ y revisión visual móvil/tablet/PC; sin overflow horizontal. Pruebas de formulario vacío, nombre/correo/celular/contraseña inválidos, coincidencia, términos, navegación, Google pendiente, carga, éxito, error, doble envío y reducción de movimiento. La carga de Cloudinary requiere red habilitada en el entorno de pruebas.
 
 No se acredita autenticación real, todos los navegadores físicos ni capacidad de usuarios concurrentes.
