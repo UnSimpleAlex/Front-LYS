@@ -50,7 +50,7 @@ for (const [width, height] of sizes) {
 test('carrusel cambia con flechas, indicadores y teclado', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: 'Diapositiva siguiente' }).click();
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Tu combo favorito');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Comparte el fuego');
   await page.getByRole('button', { name: 'Ver diapositiva 3' }).click();
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Sabor a la leña');
   await page.getByRole('region', { name: 'Sabores de nuestra cocina' }).focus();
@@ -89,7 +89,7 @@ test('gesto móvil y reducción de movimiento conservan el carrusel', async ({ p
     element.dispatchEvent(new TouchEvent('touchstart', { bubbles: true, touches: [new Touch({ identifier: 1, target: element, clientX: 250, clientY: 200 })] }));
     element.dispatchEvent(new TouchEvent('touchend', { bubbles: true, changedTouches: [new Touch({ identifier: 1, target: element, clientX: 100, clientY: 200 })] }));
   });
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Tu combo favorito');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Comparte el fuego');
   await page.getByRole('button', { name: 'Ver diapositiva 1' }).click();
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Sabor peruano');
 });
