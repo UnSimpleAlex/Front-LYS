@@ -1,10 +1,10 @@
 import { useState, type FormEvent } from 'react';
 import { Icon, GoogleIcon } from '../../components/Icon';
+import { AuthField } from './AuthField';
 import { useSignIn } from './useSignIn';
 
 type FieldName = 'email' | 'password';
 export function SignInCard({ onHelp }: { onHelp: (action: 'register' | 'recover') => void }) {
-  const [passwordVisible, setPasswordVisible] = useState(false);
   const [errors, setErrors] = useState<Partial<Record<FieldName, string>>>({});
   const { pending, provider, status, message, submit } = useSignIn();
 
@@ -32,23 +32,8 @@ export function SignInCard({ onHelp }: { onHelp: (action: 'register' | 'recover'
     <h2 id="sign-in-title">Iniciar sesión</h2>
     <form onSubmit={onSubmit} noValidate aria-busy={pending}>
       <div className="fields">
-        <div className="field-group">
-          <label className="field-label" htmlFor="email">Correo electrónico</label>
-          <div className="input-field">
-            <Icon name="mail" />
-            <input id="email" name="email" type="email" placeholder="nombre@correo.com" autoComplete="email" required disabled={pending} aria-invalid={!!errors.email} aria-describedby={errors.email ? 'email-error' : undefined} onBlur={(event) => validate(event.currentTarget)} onChange={(event) => { if (errors.email) validate(event.currentTarget); }} />
-          </div>
-          {errors.email && <p className="field-error" id="email-error">{errors.email}</p>}
-        </div>
-        <div className="field-group">
-          <label className="field-label" htmlFor="password">Contraseña</label>
-          <div className="input-field">
-            <Icon name="lock" />
-            <input id="password" name="password" type={passwordVisible ? 'text' : 'password'} placeholder="Tu contraseña" autoComplete="current-password" required disabled={pending} aria-invalid={!!errors.password} aria-describedby={errors.password ? 'password-error' : undefined} onBlur={(event) => validate(event.currentTarget)} onChange={(event) => { if (errors.password) validate(event.currentTarget); }} />
-            <button type="button" className="password-toggle" disabled={pending} aria-label={passwordVisible ? 'Ocultar contraseña' : 'Mostrar contraseña'} aria-pressed={passwordVisible} onClick={() => setPasswordVisible(!passwordVisible)}><Icon key={String(passwordVisible)} name={passwordVisible ? 'eye' : 'eye-off'} /></button>
-          </div>
-          {errors.password && <p className="field-error" id="password-error">{errors.password}</p>}
-        </div>
+        <AuthField label="Correo electrónico" icon="mail" id="email" name="email" type="email" placeholder="nombre@correo.com" autoComplete="email" required disabled={pending} error={errors.email} onBlur={(event) => validate(event.currentTarget)} onChange={(event) => { if (errors.email) validate(event.currentTarget); }} />
+        <AuthField label="Contraseña" icon="lock" id="password" name="password" type="password" placeholder="Tu contraseña" autoComplete="current-password" required disabled={pending} error={errors.password} onBlur={(event) => validate(event.currentTarget)} onChange={(event) => { if (errors.password) validate(event.currentTarget); }} />
       </div>
       <div className="form-options">
         <label className="remember-option"><input type="checkbox" name="remember" defaultChecked disabled={pending} /><span className="checkbox-mark" aria-hidden="true"><Icon name="check" /></span><span>Recordarme en este dispositivo</span></label>
