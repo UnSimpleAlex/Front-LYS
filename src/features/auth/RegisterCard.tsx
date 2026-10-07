@@ -42,8 +42,8 @@ export function RegisterCard({ onLogin, onLegal }: Props) {
         <AuthField {...binding('phone')} label="Celular" icon="phone" type="tel" inputMode="numeric" placeholder="Tu número de celular" onChange={event => {
           const digits = sanitizeCellphone(event.target.value, country);
           if (digits === undefined) { setPhoneInputError(`El prefijo debe ser ${callingCode(country)} para el país seleccionado.`); return; }
-          setPhoneInputError(''); change('phone', digits);
-        }} autoComplete="tel-national" maxLength={25} suffix={<PhoneCountrySelect country={country} disabled={pending} onChange={next => { setCountry(next); setPhoneInputError(''); setTouched(current => ({ ...current, phone: !!values.phone.trim() })); }} />} />
+          setPhoneInputError(''); change('phone', country === 'PE' ? digits.slice(0, 9) : digits);
+        }} autoComplete="tel-national" maxLength={25} suffix={<PhoneCountrySelect country={country} disabled={pending} onChange={next => { setCountry(next); setPhoneInputError(''); if (next === 'PE') change('phone', values.phone.slice(0, 9)); setTouched(current => ({ ...current, phone: !!values.phone.trim() })); }} />} />
         <AuthField {...binding('password')} label="Contraseña" icon="lock" type="password" placeholder="Tu contraseña" autoComplete="new-password" />
         <AuthField {...binding('confirmation')} label="Confirmar contraseña" icon="lock" type="password" placeholder="Confirma tu contraseña" autoComplete="new-password" success={!!values.confirmation && values.confirmation === values.password} help={values.confirmation && values.confirmation === values.password ? 'Las contraseñas coinciden.' : undefined} />
       </div>

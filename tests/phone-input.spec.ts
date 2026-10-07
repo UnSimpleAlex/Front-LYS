@@ -12,6 +12,12 @@ test('celular filtra letras y avisa del inicio mientras se escribe', async ({ pa
   await expect(input).toHaveValue('999888777');
   await input.fill('+51 999 888 777');
   await expect(input).toHaveValue('999888777');
+  await input.pressSequentially('123');
+  await expect(input).toHaveValue('999888777');
+  await input.fill('987654321123');
+  await expect(input).toHaveValue('987654321');
+  await input.fill('+51 987654321123');
+  await expect(input).toHaveValue('987654321');
   await input.fill('+57 3211234567');
   await expect(page.locator('#register-phone-error')).toContainText('prefijo debe ser +51');
   await input.fill('999888777');
@@ -20,5 +26,9 @@ test('celular filtra letras y avisa del inicio mientras se escribe', async ({ pa
   await input.fill('2');
   await expect(page.locator('#register-phone-error')).toHaveText('El celular de Colombia debe comenzar con 3, 9.');
   await input.fill('3211234567');
+  await expect(input).toHaveValue('3211234567');
   await expect(input).toHaveAttribute('aria-invalid', 'false');
+  await page.getByRole('button', { name: /País y prefijo del celular/ }).click();
+  await page.getByRole('option', { name: 'Perú +51', exact: true }).click();
+  await expect(input).toHaveValue('321123456');
 });
