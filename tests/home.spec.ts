@@ -9,10 +9,18 @@ test('los dos primeros banners mantienen la misma altura en móvil, tablet y PC'
     await expect(page.getByRole('heading', { level: 1 })).toContainText('Sabor peruano');
     const hero = page.locator('.home-hero');
     const first = await hero.boundingBox();
+    const firstButton = await page.locator('.home-hero-actions button').first().boundingBox();
     await page.getByRole('button', { name: 'Ver diapositiva 2' }).click();
     await expect(page.getByRole('heading', { level: 1 })).toContainText('Comparte el fuego');
     const second = await hero.boundingBox();
     expect(second!.height).toBe(first!.height);
+    const secondButton = await page.locator('.home-hero-actions button').first().boundingBox();
+    expect(secondButton!.y).toBe(firstButton!.y);
+    expect(secondButton!.x).toBe(firstButton!.x);
+    await page.getByRole('button', { name: 'Ver diapositiva 3' }).click();
+    await expect(page.getByRole('heading', { level: 1 })).toContainText('Sabor a la leña');
+    const thirdButton = await page.locator('.home-hero-actions button').first().boundingBox();
+    expect(thirdButton!.y).toBe(firstButton!.y);
   }
 });
 test('membresía muestra tres rangos y abre el registro', async ({ page }) => {

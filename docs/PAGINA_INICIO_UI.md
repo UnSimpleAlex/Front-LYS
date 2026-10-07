@@ -43,3 +43,5 @@ Los banners 1 y 2 comparten las mismas reglas de altura en todos los breakpoints
 El lettering del segundo carrusel usa un filtro SVG sRGB que lleva su rojo dominante (250,2,1) a (211,1,0), #D30100, según el adjunto codex-clipboard-555edd8d-0f0a-4f08-97a2-fda218df301e.png. Conserva alpha, negro y geometría, sin regenerar ni alterar la imagen original.
 
 Transición refinada: fundido de 600 ms con fondo saliente opaco debajo para evitar destellos, easing de desaceleración; texto sale en 150 ms y entra en 450 ms con desplazamiento de 12 px; botones entran discretamente en 400 ms. Precarga y decodificación de fondos y lettering; reduced motion anula duraciones, retrasos y desplazamientos.
+
+Descripciones del carrusel en Caveat 600, como el lema del login. Acciones persistentes ancladas a una posición común, sin animación vertical; primera acción mantiene coordenadas X/Y en las tres diapositivas. Nueva transición horizontal direccional de 700 ms con ease-in-out; texto acompaña con 24 px y fundido discreto. Pruebas verifican posición idéntica de botones en 320/390/768/1440/1920 px.

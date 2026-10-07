@@ -224,3 +224,22 @@
 }
 
 .home-hero-inner, .carousel-arrow, .carousel-dots { z-index: 3; }
+
+/* Descripciones y acciones comparten una composición estable entre diapositivas. */
+.home-hero-inner, .home-hero-sharing .home-hero-inner { justify-content: flex-start; padding-block: 22px 0; }
+.home-hero h1 { margin-bottom: 12px; }
+.home-hero-copy p, .home-hero-sharing .home-hero-copy p { font-family: Caveat, 'DM Sans', cursive; font-weight: 600; font-size: clamp(21px, 1.8vw, 32px); line-height: 1.15; margin-bottom: 0; }
+.home-hero-actions { position: absolute; left: 3%; bottom: 12%; margin: 0; }
+.home-hero-actions .home-button { min-width: 190px; }
+@media (max-width: 1100px) {
+  .home-hero-copy p, .home-hero-sharing .home-hero-copy p { font-size: clamp(20px, 2.5vw, 25px); }
+  .home-hero-actions .home-button { min-width: 170px; }
+}
+@media (max-width: 650px) {
+  .home-hero-inner, .home-hero-sharing .home-hero-inner { padding-top: 18px; }
+  .home-hero-copy p, .home-hero-sharing .home-hero-copy p { font-size: clamp(16px, 4.1vw, 24px); line-height: 1.1; }
+  .home-hero-actions, .home-hero-sharing .home-hero-actions { left: 0; bottom: 30px; width: 52%; }
+  .home-hero-actions .home-button, .home-hero-sharing .home-button { min-width: 0; min-height: 34px; gap: 6px; padding: 7px 9px; font-size: clamp(12px, 3vw, 16px); }
+  .slide-hero-compartir { top: 44%; }
+  .home-hero-sharing .home-hero-picture:not(.slide-hero-compartir) { top: 0; }
+}

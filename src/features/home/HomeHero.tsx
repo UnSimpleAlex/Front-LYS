@@ -9,10 +9,11 @@ const slides = [
 ];
 export function HomeHero({ onAction }: { onAction: (section: string) => void }) {
   const [current, setCurrent] = useState(0);
+  const [direction, setDirection] = useState(1);
   const startX = useRef<number | null>(null);
   const reduce = useReducedMotion();
   const slide = slides[current];
-  const easing = [.22, 1, .36, 1] as const;
+  const easing = [.65, 0, .35, 1] as const;
   useEffect(() => {
     const size = window.innerWidth * window.devicePixelRatio > 1080 ? '2172' : '1080';
     const sources = [window.matchMedia('(max-width: 650px)').matches ? 'hero-mobile' : `hero-${size}`, `hero-compartir-${size}`, 'parrillas-1080', 'title', 'title-compartir'];
@@ -22,7 +23,8 @@ export function HomeHero({ onAction }: { onAction: (section: string) => void }) 
       void image.decode().catch(() => {});
     });
   }, []);
-  function move(delta: number) { setCurrent(index => (index + delta + slides.length) % slides.length); }
+  function move(delta: number) { setDirection(delta > 0 ? 1 : -1); setCurrent(index => (index + delta + slides.length) % slides.length); }
+  function select(index: number) { setDirection(index > current ? 1 : -1); setCurrent(index); }
   return <section className={`home-hero${current === 1 ? ' home-hero-sharing' : ''}`} aria-roledescription="carrusel" aria-label="Sabores de nuestra cocina" onKeyDown={event => {
     if (event.target !== event.currentTarget) return;
     if (event.key === 'ArrowRight') move(1);
@@ -40,28 +42,27 @@ export function HomeHero({ onAction }: { onAction: (section: string) => void }) 
         </filter>
       </defs>
     </svg>
-    {/* .999 conserva el fondo saliente durante el fundido sin que Motion lo retire inmediatamente. */}
-    <AnimatePresence initial={false}>
-      <motion.picture key={slide.image} className={`home-hero-picture slide-${slide.image}`} initial={{ opacity: 0, zIndex: 2 }} animate={{ opacity: 1, zIndex: 2 }} exit={{ opacity: .999, zIndex: 1 }} transition={{ duration: reduce ? 0 : .6, ease: easing }}>
+    <AnimatePresence initial={false} custom={direction}>
+      <motion.picture key={slide.image} custom={direction} className={`home-hero-picture slide-${slide.image}`} variants={{ enter: (value: number) => ({ x: reduce ? 0 : `${value * 100}%` }), active: { x: 0 }, leave: (value: number) => ({ x: reduce ? 0 : `${value * -100}%` }) }} initial="enter" animate="active" exit="leave" transition={{ duration: reduce ? 0 : .7, ease: easing }}>
         {current === 0 && <source media="(max-width: 650px)" srcSet="/images/home/hero-mobile.webp" />}
         <img src={`/images/home/${slide.image}-${current < 2 ? '2172' : '1080'}.webp`} srcSet={current < 2 ? `/images/home/${slide.image}-1080.webp 1080w, /images/home/${slide.image}-2172.webp 2172w` : undefined} sizes="100vw" alt={slide.alt} width={current < 2 ? 2172 : 1080} height={current === 0 ? 724 : current === 1 ? 543 : 432} fetchPriority="high" />
       </motion.picture>
     </AnimatePresence>
     <div className="home-hero-inner home-container">
       <AnimatePresence mode="wait" initial={false}>
-        <motion.div key={current} className="home-hero-copy" initial={{ opacity: 0, y: reduce ? 0 : 12 }} animate={{ opacity: 1, y: 0, transition: { duration: reduce ? 0 : .45, ease: easing } }} exit={{ opacity: 0, y: reduce ? 0 : -4, transition: { duration: reduce ? 0 : .15 } }}>
+        <motion.div key={current} className="home-hero-copy" initial={{ opacity: 0, x: reduce ? 0 : direction * 24 }} animate={{ opacity: 1, x: 0, transition: { duration: reduce ? 0 : .4, ease: [.22, 1, .36, 1] } }} exit={{ opacity: 0, x: reduce ? 0 : direction * -12, transition: { duration: reduce ? 0 : .18 } }}>
           <h1>{current < 2 ? <><span className="sr-only">{slide.first} {slide.second}</span><img className="home-hero-title" src={current === 0 ? '/images/home/title.webp' : '/images/home/title-compartir.webp'} alt="" width="1400" height={current === 0 ? 519 : 468} /></> : <><span>{slide.first}</span><span className="home-brush-accent">{slide.second}</span></>}</h1>
           <p>{slide.description}</p>
         </motion.div>
       </AnimatePresence>
-      <motion.div key={`actions-${current}`} className="home-hero-actions" initial={{ opacity: 0, y: reduce ? 0 : 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: reduce ? 0 : .4, delay: reduce ? 0 : .16, ease: easing }}>
+      <div className="home-hero-actions">
         <motion.button type="button" className="home-button" whileHover={{ scale: 1.015 }} whileTap={{ scale: .98 }} onClick={() => onAction('Pedir ahora')}><span className="order-glare" aria-hidden="true" /><Icon name="truck" />Pedir ahora<Icon name="arrow" /></motion.button>
         <motion.button type="button" className="home-button home-button-outline" whileHover={{ scale: 1.015 }} whileTap={{ scale: .98 }} onClick={() => onAction('Carta')}><Icon name="cutlery" />{current === 1 ? 'Descubre combos' : 'Ver carta'}</motion.button>
-      </motion.div>
+      </div>
     </div>
     <button className="carousel-arrow previous" type="button" aria-label="Diapositiva anterior" onClick={() => move(-1)}><Icon name="arrow" /></button>
     <button className="carousel-arrow next" type="button" aria-label="Diapositiva siguiente" onClick={() => move(1)}><Icon name="arrow" /></button>
-    <div className="carousel-dots" aria-label="Elegir diapositiva">{slides.map((item, index) => <button type="button" key={item.image} aria-label={`Ver diapositiva ${index + 1}`} aria-pressed={current === index} onClick={() => setCurrent(index)}><span /></button>)}</div>
+    <div className="carousel-dots" aria-label="Elegir diapositiva">{slides.map((item, index) => <button type="button" key={item.image} aria-label={`Ver diapositiva ${index + 1}`} aria-pressed={current === index} onClick={() => select(index)}><span /></button>)}</div>
     <p className="sr-only" role="status" aria-live="polite">Diapositiva {current + 1} de {slides.length}: {slide.first} {slide.second}</p>
   </section>;
 }
