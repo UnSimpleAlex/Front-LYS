@@ -2,7 +2,7 @@
 .membership-inner { display: grid; grid-template-columns: 35% minmax(0, 1fr); column-gap: 3%; align-items: center; }
 .membership-label { display: flex; align-items: center; gap: 22px; margin: 0 0 20px; color: #b80012; text-transform: uppercase; font-size: 12px; letter-spacing: .18em; font-weight: 750; }
 .membership-label::after { content: ''; width: 65px; height: 1px; background: currentColor; }
-.membership-copy h2 { margin: 0; font-family: Georgia, serif; font-size: clamp(32px, 3.5vw, 66px); line-height: 1.05; letter-spacing: -.035em; }
+.membership-copy h2 { margin: 0; font-family: 'DM Sans', sans-serif; font-size: clamp(32px, 3.5vw, 66px); line-height: 1.05; letter-spacing: -.035em; }
 .membership-copy h2 .home-script { display: block; margin-top: 3px; font-size: 1.6em; }
 .membership-description { font-size: clamp(15px, 1.1vw, 20px); line-height: 1.5; margin: 24px 0; color: #4d4240; }
 .membership-join { min-height: 48px; font-size: 16px; }
@@ -35,7 +35,7 @@
 .rank-chispa svg { color: #b29276; }
 .rank-brasa svg, .rank-brasa h3 { color: #b80012; }
 .rank-fuego svg { color: #aa6d24; }
-.membership-ranks h3 { font-family: Georgia, serif; font-size: clamp(21px, 1.8vw, 32px); margin: 0 0 5px; }
+.membership-ranks h3 { font-family: 'DM Sans', sans-serif; font-size: clamp(21px, 1.8vw, 32px); margin: 0 0 5px; }
 .membership-ranks p { margin: 0; font-size: clamp(13px, .95vw, 17px); line-height: 1.35; color: #594b46; }
 .membership-explainer { display: flex; align-items: center; justify-content: center; gap: 24px; margin: 30px 0 0; font-size: 13px; color: #69422b; letter-spacing: .12em; text-align: center; }
 .membership-explainer::before, .membership-explainer::after { content: ''; width: 85px; height: 1px; background: #d9c3b4; }
