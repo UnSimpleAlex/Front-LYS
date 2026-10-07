@@ -1,7 +1,20 @@
 import type { SVGProps } from 'react';
 
-type IconName = 'phone' | 'mail' | 'lock' | 'eye' | 'eye-off' | 'user' | 'arrow' | 'menu' | 'close' | 'check' | 'cart';
+export type IconName = 'phone' | 'mail' | 'lock' | 'eye' | 'eye-off' | 'user' | 'arrow' | 'menu' | 'close' | 'check' | 'cart' | 'truck' | 'store' | 'table' | 'card' | 'gift' | 'flame' | 'leaf' | 'clock' | 'star' | 'percent' | 'mobile' | 'cutlery' | 'pin';
 const paths: Record<IconName, string[]> = {
+  truck: ['M1 6h13v12H1', 'M14 10h5l4 5v3h-9', 'M7 18a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z', 'M21 18a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z', 'M1 10h6', 'M1 14h4'],
+  store: ['M4 10v11h16V10', 'M2 10l3-7h14l3 7', 'M2 10c0 4 5 4 5 0 0 4 5 4 5 0 0 4 5 4 5 0 0 4 5 4 5 0', 'M9 21v-7h6v7'],
+  table: ['M6 9h12', 'M12 9v12', 'M2 5v10h6v6', 'M22 5v10h-6v6'],
+  card: ['M3 4h18v16H3Z', 'M3 9h18', 'M6 15h5', 'M16 15h2'],
+  gift: ['M3 9h18v4H3Z', 'M5 13v8h14v-8', 'M12 9v12', 'M12 9S3 8 5 4c2-4 7 5 7 5 0 0 5-9 7-5s-7 5-7 5Z'],
+  flame: ['M12 2c3 4-2 7 3 10 1-3 1-4 1-4 9 10 4 14-4 14S0 15 5 8c0 5 4 4 7-6Z'],
+  leaf: ['M3 21C4 8 10 3 22 2c0 15-8 20-17 15', 'M5 17 16 8'],
+  clock: ['M12 6a8 8 0 1 1-8 8 8 8 0 0 1 8-8Z', 'M12 9v5l4 3', 'M9 2h6', 'm18 4 2 2'],
+  star: ['m12 2 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1Z'],
+  percent: ['m7 17 10-10', 'M8 7a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z', 'M18 17a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z', 'm12 2 3 2 4 1 1 4 2 3-2 3-1 4-4 1-3 2-3-2-4-1-1-4-2-3 2-3 1-4 4-1Z'],
+  mobile: ['M6 2h12v20H6Z', 'M6 5h12', 'M11 19h2'],
+  cutlery: ['M3 2v6c0 4 6 4 6 0V2', 'M6 2v20', 'M18 2c-4 4-4 10 0 10V2v20'],
+  pin: ['M19 9c0 5-7 13-7 13S5 14 5 9a7 7 0 0 1 14 0Z', 'M14 9a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z'],
   phone: ['M6 3h3l2 5-2 2a14 14 0 0 0 5 5l2-2 5 2v3a3 3 0 0 1-3 3A18 18 0 0 1 3 6a3 3 0 0 1 3-3Z'],
   cart: ['M3 3h2l2.5 12h11l2-8H6', 'M9 20a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z', 'M19 20a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z'],
   mail: ['M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z', 'm3 6 9 7 9-7'],
