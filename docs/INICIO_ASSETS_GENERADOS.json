@@ -10,6 +10,11 @@
       "output": "public/images/home/title.webp",
       "source": "exec-2c7ad9a5-671e-4cd2-81ab-5f00fb695f3f.png",
       "prompt": "Create only the isolated brush calligraphy headline from the reference. Transparent background, wide 2.7:1 lettering block, tightly composed. Exact text in two lines: first line \"Sabor peruano\" black bold expressive hand-painted brush lettering; second line \"en cada brasa\" vivid red bold flowing hand-painted brush lettering. Match reference headline closely including red brush underline below second line and small red brush emphasis rays. NO food, no background, no page UI. Only this headline on real transparency. High resolution clean reusable website image."
+    },
+    {
+      "output": "public/images/home/title-compartir.webp",
+      "source": "exec-3f6675d4-d814-4bda-9677-96cebac67b04.png",
+      "prompt": "Use case: background-extraction. Extract ONLY the large two-line brush lettering from the attached banner reference into a tightly framed wide transparent PNG asset for a website carousel. Exact first line: 'Comparte el fuego' in black. Exact second line: 'de nuestra cocina' in deep red. Preserve the reference's slanted expressive hand painted brush script, relative line sizes, red brush underline under cocina and small red energetic flourish marks to the left and right of the second line. Actual alpha transparency everywhere except lettering and those red decorations. Remove ALL background, mountains, patterns, food, supporting description, buttons, logos and any other elements. No shadows, no cream or white background, no new text. Keep letters complete with small safe margins; horizontal composition roughly 3.4:1."
     }
   ]
 }

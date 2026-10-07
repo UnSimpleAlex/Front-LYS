@@ -26,13 +26,13 @@ export function HomeHero({ onAction }: { onAction: (section: string) => void }) 
     <AnimatePresence initial={false}>
       <motion.picture key={slide.image} className={`home-hero-picture slide-${slide.image}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: reduce ? 0 : .35 }}>
         {current === 0 && <source media="(max-width: 650px)" srcSet="/images/home/hero-mobile.webp" />}
-        <img src={`/images/home/${slide.image}-${current < 2 ? '2172' : '1080'}.webp`} srcSet={current < 2 ? `/images/home/${slide.image}-1080.webp 1080w, /images/home/${slide.image}-2172.webp 2172w` : undefined} sizes="100vw" alt={slide.alt} width={current < 2 ? 2172 : 1080} height={current < 2 ? 724 : 432} fetchPriority="high" />
+        <img src={`/images/home/${slide.image}-${current < 2 ? '2172' : '1080'}.webp`} srcSet={current < 2 ? `/images/home/${slide.image}-1080.webp 1080w, /images/home/${slide.image}-2172.webp 2172w` : undefined} sizes="100vw" alt={slide.alt} width={current < 2 ? 2172 : 1080} height={current === 0 ? 724 : current === 1 ? 543 : 432} fetchPriority="high" />
       </motion.picture>
     </AnimatePresence>
     <div className="home-hero-inner home-container">
       <AnimatePresence mode="wait" initial={false}>
         <motion.div key={current} className="home-hero-copy" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: reduce ? 0 : .2 }}>
-          <h1>{current === 0 ? <><span className="sr-only">Sabor peruano en cada brasa</span><img className="home-hero-title" src="/images/home/title.webp" alt="" width="1400" height="519" /></> : <><span>{slide.first}</span><span className="home-brush-accent">{slide.second}</span></>}</h1>
+          <h1>{current < 2 ? <><span className="sr-only">{slide.first} {slide.second}</span><img className="home-hero-title" src={current === 0 ? '/images/home/title.webp' : '/images/home/title-compartir.webp'} alt="" width="1400" height={current === 0 ? 519 : 468} /></> : <><span>{slide.first}</span><span className="home-brush-accent">{slide.second}</span></>}</h1>
           <p>{slide.description}</p>
         </motion.div>
       </AnimatePresence>
