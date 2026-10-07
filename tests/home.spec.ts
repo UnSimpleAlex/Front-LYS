@@ -16,11 +16,17 @@ for (const [width, height] of sizes) {
     const geometry = await page.evaluate(() => {
       const hero = document.querySelector('.home-hero')!.getBoundingClientRect();
       const copy = document.querySelector('.home-hero-copy')!.getBoundingClientRect();
-      return { overflow: document.documentElement.scrollWidth > innerWidth, hero: hero.width, copyRight: copy.right, images: [...document.images].every(image => image.naturalWidth > 0) };
+      const clippedArrows = [...document.querySelectorAll('.specialty-card')].some(card => card.querySelector('.round-arrow')!.getBoundingClientRect().bottom > card.getBoundingClientRect().bottom);
+      const order = document.querySelector('.home-hero-actions button')!;
+      const text = [...order.childNodes].find(node => node.nodeType === Node.TEXT_NODE && node.textContent?.includes('Pedir ahora'))!;
+      const range = document.createRange(); range.selectNodeContents(text);
+      return { overflow: document.documentElement.scrollWidth > innerWidth, hero: hero.width, copyRight: copy.right, images: [...document.images].every(image => image.naturalWidth > 0), clippedArrows, orderLines: range.getClientRects().length };
     });
     expect(geometry.overflow).toBe(false);
     expect(geometry.copyRight).toBeLessThanOrEqual(width);
     expect(geometry.images).toBe(true);
+    expect(geometry.clippedArrows).toBe(false);
+    expect(geometry.orderLines).toBe(1);
     expect(errors).toEqual([]);
     await expect(page.getByRole('navigation', { name: 'Navegación principal' })).toBeVisible({ visible: width > 1100 });
     await page.screenshot({ path: testInfo.outputPath(`inicio-${width}.png`), fullPage: true });

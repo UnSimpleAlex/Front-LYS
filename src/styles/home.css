@@ -256,3 +256,13 @@
   .footer-phrase { grid-column: 2; font-size: 19px; }
   .footer-bottom { flex-wrap: wrap; gap: 8px; font-size: 9px; }
 }
+@media (max-width: 380px) {
+  .home-hero { min-height: 310px; }
+  .home-hero-picture img { object-position: right center; }
+  .home-hero-copy p { font-size: 11px; width: 58%; }
+  .home-hero-actions { width: 46%; }
+  .carousel-arrow.previous { top: 57%; }
+  .specialty-card { min-height: 112px; }
+  .specialty-copy { width: 50%; }
+  .app-phone { width: 60px; height: 140px; transform: rotate(-12deg); left: 8%; }
+}
