@@ -15,6 +15,11 @@
       "output": "public/images/home/title-compartir.webp",
       "source": "exec-3f6675d4-d814-4bda-9677-96cebac67b04.png",
       "prompt": "Use case: background-extraction. Extract ONLY the large two-line brush lettering from the attached banner reference into a tightly framed wide transparent PNG asset for a website carousel. Exact first line: 'Comparte el fuego' in black. Exact second line: 'de nuestra cocina' in deep red. Preserve the reference's slanted expressive hand painted brush script, relative line sizes, red brush underline under cocina and small red energetic flourish marks to the left and right of the second line. Actual alpha transparency everywhere except lettering and those red decorations. Remove ALL background, mountains, patterns, food, supporting description, buttons, logos and any other elements. No shadows, no cream or white background, no new text. Keep letters complete with small safe margins; horizontal composition roughly 3.4:1."
+    },
+    {
+      "output": "public/images/home/title-compartir.webp",
+      "source": "exec-bf2d72dd-c56a-4d68-a847-f23166e3ee18.png",
+      "prompt": "Precise color-only edit of FIRST image (transparent title 'Comparte el fuego / de nuestra cocina'). Change ONLY red lettering 'de nuestra cocina', its underline and red flourish marks to the same vivid warm saturated red as the SECOND reference image's 'en cada brasa'. Match that reference red (approximately #ed0000, bright red, not dark burgundy). Preserve all exact lettering shapes, wording, brush texture, position, canvas size, black first line and real alpha transparency unchanged. No new marks, backgrounds, shadows or layout changes."
     }
   ]
 }

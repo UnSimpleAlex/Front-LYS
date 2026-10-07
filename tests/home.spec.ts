@@ -1,6 +1,20 @@
 import { test, expect } from '@playwright/test';
 
 const sizes = [[320, 568], [360, 800], [375, 812], [390, 844], [412, 915], [430, 932], [480, 900], [768, 1024], [1024, 768], [1280, 800], [1366, 768], [1440, 900], [1920, 1080]];
+test('los dos primeros banners mantienen la misma altura en móvil, tablet y PC', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  for (const width of [320, 390, 768, 1440, 1920]) {
+    await page.setViewportSize({ width, height: 950 });
+    await page.goto('/');
+    await expect(page.getByRole('heading', { level: 1 })).toContainText('Sabor peruano');
+    const hero = page.locator('.home-hero');
+    const first = await hero.boundingBox();
+    await page.getByRole('button', { name: 'Ver diapositiva 2' }).click();
+    await expect(page.getByRole('heading', { level: 1 })).toContainText('Comparte el fuego');
+    const second = await hero.boundingBox();
+    expect(second!.height).toBe(first!.height);
+  }
+});
 test('membresía muestra tres rangos y abre el registro', async ({ page }) => {
   await page.goto('/');
   const membership = page.getByRole('region', { name: 'Volver tiene su recompensa' });

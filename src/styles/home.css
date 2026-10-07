@@ -20,7 +20,6 @@
 .home-hero h1 > span { display: block; white-space: nowrap; }
 .home-hero-title { display: block; width: 100%; height: auto; }
 .home-hero-sharing h1 { font-size: clamp(34px, 3.9vw, 76px); line-height: 1.15; }
-.home-hero-sharing { aspect-ratio: 4; min-height: 360px; }
 .home-hero-sharing .home-hero-inner { padding-block: 18px 30px; }
 .home-hero-sharing .home-hero-copy { width: 44%; }
 .home-hero-sharing h1 { margin-bottom: 12px; }
@@ -158,7 +157,7 @@
   .carousel-dots button { width: 24px; height: 28px; }
   .carousel-dots span { width: 9px; height: 9px; }
   .slide-combos img, .slide-parrillas img { object-position: 67%; }
-  .home-hero-sharing { aspect-ratio: .95; background: #fbf0e2; }
+  .home-hero-sharing { background: #fbf0e2; }
   .home-hero-sharing h1 { font-size: clamp(26px, 6.7vw, 44px); }
   .home-hero-sharing .home-hero-copy { width: 100%; }
   .home-hero-sharing h1:has(.home-hero-title) { width: 92%; }
