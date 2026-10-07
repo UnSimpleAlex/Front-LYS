@@ -25,8 +25,8 @@ export function RegisterCard({ onLogin, onLegal }: Props) {
   }
   const binding = (field: Exclude<RegistrationField, 'terms'>) => ({ id: `register-${field}`, name: field, value: values[field], required: true, disabled: pending, error: error(field), onChange: (event: React.ChangeEvent<HTMLInputElement>) => change(field, event.target.value), onBlur: () => setTouched(current => ({ ...current, [field]: true })) });
 
-  return <section className="sign-in-card register-card" id="registrarse" aria-labelledby="register-title">
-    <header className="register-heading">
+  return <section className="sign-in-card compact-auth-card register-card" id="registrarse" aria-labelledby="register-title">
+    <header className="auth-heading">
       <h2 id="register-title" tabIndex={-1}><span className="heading-rays" aria-hidden="true" />Crea tu cuenta<span className="heading-rays" aria-hidden="true" /></h2>
       <p className="auth-description">Y sé parte de buenos momentos</p>
     </header>

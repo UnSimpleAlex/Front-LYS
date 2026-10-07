@@ -16,7 +16,7 @@ for (const [width, height] of viewports) {
     await page.evaluate(() => document.fonts.ready);
     await page.waitForFunction(() => [...document.images].every(image => image.complete && image.naturalWidth > 0));
     await page.evaluate(() => Promise.all(document.getAnimations().map(animation => animation.finished)));
-    await expect(page.getByRole('heading', { name: 'Iniciar sesión' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: '¡Bienvenido!', exact: true })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Continuar con Google' })).toBeVisible();
     const geometry = await page.evaluate(() => {
       const card = document.querySelector('.sign-in-card')!.getBoundingClientRect();
@@ -54,7 +54,7 @@ for (const [width, height] of viewports) {
     expect(geometry.lines[0][0].top).toBeGreaterThanOrEqual(geometry.lettering.bottom);
     expect(geometry.imagesReady).toBe(true);
     expect(geometry.fontsReady).toBe(true);
-    expect(geometry.inputHeight).toBeGreaterThanOrEqual(46);
+    expect(geometry.inputHeight).toBeGreaterThanOrEqual(44);
     expect(geometry.toggleWidth).toBeGreaterThanOrEqual(44);
     expect(geometry.card.bottom).toBeLessThanOrEqual(geometry.documentHeight);
     expect(Math.abs(geometry.pageBottom - geometry.documentHeight)).toBeLessThanOrEqual(1);

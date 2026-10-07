@@ -28,22 +28,25 @@ export function SignInCard({ onHelp }: { onHelp: (action: 'register' | 'recover'
     void submit({ email: email.value.trim(), password: password.value, remember: values.get('remember') === 'on' });
   }
 
-  return <section className="sign-in-card" id="iniciar-sesion" aria-labelledby="sign-in-title">
-    <h2 id="sign-in-title">Iniciar sesión</h2>
+  return <section className="sign-in-card compact-auth-card login-card" id="iniciar-sesion" aria-labelledby="sign-in-title">
+    <header className="auth-heading">
+      <h2 id="sign-in-title"><span className="heading-rays" aria-hidden="true" />¡Bienvenido!<span className="heading-rays" aria-hidden="true" /></h2>
+      <p className="auth-description">Nos alegra verte de nuevo</p>
+    </header>
     <form onSubmit={onSubmit} noValidate aria-busy={pending}>
       <div className="fields">
-        <AuthField label="Correo electrónico" icon="mail" id="email" name="email" type="email" placeholder="nombre@correo.com" autoComplete="email" required disabled={pending} error={errors.email} onBlur={(event) => validate(event.currentTarget)} onChange={(event) => { if (errors.email) validate(event.currentTarget); }} />
+        <AuthField label="Correo electrónico" icon="mail" id="email" name="email" type="email" placeholder="Tu correo electrónico" autoComplete="email" required disabled={pending} error={errors.email} onBlur={(event) => validate(event.currentTarget)} onChange={(event) => { if (errors.email) validate(event.currentTarget); }} />
         <AuthField label="Contraseña" icon="lock" id="password" name="password" type="password" placeholder="Tu contraseña" autoComplete="current-password" required disabled={pending} error={errors.password} onBlur={(event) => validate(event.currentTarget)} onChange={(event) => { if (errors.password) validate(event.currentTarget); }} />
       </div>
       <div className="form-options">
-        <label className="remember-option"><input type="checkbox" name="remember" defaultChecked disabled={pending} /><span className="checkbox-mark" aria-hidden="true"><Icon name="check" /></span><span>Recordarme en este dispositivo</span></label>
+        <label className="remember-option"><input type="checkbox" name="remember" defaultChecked disabled={pending} /><span className="checkbox-mark" aria-hidden="true"><Icon name="check" /></span><span>Recordarme</span></label>
         <button className="text-link" type="button" onClick={() => onHelp('recover')}>¿Olvidaste tu contraseña?</button>
       </div>
       <button className="primary-button sign-in-button" type="submit" disabled={pending}><span>{pending && provider === 'password' ? 'Iniciando sesión…' : 'Iniciar sesión'}</span>{pending && provider === 'password' ? <span className="spinner" aria-hidden="true" /> : <Icon name={status === 'success' ? 'check' : 'arrow'} />}</button>
     </form>
     <div className="or-divider"><span>o continúa con</span></div>
     <button className="google-button" type="button" disabled={pending} onClick={() => void submit()}>{pending && provider === 'google' ? <span className="spinner" aria-hidden="true" /> : <GoogleIcon />}<span>{pending && provider === 'google' ? 'Conectando con Google…' : 'Continuar con Google'}</span></button>
-    <div className="register-divider"><span>¿No tienes cuenta?</span><button className="text-link" type="button" onClick={() => onHelp('register')}>Regístrate</button><span>aquí</span></div>
+    <div className="register-divider"><span>¿No tienes una cuenta?</span><button className="text-link" type="button" onClick={() => onHelp('register')}>Crear cuenta</button></div>
     {message && <p key={status + message} className={`auth-message ${status}`} role={status === 'error' ? 'alert' : 'status'}>{status === 'success' && <Icon name="check" />}<span>{message}</span></p>}
   </section>;
 }

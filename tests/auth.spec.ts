@@ -43,7 +43,7 @@ test('menú móvil y diálogos funcionan con teclado y restauran el foco', async
   await expect(page.getByRole('heading', { name: 'Recuperar contraseña' })).toBeVisible();
   await page.getByRole('button', { name: 'Entendido' }).click();
   await expect(recovery).toBeFocused();
-  await page.getByRole('button', { name: 'Regístrate' }).click();
+  await page.getByRole('button', { name: 'Crear cuenta' }).click();
   await expect(page.getByRole('heading', { name: 'Crea tu cuenta', exact: true })).toBeVisible();
   await expect(page).toHaveURL(/\/registro$/);
 });

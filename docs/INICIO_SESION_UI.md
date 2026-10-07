@@ -79,3 +79,9 @@ En tablet (600–1150 px), Caveat aumenta a 30–38 px conservando sus dos líne
 El botón de la cabecera muestra «Pedir ahora», con fondo rojo e icono/texto blancos, hover rojo oscuro y altura visible de 36 px. En móviles estrechos se ajusta el ancho del logo para acomodar la etiqueta completa; mantiene el destino de pedidos existente.
 
 «Pedir ahora» incorpora un destello diagonal blanco de una pasada/600 ms al pasar el cursor o recibir foco visible. La capa decorativa no intercepta clics y su recorte mantiene el área táctil ampliada del botón. Respeta reduced motion. Implementación CSS propia adaptada al proyecto sin Tailwind, tomando Glare Hover de Magic UI como referencia visual: https://magicui.design/docs/components/glare-hover. Sin nuevas dependencias.
+
+### Formulario según la referencia compacta
+
+El formulario usa título rojo «¡Bienvenido!» con Caveat como aproximación y adornos laterales, subtítulo «Nos alegra verte de nuevo», campos de 44 px con iconos y labels accesibles ocultos visualmente. Recordarme y recuperación aparecen en rojo; el botón de 46 px mantiene su flecha a la derecha. Separador en mayúsculas, Google compacto y enlace «Crear cuenta» a /registro. El estilo común compact-auth-card se comparte con registro, manteniendo su ancho y los estados de validación/carga existentes.
+
+Validación: lint y build/typecheck, suite de 46 pruebas y revisión visual de móvil, tablet y PC. Las capturas finales quedan en test-results/.

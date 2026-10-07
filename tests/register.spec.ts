@@ -15,7 +15,7 @@ async function fillRegistration(page: Page) {
 
 test('registro valida campos, coincidencia, términos y navegación sin simular cuentas', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Regístrate', exact: true }).click();
+  await page.getByRole('button', { name: 'Crear cuenta', exact: true }).click();
   await expect(page).toHaveURL(/\/registro$/);
   await page.getByRole('button', { name: 'Crear cuenta', exact: true }).click();
   await expect(page.locator('#register-name')).toBeFocused();
