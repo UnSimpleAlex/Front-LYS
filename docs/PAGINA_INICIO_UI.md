@@ -41,3 +41,5 @@ Actualización del carrusel 2: fondo codex-clipboard-2b6ab9ea-3f76-4cb7-b7c9-bc1
 Los banners 1 y 2 comparten las mismas reglas de altura en todos los breakpoints, sin saltos al cambiar de diapositiva. Lettering del segundo ajustado con ImageGen al rojo vivo del primero. Prueba de igualdad de altura a 320, 390, 768, 1440 y 1920 px.
 
 El lettering del segundo carrusel usa un filtro SVG sRGB que lleva su rojo dominante (250,2,1) a (211,1,0), #D30100, según el adjunto codex-clipboard-555edd8d-0f0a-4f08-97a2-fda218df301e.png. Conserva alpha, negro y geometría, sin regenerar ni alterar la imagen original.
+
+Transición refinada: fundido de 600 ms con fondo saliente opaco debajo para evitar destellos, easing de desaceleración; texto sale en 150 ms y entra en 450 ms con desplazamiento de 12 px; botones entran discretamente en 400 ms. Precarga y decodificación de fondos y lettering; reduced motion anula duraciones, retrasos y desplazamientos.

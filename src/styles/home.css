@@ -222,3 +222,5 @@
   .specialty-card { min-height: 112px; }
   .specialty-copy { width: 50%; }
 }
+
+.home-hero-inner, .carousel-arrow, .carousel-dots { z-index: 3; }
