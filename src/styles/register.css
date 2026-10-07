@@ -44,8 +44,9 @@
 .field-help { margin: 0; color: #226d39; font-size: 13px; line-height: 1.4; }
 .input-field.field-success:not(:focus-within) { border-color: #54866b; }
 .terms-group { margin: 8px 0 12px; }
-.terms-option { display: grid; grid-template-columns: 16px minmax(0, 1fr); align-items: center; gap: 8px; color: #455775; font-size: 12px; line-height: 1.5; }
-.terms-option .remember-option { min-height: 44px; align-items: start; padding-top: 4px; }
+.terms-option { display: grid; grid-template-columns: 16px minmax(0, 1fr); align-items: start; gap: 8px; color: #455775; font-size: 12px; line-height: 1.5; }
+.terms-option .remember-option { min-height: 44px; align-items: center; padding-top: 0; }
+.terms-option > span { padding-top: 13px; }
 .terms-option .remember-option input { top: 0; transform: none; height: 44px; }
 .terms-option .text-link { text-align: left; font-size: inherit; display: inline; line-height: inherit; }
 .register-page .registration-caption { width: min(70%, 420px); margin-top: 12px; text-wrap: pretty; }
