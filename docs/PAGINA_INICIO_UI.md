@@ -31,3 +31,5 @@ Lint, typecheck y build. Suite de 89 casos: 71 regresiones de auth y 18 de Home.
 ## Círculo de la Brasa
 
 Propuesta simplificada según el adjunto codex-clipboard-ebd36303-4883-4ab3-a977-ad87a4db785e.png: Volver tiene su recompensa, frase breve, CTA Quiero ser parte y tres credenciales visibles juntas (Chispa crema, Brasa roja al frente y Fuego negra/dorada). Se eliminan selector, estados y explicaciones extensas. Cada rango tiene una sola frase; se conserva aviso breve de próximamente y CTA a /registro. Credenciales HTML/CSS con logo original WebP, títulos DM Sans y acento Caveat, las mismas familias del resto de la web; no se generan fotografías. Los rangos y beneficios se presentan como propuesta pendiente de reglas e integración, sin umbrales ni descuentos concretos. Responsive en dos columnas para tablet/PC y apilado en móvil.
+
+Pedir ahora y Quiero ser parte comparten el rojo #ed0000. Las credenciales se elevan, amplían 10%, enderezan y pasan al frente con un destello al hover o foco de teclado; transición de 380 ms. Touch conserva la composición y reduced motion desactiva desplazamiento/destello.

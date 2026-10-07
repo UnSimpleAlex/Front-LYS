@@ -71,3 +71,18 @@
   .membership-explainer { font-size: 11px; letter-spacing: .04em; gap: 12px; margin-top: 24px; }
   .membership-explainer::before, .membership-explainer::after { width: 20px; flex-shrink: 0; }
 }
+
+.membership-pass { transition: transform 380ms cubic-bezier(.2,.8,.2,1), box-shadow 380ms ease; }
+.membership-pass::after { content: ''; position: absolute; inset: -50%; pointer-events: none; background: linear-gradient(115deg, transparent 42%, #fff0 44%, #ffffff40 50%, #fff0 56%, transparent 58%); transform: translateX(-80%); opacity: 0; z-index: 3; }
+.membership-pass:focus-visible { z-index: 5; transform: translateY(-18px) rotate(0deg) scale(1.1); box-shadow: 0 26px 38px #44271b40; }
+.membership-pass:focus-visible::after { animation: membership-shine 650ms ease-out both; }
+@media (hover: hover) and (pointer: fine) {
+  .membership-pass:hover { z-index: 5; transform: translateY(-18px) rotate(0deg) scale(1.1); box-shadow: 0 26px 38px #44271b40; }
+  .membership-pass:hover::after { animation: membership-shine 650ms ease-out both; }
+}
+@keyframes membership-shine { 0% { transform: translateX(-80%); opacity: 0; } 20% { opacity: 1; } 100% { transform: translateX(80%); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .membership-pass { transition: none; }
+  .membership-pass:hover, .membership-pass:focus-visible { transform: none; }
+  .membership-pass::after { animation: none !important; }
+}
