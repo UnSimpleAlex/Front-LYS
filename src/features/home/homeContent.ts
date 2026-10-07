@@ -19,12 +19,6 @@ export const serviceBenefits: Benefit[] = [
   { icon: 'card', title: 'Pagos rápidos', description: 'Efectivo, tarjeta y Yape' },
   { icon: 'gift', title: 'Promociones exclusivas', description: 'Más sabor, más momentos' },
 ];
-export const qualityBenefits: Benefit[] = [
-  { icon: 'flame', title: 'Sabor auténtico', description: 'Recetas tradicionales que nos unen' },
-  { icon: 'leaf', title: 'Ingredientes frescos', description: 'Seleccionados cuidadosamente' },
-  { icon: 'clock', title: 'Atención rápida', description: 'Para que disfrutes sin esperas' },
-  { icon: 'truck', title: 'Delivery confiable', description: 'Tu sabor favorito donde estés' },
-];
 export const appBenefits: Benefit[] = [
   { icon: 'star', title: 'Acumula puntos', description: 'y disfruta beneficios' },
   { icon: 'percent', title: 'Accede a promociones', description: 'exclusivas' },

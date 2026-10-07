@@ -30,7 +30,7 @@ export function App() {
   }
 
   function onSection(section: string) {
-    const targets: Record<string, string> = { Inicio: 'contenido', Promociones: 'promociones', Nosotros: 'nosotros', Contacto: 'contacto' };
+    const targets: Record<string, string> = { Inicio: 'contenido', Promociones: 'promociones', Contacto: 'contacto' };
     if (home && targets[section]) {
       document.getElementById(targets[section])?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
       return;

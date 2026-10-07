@@ -4,15 +4,17 @@ Ruta `/`; login en `/iniciar-sesion`, registro en `/registro`. El historial y lo
 
 ## Referencias y composición
 
-Referencias suministradas: desktop `3.png` + `4.png`, móvil `Movil/1.png` + `Movil/2.png`, como una sola página continua. Navbar, carrusel, servicios, especialidades, promociones, app, motivos para elegirnos y footer. Componentes en `src/features/home`, coordinados por `HomePage`.
+Referencias suministradas: desktop `3.png` + `4.png`, móvil `Movil/1.png` + `Movil/2.png`, como una sola página continua. Navbar, carrusel, servicios, especialidades, promociones, app y footer. Componentes en `src/features/home`, coordinados por `HomePage`.
 
 Se usan los fondos y fotografías adjuntos, con WebP y tamaños 640/1080; hero 1080/2172. El fondo móvil y el lettering principal se recrearon con la herramienta integrada ImageGen. Se preservó alpha en el título. Las fotografías suministradas tienen diferencias respecto de las incluidas en los mockups; se priorizan los recursos originales autorizados (incluido el fondo amarillo del Dúo). El teléfono se construye como un mockup HTML/CSS usando logo e imagen reales. Caveat aproxima la escritura de los títulos secundarios y Knewave la de los otros slides, ambas con licencia OFL; Impact/Arial Narrow aproxima los títulos condensados.
+
+La sección «Por qué elegirnos» fue eliminada por solicitud del usuario; el bloque de la app conecta directamente con el footer. Nosotros muestra el aviso de disponibilidad pendiente.
 
 ## Interacciones
 
 Especialidades y promociones tienen fondo blanco. El footer utiliza iconos SVG de Facebook, Instagram, TikTok y YouTube, con tamaño uniforme y nombres accesibles.
 
-Carrusel manual con 3 diapositivas: flechas, indicadores, teclado y deslizamiento táctil. Sin rotación automática. Motion controla transiciones y estados de botones/tarjetas; `MotionConfig` respeta reducción de movimiento y se anula la duración del carrusel cuando corresponde. Menú móvil/tablet con Escape y animación discreta. Navegación Inicio/Promociones/Nosotros/Contacto desplaza a las secciones.
+Carrusel manual con 3 diapositivas: flechas, indicadores, teclado y deslizamiento táctil. Sin rotación automática. Motion controla transiciones y estados de botones/tarjetas; `MotionConfig` respeta reducción de movimiento y se anula la duración del carrusel cuando corresponde. Menú móvil/tablet con Escape y animación discreta. Navegación Inicio/Promociones/Contacto desplaza a las secciones.
 
 Carta, pedidos, locales, enlaces sociales y descargas de app muestran avisos de disponibilidad pendiente. No se simulan pedidos ni enlaces externos sin URL oficial. Los importes y datos de contacto son los de la referencia, pendientes de confirmación comercial; no hay checkout ni llamadas telefónicas habilitadas. La app todavía no está publicada. No se añaden servicios ni integración de backend.
 
