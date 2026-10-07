@@ -59,7 +59,8 @@ for (const outcome of ['success', 'error'] as const) {
     await page.route('**/src/services/registrationService.ts*', route => route.fulfill({ contentType: 'application/javascript', body: `export const registrationService={register:async(values)=>{window.registrationPhone=values.phone;window.submissions=(window.submissions||0)+1;await new Promise(r=>window.finishSignIn=r);${outcome === 'success' ? 'return {ok:true};' : 'throw new Error("offline");'}},registerWithGoogle:async()=>({ok:false,message:'pendiente'})};` }));
     await page.goto('/registro'); await fillRegistration(page);
     if (outcome === 'success') {
-      await page.getByLabel('País y prefijo del celular').selectOption('CO');
+      await page.getByRole('button', { name: /País y prefijo del celular/ }).click();
+      await page.getByRole('option', { name: 'Colombia +57', exact: true }).click();
       await page.getByLabel('Celular', { exact: true }).fill('321 123 4567');
     }
     await page.getByRole('button', { name: 'Crear cuenta', exact: true }).click();

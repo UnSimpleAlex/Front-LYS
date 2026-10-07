@@ -19,3 +19,5 @@ Validación: lint, typecheck y build aprobados; 46 pruebas aprobadas (27 de logi
 No se acredita autenticación real, todos los navegadores físicos ni capacidad de usuarios concurrentes.
 
 Validación de celulares: 22 pruebas de reglas (los 21 destinos, números cortos/largos, entrada no numérica, país ajeno, normalización y condiciones explícitas de Perú), además de los 19 escenarios de registro. Fuentes de numeración: https://www.itu.int/oth/T0202.aspx?parent=T0202 y documentación de https://github.com/catamphetamine/libphonenumber-js. Bandera SVG local de country-flag-icons evita depender del soporte de emojis del sistema.
+
+Selector de países: menú propio con chevron SVG, buscador por país/prefijo sin distinguir acentos, filas de 44 px con bandera/nombre/prefijo y marca de selección. Abre arriba o abajo según espacio disponible, limita su altura y permite scroll; soporta flechas, Inicio/Fin, Enter, Escape, cierre al salir del foco o hacer clic fuera. Se conserva la validación por país. Capturas de lista abierta y pruebas de búsqueda, selección, vacío, teclado y cierre en 390 y 1366 px.
