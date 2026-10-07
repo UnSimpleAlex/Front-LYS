@@ -17,3 +17,7 @@ Antes de actualizar revisar changelog, breaking changes, pruebas e integración 
 - libphonenumber-js 1.13.14: metadatos completos de numeración y validación de tipo móvil por país; licencia MIT y metadatos Apache-2.0.
 - country-flag-icons 1.6.20: banderas SVG React de los destinos latinoamericanos, sin solicitudes externas; licencia MIT.
 - Lockfile actualizado; instalación auditada sin vulnerabilidades. Importaciones de banderas limitadas a los 21 destinos admitidos. Build total aproximado: 453 kB JavaScript, 132 kB comprimido. Los metadatos deben actualizarse al cambiar los planes nacionales.
+
+## Movimiento en Inicio
+
+Motion 14.0.0 (MIT), importado desde `motion/react`, sin Motion+ ni GSAP. Se usa para el carrusel, menú y estados de interacción, con reducción de movimiento. Instalación auditada sin vulnerabilidades. Registro y Home se cargan por separado para evitar cargar metadatos de celulares en Inicio.

@@ -14,7 +14,7 @@ async function fillRegistration(page: Page) {
 }
 
 test('registro valida campos, coincidencia, términos y navegación sin simular cuentas', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/iniciar-sesion');
   await page.getByRole('button', { name: 'Crear cuenta', exact: true }).click();
   await expect(page).toHaveURL(/\/registro$/);
   await page.getByRole('button', { name: 'Crear cuenta', exact: true }).click();
@@ -50,7 +50,7 @@ test('registro valida campos, coincidencia, términos y navegación sin simular 
   await expect(page.getByRole('status')).toContainText('Google');
   expect(await page.evaluate(() => localStorage.length + sessionStorage.length)).toBe(0);
   await page.getByRole('button', { name: 'Iniciar sesión', exact: true }).click();
-  await expect(page).toHaveURL(/\/$/);
+  await expect(page).toHaveURL(/\/iniciar-sesion$/);
   await page.goBack();
   await expect(page.getByRole('heading', { name: 'Crea tu cuenta', exact: true })).toBeVisible();
 });

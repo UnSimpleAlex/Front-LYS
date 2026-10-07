@@ -27,3 +27,7 @@ Se buscaron y compararon [Brusher](https://www.dafont.com/es/brusher.font), [Kne
 ## Tipografía manuscrita de bienvenida
 
 Caveat variable (400–700), desde https://github.com/google/fonts/tree/main/ofl/caveat, alojada localmente en public/fonts/Caveat.ttf. Licencia SIL OFL 1.1 conservada en Caveat-OFL.txt. Se utiliza solo para la frase del banner. Smile Moon se descartó por decisión del usuario al requerir licencia comercial; no se incorpora al repositorio.
+
+## Inicio
+
+`public/images/home/`: fondos y fotos originales del usuario, convertidos a WebP con variantes para hero/categorías/promociones. `hero-mobile.webp` es una recomposición móvil creada con ImageGen; `title.webp` es lettering sobre alpha creado con ImageGen. Prompts exactos y procedencia en `docs/INICIO_ASSETS_GENERADOS.json`. Knewave alojada en `public/fonts/Knewave.ttf` con licencia SIL OFL en `Knewave-OFL.txt`, obtenidas de https://github.com/google/fonts/tree/main/ofl/knewave. Caveat y DM Sans se reutilizan.

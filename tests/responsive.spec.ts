@@ -12,7 +12,7 @@ for (const [width, height] of viewports) {
     page.on('pageerror', (error) => errors.push(error.message));
     page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
     await page.setViewportSize({ width, height });
-    await page.goto('/');
+    await page.goto('/iniciar-sesion');
     await page.evaluate(() => document.fonts.ready);
     await page.waitForFunction(() => [...document.images].every(image => image.complete && image.naturalWidth > 0));
     await page.evaluate(() => Promise.all(document.getAnimations().map(animation => animation.finished)));
@@ -71,7 +71,7 @@ test('navegación de PC visible con el espacio equivalente a zoom de 200% a 500%
   for (const width of [683, 455, 342, 273]) {
     const context = await browser.newContext({ baseURL: 'http://127.0.0.1:5173', screen: { width: 1366, height: 768 }, viewport: { width, height: 600 } });
     const page = await context.newPage();
-    await page.goto('/');
+    await page.goto('/iniciar-sesion');
     const navigation = page.getByRole('navigation', { name: 'Navegación principal', exact: true });
     await expect(navigation).toBeVisible();
     await expect(navigation.getByRole('button', { name: 'Inicio', exact: true })).toBeInViewport();
@@ -91,7 +91,7 @@ test('navegación de PC visible con el espacio equivalente a zoom de 200% a 500%
 test('móvil y tablet conservan la cabecera compacta con menú', async ({ page }) => {
   for (const width of [390, 820, 1024]) {
     await page.setViewportSize({ width, height: 1180 });
-    await page.goto('/');
+    await page.goto('/iniciar-sesion');
     await expect(page.getByRole('navigation', { name: 'Navegación principal', exact: true })).not.toBeVisible();
     const menu = page.getByRole('button', { name: 'Abrir menú' });
     await menu.click();

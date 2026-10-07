@@ -5,7 +5,7 @@ declare global {
 }
 
 test('valida el formulario y no simula una sesión autenticada', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/iniciar-sesion');
   await page.getByRole('button', { name: 'Iniciar sesión', exact: true }).click();
   await expect(page.locator('#email')).toHaveAttribute('aria-invalid', 'true');
   await expect(page.locator('#email')).toBeFocused();
@@ -27,7 +27,7 @@ test('valida el formulario y no simula una sesión autenticada', async ({ page }
 
 test('menú móvil y diálogos funcionan con teclado y restauran el foco', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('/');
+  await page.goto('/iniciar-sesion');
   const toggle = page.getByRole('button', { name: /Abrir menú|Cerrar menú/ });
   await toggle.click();
   await expect(toggle).toHaveAttribute('aria-expanded', 'true');
@@ -54,7 +54,7 @@ for (const outcome of ['success', 'error'] as const) {
       contentType: 'application/javascript',
       body: `export const authService = { signIn: async () => { window.submissions = (window.submissions || 0) + 1; await new Promise(r => { window.finishSignIn = r; }); ${outcome === 'success' ? 'return {ok:true};' : 'throw new Error("offline");'} }, signInWithGoogle: async () => ({ok:false, reason:'unavailable', message:'Google estará disponible pronto.'}) };`,
     }));
-    await page.goto('/');
+    await page.goto('/iniciar-sesion');
     await page.getByLabel('Correo electrónico', { exact: true }).fill('cliente@example.com');
     await page.getByLabel('Contraseña', { exact: true }).fill('contraseña-de-prueba');
     await page.getByRole('button', { name: 'Iniciar sesión', exact: true }).click();
@@ -72,7 +72,7 @@ for (const outcome of ['success', 'error'] as const) {
 test('teclado, campos inválidos y reduced motion conservan la usabilidad', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.setViewportSize({width:320, height:568});
-  await page.goto('/');
+  await page.goto('/iniciar-sesion');
   await page.getByLabel('Correo electrónico', {exact:true}).fill('correo-inválido');
   await page.getByRole('button', {name:'Iniciar sesión', exact:true}).click();
   await expect(page.locator('#email-error')).toContainText('correo válido');

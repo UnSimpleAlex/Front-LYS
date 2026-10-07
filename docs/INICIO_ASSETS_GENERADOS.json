@@ -1,0 +1,15 @@
+{
+  "tool": "image_gen.imagegen (herramienta integrada)",
+  "assets": [
+    {
+      "output": "public/images/home/hero-mobile.webp",
+      "source": "exec-2e85b336-49e0-4eed-8f68-3795ec987f65.png",
+      "prompt": "Edit/recompose first image into a vertical mobile website hero background 1080 x 850 approximately, matching background composition of second reference (ignore all its UI/text). Preserve appetizing realistic Peruvian roasted chicken in red dish, Inca Kola bottle at right, fries, salad, little white cream bowls, wooden table and red textile bottom, beige mountain and beige Peruvian geometric textile ornaments. Top 40% pale beige empty space for website headline; left middle 40% pale cream clear area for description, chicken begins at about 45% height on right, foods fill bottom. NO text, letters, buttons, arrows, dots or navbar. Bottle label retain INCA KOLA exactly. Faithful to provided food and palette, edge-to-edge food scene, clean empty text areas. Produce one background image."
+    },
+    {
+      "output": "public/images/home/title.webp",
+      "source": "exec-2c7ad9a5-671e-4cd2-81ab-5f00fb695f3f.png",
+      "prompt": "Create only the isolated brush calligraphy headline from the reference. Transparent background, wide 2.7:1 lettering block, tightly composed. Exact text in two lines: first line \"Sabor peruano\" black bold expressive hand-painted brush lettering; second line \"en cada brasa\" vivid red bold flowing hand-painted brush lettering. Match reference headline closely including red brush underline below second line and small red brush emphasis rays. NO food, no background, no page UI. Only this headline on real transparency. High resolution clean reusable website image."
+    }
+  ]
+}

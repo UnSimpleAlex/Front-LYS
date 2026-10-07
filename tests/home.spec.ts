@@ -1,0 +1,74 @@
+import { test, expect } from '@playwright/test';
+
+const sizes = [[320, 568], [360, 800], [375, 812], [390, 844], [412, 915], [430, 932], [480, 900], [768, 1024], [1024, 768], [1280, 800], [1366, 768], [1440, 900], [1920, 1080]];
+for (const [width, height] of sizes) {
+  test(`inicio ${width} × ${height}: composición, imágenes y navegación`, async ({ page }, testInfo) => {
+    const errors: string[] = [];
+    page.on('pageerror', error => errors.push(error.message));
+    page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
+    await page.setViewportSize({ width, height });
+    await page.goto('/');
+    await page.evaluate(() => document.fonts.ready);
+    await expect(page.getByRole('heading', { level: 1 })).toContainText('Sabor peruano');
+    await page.locator('.home-footer').scrollIntoViewIfNeeded();
+    await page.waitForFunction(() => [...document.images].every(image => image.complete && image.naturalWidth > 0));
+    await page.evaluate(() => window.scrollTo(0, 0));
+    const geometry = await page.evaluate(() => {
+      const hero = document.querySelector('.home-hero')!.getBoundingClientRect();
+      const copy = document.querySelector('.home-hero-copy')!.getBoundingClientRect();
+      return { overflow: document.documentElement.scrollWidth > innerWidth, hero: hero.width, copyRight: copy.right, images: [...document.images].every(image => image.naturalWidth > 0) };
+    });
+    expect(geometry.overflow).toBe(false);
+    expect(geometry.copyRight).toBeLessThanOrEqual(width);
+    expect(geometry.images).toBe(true);
+    expect(errors).toEqual([]);
+    await expect(page.getByRole('navigation', { name: 'Navegación principal' })).toBeVisible({ visible: width > 1100 });
+    await page.screenshot({ path: testInfo.outputPath(`inicio-${width}.png`), fullPage: true });
+  });
+}
+test('carrusel cambia con flechas, indicadores y teclado', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Diapositiva siguiente' }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Tu combo favorito');
+  await page.getByRole('button', { name: 'Ver diapositiva 3' }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Sabor a la leña');
+  await page.getByRole('region', { name: 'Sabores de nuestra cocina' }).focus();
+  await page.keyboard.press('ArrowRight');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Sabor peruano');
+});
+test('inicio conserva login, registro y retorno con el historial', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('link', { name: 'Iniciar sesión', exact: true }).first().click();
+  await expect(page).toHaveURL(/\/iniciar-sesion$/);
+  await page.getByRole('button', { name: 'Crear cuenta', exact: true }).click();
+  await expect(page).toHaveURL(/\/registro$/);
+  await page.goBack();
+  await expect(page.getByRole('heading', { name: 'Inicia sesión', exact: true })).toBeVisible();
+  await page.goBack();
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Sabor peruano');
+});
+test('menú móvil y acciones pendientes tienen respuesta accesible', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+  const menu = page.getByRole('button', { name: 'Abrir menú' });
+  await menu.click();
+  await page.getByRole('navigation', { name: 'Navegación móvil' }).getByRole('button', { name: 'Promociones', exact: true }).click();
+  await expect(menu).toHaveAttribute('aria-expanded', 'false');
+  await page.getByRole('button', { name: 'Ver toda la carta' }).click();
+  await expect(page.getByRole('dialog')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('dialog')).not.toBeVisible();
+});
+test('gesto móvil y reducción de movimiento conservan el carrusel', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+  const hero = page.getByRole('region', { name: 'Sabores de nuestra cocina' });
+  await hero.evaluate(element => {
+    element.dispatchEvent(new TouchEvent('touchstart', { bubbles: true, touches: [new Touch({ identifier: 1, target: element, clientX: 250, clientY: 200 })] }));
+    element.dispatchEvent(new TouchEvent('touchend', { bubbles: true, changedTouches: [new Touch({ identifier: 1, target: element, clientX: 100, clientY: 200 })] }));
+  });
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Tu combo favorito');
+  await page.getByRole('button', { name: 'Ver diapositiva 1' }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Sabor peruano');
+});
