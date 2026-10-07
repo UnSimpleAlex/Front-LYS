@@ -20,6 +20,11 @@
       "output": "public/images/home/title-compartir.webp",
       "source": "exec-bf2d72dd-c56a-4d68-a847-f23166e3ee18.png",
       "prompt": "Precise color-only edit of FIRST image (transparent title 'Comparte el fuego / de nuestra cocina'). Change ONLY red lettering 'de nuestra cocina', its underline and red flourish marks to the same vivid warm saturated red as the SECOND reference image's 'en cada brasa'. Match that reference red (approximately #ed0000, bright red, not dark burgundy). Preserve all exact lettering shapes, wording, brush texture, position, canvas size, black first line and real alpha transparency unchanged. No new marks, backgrounds, shadows or layout changes."
+    },
+    {
+      "output": "public/images/home/hero-compartir-mobile.webp",
+      "source": "exec-0ed16727-c0b0-4a59-b9e7-1e3aaea3caba.png",
+      "prompt": "Recompose the supplied Peruvian parrilla website background as a mobile hero background approximately 1080 x 920. Preserve the same photoreal mixed grilled beef and chicken platter, fries, salad, white sauce bowls, Inca Kola bottle on right, wooden table and red Peruvian woven cloth. Food occupies bottom 45% and right lower half. Top 55% is light cream with delicate pale peach watercolor Andean mountains and light traditional Peruvian geometric motifs along edges, continuous illustrated background visible behind overlaid website lettering. Keep top and middle left especially clear and pale for readable text, no food behind title area. Blend mountains into lower scene seamlessly, not a flat cream rectangular blank band. Retain bottle's INCA KOLA label. No new typography, no UI, no buttons, no headline, no arrows. Edge-to-edge portrait-ish mobile banner composition."
     }
   ]
 }

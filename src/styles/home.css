@@ -163,8 +163,8 @@
   .home-hero-sharing .home-hero-copy { width: 100%; }
   .home-hero-sharing h1:has(.home-hero-title) { width: 92%; }
   .home-hero-sharing .home-hero-copy p { width: 86%; font-size: clamp(13px, 3.3vw, 19px); }
-  .home-hero-sharing .home-hero-picture { top: 44%; }
-  .home-hero-sharing .home-hero-picture img { object-position: 72% bottom; }
+  .home-hero-sharing .home-hero-picture { top: 0; }
+  .home-hero-sharing .home-hero-picture img { object-position: center; }
   .home-hero-sharing .home-hero-actions { width: 52%; }
   .home-hero-sharing .home-button { gap: 6px; padding-inline: 9px; font-size: clamp(12px, 3vw, 16px); }
   .service-benefits { padding: 18px 0 12px; }
@@ -240,6 +240,22 @@
   .home-hero-copy p, .home-hero-sharing .home-hero-copy p { font-size: clamp(16px, 4.1vw, 24px); line-height: 1.1; }
   .home-hero-actions, .home-hero-sharing .home-hero-actions { left: 0; bottom: 30px; width: 52%; }
   .home-hero-actions .home-button, .home-hero-sharing .home-button { min-width: 0; min-height: 34px; gap: 6px; padding: 7px 9px; font-size: clamp(12px, 3vw, 16px); }
-  .slide-hero-compartir { top: 44%; }
+  .slide-hero-compartir { top: 0; }
   .home-hero-sharing .home-hero-picture:not(.slide-hero-compartir) { top: 0; }
+}
+
+.home-hero-copy { pointer-events: auto; }
+.home-hero-copy p { user-select: text; cursor: text; }
+.hero-description-line { display: block; }
+@media (max-width: 319px) {
+  .home-promotions .home-section-heading { flex-wrap: wrap; }
+  .home-promotions .home-more { max-width: 100%; white-space: nowrap; }
+}
+@media (min-width: 651px) and (max-width: 1100px) {
+  .home-hero h1:has(.home-hero-title) { width: 90%; }
+  .home-hero-copy p, .home-hero-sharing .home-hero-copy p { font-size: 22px; }
+}
+@media (max-width: 650px) {
+  .hero-description-line { display: inline; }
+  .home-hero-sharing h1:has(.home-hero-title) { width: 90%; }
 }

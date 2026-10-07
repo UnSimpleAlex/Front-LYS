@@ -1,6 +1,30 @@
 import { test, expect } from '@playwright/test';
 
 const sizes = [[320, 568], [360, 800], [375, 812], [390, 844], [412, 915], [430, 932], [480, 900], [768, 1024], [1024, 768], [1280, 800], [1366, 768], [1440, 900], [1920, 1080]];
+test('descripciones seleccionables y banners sin colisiones en resoluciones intermedias', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  for (const width of [320, 390, 540, 650, 651, 768, 912, 1024, 1100, 1101, 1280, 1440, 1920, 2560]) {
+    await page.setViewportSize({ width, height: 1000 });
+    await page.goto('/');
+    await expect(page.getByRole('heading', { level: 1 })).toContainText('Sabor peruano');
+    await page.evaluate(() => document.fonts.ready);
+    for (const index of [1, 2]) {
+      await page.getByRole('button', { name: `Ver diapositiva ${index}` }).click();
+      await expect(page.getByRole('heading', { level: 1 })).toContainText(index === 1 ? 'Sabor peruano' : 'Comparte el fuego');
+      const geometry = await page.evaluate(() => {
+        const p = document.querySelector('.home-hero-copy p')!;
+        const actions = document.querySelector('.home-hero-actions')!;
+        return { gap: actions.getBoundingClientRect().top - p.getBoundingClientRect().bottom, pointer: getComputedStyle(p).pointerEvents, overflow: document.documentElement.scrollWidth > innerWidth };
+      });
+      expect(geometry.gap, `${width}px, banner ${index}`).toBeGreaterThanOrEqual(4);
+      expect(geometry.pointer).toBe('auto');
+      expect(geometry.overflow).toBe(false);
+      if (index === 2 && width <= 650) await expect(page.locator('.slide-hero-compartir img')).toHaveJSProperty('currentSrc', 'http://127.0.0.1:5173/images/home/hero-compartir-mobile.webp');
+    }
+  }
+  await page.locator('.home-hero-copy p').dblclick();
+  expect(await page.evaluate(() => window.getSelection()?.toString().length)).toBeGreaterThan(0);
+});
 test('los dos primeros banners mantienen la misma altura en móvil, tablet y PC', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   for (const width of [320, 390, 768, 1440, 1920]) {
