@@ -1,5 +1,9 @@
 import { test, expect, type Page } from '@playwright/test';
 
+declare global {
+  interface Window { registrationPhone: string }
+}
+
 async function fillRegistration(page: Page) {
   await page.getByLabel('Nombres y apellidos', { exact: true }).fill('María-José O’Connor');
   await page.getByLabel('Correo electrónico', { exact: true }).fill('cliente@example.com');
@@ -47,13 +51,17 @@ test('registro valida campos, coincidencia, términos y navegación sin simular 
   await page.getByRole('button', { name: 'Iniciar sesión', exact: true }).click();
   await expect(page).toHaveURL(/\/$/);
   await page.goBack();
-  await expect(page.getByRole('heading', { name: 'Registrarse', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Crea tu cuenta', exact: true })).toBeVisible();
 });
 
 for (const outcome of ['success', 'error'] as const) {
   test(`registro carga, evita doble envío y comunica ${outcome}`, async ({ page }) => {
-    await page.route('**/src/services/registrationService.ts*', route => route.fulfill({ contentType: 'application/javascript', body: `export const registrationService={register:async()=>{window.submissions=(window.submissions||0)+1;await new Promise(r=>window.finishSignIn=r);${outcome === 'success' ? 'return {ok:true};' : 'throw new Error("offline");'}},registerWithGoogle:async()=>({ok:false,message:'pendiente'})};` }));
+    await page.route('**/src/services/registrationService.ts*', route => route.fulfill({ contentType: 'application/javascript', body: `export const registrationService={register:async(values)=>{window.registrationPhone=values.phone;window.submissions=(window.submissions||0)+1;await new Promise(r=>window.finishSignIn=r);${outcome === 'success' ? 'return {ok:true};' : 'throw new Error("offline");'}},registerWithGoogle:async()=>({ok:false,message:'pendiente'})};` }));
     await page.goto('/registro'); await fillRegistration(page);
+    if (outcome === 'success') {
+      await page.getByLabel('Prefijo telefónico').selectOption('+57');
+      await page.getByLabel('Celular', { exact: true }).fill('999 888 777');
+    }
     await page.getByRole('button', { name: 'Crear cuenta', exact: true }).click();
     await expect(page.getByRole('button', { name: 'Creando cuenta…' })).toBeDisabled();
     await expect(page.locator('#register-name')).toBeDisabled();
@@ -62,6 +70,7 @@ for (const outcome of ['success', 'error'] as const) {
     await page.evaluate(() => window.finishSignIn());
     await expect(page.getByRole(outcome === 'success' ? 'status' : 'alert')).toContainText(outcome === 'success' ? 'Cuenta creada correctamente' : 'Inténtalo nuevamente');
     expect(await page.evaluate(() => window.submissions)).toBe(1);
+    expect(await page.evaluate(() => window.registrationPhone)).toBe(outcome === 'success' ? '+57 999 888 777' : '+51 999 888 777');
   });
 }
 
@@ -72,7 +81,7 @@ for (const [width, height] of sizes) {
     await page.setViewportSize({ width, height }); await page.goto('/registro');
     await page.evaluate(() => document.fonts.ready);
     await page.waitForFunction(() => [...document.images].every(i => i.complete && i.naturalWidth > 0));
-    await expect(page.getByRole('heading', { name: 'Registrarse', exact: true })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Crea tu cuenta', exact: true })).toBeVisible();
     await page.getByRole('button', { name: 'Crear cuenta', exact: true }).scrollIntoViewIfNeeded();
     await expect(page.getByRole('button', { name: 'Crear cuenta', exact: true })).toBeInViewport();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);

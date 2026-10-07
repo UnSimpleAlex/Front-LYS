@@ -10,29 +10,33 @@ const fields: Exclude<RegistrationField, 'terms'>[] = ['name', 'email', 'phone',
 
 export function RegisterCard({ onLogin, onLegal }: Props) {
   const [values, setValues] = useState(initialRegistration);
+  const [dialCode, setDialCode] = useState('+51');
   const [touched, setTouched] = useState<Partial<Record<RegistrationField, boolean>>>({});
+  const validationValues = { ...values, phone: values.phone.trim() && !values.phone.trim().startsWith('+') ? `${dialCode} ${values.phone.trim()}` : values.phone.trim() };
   const { pending, provider, status, message, run } = useAuthRequest('Cuenta creada correctamente.', 'No pudimos crear tu cuenta. Inténtalo nuevamente.');
-  const error = (field: RegistrationField) => touched[field] ? registrationError(field, values) : '';
+  const error = (field: RegistrationField) => touched[field] ? registrationError(field, validationValues) : '';
   function change(field: RegistrationField, value: string | boolean) { setValues(current => ({ ...current, [field]: value }) as RegistrationValues); }
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setTouched(Object.fromEntries([...fields, 'terms'].map(field => [field, true])));
-    const firstInvalid = [...fields, 'terms' as const].find(field => registrationError(field, values));
+    const firstInvalid = [...fields, 'terms' as const].find(field => registrationError(field, validationValues));
     if (firstInvalid) { (event.currentTarget.elements.namedItem(firstInvalid) as HTMLInputElement).focus(); return; }
-    void run(() => registrationService.register({ name: values.name.trim().replace(/\s+/g, ' '), email: values.email.trim(), phone: values.phone.trim(), password: values.password, termsAccepted: values.terms }), 'password');
+    void run(() => registrationService.register({ name: values.name.trim().replace(/\s+/g, ' '), email: values.email.trim(), phone: validationValues.phone, password: values.password, termsAccepted: values.terms }), 'password');
   }
   const binding = (field: Exclude<RegistrationField, 'terms'>) => ({ id: `register-${field}`, name: field, value: values[field], required: true, disabled: pending, error: error(field), onChange: (event: React.ChangeEvent<HTMLInputElement>) => change(field, event.target.value), onBlur: () => setTouched(current => ({ ...current, [field]: true })) });
 
   return <section className="sign-in-card register-card" id="registrarse" aria-labelledby="register-title">
-    <h2 id="register-title" tabIndex={-1}>Registrarse</h2>
-    <p className="auth-description">Crea tu cuenta y empieza a disfrutar de tus favoritos, promociones exclusivas y pedidos más rápidos.</p>
+    <header className="register-heading">
+      <h2 id="register-title" tabIndex={-1}><span className="heading-rays" aria-hidden="true" />Crea tu cuenta<span className="heading-rays" aria-hidden="true" /></h2>
+      <p className="auth-description">Y sé parte de buenos momentos</p>
+    </header>
     <form onSubmit={onSubmit} noValidate aria-busy={pending}>
       <div className="fields">
         <AuthField {...binding('name')} label="Nombres y apellidos" icon="user" placeholder="Tus nombres y apellidos" autoComplete="name" maxLength={120} />
-        <AuthField {...binding('email')} label="Correo electrónico" icon="mail" type="email" placeholder="nombre@correo.com" autoComplete="email" />
-        <AuthField {...binding('phone')} label="Celular" icon="phone" type="tel" inputMode="tel" placeholder="Tu número de celular" autoComplete="tel" maxLength={25} />
-        <AuthField {...binding('password')} label="Contraseña" icon="lock" type="password" placeholder="Crea una contraseña" autoComplete="new-password" />
-        <AuthField {...binding('confirmation')} label="Confirmar contraseña" icon="lock" type="password" placeholder="Repite tu contraseña" autoComplete="new-password" success={!!values.confirmation && values.confirmation === values.password} help={values.confirmation && values.confirmation === values.password ? 'Las contraseñas coinciden.' : undefined} />
+        <AuthField {...binding('email')} label="Correo electrónico" icon="mail" type="email" placeholder="Tu correo electrónico" autoComplete="email" />
+        <AuthField {...binding('phone')} label="Celular" icon="phone" type="tel" inputMode="tel" placeholder="Tu número de teléfono" autoComplete="tel-national" maxLength={25} suffix={<div className="phone-prefix"><span className="phone-country" data-dial={dialCode} aria-hidden="true">{dialCode === '+51' ? '🇵🇪' : dialCode === '+57' ? '🇨🇴' : dialCode === '+56' ? '🇨🇱' : dialCode === '+593' ? '🇪🇨' : '🇺🇸'}</span><select aria-label="Prefijo telefónico" value={dialCode} disabled={pending} onChange={event => setDialCode(event.target.value)}><option value="+51">+51</option><option value="+57">+57</option><option value="+56">+56</option><option value="+593">+593</option><option value="+1">+1</option></select></div>} />
+        <AuthField {...binding('password')} label="Contraseña" icon="lock" type="password" placeholder="Tu contraseña" autoComplete="new-password" />
+        <AuthField {...binding('confirmation')} label="Confirmar contraseña" icon="lock" type="password" placeholder="Confirma tu contraseña" autoComplete="new-password" success={!!values.confirmation && values.confirmation === values.password} help={values.confirmation && values.confirmation === values.password ? 'Las contraseñas coinciden.' : undefined} />
       </div>
       <div className="terms-group">
         <div className="terms-option">

@@ -1,15 +1,39 @@
-.register-card { padding: clamp(24px, 2vw, 36px); }
-.register-card h2 { margin-bottom: 8px; }
-.auth-description { color: #455775; font-size: 15px; line-height: 1.45; margin: 0 0 20px; }
-.register-card .fields { gap: 12px; }
+.register-card { padding: clamp(22px, 2vw, 30px); }
+.register-heading { text-align: center; margin-bottom: 22px; }
+.register-card h2 { display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--button-red); font-family: 'Caveat', sans-serif; font-size: clamp(36px, 4vw, 48px); font-weight: 700; font-style: italic; line-height: 1.05; letter-spacing: -.04em; margin: 0; }
+.heading-rays { width: 16px; height: 3px; background: currentColor; position: relative; flex-shrink: 0; border-radius: 50%; }
+.heading-rays::before, .heading-rays::after { content: ''; position: absolute; width: 12px; height: 3px; left: 4px; background: currentColor; border-radius: inherit; }
+.heading-rays::before { top: -10px; transform: rotate(35deg); }
+.heading-rays::after { top: 10px; transform: rotate(-35deg); }
+.heading-rays:last-child { transform: rotate(180deg); }
+.auth-description { color: #455775; font-size: 14px; line-height: 1.4; margin: 6px 0 0; }
+.register-card .fields { gap: 8px; }
+.register-card .field-label { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.register-card .field-group { gap: 0; }
+.register-card .input-field { min-height: 44px; background: #fcfcfd; gap: 10px; padding-inline: 12px; }
+.register-card .input-field > svg { width: 19px; height: 19px; color: #52565d; }
+.register-card .input-field input { font-size: 14px; }
+.register-card .input-field input::placeholder { color: #69717f; }
+.register-card .field-error, .register-card .field-help { margin-top: 5px; }
+.phone-prefix { display: flex; align-items: center; gap: 5px; border-left: 1px solid var(--input-border); padding-left: 9px; flex-shrink: 0; }
+.phone-prefix select { min-height: 44px; max-width: 65px; font: inherit; font-size: 13px; border: 0; background: transparent; color: #303846; cursor: pointer; }
+.phone-country[data-dial="+51"] { display: block; width: 18px; height: 12px; font-size: 0; background: linear-gradient(90deg, #d90019 33.33%, #fff 33.33% 66.66%, #d90019 66.66%); }
+.register-card .sign-in-button { min-height: 46px; position: relative; letter-spacing: .08em; }
+.register-card .sign-in-button > svg { position: absolute; right: 14px; }
+.register-card .or-divider { margin: 14px 0; gap: 12px; }
+.register-card .or-divider span { text-transform: uppercase; font-size: 10px; letter-spacing: .22em; white-space: nowrap; }
+.register-card .google-button { min-height: 46px; font-size: 15px; }
+.register-card .register-divider { font-size: 13px; margin-top: 12px; }
 .field-help { margin: 0; color: #226d39; font-size: 13px; line-height: 1.4; }
 .input-field.field-success:not(:focus-within) { border-color: #54866b; }
-.terms-group { margin: 12px 0 16px; }
-.terms-option { display: grid; grid-template-columns: 16px minmax(0, 1fr); align-items: start; gap: 8px; color: #455775; font-size: 14px; line-height: 1.6; }
+.terms-group { margin: 8px 0 12px; }
+.terms-option { display: grid; grid-template-columns: 16px minmax(0, 1fr); align-items: center; gap: 8px; color: #455775; font-size: 12px; line-height: 1.5; }
 .terms-option .remember-option { min-height: 44px; align-items: start; padding-top: 4px; }
 .terms-option .remember-option input { top: 0; transform: none; height: 44px; }
 .terms-option .text-link { text-align: left; font-size: inherit; display: inline; line-height: inherit; }
 .register-page .registration-caption { width: min(70%, 420px); margin-top: 12px; text-wrap: pretty; }
+.register-page { --photo-offset: 80px; }
+.register-page .hero-background { padding-top: var(--photo-offset); }
 .register-page .welcome-copy { width: min(calc(100% - 100px), 760px); }
 @media (max-width: 1150px) {
  .register-page .hero-layout { display: flex; flex-direction: column; gap: 0; padding-block: 12px 24px; }
@@ -26,6 +50,8 @@
  .register-page .register-card { max-width: 520px; padding: clamp(24px, 2vw, 36px); }
 }
 @media (max-width: 599px) {
+ .register-page { --photo-offset: 95px; }
+ .register-card h2 { font-size: clamp(32px, 10vw, 44px); }
  .register-page .registration-caption { width: 95%; }
 }
 @media (max-width: 280px) {
