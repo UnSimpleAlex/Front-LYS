@@ -24,6 +24,7 @@ test('registro valida campos, coincidencia, términos y navegación sin simular 
   await page.getByLabel('Nombres y apellidos', { exact: true }).fill('123');
   await page.getByLabel('Correo electrónico', { exact: true }).fill('correo-inválido');
   await page.getByLabel('Celular', { exact: true }).fill('abc');
+  await expect(page.getByLabel('Celular', { exact: true })).toHaveValue('');
   await page.getByLabel('Contraseña', { exact: true }).fill('');
   await page.getByRole('button', { name: 'Crear cuenta', exact: true }).click();
   for (const field of ['name', 'email', 'phone', 'password']) await expect(page.locator(`#register-${field}`)).toHaveAttribute('aria-invalid', 'true');

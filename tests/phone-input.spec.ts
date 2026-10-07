@@ -1,0 +1,24 @@
+import { test, expect } from '@playwright/test';
+
+test('celular filtra letras y avisa del inicio mientras se escribe', async ({ page }) => {
+  await page.goto('/registro');
+  const input = page.getByLabel('Celular', { exact: true });
+  await input.pressSequentially('abc8');
+  await expect(input).toHaveValue('8');
+  await expect(page.locator('#register-phone-error')).toHaveText('El celular de Perú debe comenzar con 9.');
+  await input.fill('9');
+  await expect(page.locator('#register-phone-error')).toHaveCount(0);
+  await input.fill('9ab99-888 777');
+  await expect(input).toHaveValue('999888777');
+  await input.fill('+51 999 888 777');
+  await expect(input).toHaveValue('999888777');
+  await input.fill('+57 3211234567');
+  await expect(page.locator('#register-phone-error')).toContainText('prefijo debe ser +51');
+  await input.fill('999888777');
+  await page.getByRole('button', { name: /País y prefijo del celular/ }).click();
+  await page.getByRole('option', { name: 'Colombia +57', exact: true }).click();
+  await input.fill('2');
+  await expect(page.locator('#register-phone-error')).toHaveText('El celular de Colombia debe comenzar con 3, 9.');
+  await input.fill('3211234567');
+  await expect(input).toHaveAttribute('aria-invalid', 'false');
+});

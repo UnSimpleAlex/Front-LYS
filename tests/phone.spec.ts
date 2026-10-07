@@ -1,11 +1,12 @@
 import { test, expect } from '@playwright/test';
-import { callingCode, phoneCountries, phoneExample, validateCellphone } from '../src/features/auth/phoneCountries';
+import { callingCode, cellphoneStartError, phoneCountries, phoneExample, validateCellphone } from '../src/features/auth/phoneCountries';
 
 for (const [country, name] of phoneCountries) {
   test(`celular de ${name}: longitud, prefijo y formato internacional`, () => {
     const example = phoneExample(country);
     const valid = validateCellphone(example, country);
     expect(valid.error).toBe('');
+    expect(cellphoneStartError(example, country)).toBe('');
     expect(valid.number).toBe(`${callingCode(country)}${example}`);
     expect(validateCellphone(valid.number, country)).toEqual(valid);
     expect(validateCellphone(example.slice(0, -1), country).error).not.toBe('');

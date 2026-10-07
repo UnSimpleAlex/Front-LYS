@@ -13,6 +13,30 @@ export type PhoneCountry = typeof phoneCountries[number][0];
 export const callingCode = (country: PhoneCountry) => `+${getCountryCallingCode(country)}`;
 export const phoneExample = (country: PhoneCountry) => examples[country];
 
+// Broad initial series from the installed numbering metadata; full validation still checks each allocation.
+const mobileStarts: Record<PhoneCountry, string> = {
+  PE: '9', AR: '69', BO: '567', BR: '123456789', CL: '23456789', CO: '39', CR: '35678',
+  CU: '56', EC: '9', SV: '567', GT: '3458', HT: '345', HN: '3789', MX: '23456789',
+  NI: '5678', PA: '1268', PY: '9', PR: '79', DO: '8', UY: '9', VE: '4',
+};
+
+export function cellphoneStartError(digits: string, country: PhoneCountry): string {
+  if (!digits) return '';
+  const national = country === 'PE' ? digits : digits.replace(/^0/, '');
+  if (!national || mobileStarts[country].includes(national[0])) return '';
+  const name = phoneCountries.find(([code]) => code === country)![1];
+  return `El celular de ${name} debe comenzar con ${mobileStarts[country].split('').join(', ')}.`;
+}
+
+export function sanitizeCellphone(value: string, country: PhoneCountry): string | undefined {
+  const digits = value.replace(/\D/g, '');
+  if (value.trim().startsWith('+')) {
+    const prefix = callingCode(country).slice(1);
+    return digits.startsWith(prefix) ? digits.slice(prefix.length) : undefined;
+  }
+  return digits;
+}
+
 export function validateCellphone(value: string, country: PhoneCountry): { error: string; number: string } {
   const raw = value.trim();
   if (!raw) return { error: 'Ingresa tu número de celular.', number: '' };
