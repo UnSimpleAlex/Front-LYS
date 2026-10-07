@@ -30,7 +30,7 @@ export function SignInCard({ onHelp }: { onHelp: (action: 'register' | 'recover'
 
   return <section className="sign-in-card compact-auth-card login-card" id="iniciar-sesion" aria-labelledby="sign-in-title">
     <header className="auth-heading">
-      <h2 id="sign-in-title"><span className="heading-rays" aria-hidden="true" />¡Bienvenido!<span className="heading-rays" aria-hidden="true" /></h2>
+      <h2 id="sign-in-title"><span className="heading-rays" aria-hidden="true" />Inicia sesión<span className="heading-rays" aria-hidden="true" /></h2>
       <p className="auth-description">Nos alegra verte de nuevo</p>
     </header>
     <form onSubmit={onSubmit} noValidate aria-busy={pending}>

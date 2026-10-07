@@ -16,7 +16,7 @@ for (const [width, height] of viewports) {
     await page.evaluate(() => document.fonts.ready);
     await page.waitForFunction(() => [...document.images].every(image => image.complete && image.naturalWidth > 0));
     await page.evaluate(() => Promise.all(document.getAnimations().map(animation => animation.finished)));
-    await expect(page.getByRole('heading', { name: '¡Bienvenido!', exact: true })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Inicia sesión', exact: true })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Continuar con Google' })).toBeVisible();
     const geometry = await page.evaluate(() => {
       const card = document.querySelector('.sign-in-card')!.getBoundingClientRect();

@@ -82,6 +82,6 @@ El botón de la cabecera muestra «Pedir ahora», con fondo rojo e icono/texto b
 
 ### Formulario según la referencia compacta
 
-El formulario usa título rojo «¡Bienvenido!» con Caveat como aproximación y adornos laterales, subtítulo «Nos alegra verte de nuevo», campos de 44 px con iconos y labels accesibles ocultos visualmente. Recordarme y recuperación aparecen en rojo; el botón de 46 px mantiene su flecha a la derecha. Separador en mayúsculas, Google compacto y enlace «Crear cuenta» a /registro. El estilo común compact-auth-card se comparte con registro, manteniendo su ancho y los estados de validación/carga existentes.
+El formulario usa título rojo «Inicia sesión» con Caveat como aproximación y adornos laterales, subtítulo «Nos alegra verte de nuevo», campos de 44 px con iconos y labels accesibles ocultos visualmente. Recordarme y recuperación aparecen en rojo; el botón de 46 px mantiene su flecha a la derecha. Separador en mayúsculas, Google compacto y enlace «Crear cuenta» a /registro. El estilo común compact-auth-card se comparte con registro, manteniendo su ancho y los estados de validación/carga existentes.
 
 Validación: lint y build/typecheck, suite de 46 pruebas y revisión visual de móvil, tablet y PC. Las capturas finales quedan en test-results/.
