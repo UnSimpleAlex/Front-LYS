@@ -10,6 +10,8 @@ Se usan los fondos y fotografías adjuntos, con WebP y tamaños 640/1080; hero 1
 
 ## Interacciones
 
+Especialidades y promociones tienen fondo blanco. El footer utiliza iconos SVG de Facebook, Instagram, TikTok y YouTube, con tamaño uniforme y nombres accesibles.
+
 Carrusel manual con 3 diapositivas: flechas, indicadores, teclado y deslizamiento táctil. Sin rotación automática. Motion controla transiciones y estados de botones/tarjetas; `MotionConfig` respeta reducción de movimiento y se anula la duración del carrusel cuando corresponde. Menú móvil/tablet con Escape y animación discreta. Navegación Inicio/Promociones/Nosotros/Contacto desplaza a las secciones.
 
 Carta, pedidos, locales, enlaces sociales y descargas de app muestran avisos de disponibilidad pendiente. No se simulan pedidos ni enlaces externos sin URL oficial. Los importes y datos de contacto son los de la referencia, pendientes de confirmación comercial; no hay checkout ni llamadas telefónicas habilitadas. La app todavía no está publicada. No se añaden servicios ni integración de backend.
