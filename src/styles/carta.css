@@ -75,21 +75,15 @@
 .product-photo-beverage .beverage-backdrop { position: absolute; inset: 0; object-fit: fill; }
 .product-favorite { position: absolute; right: 6px; top: 6px; width: 36px; height: 36px; display: grid; place-items: center; padding: 6px; color: #fff; background: #0003; border: 0; border-radius: 50%; transition: background-color 160ms var(--ease-out); }
 .favorite-symbol { display: grid; place-items: center; width: 100%; height: 100%; }
-.product-favorite::after { content: ''; position: absolute; inset: 2px; border: 2px solid #fff; border-radius: 50%; opacity: 0; pointer-events: none; }
-.product-favorite[data-feedback=save] .favorite-symbol { animation: favorite-heartbeat 420ms var(--ease-out) both; }
-.product-favorite[data-feedback=save]::after { animation: favorite-ripple 380ms var(--ease-out) both; }
+.product-favorite[data-feedback=save] .favorite-symbol { animation: favorite-wiggle 500ms ease-in-out both; }
 .product-favorite[data-feedback=remove] .favorite-symbol { animation: favorite-release 200ms var(--ease-out) both; }
 .product-favorite:active .favorite-symbol { transform: scale(.88); }
-@keyframes favorite-heartbeat {
-  0% { transform: scale(.72); }
-  35% { transform: scale(1.22) rotate(-8deg); }
-  62% { transform: scale(.95) rotate(3deg); }
-  82% { transform: scale(1.08); }
-  100% { transform: scale(1); }
-}
-@keyframes favorite-ripple {
-  0% { transform: scale(.7); opacity: .9; }
-  100% { transform: scale(1.4); opacity: 0; }
+/* Movimiento adaptado del ejemplo de Uiverse.io por SalladShooter. */
+@keyframes favorite-wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-10deg); }
+  50% { transform: rotate(10deg); }
+  75% { transform: rotate(-10deg); }
 }
 @keyframes favorite-release {
   0% { transform: scale(.82); }
