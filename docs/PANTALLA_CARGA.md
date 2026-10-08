@@ -17,3 +17,5 @@ Ajuste de movimiento: siete pruebas de carga aprobadas, incluida una comprobaci�
 En PC, el contenedor raíz de carga ocupa 100dvh. La escena usa el espacio restante bajo el navbar y ajusta sus dimensiones al alto disponible, sin ocultar el scroll de las páginas normales.
 
 LoadingEmbers dibuja una estela de pequeñas brasas rojizas irregulares al mover el mouse. Se desvanece en 1.1 segundos, limita la emisión y el total a 90 partículas; deja de dibujar cuando no quedan brasas. Canvas decorativo sin eventos ni anuncios, con tamaño observado y limpieza al desmontar. Desactivado para movimiento reducido y dispositivos sin puntero preciso.
+
+En PC los puntos se separan del asador entre 20 y 40 px según el alto de pantalla; el mensaje se sitúa entre 14 y 24 px debajo, ambos centrados.
