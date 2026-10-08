@@ -540,6 +540,28 @@
       "name": "categories/salsas",
       "prompt": "Create one photorealistic isolated food cutout for a mobile restaurant menu category tile: three small bowls of yellow aji mayonnaise, green huacatay sauce and red rocoto sauce. All subject fully visible centered in middle 80% of a square canvas. Warm realistic studio food lighting, appealing and detailed, slightly elevated 3/4 view, no table, no background, no text, no labels, no collage. Transparent alpha background.",
       "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-d939d597-f456-420b-85de-325028d78880.png"
+    },
+    {
+      "name": "combos-02-incakola",
+      "prompt": "Replace ONLY the generic yellow soda bottle with a realistic 1.5 liter Inca Kola bottle, yellow soda, blue cap and authentic blue-yellow label clearly reading INCA KOLA. Preserve exactly the single whole chicken, fries, salad, table, lighting, restaurant background and overall framing. Second image is packaging reference only.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-2cbbc176-f126-4faa-801b-461004493405.png",
+      "final": "public\\images\\carta\\products\\combos-02-incakola.webp",
+      "references": [
+        "public/images/carta/products/combos-02.webp",
+        "public/images/carta/products/bebidas-02.webp"
+      ],
+      "tool": "built-in image_gen"
+    },
+    {
+      "name": "combos-08-incakola",
+      "prompt": "Replace ONLY BOTH generic yellow soda bottles with recognizable Inca Kola bottles, yellow soda, blue caps and blue-yellow labels clearly reading INCA KOLA. Keep exactly two whole roast chickens, fries and salad, original table, lighting, background and composition. Second image is packaging reference only.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-b9c9b125-a9fc-4543-9f1d-d0fef02874a7.png",
+      "final": "public\\images\\carta\\products\\combos-08-incakola.webp",
+      "references": [
+        "public/images/carta/products/combos-08.webp",
+        "public/images/carta/products/bebidas-02.webp"
+      ],
+      "tool": "built-in image_gen"
     }
   ]
 }

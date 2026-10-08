@@ -34,3 +34,5 @@ Rama `feature/carta` basada en la versión de Inicio del PR #2. Su PR debe revis
 
 
 Selector de cantidad retirado de las tarjetas junto con sus props, estilos e iconos exclusivos. El borde animado se conserva.
+
+Bebidas amarillas identificadas como Inca Kola en las ocho descripciones correspondientes. Combo familiar y Combo dúo brasa usan imágenes editadas con botellas etiquetadas; versiones WebP de 640×427 px y prompts en CARTA_ASSETS_GENERADOS.json.
