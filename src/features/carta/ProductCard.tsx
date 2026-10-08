@@ -12,10 +12,10 @@ export function ProductCard({ product, favorite, count, onFavorite, onAdd, onQua
       <FavoriteButton selected={favorite} productName={product.name} onToggle={onFavorite} />
     </div>
     <div className="product-info"><button className="product-name" type="button" onClick={onDetail}><h3>{product.name}</h3></button><p>{product.description}</p><div className="product-purchase"><strong>{soles(product.price)}</strong>
-      <div className={`product-cart-control${count ? ' has-quantity' : ''}`} role="group" aria-label={`Cantidad de ${product.name}`}>
-        <button type="button" className="product-decrease" hidden={!count} aria-label={`Reducir cantidad de ${product.name}`} onClick={() => { if (count === 1) addButton.current?.focus(); onQuantity(-1); }}><Icon name="minus" /></button>
-        <output hidden={!count} aria-live="polite" aria-label={`Unidades de ${product.name}`}>{count}</output>
-        <button ref={addButton} type="button" className="product-add" disabled={count >= 99} aria-label={`${count ? 'Aumentar cantidad de' : 'Agregar'} ${product.name}`} onClick={onAdd}><Icon name={count ? 'plus' : 'cart'} /><span>{count ? '' : 'Agregar'}</span><span className="product-plus" aria-hidden="true">+</span></button>
+      <div className="product-cart-control has-quantity" role="group" aria-label={`Cantidad de ${product.name}`}>
+        <button type="button" className="product-decrease" disabled={!count} aria-label={`Reducir cantidad de ${product.name}`} onClick={() => { if (count === 1) addButton.current?.focus(); onQuantity(-1); }}><Icon name="minus" /></button>
+        <output aria-live="polite" aria-label={`Unidades de ${product.name}`}>{count}</output>
+        <button ref={addButton} type="button" className="product-add" disabled={count >= 99} aria-label={`Aumentar cantidad de ${product.name}`} onClick={onAdd}><Icon name="plus" /></button>
       </div>
     </div></div>
   </article>;
