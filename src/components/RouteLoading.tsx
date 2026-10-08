@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import '../styles/loading.css';
+import { LoadingEmbers } from './LoadingEmbers';
 
 export function RouteLoading() {
   const [visible, setVisible] = useState(false);
@@ -9,6 +10,7 @@ export function RouteLoading() {
   }, []);
 
   return <div className="route-loading" id="contenido">
+    <LoadingEmbers />
     {visible && <div className="loading-scene" role="status" aria-live="polite">
       <img className="loading-brand" src="/images/logo.webp" alt="Leñas y Sabores" width="2048" height="682" />
       <div className="loading-rotisserie" aria-hidden="true">
@@ -21,7 +23,6 @@ export function RouteLoading() {
       </div>
       <div className="loading-dots" aria-hidden="true"><span /><span /><span /></div>
       <p className="loading-title">Preparando tu experiencia<span aria-hidden="true">…</span></p>
-      <div className="loading-ornament" aria-hidden="true"><span /><i /><span /></div>
     </div>}
   </div>;
 }

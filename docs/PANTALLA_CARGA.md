@@ -1,6 +1,6 @@
 # Pantalla de carga
 
-RouteLoading es el fallback compartido de Suspense para Inicio, Carta y registro. Sigue la referencia codex-clipboard-d439f25e-c71c-4219-a363-ed4963018330.png: logo grande existente, fondo peruano gris tenue, pollo ilustrado sobre asador horizontal fijo, vapor, flechas y «Preparando tu experiencia…» con ornamento rojo.
+RouteLoading es el fallback compartido de Suspense para Inicio, Carta y registro. Sigue la referencia codex-clipboard-d439f25e-c71c-4219-a363-ed4963018330.png: logo grande existente, fondo peruano gris tenue, pollo ilustrado sobre asador horizontal fijo, vapor, flechas y «Preparando tu experiencia…» en Caveat 600, como el subtítulo de Carta, sin líneas ni rombo.
 
 El pollo usa un recorte transparente generado con image_gen y un giro CSS corto de 3.6 segundos, con aceleración y desaceleración suaves. Se limita a ±14° en el eje horizontal y ±2° de inclinación para conservar el volumen aparente y evitar el aplanamiento del giro completo. Es una simulación ilustrada sobre un plano 2D, no un modelo volumétrico 3D. Eje y sombra permanecen fijos. Se retiraron los pollos transparentes laterales; tres puntos rojos animados aparecen encima del mensaje, con pulso escalonado de 1.2 segundos. Movimiento reducido los mantiene fijos. Sólo se animan transform y opacity. Los fondos de tablet/móvil muestran los extremos originales con máscaras suaves sin estirar la imagen.
 
@@ -15,3 +15,5 @@ Validación: seis pruebas de carga aprobadas, incluyendo giro continuo, movimien
 Ajuste de movimiento: siete pruebas de carga aprobadas, incluida una comprobación de que la altura visible del pollo conserva al menos el 90% durante todo el ciclo. Se revisaron ambas posiciones extremas.
 
 En PC, el contenedor raíz de carga ocupa 100dvh. La escena usa el espacio restante bajo el navbar y ajusta sus dimensiones al alto disponible, sin ocultar el scroll de las páginas normales.
+
+LoadingEmbers dibuja una estela de pequeñas brasas rojizas irregulares al mover el mouse. Se desvanece en 1.1 segundos, limita la emisión y el total a 90 partículas; deja de dibujar cuando no quedan brasas. Canvas decorativo sin eventos ni anuncios, con tamaño observado y limpieza al desmontar. Desactivado para movimiento reducido y dispositivos sin puntero preciso.

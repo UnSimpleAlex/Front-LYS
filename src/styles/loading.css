@@ -1,5 +1,5 @@
 .route-loading { position: relative; isolation: isolate; flex: 1; min-height: 100dvh; display: grid; place-items: center; padding: 50px 24px; background: #fff url('/images/loading/background.webp') center / cover no-repeat; }
-.loading-scene { display: flex; flex-direction: column; align-items: center; text-align: center; width: min(100%, 1100px); animation: loading-arrive 240ms ease-out both; }
+.loading-scene { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; text-align: center; width: min(100%, 1100px); animation: loading-arrive 240ms ease-out both; }
 .loading-brand { width: clamp(240px, 54vw, 820px); max-width: 100%; height: auto; max-height: 240px; object-fit: contain; display: block; margin-bottom: 24px; }
 .loading-rotisserie { position: relative; width: min(100%, 1000px); height: clamp(170px, 22vw, 340px); perspective: 1000px; }
 .loading-spit { position: absolute; width: 100%; height: 14px; top: 50%; transform: translateY(-50%); background: linear-gradient(#4b2414, #d99a62 35%, #552817 55%, #331809 80%, #a16b49); border-radius: 50%; mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent); }
@@ -17,11 +17,7 @@
 .loading-dots span:nth-child(2) { animation-delay: .16s; }
 .loading-dots span:nth-child(3) { animation-delay: .32s; }
 @keyframes loading-dot-pulse { 0%, 60%, 100% { transform: translateY(0) scale(.85); opacity: .4; } 30% { transform: translateY(-5px) scale(1); opacity: 1; } }
-.loading-title { font-size: clamp(18px, 1.9vw, 30px); font-weight: 500; letter-spacing: .14em; line-height: 1.5; color: #171717; margin: 14px 0 18px; }
-.loading-ornament { display: flex; align-items: center; gap: 18px; }
-.loading-ornament span { width: clamp(50px, 7vw, 110px); height: 1px; background: linear-gradient(90deg, transparent, var(--red)); }
-.loading-ornament span:last-child { transform: rotate(180deg); }
-.loading-ornament i { width: 12px; height: 12px; border: 3px solid var(--red); transform: rotate(45deg); }
+.loading-title { font-family: Caveat, 'DM Sans', cursive; font-size: clamp(18px, 1.9vw, 30px); font-weight: 600; letter-spacing: normal; line-height: 1.15; color: #171717; margin: 14px 0 18px; }
 @keyframes loading-arrive { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 /* Un giro corto conserva el volumen de la ilustración y evita el efecto de plano al voltearla. */
 @keyframes loading-roast-turn {
@@ -41,7 +37,7 @@
   .loading-chicken { width: 64%; left: 18%; }
   .loading-spit { height: 8px; } .loading-spit::before, .loading-spit::after { width: 8px; height: 20px; top: -6px; }
   .loading-spit::before { left: 12%; } .loading-spit::after { right: 12%; }
-  .loading-title { font-size: clamp(14px, 4vw, 20px); letter-spacing: .06em; margin-top: 22px; }
+  .loading-title { font-size: clamp(14px, 4vw, 20px); letter-spacing: normal; margin-top: 22px; }
   .arrow-left { left: 15%; } .arrow-right { right: 15%; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -60,3 +56,5 @@
   .loading-rotisserie { height: min(340px, 22vw, 36dvh); }
   .loading-title { font-size: min(30px, 1.9vw, 4dvh); margin-block: min(14px, 2dvh) min(18px, 2dvh); }
 }
+
+.loading-embers { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
