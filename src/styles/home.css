@@ -1,6 +1,5 @@
 @font-face { font-family: Knewave; src: url('/fonts/Knewave.ttf') format('truetype'); font-display: swap; }
 .home-page { --home-red: #ed0000; --home-cream: #fcf6ee; color: #111; background: #fff; }
-.route-loading { min-height: 60vh; display: grid; place-items: center; }
 .home-container { width: 88%; max-width: 1740px; margin-inline: auto; }
 .home-header { padding-inline: 9%; gap: 3%; }
 .home-header .brand { width: clamp(180px, 16vw, 250px); }
