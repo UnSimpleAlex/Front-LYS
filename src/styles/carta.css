@@ -18,6 +18,9 @@
 .carta-hero h1 { margin: 0; }
 .carta-hero h1 img { width: 100%; height: clamp(85px, 8.5vw, 155px); object-fit: contain; display: block; }
 .carta-hero p { margin: 8px 0 0; font-family: Caveat, 'DM Sans', cursive; font-weight: 600; line-height: 1.15; font-size: clamp(15px, 1.7vw, 28px); }
+@media (min-width: 1101px) {
+  .carta-hero p { position: relative; top: calc(-1 * clamp(6px, .6vw, 12px)); }
+}
 .carta-tagline-mobile, .carta-ornament { display: none; }
 .carta-container { width: 93%; max-width: 1800px; margin-inline: auto; padding-bottom: 50px; }
 .carta-toolbar { display: flex; gap: 12px; align-items: center; margin-top: 12px; padding: 10px 12px; border: 1px solid #f1f1f3; border-radius: 18px; box-shadow: 0 10px 26px #00000006; }
