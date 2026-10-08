@@ -6,6 +6,7 @@ import './styles/global.css';
 import './styles/login.css';
 import './styles/register.css';
 import './styles/home.css';
+import './styles/carta.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode><App /></StrictMode>,

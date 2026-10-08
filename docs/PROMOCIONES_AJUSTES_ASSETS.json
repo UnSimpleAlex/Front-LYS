@@ -1,0 +1,23 @@
+{
+  "mode": "built-in image_gen edit",
+  "assets": [
+    {
+      "name": "hero-desktop-v3",
+      "ref": "hero-desktop.webp",
+      "prompt": "Edit this Halloween polleria website banner background. Preserve the illustrated spiderweb, bats, pumpkin, photorealistic roast chicken fries and warm dark Halloween restaurant style. CRITICAL layout: widen the blank light cream paper panel to occupy the LEFT 65% of the entire image, with a rough diagonal brushed transition only between x=64% and x=70%. Move the entire chicken and fries arrangement to the RIGHT, within x=71%..94%, leaving x=94%..100% dark for a small overlaid tagline. Keep blank cream panel truly empty centrally, decorations restricted to outer left edge. The food should be completely visible in a centered horizontal band between 22% and 78% of the height because this image will be displayed in a short wide banner. Maintain wide landscape ratio. NO TEXT, NO LETTERS.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-06ee0252-6632-45cd-aa68-abfe7eadf567.png"
+    },
+    {
+      "name": "hero-mobile-v2",
+      "ref": "hero-mobile.webp",
+      "prompt": "Edit this Halloween polleria banner background, preserve its style and decoration and roast chicken/fries. Widen the empty light cream paper left panel to 64% of total width. Move the chicken and fries to the right 36%, in the lower right half, avoiding any dark texture behind the left 60% text region. Preserve spiderweb, bats and small pumpkin at extreme outer left edges, leave main left center blank. Preserve landscape ratio around 2.5:1. No text.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-590c6b3d-0106-41d5-b4a5-a747af959ad6.png"
+    },
+    {
+      "name": "page-texture-white",
+      "ref": "page-texture.webp",
+      "prompt": "Edit this decorative Halloween background. Keep exactly the same orange and muted gray line art of leaves, pumpkins, roast chickens at the outer left and right margins with the same scale, placement and composition. Change all the cream/beige paper background to clean pure WHITE #FFFFFF, including the whole center and gaps between ornaments. Remove beige/grunge tint, use white throughout. No text. Preserve the same landscape aspect ratio.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-0198605e-c4ae-44e9-93c0-6921e79b8788.png"
+    }
+  ]
+}

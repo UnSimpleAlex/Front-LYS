@@ -39,24 +39,9 @@ for (const entry of [
   });
 }
 
-test('vista previa local mantiene la carga y permite volver a Carta', async ({ page }) => {
+test('el enlace antiguo de preview ya muestra Carta', async ({ page }) => {
   await page.goto('/carta?preview=carga');
-  await expect(page.getByRole('status').filter({ hasText: 'Preparando tu experiencia' })).toBeVisible();
-  await expect(page.locator('.product-card')).toHaveCount(0);
-  await page.getByRole('link', { name: 'Volver a la página' }).click();
   await expect(page.getByRole('heading', { name: 'Nuestra carta', exact: true })).toBeVisible();
+  await expect(page.locator('.route-loading')).toHaveCount(0);
   await expect(page).toHaveURL(/\/carta$/);
 });
-
-for (const viewport of [{ width: 1366, height: 768 }, { width: 1920, height: 1080 }, { width: 1280, height: 600 }, { width: 1440, height: 480 }]) {
-  test(`carga PC sin scroll a ${viewport.width}x${viewport.height}`, async ({ page }) => {
-    await page.setViewportSize(viewport);
-    await page.goto('/carta?preview=carga');
-    await expect(page.getByRole('status')).toBeVisible();
-    const bounds = await page.locator('.loading-scene').boundingBox();
-    expect(bounds!.y).toBeGreaterThanOrEqual(0);
-    expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(viewport.height);
-    expect(await page.evaluate(() => document.documentElement.scrollHeight <= innerHeight)).toBe(true);
-    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-  });
-}

@@ -1,0 +1,68 @@
+{
+  "mode": "built-in image_gen",
+  "assets": [
+    {
+      "name": "hero-desktop",
+      "source": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-6a399809-02ed-41f1-9006-dbcbfd630707.png",
+      "final": "public/images/promotions/hero-desktop.webp",
+      "prompt": "Edit this Halloween hero BACKGROUND so it crops correctly to a very wide short 5.3:1 desktop banner. Keep the canvas dimensions and same ivory left half / dark right half, spiders, bats, brush textures, warm lighting. Zoom OUT the chicken and fries on right: their ENTIRE serving including the board MUST fit in the narrow CENTER horizontal strip from 32% to 69% of canvas height (y approximately 235 to 505 for 732px source). Extend blurred dark restaurant above and wood below to fill rest. Move orange pumpkin illustration at lower left up into y=480 so it survives central crop. Keep left center clean for separate title. No text or letters. Do not distort chicken; make it smaller with full shape visible. All critical subjects in the center horizontal band, important for crop. Preserve realistic food look.",
+      "references": [
+        "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-84cea849-15c1-422f-9201-7cbef48cc4da.png"
+      ]
+    },
+    {
+      "name": "hero-mobile",
+      "source": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-86338099-4859-4e99-b061-222fe4228a44.png",
+      "final": "public/images/promotions/hero-mobile.webp",
+      "prompt": "Generate ONLY the Halloween restaurant hero BACKGROUND from the supplied mobile website reference. Landscape 2.5:1 banner. Left 58% warm ivory parchment EMPTY reserved for title, black spiderweb top-left with dangling spider, tiny bats and orange pumpkin lower-left, irregular black and orange brush frame. Right 42% glossy whole Peruvian pollo a la brasa and golden fries on wooden board against dark warm blurred jack-o-lantern restaurant, steam above chicken. Keep chicken legible and complete in compact wide crop. Far upper-right dark corner left empty for tagline. No text, letters, logos, header, cards, buttons or interface. Faithful reference colors.",
+      "references": [
+        "C:\\Users\\Usuario\\Downloads\\Diseño sin título\\Movil\\15.png"
+      ]
+    },
+    {
+      "name": "title",
+      "source": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-ada946a9-966b-4b8e-8355-cfd9db2dd354.png",
+      "final": "public/images/promotions/title.webp",
+      "prompt": "Create a transparent-background title graphic matching the supplied Halloween restaurant reference. ONLY exact words on two lines: PROMOCIONES / QUE DAN SUSTO. First line bold black energetic rough dry-brush uppercase calligraphy, second line vivid red rough brush uppercase. Wide composition, both lines equal width, generous clear margins around lettering, fine orange hand-painted underline under second line and small orange brush accent rays at sides. No other wording, background, food, logo or UI. True transparent alpha. Crisp text correctly spelled.",
+      "references": [
+        "C:\\Users\\Usuario\\Downloads\\Diseño sin título\\13.png"
+      ]
+    },
+    {
+      "name": "familiar",
+      "source": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-f086aac6-201d-485f-8254-fdba5afc511e.png",
+      "final": "public/images/promotions/familiar.webp",
+      "prompt": "Premium photoreal food image ONLY for Combo Familiar del Terror, matching the first card in the Halloween restaurant reference. Landscape 2.25:1. Exactly one whole Peruvian charcoal roast chicken, bowl of large golden french fries behind, family salad, green and white sauce ramekins, one Coca-Cola 1.5 liter bottle with readable authentic red label to right. Rustic dark wooden table, blurred orange glowing jack-o-lanterns and grill flames behind. Glossy appetizing skin, whole serving visible. All items within middle 80% width and central 70% height. No badge, caption, title, price or UI. Packaging label allowed.",
+      "references": [
+        "C:\\Users\\Usuario\\Downloads\\Diseño sin título\\13.png"
+      ]
+    },
+    {
+      "name": "parrilla",
+      "source": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-fc6d35de-12ee-4286-a74d-0c3510748a64.png",
+      "final": "public/images/promotions/parrilla.webp",
+      "prompt": "Premium photoreal food image ONLY for Combo Parrilla Embrujada matching second card in Halloween restaurant reference. Landscape 2.25:1. Precisely half a charcoal roasted chicken, three grilled beef-heart anticucho skewers, grilled chorizo, large golden french fries, small salad and house green/red/white sauce bowls. On dark rectangular wooden platter. Blurred warm dark restaurant, orange glowing Halloween pumpkins and soft flames. Entire correct food serving visible with slight margins for wide card crop. No bottle, no badge, no caption, prices or UI.",
+      "references": [
+        "C:\\Users\\Usuario\\Downloads\\Diseño sin título\\13.png"
+      ]
+    },
+    {
+      "name": "duo",
+      "source": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-10ac863d-534d-4082-bec6-4acf81676ae2.png",
+      "final": "public/images/promotions/duo.webp",
+      "prompt": "Premium photoreal food image ONLY for Terror Dúo matching third card in Halloween restaurant reference. Landscape 2.25:1. Precisely TWO quarter portions of Peruvian charcoal roast chicken (two leg quarters), medium serving golden french fries behind, salad bowl, house sauces, TWO glasses of dark Coca-Cola with ice behind right. Dark rustic wooden board, warm blurred restaurant with orange glowing jack-o-lanterns and flames. All foods legible complete and centered with margins for wide menu card. No badge, title, prices or UI. Small authentic Coca-Cola glass logo allowed.",
+      "references": [
+        "C:\\Users\\Usuario\\Downloads\\Diseño sin título\\13.png"
+      ]
+    },
+    {
+      "name": "page-texture",
+      "source": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-5780e41d-467d-4a59-9d99-60c48a0a406a.png",
+      "final": "public/images/promotions/page-texture.webp",
+      "prompt": "Generate decorative restaurant promotions page background texture ONLY matching supplied reference margins below hero. Landscape 16:9, warm almost-white ivory parchment, subtle fibers. Fine orange hand-drawn pumpkins, falling leaves, roasted chicken contour motifs confined to far left and far right narrow 7% margins, pale brown brush texture top and bottom corners. Central 86% completely empty pale ivory, very low contrast paper. No food photography, no letters, text, badges, header, cards, UI or shadows. Elegant Halloween seasonal border artwork.",
+      "references": [
+        "C:\\Users\\Usuario\\Downloads\\Diseño sin título\\13.png"
+      ]
+    }
+  ]
+}
