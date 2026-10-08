@@ -105,10 +105,10 @@
 .product-cart-control output { width: 25px; text-align: center; font-size: 14px; font-weight: 650; font-variant-numeric: tabular-nums; }
 .product-decrease { display: grid; place-items: center; padding: 0; border: 0; width: 32px; height: 38px; background: #fff; color: var(--red); }
 .product-decrease svg { width: 16px; height: 16px; }
-.has-quantity .product-add { width: 32px; min-height: 38px; padding: 0; border-radius: 0; }
+.has-quantity .product-add { width: 32px; min-height: 38px; padding: 0; border-radius: 0; background: #fff; color: var(--red); }
 .has-quantity .product-add span { display: none; }
 .product-cart-control button:focus-visible { outline-offset: -3px; }
-.product-decrease:hover { background: #fff0f0; }
+.product-decrease:hover, .has-quantity .product-add:hover { background: #fff0f0; }
 .product-plus { display: none; }
 .carta-load-more { display: flex; align-items: center; justify-content: center; gap: 14px; margin: 30px auto 0; padding: 12px 28px; min-height: 46px; background: #fff; color: var(--red); border: 1px solid var(--red); border-radius: 9px; font-weight: 650; }
 .carta-no-results { text-align: center; padding: 60px 20px; }

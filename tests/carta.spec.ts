@@ -91,9 +91,7 @@ for (const width of [390, 1672]) {
     await page.setViewportSize({ width, height: 1000 });
     await page.goto('/carta');
     const card = page.locator('.product-card').first();
-    await expect(card.locator('output')).toHaveText('0');
-    await expect(card.getByRole('button', { name: 'Reducir cantidad de Pollo entero' })).toBeDisabled();
-    await card.getByRole('button', { name: 'Aumentar cantidad de Pollo entero', exact: true }).click();
+    await card.getByRole('button', { name: 'Agregar Pollo entero', exact: true }).click();
     await expect(card.getByRole('button', { name: 'Aumentar cantidad de Pollo entero' })).toBeFocused();
     await card.getByRole('button', { name: 'Aumentar cantidad de Pollo entero' }).click();
     await expect(card.locator('output')).toHaveText('2');
@@ -104,9 +102,8 @@ for (const width of [390, 1672]) {
     await page.reload();
     await expect(card.locator('output')).toHaveText('1');
     await card.getByRole('button', { name: 'Reducir cantidad de Pollo entero' }).click();
-    await expect(card.getByRole('button', { name: 'Aumentar cantidad de Pollo entero', exact: true })).toBeFocused();
-    await expect(card.locator('output')).toHaveText('0');
-    await expect(card.getByRole('button', { name: 'Reducir cantidad de Pollo entero' })).toBeDisabled();
+    await expect(card.getByRole('button', { name: 'Agregar Pollo entero', exact: true })).toBeFocused();
+    await expect(card.locator('output')).toBeHidden();
     await expect(page.getByRole('button', { name: 'Ver pedido, 0 productos', exact: true })).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await page.evaluate(() => localStorage.setItem('lys-carta-cart', JSON.stringify({ 'pollo-01': 98 })));
