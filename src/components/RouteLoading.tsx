@@ -11,14 +11,18 @@ export function RouteLoading() {
   return <div className="route-loading" id="contenido">
     {visible && <div className="loading-scene" role="status" aria-live="polite">
       <img className="loading-brand" src="/images/logo.webp" alt="Leñas y Sabores" width="2048" height="682" />
-      <div className="loading-embers" aria-hidden="true">
-        <div className="loading-orbit" />
-        <div className="loading-coal"><svg viewBox="0 0 64 80" focusable="false"><path d="M34 3C40 22 21 27 27 43C30 36 37 34 38 24C53 37 60 48 56 61C52 75 40 79 30 77C13 77 6 65 8 52C10 41 20 34 17 24C28 31 29 19 34 3Z" /><path className="loading-flame-core" d="M32 45C34 54 25 56 26 64C27 73 40 74 42 64C44 56 37 53 37 48C36 53 32 55 32 45Z" /></svg></div>
-        <i /><i /><i />
+      <div className="loading-rotisserie" aria-hidden="true">
+        <div className="loading-steam"><i /><i /><i /></div>
+        <div className="loading-spit" />
+        <img className="loading-chicken-echo echo-left" src="/images/loading/chicken.webp" alt="" width="900" height="507" />
+        <img className="loading-chicken-echo echo-right" src="/images/loading/chicken.webp" alt="" width="900" height="507" />
+        <img className="loading-chicken" src="/images/loading/chicken.webp" alt="" width="900" height="507" />
+        <div className="loading-roast-shadow" />
+        <svg className="loading-turn-arrow arrow-left" viewBox="0 0 100 60" focusable="false"><path d="M95 5C55 7 26 22 12 49L10 37M12 49L25 44" /></svg>
+        <svg className="loading-turn-arrow arrow-right" viewBox="0 0 100 60" focusable="false"><path d="M5 55C45 53 74 38 88 11L90 23M88 11L75 16" /></svg>
       </div>
-      <p className="loading-title">Encendiendo el sabor<span aria-hidden="true">…</span></p>
-      <p className="loading-caption">La tradición está por servirse</p>
-      <div className="loading-rhythm" aria-hidden="true"><span /><span /><span /></div>
+      <p className="loading-title">Preparando tu experiencia<span aria-hidden="true">…</span></p>
+      <div className="loading-ornament" aria-hidden="true"><span /><i /><span /></div>
     </div>}
   </div>;
 }

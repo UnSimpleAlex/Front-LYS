@@ -7,12 +7,15 @@ for (const width of [390, 768, 1672]) {
     const pending = new Promise<void>(resolve => { release = resolve; });
     await page.route('**/src/pages/CartaPage.tsx*', async route => { await pending; await route.continue(); });
     await page.goto('/carta', { waitUntil: 'domcontentloaded' });
-    const loader = page.getByRole('status').filter({ hasText: 'Encendiendo el sabor' });
+    const loader = page.getByRole('status').filter({ hasText: 'Preparando tu experiencia' });
     await expect(loader).toBeVisible();
     await expect(loader.getByRole('img', { name: 'Leñas y Sabores' })).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    const chicken = page.locator('.loading-chicken');
+    const turn = await chicken.evaluate(el => getComputedStyle(el).transform);
+    await expect.poll(() => chicken.evaluate(el => getComputedStyle(el).transform)).not.toBe(turn);
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    await expect(page.locator('.loading-coal svg')).toHaveCSS('animation-name', 'none');
+    await expect(page.locator('.loading-chicken')).toHaveCSS('animation-name', 'none');
     release();
     await expect(page.getByRole('heading', { name: 'Nuestra carta', exact: true })).toBeVisible();
     await expect(loader).toHaveCount(0);
@@ -28,7 +31,7 @@ for (const entry of [
     const pending = new Promise<void>(resolve => { release = resolve; });
     await page.route(entry.module, async route => { await pending; await route.continue(); });
     await page.goto(entry.path, { waitUntil: 'domcontentloaded' });
-    await expect(page.getByRole('status').filter({ hasText: 'Encendiendo el sabor' })).toBeVisible();
+    await expect(page.getByRole('status').filter({ hasText: 'Preparando tu experiencia' })).toBeVisible();
     release();
     if (entry.path === '/registro') await expect(page.getByRole('heading', { name: 'Crea tu cuenta', exact: true })).toBeVisible();
     else await expect(page.locator(entry.content)).toBeVisible();
@@ -38,7 +41,7 @@ for (const entry of [
 
 test('vista previa local mantiene la carga y permite volver a Carta', async ({ page }) => {
   await page.goto('/carta?preview=carga');
-  await expect(page.getByRole('status').filter({ hasText: 'Encendiendo el sabor' })).toBeVisible();
+  await expect(page.getByRole('status').filter({ hasText: 'Preparando tu experiencia' })).toBeVisible();
   await expect(page.locator('.product-card')).toHaveCount(0);
   await page.getByRole('link', { name: 'Volver a la página' }).click();
   await expect(page.getByRole('heading', { name: 'Nuestra carta', exact: true })).toBeVisible();
