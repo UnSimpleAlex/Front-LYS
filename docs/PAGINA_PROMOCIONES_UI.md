@@ -37,3 +37,14 @@ Verificación final: 61 pruebas de Inicio, Carta, carga y Promociones aprobadas;
 Ajuste visual: fondo blanco con los mismos motivos laterales, banner PC/móvil con zona crema ampliada y pollo desplazado a la derecha; contorno naranja animado en hover y foco, con movimiento reducido respetado. Prompts de las tres ediciones en PROMOCIONES_AJUSTES_ASSETS.json.
 
 Validacion de la ampliacion: 34 pruebas de Carta y Promociones aprobadas (incluidas categorias y contorno naranja), lint y build aprobados.
+
+
+## Dimensiones y presentación compartidas con Carta
+
+El banner usa la altura de Carta (clamp de 180 a 360 px en escritorio; relación 2.55 y altura mínima de 150 px en móvil). Las categorías reutilizan CartaCategories con los mismos colores, medidas, imágenes móviles y flechas de desplazamiento.
+
+La lista muestra seis promociones al principio. Ver más productos agrega otras seis, hasta completar las quince; cambiar categoría o búsqueda reinicia la lista. Las bebidas usan una sola imagen que cubre todo el ancho, sin duplicado desenfocado. Los motivos del fondo conservan su diseño con opacidad de 8%, sobre blanco.
+
+Se reducen los precios promocionales manteniendo los precios anteriores: familiar 64.90 (ahorro 25), parrilla 49.90 (ahorro 20) y dúo 34.90 (ahorro 18). El carrito utiliza los mismos precios del catálogo.
+
+Validación: pruebas de paginación, filtros, carrito y comparación de dimensiones con Carta, además de responsive de 240 a 2560 px; lint y build correctos.

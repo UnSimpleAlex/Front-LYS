@@ -1,18 +1,14 @@
-.promotions-page { position: relative; isolation: isolate; flex: 1; background: #fff url('/images/promotions/page-texture-white.webp') center top / 100% auto repeat-y; }
-.promotions-hero { position: relative; z-index: 1; height: clamp(220px, 18.8vw, 365px); overflow: hidden; }
+.promotions-page { position: relative; isolation: isolate; flex: 1; background: #fff; }
+.promotions-hero { height: clamp(180px, 13.5vw, 360px); position: relative; z-index: 1; overflow: hidden; }
 .promotions-hero-background, .promotions-hero-background img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .promotions-hero-copy { position: absolute; width: 46%; left: 9%; top: 50%; transform: translateY(-50%); text-align: center; }
 .promotions-hero-copy h1 { margin: 0; }
-.promotions-hero-copy h1 img { display: block; width: 100%; height: auto; max-height: 245px; object-fit: contain; }
+.promotions-hero-copy h1 img { display: block; width: 100%; height: clamp(85px, 8.5vw, 155px); max-height: 155px; object-fit: contain; }
 .promotions-hero-copy p { font-size: clamp(9px, .85vw, 16px); font-weight: 650; letter-spacing: .33em; text-transform: uppercase; margin: 12px 0 0; }
 .promotions-hero-note { position: absolute; right: 2%; top: 32%; color: #f08b20; font-family: Caveat, cursive; font-weight: 700; font-size: clamp(16px, 1.5vw, 29px); line-height: 1.05; transform: rotate(-9deg); text-transform: uppercase; margin: 0; text-align: center; }
 .promotions-hero-note span { color: #fff; }
 .promotions-container { position: relative; z-index: 1; width: min(89%, 1720px); margin: 0 auto; padding-bottom: 30px; }
-.promo-offer-filters { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: clamp(10px, 1vw, 20px); padding: 20px 0 24px; }
-.promo-offer-filters button { display: flex; align-items: center; justify-content: center; gap: 12px; border: 1px solid #ede9e4; background: #fffdfb; border-radius: 40px; min-height: clamp(44px, 3vw, 60px); padding: 10px clamp(16px, 2.5vw, 46px); font-size: clamp(13px, 1vw, 20px); font-weight: 600; box-shadow: 0 5px 14px #2f160707; }
-.promo-offer-filters button[aria-pressed=true] { background: #d00000; border-color: #d00000; color: #fff; }
-.promo-offer-filters button:hover { border-color: #d00000; }
-.promo-offer-filters svg { width: clamp(22px, 1.5vw, 30px); height: clamp(22px, 1.5vw, 30px); }
+
 .promo-offer-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(14px, 1.1vw, 24px); }
 .promo-offer-card { position: relative; display: flex; flex-direction: column; min-width: 0; background: #fff; border-radius: 18px; box-shadow: 0 10px 24px #3018040b; overflow: hidden; }
 .promo-offer-photo { position: relative; aspect-ratio: 2.27; overflow: hidden; }
@@ -38,23 +34,23 @@
 @media (max-width: 1100px) {
   .promotions-container { width: 93%; }
   .promo-offer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .promotions-hero { height: clamp(200px, 25vw, 280px); }
+
   .promo-offer-info h2 { font-size: 21px; }
   .promo-offer-price strong { font-size: 31px; }
   .promo-offer-price > span { padding: 8px 10px; }
-  .promo-offer-filters button { padding: 10px 20px; }
+
 }
 @media (max-width: 650px) {
   .promotions-page { padding-bottom: calc(78px + env(safe-area-inset-bottom)); }
-  .promotions-hero { height: auto; aspect-ratio: 2.5; }
+
   .promotions-hero-copy { left: 5%; width: 53%; }
-  .promotions-hero-copy h1 img { max-height: none; }
+  .promotions-hero-copy h1 img { height: auto; max-height: 105px; }
   .promotions-hero-copy p { font-size: clamp(6px, 1.6vw, 10px); letter-spacing: .22em; margin-top: 7px; }
   .promotions-hero-note { font-size: clamp(9px, 2vw, 13px); right: 2%; top: 9%; }
   .promotions-container { width: 93%; }
-  .promo-offer-filters { gap: 7px; padding: 12px 0; }
-  .promo-offer-filters button { min-height: 40px; font-size: 12px; gap: 7px; padding: 6px 12px; flex: 1 1 auto; }
-  .promo-offer-filters svg { width: 20px; height: 20px; }
+
+
+
   .promo-offer-grid { grid-template-columns: minmax(0, 1fr); gap: 14px; }
   .promo-offer-card { border-radius: 13px; }
   .promo-offer-photo { aspect-ratio: 3.3; }
@@ -80,25 +76,13 @@
   .promo-offer-price strong { font-size: 31px; }
 }
 @media (max-width: 359px) {
-  .promo-offer-filters button { font-size: 11px; padding-inline: 9px; }
+
   .promo-offer-price > span { padding-inline: 7px; }
   .promo-offer-price strong { font-size: 24px; }
   .promo-offer-price { gap: 5px; }
 }
 
-
 .promotions-page .ember-trail { z-index: 2; }
-@media (max-width: 650px) {
-  .promo-offer-filters { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); }
-  .promo-offer-filters button { grid-column: span 3; min-width: 0; padding-inline: 4px; font-size: 10px; gap: 4px; }
-  .promo-offer-filters button:nth-child(5) { grid-column: 3 / span 4; }
-  .promo-offer-filters button:nth-child(6) { grid-column: 7 / span 4; }
-  .promo-offer-filters svg { width: 16px; height: 16px; }
-}
-@media (max-width: 359px) {
-  .promo-offer-filters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .promo-offer-filters button, .promo-offer-filters button:nth-child(5), .promo-offer-filters button:nth-child(6) { grid-column: auto; }
-}
 
 @media (max-width: 300px) {
   .promo-offer-actions { gap: 6px; }
@@ -121,7 +105,9 @@
   .promo-offer-border-trace { transition: none; }
   .promo-offer-card .promo-offer-border-trace rect { animation: none; stroke-dasharray: none; }
 }
-.promo-offer-photo-beverage > img { position: absolute; inset: 0; object-fit: contain; }
-.promo-offer-photo-beverage > .promo-offer-beverage-backdrop { object-fit: cover; filter: blur(12px); transform: scale(1.12); }
 
-@media (max-width: 650px) { .promo-offer-filters button { flex: 0 1 calc(25% - 6px); padding-inline: 8px; font-size: 11px; gap: 5px; } .promo-offer-filters button:nth-last-child(-n+2) { flex-basis: calc(38% - 6px); } .promo-offer-filters svg { width: 17px; height: 17px; } }
+.promotions-page::before { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: url('/images/promotions/page-texture-white.webp') center top / 100% auto repeat-y; opacity: .08; }
+.promotions-container > section { margin-top: 18px; }
+.promo-offer-photo-beverage > img { object-fit: cover; object-position: center; }
+
+@media (max-width: 650px) { .promotions-hero { width: 100%; height: auto; aspect-ratio: 2.55; min-height: 150px; } }
