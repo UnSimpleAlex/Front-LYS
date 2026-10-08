@@ -34,7 +34,7 @@ test('menú móvil y diálogos funcionan con teclado y restauran el foco', async
   await page.keyboard.press('Escape');
   await expect(toggle).toHaveAttribute('aria-expanded', 'false');
   await toggle.click();
-  await page.getByRole('navigation', { name: 'Navegación móvil' }).getByRole('button', { name: 'Carta', exact: true }).click();
+  await page.getByRole('navigation', { name: 'Navegación móvil' }).getByRole('button', { name: 'Nosotros', exact: true }).click();
   await expect(page.getByRole('dialog')).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(page.getByRole('dialog')).not.toBeVisible();

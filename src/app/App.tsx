@@ -1,10 +1,12 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { MotionConfig } from 'motion/react';
+import { RouteLoading } from '../components/RouteLoading';
 import { Header } from '../components/Header';
 import { NoticeDialog, type Notice } from '../components/NoticeDialog';
 import { SignInPage } from '../pages/SignInPage';
 import { AuthLayout } from '../components/AuthLayout';
 const HomePage = lazy(() => import('../pages/HomePage').then(module => ({ default: module.HomePage })));
+const CartaPage = lazy(() => import('../pages/CartaPage').then(module => ({ default: module.CartaPage })));
 const RegisterCard = lazy(() => import('../features/auth/RegisterCard').then(module => ({ default: module.RegisterCard })));
 
 export function App() {
@@ -12,6 +14,7 @@ export function App() {
   const [route, setRoute] = useState(window.location.pathname);
   const registration = route === '/registro';
   const home = route === '/';
+  const carta = route === '/carta';
   useEffect(() => {
     const updateRoute = () => setRoute(window.location.pathname);
     window.addEventListener('popstate', updateRoute);
@@ -22,7 +25,7 @@ export function App() {
     setRoute(toRegistration ? '/registro' : '/iniciar-sesion');
     window.scrollTo({ top: 0, behavior: 'instant' });
   }
-  useEffect(() => { document.title = home ? 'Leñas y Sabores | Sabor peruano en cada brasa' : registration ? 'Registrarse | Leñas y Sabores' : 'Iniciar sesión | Leñas y Sabores'; }, [registration, home]);
+  useEffect(() => { document.title = home ? 'Leñas y Sabores | Sabor peruano en cada brasa' : carta ? 'Nuestra carta | Leñas y Sabores' : registration ? 'Registrarse | Leñas y Sabores' : 'Iniciar sesión | Leñas y Sabores'; }, [registration, home, carta]);
 
   function openHelp(action: 'register' | 'recover') {
     if (action === 'register') navigate(true);
@@ -30,6 +33,8 @@ export function App() {
   }
 
   function onSection(section: string) {
+    const cartaTargets: Record<string, string> = { Carta: '', 'Pollo a la brasa': 'pollo', Parrillas: 'parrillas', Combos: 'combos', 'Bebidas y acompañamientos': 'bebidas', 'Descubre combos': 'combos', 'Ver nuestro menú': '' };
+    if (section in cartaTargets) { window.history.pushState(null, '', `/carta${cartaTargets[section] ? `?categoria=${cartaTargets[section]}` : ''}`); setRoute('/carta'); window.scrollTo({ top: 0, behavior: 'instant' }); return; }
     if (section === 'Afiliarme') { navigate(true); return; }
     const targets: Record<string, string> = { Inicio: 'contenido', Promociones: 'promociones', Contacto: 'contacto' };
     if (home && targets[section]) {
@@ -40,10 +45,13 @@ export function App() {
     const message = section === 'Pedir ahora' ? 'Pronto podrás hacer tu pedido desde aquí.' : `La sección ${section.toLowerCase()} estará disponible pronto.`;
     setNotice({ title: section, message });
   }
+  if (import.meta.env.DEV && new URLSearchParams(window.location.search).get('preview') === 'carga') {
+    return <><a className="loading-preview-back" href={window.location.pathname}>← Volver a la página</a><RouteLoading /></>;
+  }
   return <MotionConfig reducedMotion="user">
     <a className="skip-link" href="#contenido">Saltar al contenido</a>
-    <Header onSection={onSection} home={home} />
-    <Suspense fallback={<p className="route-loading" role="status">Cargando…</p>}>{home ? <HomePage onAction={onSection} /> : registration ? <AuthLayout registration><RegisterCard onLogin={() => navigate(false)} onLegal={kind => setNotice({ title: kind === 'terms' ? 'Términos y Condiciones' : 'Política de Privacidad', message: 'El documento oficial estará disponible antes de habilitar la creación de cuentas.' })} /></AuthLayout> : <SignInPage onHelp={openHelp} />}</Suspense>
+    {!carta && <Header onSection={onSection} home={home} />}
+    <Suspense fallback={<RouteLoading />}>{carta ? <CartaPage onAction={onSection} /> : home ? <HomePage onAction={onSection} /> : registration ? <AuthLayout registration><RegisterCard onLogin={() => navigate(false)} onLegal={kind => setNotice({ title: kind === 'terms' ? 'Términos y Condiciones' : 'Política de Privacidad', message: 'El documento oficial estará disponible antes de habilitar la creación de cuentas.' })} /></AuthLayout> : <SignInPage onHelp={openHelp} />}</Suspense>
     <NoticeDialog notice={notice} onClose={() => setNotice(null)} />
   </MotionConfig>;
 }

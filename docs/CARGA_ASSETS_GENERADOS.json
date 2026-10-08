@@ -1,0 +1,16 @@
+{
+  "tool": "image_gen",
+  "reference": "C:/Users/Usuario/AppData/Local/Temp/codex-clipboard-d439f25e-c71c-4219-a363-ed4963018330.png",
+  "assets": [
+    {
+      "name": "chicken",
+      "prompt": "Use case: background-extraction. Asset for a React loading screen. Reference image provided: extract/recreate ONLY the central illustrated roasted whole chicken as a separate clean cutout. Golden orange glossy Peruvian pollo a la brasa, same expressive painterly 3D cartoon illustration style as reference, plump whole chicken, two drumsticks, small wings, browned speckles. Horizontal body composition, viewed front at slight elevated angle. Completely remove the spit rod, arrows, steam, shadow, all logo, lettering, background and duplicated ghost chickens. ONE chicken only, centered, occupies about 85% width with transparent padding all around, landscape aspect around 1.8:1. Genuine transparent alpha background. No plate, no garnish, no text. This image will be rotated in CSS around its horizontal axis; clean complete silhouette, no clipping.",
+      "source": "Generated images are saved to C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc as C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-4b32d19a-7804-4799-b19e-3cf83e7e077f.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    },
+    {
+      "name": "background",
+      "prompt": "Precise-object-edit: take the supplied loading-screen reference and retain ONLY the subtle white and very pale neutral gray background illustration. Remove all central logo, lettering, chicken food, horizontal spit rod, arrows, steam, drop shadows and red ornaments. Fill the entire middle with seamless clean white. Preserve muted grayscale Andean mountains upper left, discreet woven Inca geometric corner motifs top left/top right/bottom right, faded grill in bottom left, faint botanical herbs, and large pale rooster silhouette on right edge. Keep everything extremely subtle gray on white as in the reference, a broad completely empty WHITE central safe area covering 65% of width and 75% height. Wide 16:9 landscape composition. No text or lettering or logos or colored food anywhere, no central subject. This will be used as a full screen responsive CSS decorative background behind real HTML logo, text and animated chicken. Opaque white background.",
+      "source": "Generated images are saved to C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc as C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-48f0b06c-675d-4ae4-87c4-eb2887068e4d.png by default.\nIf you need to use a generated image at another path, copy it and leave the original in place unless the user explicitly asks you to delete it.\nThe generated image is already displayed to the user. There is no need to render it in the final response as a Markdown image or file link."
+    }
+  ]
+}
