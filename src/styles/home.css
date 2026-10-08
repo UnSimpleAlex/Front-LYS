@@ -244,9 +244,11 @@
   .home-promotions .home-more { max-width: 100%; white-space: nowrap; }
 }
 @media (min-width: 651px) and (max-width: 1100px) {
+  .slide-hero-compartir img { transform: scale(1.24); transform-origin: right bottom; }
   .home-hero h1:has(.home-hero-title) { width: 90%; }
   .home-hero-copy p, .home-hero-sharing .home-hero-copy p { font-size: 22px; }
 }
 @media (max-width: 650px) {
+  .slide-hero-compartir img { transform: scale(1.22); transform-origin: right bottom; }
   .hero-description-line { display: inline; }
 }
