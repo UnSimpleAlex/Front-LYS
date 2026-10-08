@@ -6,7 +6,7 @@ Ruta `/carta`, enlazada desde el navbar, el banner y las especialidades de Inici
 
 96 productos propuestos: 12 en cada una de las ocho categorías Pollo a la brasa, Parrillas, Combos, Chaufas, Saltados, Acompañamientos, Bebidas y Salsas. Se reúnen las categorías de ambas referencias sin incluir postres. Nombres, ingredientes, tamaños, precios y etiquetas son contenido de demostración editable en `src/features/carta/catalog.json`; no constituyen una carta comercial aprobada.
 
-Cada producto tiene una fotografía generada independiente según su descripción. El banner tiene fondos PC/móvil sin texto y dos versiones del título sobre transparencia. Ocho miniaturas recortadas con transparencia identifican las categorías en móvil: 108 imágenes finales en total. Se reutilizan logo y fuentes existentes. Origen y prompts: `CARTA_ASSETS_GENERADOS.json`, herramienta integrada `image_gen`. Los WebP finales viven en `public/images/carta/`; las fuentes PNG se conservan en las rutas registradas. `scripts/optimize_carta_assets.py` optimiza los archivos sin modificar las fuentes. Las bebidas conservan el encuadre completo para no cortar botellas y jarras.
+Cada producto tiene una fotografía generada independiente según su descripción. El banner tiene fondos PC/móvil sin texto y dos versiones del título sobre transparencia. Ocho miniaturas recortadas con transparencia identifican las categorías en móvil: 108 imágenes finales en total. Se reutilizan logo y fuentes existentes. Origen y prompts: `CARTA_ASSETS_GENERADOS.json`, herramienta integrada `image_gen`. Los WebP finales viven en `public/images/carta/`; las fuentes PNG se conservan en las rutas registradas. `scripts/optimize_carta_assets.py` optimiza los archivos sin modificar las fuentes. Las bebidas conservan el encuadre completo para no cortar botellas y jarras. Su fotografía se extiende en los laterales y se funde con el encuadre central mediante una máscara suave, sin franjas de color plano. Las capas reutilizan el mismo archivo y la caché del navegador.
 
 ## Interacciones
 
@@ -16,13 +16,13 @@ Carrito local con cantidades, total y persistencia en `localStorage`. Favoritos 
 
 ## Responsive
 
-Cuatro columnas en PC, tres en tablet; móvil compacto con tres columnas desde 360 px y dos en anchos menores para legibilidad. Categorías desplazables horizontalmente, búsqueda accesible desde el navbar, filtros compactos y navegación inferior fija con espacio para el área segura. El header compartido conserva su altura y marca Carta como activa. Los diálogos usan scroll interno, foco nativo y Escape.
+Cuatro columnas en PC, tres en tablet; móvil compacto con tres columnas desde 360 px y dos en anchos menores para legibilidad. Categorías compactas desplazables horizontalmente sin barra visible, con flechas en ambos extremos cuando hay contenido fuera de vista (desactivadas al llegar al límite). Se conserva el gesto táctil y el acceso por teclado. Ordenar por usa un desplegable con iconos, descripciones y selección marcada; admite flechas, Inicio/Fin, Enter, Escape y cierre al hacer clic fuera. Búsqueda accesible desde el navbar, filtros compactos y navegación inferior fija con espacio para el área segura. El header compartido conserva su altura y marca Carta como activa. Los diálogos usan scroll interno, foco nativo y Escape.
 
 ## Validación
 
-Las 16 comprobaciones de Carta cubren catálogo, entrega de las 108 imágenes como WebP, filtros, búsqueda, favoritos, detalle, cantidades, persistencia y composición a 240/320/360/390/430/650/768/1024/1280/1440/1672/1920/2560 px. Se revisaron capturas de PC, móvil y tablet; se corrigieron recortes del banner, desbordes en anchos pequeños y descripciones estrechas en tablet. También se ejecutan las pruebas existentes de Inicio, acceso, registro y teléfono, además de lint, TypeScript y build. No se afirma cobertura de todos los dispositivos posibles.
+Las 17 comprobaciones de Carta cubren catálogo, entrega de las 108 imágenes como WebP, filtros, búsqueda, favoritos, detalle, cantidades, persistencia y composición a 240/320/360/390/430/650/768/1024/1280/1440/1672/1920/2560 px. Se revisaron capturas de PC, móvil y tablet; se corrigieron recortes del banner, desbordes en anchos pequeños y descripciones estrechas en tablet. También se ejecutan las pruebas existentes de Inicio, acceso, registro y teléfono, además de lint, TypeScript y build. No se afirma cobertura de todos los dispositivos posibles.
 
-Resultado: 109 pruebas de Playwright aprobadas, lint sin errores y build con comprobación TypeScript aprobado.
+Resultado: 110 pruebas de Playwright aprobadas, lint sin errores y build con comprobación TypeScript aprobado.
 
 ## Integración Git
 

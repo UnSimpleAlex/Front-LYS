@@ -1,7 +1,8 @@
 import type { SVGProps } from 'react';
 
-export type IconName = 'phone' | 'mail' | 'lock' | 'eye' | 'eye-off' | 'user' | 'arrow' | 'menu' | 'close' | 'check' | 'cart' | 'truck' | 'store' | 'table' | 'card' | 'gift' | 'flame' | 'leaf' | 'clock' | 'star' | 'percent' | 'mobile' | 'cutlery' | 'pin' | 'search' | 'heart' | 'grid' | 'chicken' | 'grill' | 'rice' | 'fries' | 'drink' | 'bowl' | 'home' | 'tag' | 'sort';
+export type IconName = 'phone' | 'mail' | 'lock' | 'eye' | 'eye-off' | 'user' | 'arrow' | 'menu' | 'close' | 'check' | 'cart' | 'truck' | 'store' | 'table' | 'card' | 'gift' | 'flame' | 'leaf' | 'clock' | 'star' | 'percent' | 'mobile' | 'cutlery' | 'pin' | 'search' | 'heart' | 'grid' | 'chicken' | 'grill' | 'rice' | 'fries' | 'drink' | 'bowl' | 'home' | 'tag' | 'sort' | 'chevron';
 const paths: Record<IconName, string[]> = {
+  chevron: ['m6 9 6 6 6-6'],
   search: ['M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z', 'm15 15 6 6'],
   heart: ['M12 21 3 12C-2 5 7 0 12 6c5-6 14-1 9 6Z'],
   grid: ['M3 3h7v7H3Z', 'M14 3h7v7h-7Z', 'M3 14h7v7H3Z', 'M14 14h7v7h-7Z'],
