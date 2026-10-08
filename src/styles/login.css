@@ -1,9 +1,9 @@
 .brand img { width: 100%; height: 52px; object-fit: contain; display: block; }
-.nav-link { border: 0; background: none; font-size: 19px; color: #384f79; padding: 20px 0; position: relative; white-space: nowrap; }
+.nav-link { border: 0; background: none; font-size: 19px; color: #262626; padding: 20px 0; position: relative; white-space: nowrap; }
 .nav-link.active { color: #08080b; font-weight: 750; }
 .nav-link.active::after { content: ''; position: absolute; bottom: 10px; left: 0; right: 0; height: 3px; background: var(--red); }
 .login-link { display: flex; align-items: center; gap: 14px; text-decoration: none; font-size: 19px; white-space: nowrap; }
-.header-divider { width: 1px; height: 32px; background: #c0c9da; }
+.header-divider { width: 1px; height: 32px; background: #f06d6d; }
 .order-button:hover { background: #c90012; border-color: #c90012; }
 .mobile-nav { display: none; }
 .hero-background { overflow: clip; position: absolute; inset: 0; z-index: 0; pointer-events: none; }
@@ -20,7 +20,7 @@
 .header-actions { display: flex; align-items: center; gap: clamp(16px, 2vw, 32px); }
 .login-link svg { width: 24px; height: 24px; }
 .order-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; color: #fff; background: var(--red); border: 1.5px solid var(--red); border-radius: 9px; padding: 4px 18px; min-height: 36px; position: relative; white-space: nowrap; font-size: clamp(14px, 1vw, 18px); transition: background-color 150ms, transform 150ms; }
-.menu-toggle { display: none; padding: 0; border: 0; background: none; width: 44px; height: 44px; align-items: center; justify-content: center; flex-shrink: 0; }
+.menu-toggle { display: none; padding: 0; border: 0; background: none; color: var(--red); width: 44px; height: 44px; align-items: center; justify-content: center; flex-shrink: 0; }
 .menu-toggle svg { width: 26px; height: 26px; }
 .sign-in-page { position: relative; min-height: calc(100dvh - 64px); overflow: visible; flex: 1; display: grid; }
 .hero-background img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: left top; }

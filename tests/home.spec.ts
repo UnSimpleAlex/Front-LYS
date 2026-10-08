@@ -1,6 +1,52 @@
 import { test, expect } from '@playwright/test';
 
 const sizes = [[320, 568], [360, 800], [375, 812], [390, 844], [412, 915], [430, 932], [480, 900], [768, 1024], [1024, 768], [1280, 800], [1366, 768], [1440, 900], [1920, 1080]];
+test('carrusel automático avanza en bucle y permite pausar, leer y reanudar', async ({ page }) => {
+  await page.clock.install();
+  await page.goto('/');
+  const heading = page.getByRole('status');
+  await expect(heading).toContainText('Sabor peruano');
+  await page.clock.runFor(7000);
+  await expect(heading).toContainText('Comparte el fuego');
+  await page.clock.runFor(6000);
+  await expect(heading).toContainText('Sabores peruanos');
+  await page.clock.runFor(6000);
+  await expect(heading).toContainText('Sabor peruano');
+  await page.locator('.home-hero').hover();
+  await page.clock.runFor(14000);
+  await expect(heading).toContainText('Sabor peruano');
+  await page.getByRole('button', { name: 'Pausar carrusel automático' }).click();
+  await page.mouse.move(0, 0);
+  await page.locator('.brand').focus();
+  await page.clock.runFor(14000);
+  await expect(heading).toContainText('Sabor peruano');
+  await page.getByRole('button', { name: 'Reanudar carrusel automático' }).click();
+  await page.mouse.move(0, 0);
+  await page.locator('.brand').focus();
+  await page.clock.runFor(7000);
+  await expect(heading).toContainText('Comparte el fuego');
+  await page.locator('.home-hero').focus();
+  await page.clock.runFor(14000);
+  await expect(heading).toContainText('Comparte el fuego');
+});
+test('carrusel respeta movimiento reducido y pausa al ocultar la página', async ({ page }) => {
+  await page.clock.install();
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Sabor peruano');
+  await page.clock.runFor(20000);
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Sabor peruano');
+  await expect(page.getByRole('button', { name: 'Pausar carrusel automático' })).toHaveCount(0);
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.reload();
+  await expect(page.getByRole('button', { name: 'Pausar carrusel automático' })).toBeVisible();
+  await page.evaluate(() => { Object.defineProperty(document, 'hidden', { configurable: true, value: true }); document.dispatchEvent(new Event('visibilitychange')); });
+  await page.clock.runFor(20000);
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Sabor peruano');
+  await page.evaluate(() => { Object.defineProperty(document, 'hidden', { configurable: true, value: false }); document.dispatchEvent(new Event('visibilitychange')); });
+  await page.clock.runFor(7000);
+  await expect(page.getByRole('status')).toContainText('Comparte el fuego');
+});
 test('descripciones seleccionables y banners sin colisiones en resoluciones intermedias', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   for (const width of [320, 390, 540, 650, 651, 768, 912, 1024, 1100, 1101, 1280, 1440, 1920, 2560]) {

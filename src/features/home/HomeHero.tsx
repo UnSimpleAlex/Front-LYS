@@ -7,12 +7,30 @@ const slides = [
   { first: 'Comparte el fuego', second: 'de nuestra cocina', description: 'Crujiente por fuera, jugoso por dentro y listo para disfrutar en cada momento.', image: 'hero-compartir', alt: 'Parrilla para compartir con papas, ensalada, cremas e Inca Kola' },
   { first: 'Sabores peruanos', second: 'en cada momento', description: 'Platos tradicionales, ingredientes frescos y el auténtico sabor a la brasa.', image: 'hero-tradicion', alt: 'Lomo saltado con papas, arroz chaufa, wantanes, cremas e Inca Kola' },
 ];
+const AUTO_ADVANCE_MS = 6000;
 export function HomeHero({ onAction }: { onAction: (section: string) => void }) {
   const [current, setCurrent] = useState(0);
+  const [userPaused, setUserPaused] = useState(false);
+  const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const [touching, setTouching] = useState(false);
+  const [visible, setVisible] = useState(() => !document.hidden);
+  const [restart, setRestart] = useState(0);
   const startX = useRef<number | null>(null);
   const reduce = useReducedMotion();
   const slide = slides[current];
   const easing = [.25, .1, .25, 1] as const;
+  const paused = userPaused || hovered || focused || touching || !visible || !!reduce;
+  useEffect(() => {
+    const onVisibility = () => setVisible(!document.hidden);
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => document.removeEventListener('visibilitychange', onVisibility);
+  }, []);
+  useEffect(() => {
+    if (paused) return;
+    const timer = window.setTimeout(() => setCurrent(index => (index + 1) % slides.length), AUTO_ADVANCE_MS);
+    return () => window.clearTimeout(timer);
+  }, [current, paused, restart]);
   useEffect(() => {
     const size = window.innerWidth * window.devicePixelRatio > 1080 ? '2172' : '1080';
     const mobile = window.matchMedia('(max-width: 650px)').matches;
@@ -24,13 +42,14 @@ export function HomeHero({ onAction }: { onAction: (section: string) => void }) 
       void image.decode().catch(() => {});
     });
   }, []);
-  function move(delta: number) { setCurrent(index => (index + delta + slides.length) % slides.length); }
-  function select(index: number) { setCurrent(index); }
-  return <section className={`home-hero${current === 1 ? ' home-hero-sharing' : current === 2 ? ' home-hero-traditional' : ''}`} aria-roledescription="carrusel" aria-label="Sabores de nuestra cocina" onKeyDown={event => {
+  function move(delta: number) { setCurrent(index => (index + delta + slides.length) % slides.length); setRestart(value => value + 1); }
+  function select(index: number) { setCurrent(index); setRestart(value => value + 1); }
+  return <section className={`home-hero${current === 1 ? ' home-hero-sharing' : current === 2 ? ' home-hero-traditional' : ''}`} aria-roledescription="carrusel" aria-label="Sabores de nuestra cocina" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} onFocusCapture={() => setFocused(true)} onBlurCapture={event => { if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false); }} onKeyDown={event => {
     if (event.target !== event.currentTarget) return;
     if (event.key === 'ArrowRight') move(1);
     if (event.key === 'ArrowLeft') move(-1);
-  }} tabIndex={0} onTouchStart={event => { startX.current = event.touches[0].clientX; }} onTouchEnd={event => {
+  }} tabIndex={0} onTouchStart={event => { setTouching(true); startX.current = event.touches[0].clientX; }} onTouchCancel={() => { setTouching(false); startX.current = null; }} onTouchEnd={event => {
+    setTouching(false);
     if (startX.current === null) return;
     const distance = event.changedTouches[0].clientX - startX.current;
     if (Math.abs(distance) > 50) move(distance < 0 ? 1 : -1);
@@ -69,7 +88,7 @@ export function HomeHero({ onAction }: { onAction: (section: string) => void }) 
     </div>
     <button className="carousel-arrow previous" type="button" aria-label="Diapositiva anterior" onClick={() => move(-1)}><Icon name="arrow" /></button>
     <button className="carousel-arrow next" type="button" aria-label="Diapositiva siguiente" onClick={() => move(1)}><Icon name="arrow" /></button>
-    <div className="carousel-dots" aria-label="Elegir diapositiva">{slides.map((item, index) => <button type="button" key={item.image} aria-label={`Ver diapositiva ${index + 1}`} aria-pressed={current === index} onClick={() => select(index)}><span /></button>)}</div>
-    <p className="sr-only" role="status" aria-live="polite">Diapositiva {current + 1} de {slides.length}: {slide.first} {slide.second}</p>
+    <div className="carousel-dots" aria-label="Elegir diapositiva">{slides.map((item, index) => <button type="button" key={item.image} aria-label={`Ver diapositiva ${index + 1}`} aria-pressed={current === index} onClick={() => select(index)}><span /></button>)}{!reduce && <button type="button" className="carousel-play-toggle" aria-label={userPaused ? 'Reanudar carrusel automático' : 'Pausar carrusel automático'} aria-pressed={userPaused} onClick={() => setUserPaused(value => !value)}>{userPaused ? '▶' : 'Ⅱ'}</button>}</div>
+    <p className="sr-only" role="status" aria-live={paused ? 'polite' : 'off'}>Diapositiva {current + 1} de {slides.length}: {slide.first} {slide.second}</p>
   </section>;
 }

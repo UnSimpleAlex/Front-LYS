@@ -26,7 +26,7 @@ export function Header({ onSection, home = false }: { onSection: (section: strin
       <img src="/images/logo.webp" alt="Leñas y Sabores — Pollos & Parrillas" width="2048" height="682" />
     </a>
     <nav className="desktop-nav" aria-label="Navegación principal">
-      {sections.map((section) => <button key={section} type="button" className={section === 'Inicio' ? 'nav-link active' : 'nav-link'} aria-current={section === 'Inicio' ? 'page' : undefined} onClick={() => navigate(section)}>{section}</button>)}
+      {sections.map((section) => <button key={section} type="button" className={home && section === 'Inicio' ? 'nav-link active' : 'nav-link'} aria-current={home && section === 'Inicio' ? 'page' : undefined} onClick={() => navigate(section)}>{section}</button>)}
     </nav>
     <div className="header-actions">
       <a className="login-link" aria-label="Iniciar sesión" href="/iniciar-sesion"><Icon name="user" />Iniciar sesión</a>
