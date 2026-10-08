@@ -6,17 +6,17 @@ test('carrusel automático avanza en bucle incluso con mouse y foco sobre el ban
   await page.goto('/');
   const heading = page.getByRole('status');
   await expect(heading).toContainText('Sabor peruano');
-  await page.clock.runFor(5500);
+  await page.clock.runFor(10500);
   await expect(heading).toContainText('Comparte el fuego');
-  await page.clock.runFor(5000);
+  await page.clock.runFor(10000);
   await expect(heading).toContainText('Sabores peruanos');
-  await page.clock.runFor(5000);
+  await page.clock.runFor(10000);
   await expect(heading).toContainText('Sabor peruano');
   await page.locator('.home-hero').hover();
-  await page.clock.runFor(5000);
+  await page.clock.runFor(10000);
   await expect(heading).toContainText('Comparte el fuego');
   await page.locator('.home-hero').focus();
-  await page.clock.runFor(5000);
+  await page.clock.runFor(10000);
   await expect(heading).toContainText('Sabores peruanos');
 
 });
@@ -35,7 +35,7 @@ test('carrusel respeta movimiento reducido y pausa al ocultar la página', async
   await page.clock.runFor(20000);
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Sabor peruano');
   await page.evaluate(() => { Object.defineProperty(document, 'hidden', { configurable: true, value: false }); document.dispatchEvent(new Event('visibilitychange')); });
-  await page.clock.runFor(5500);
+  await page.clock.runFor(10500);
   await expect(page.getByRole('status')).toContainText('Comparte el fuego');
 });
 test('descripciones seleccionables y banners sin colisiones en resoluciones intermedias', async ({ page }) => {

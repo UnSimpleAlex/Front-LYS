@@ -7,7 +7,7 @@ const slides = [
   { first: 'Comparte el fuego', second: 'de nuestra cocina', description: 'Crujiente por fuera, jugoso por dentro y listo para disfrutar en cada momento.', image: 'hero-compartir', alt: 'Parrilla para compartir con papas, ensalada, cremas e Inca Kola' },
   { first: 'Sabores peruanos', second: 'en cada momento', description: 'Platos tradicionales, ingredientes frescos y el auténtico sabor a la brasa.', image: 'hero-tradicion', alt: 'Lomo saltado con papas, arroz chaufa, wantanes, cremas e Inca Kola' },
 ];
-const AUTO_ADVANCE_MS = 5000;
+const AUTO_ADVANCE_MS = 10000;
 export function HomeHero({ onAction }: { onAction: (section: string) => void }) {
   const [current, setCurrent] = useState(0);
   const [touching, setTouching] = useState(false);
