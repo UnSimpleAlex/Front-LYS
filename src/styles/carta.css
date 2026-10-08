@@ -100,18 +100,18 @@
 .product-add { flex-shrink: 0; display: flex; align-items: center; justify-content: center; gap: 8px; color: #fff; background: var(--red); border: 0; border-radius: 8px; min-height: 40px; padding: 10px 12px; font-size: 12px; font-weight: 650; }
 .product-add svg { width: 20px; height: 20px; }
 .product-cart-control { display: flex; align-items: center; flex-shrink: 0; }
-.product-cart-control.has-quantity { padding: 3px; gap: 2px; border: 1px solid #e9e4df; border-radius: 10px; background: #f7f5f2; color: #332b26; }
+.product-cart-control.has-quantity { padding: 3px; gap: 2px; border: 1px solid #dba3a5; border-radius: 10px; background: #fff6f5; color: #352124; }
 .product-cart-control [hidden] { display: none; }
 .product-cart-control output { width: 25px; text-align: center; font-size: 14px; font-weight: 650; font-variant-numeric: tabular-nums; }
-.product-decrease { display: grid; place-items: center; padding: 0; border: 0; width: 30px; height: 32px; border-radius: 6px; background: #fff; color: #65554b; box-shadow: 0 1px 2px #332b2610; }
+.product-decrease { display: grid; place-items: center; padding: 0; border: 0; width: 30px; height: 32px; border-radius: 6px; background: #f5d7d7; color: #a71320; box-shadow: 0 1px 2px #7d15221a; }
 .product-decrease svg { width: 16px; height: 16px; }
-.has-quantity .product-add { width: 30px; min-height: 32px; padding: 0; border-radius: 6px; background: #fff; color: #65554b; box-shadow: 0 1px 2px #332b2610; }
+.has-quantity .product-add { width: 30px; min-height: 32px; padding: 0; border-radius: 6px; background: #f5d7d7; color: #a71320; box-shadow: 0 1px 2px #7d15221a; }
 .has-quantity .product-add span { display: none; }
 .has-quantity button { transition: background-color 180ms ease, color 180ms ease; }
 .product-cart-control button:focus-visible { outline-offset: -3px; }
 .has-quantity button:focus-visible { outline-color: var(--red); }
 @media (hover: hover) {
-  .product-decrease:hover:not(:disabled), .has-quantity .product-add:hover:not(:disabled) { background: #fcebea; color: var(--red); }
+  .product-decrease:hover:not(:disabled), .has-quantity .product-add:hover:not(:disabled) { background: #edbcbc; color: #86101b; }
 }
 .product-plus { display: none; }
 .carta-load-more { display: flex; align-items: center; justify-content: center; gap: 14px; margin: 30px auto 0; padding: 12px 28px; min-height: 46px; background: #fff; color: var(--red); border: 1px solid var(--red); border-radius: 9px; font-weight: 650; }
