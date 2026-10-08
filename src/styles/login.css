@@ -15,10 +15,11 @@
 .site-header { border-bottom: 1px solid #e8ded5; box-shadow: 0 3px 14px #452c1710; flex-shrink: 0; display: flex; align-items: center; gap: 24px; height: 64px; padding: 0 2.3%; position: relative; z-index: 2; background: #fff; }
 .brand { display: block; flex: 0 0 auto; width: clamp(195px, 16vw, 250px); }
 .desktop-nav { flex: 1; display: flex; align-items: center; justify-content: center; gap: clamp(16px, 2vw, 36px); }
-.nav-link, .login-link { font-size: 16px; }
+.nav-link, .login-link { font-size: clamp(14px, 1vw, 19px); }
+.nav-link { padding-block: 16px; }
 .header-actions { display: flex; align-items: center; gap: clamp(16px, 2vw, 32px); }
 .login-link svg { width: 24px; height: 24px; }
-.order-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; color: #fff; background: var(--red); border: 1.5px solid var(--red); border-radius: 9px; padding: 4px 18px; min-height: 36px; position: relative; white-space: nowrap; font-size: 18px; transition: background-color 150ms, transform 150ms; }
+.order-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; color: #fff; background: var(--red); border: 1.5px solid var(--red); border-radius: 9px; padding: 4px 18px; min-height: 36px; position: relative; white-space: nowrap; font-size: clamp(14px, 1vw, 18px); transition: background-color 150ms, transform 150ms; }
 .menu-toggle { display: none; padding: 0; border: 0; background: none; width: 44px; height: 44px; align-items: center; justify-content: center; flex-shrink: 0; }
 .menu-toggle svg { width: 26px; height: 26px; }
 .sign-in-page { position: relative; min-height: calc(100dvh - 64px); overflow: visible; flex: 1; display: grid; }

@@ -2,11 +2,10 @@
 .home-page { --home-red: #ed0000; --home-cream: #fcf6ee; color: #111; background: #fff; }
 .route-loading { min-height: 60vh; display: grid; place-items: center; }
 .home-container { width: 88%; max-width: 1740px; margin-inline: auto; }
-.home-header { height: clamp(70px, 5.5vw, 106px); padding-inline: 9%; gap: 3%; }
-.home-header .brand { width: clamp(180px, 19vw, 360px); }
-.home-header .brand img { height: auto; }
+.home-header { padding-inline: 9%; gap: 3%; }
+.home-header .brand { width: clamp(180px, 16vw, 250px); }
 .home-header .desktop-nav { gap: clamp(16px, 2.1vw, 40px); }
-.home-header .nav-link { color: #262626; font-size: clamp(14px, 1vw, 19px); }
+.home-header .nav-link { color: #262626; }
 .home-header .nav-link.active { color: var(--red); }
 .home-header .header-actions { gap: 18px; }
 .home-header .order-button { font-size: clamp(14px, 1vw, 18px); padding: 12px 20px; }
@@ -96,9 +95,9 @@
 .footer-phrase { font-size: 23px; margin: 0; color: #fff; text-align: center; }
 .footer-bottom { border-top: 1px solid #555; display: flex; justify-content: space-between; gap: 16px; padding-block: 9px; }
 .peru-flag { display: inline-block; width: 21px; height: 13px; background: linear-gradient(to right,#e90000 33%,#fff 33%,#fff 66%,#e90000 66%); margin-left: 12px; }
-@media (max-width: 1450px) and (min-width: 1101px) { .home-header { padding-inline: 4%; gap: 20px; } .home-header .brand { width: 210px; } .home-header .desktop-nav { gap: 22px; } .home-header .login-link { font-size: 14px; } .promotion-copy { padding: 14px 18px; } .specialty-copy { padding: 15px; } }
+@media (max-width: 1450px) and (min-width: 1101px) { .home-header { padding-inline: 4%; gap: 20px; } .home-header .brand { width: 210px; } .home-header .desktop-nav { gap: 22px; } .promotion-copy { padding: 14px 18px; } .specialty-copy { padding: 15px; } }
 @media (max-width: 1100px) {
-  .home-header { height: 68px; padding-inline: 5%; }
+  .home-header { padding-inline: 5%; }
   .home-header .desktop-nav, .home-header .header-divider, .home-header .order-button { display: none; }
   .home-header .brand { width: clamp(180px, 30vw, 280px); }
   .home-header .header-actions { margin-left: auto; gap: 18px; }
@@ -136,7 +135,7 @@
   .footer-phrase { grid-column: 1/-1; border-left: 0 !important; }
 }
 @media (max-width: 650px) {
-  .home-header { height: 60px; padding-inline: 4%; }
+  .home-header { padding-inline: 4%; }
   .home-header .brand { width: min(62%, 215px); }
   .home-header .header-actions { gap: 10px; }
   .home-hero { aspect-ratio: 1.18; min-height: 0; max-height: none; }
