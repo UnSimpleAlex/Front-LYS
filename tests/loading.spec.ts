@@ -11,11 +11,11 @@ for (const width of [390, 768, 1672]) {
     await expect(loader).toBeVisible();
     await expect(loader.getByRole('img', { name: 'Leñas y Sabores' })).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-    const chicken = page.locator('.loading-chicken');
-    const turn = await chicken.evaluate(el => getComputedStyle(el).transform);
-    await expect.poll(() => chicken.evaluate(el => getComputedStyle(el).transform)).not.toBe(turn);
+    const dots = page.locator('.loading-dots span').first();
+    const turn = await dots.evaluate(el => getComputedStyle(el).transform);
+    await expect.poll(() => dots.evaluate(el => getComputedStyle(el).transform)).not.toBe(turn);
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    await expect(page.locator('.loading-chicken')).toHaveCSS('animation-name', 'none');
+    await expect(dots).toHaveCSS('animation-name', 'none');
     release();
     await expect(page.getByRole('heading', { name: 'Nuestra carta', exact: true })).toBeVisible();
     await expect(loader).toHaveCount(0);
@@ -46,21 +46,6 @@ test('vista previa local mantiene la carga y permite volver a Carta', async ({ p
   await page.getByRole('link', { name: 'Volver a la página' }).click();
   await expect(page.getByRole('heading', { name: 'Nuestra carta', exact: true })).toBeVisible();
   await expect(page).toHaveURL(/\/carta$/);
-});
-
-test('pollo conserva volumen durante todo el ciclo de movimiento', async ({ page }) => {
-  await page.goto('/carta?preview=carga');
-  const chicken = page.locator('.loading-chicken');
-  await expect(chicken).toBeVisible();
-  const heights = await chicken.evaluate(el => {
-    const animation = el.getAnimations()[0];
-    animation.pause();
-    return [0, 900, 1800, 2700].map(time => {
-      animation.currentTime = time;
-      return el.getBoundingClientRect().height;
-    });
-  });
-  expect(Math.min(...heights) / Math.max(...heights)).toBeGreaterThan(.9);
 });
 
 for (const viewport of [{ width: 1366, height: 768 }, { width: 1920, height: 1080 }, { width: 1280, height: 600 }, { width: 1440, height: 480 }]) {
