@@ -10,7 +10,9 @@ Cada producto tiene una fotografía generada independiente según su descripció
 
 ## Interacciones
 
-Búsqueda por nombre e ingredientes sin distinguir tildes, filtros de categoría y porción, orden por popularidad/precio/nuevos, selección de promociones y favoritos. Se muestran inicialmente doce productos; Ver más añade doce sin cambiar filtros. La tarjeta abre un detalle con descripción completa, también en móvil. Precio y Agregar comparten una fila al pie de la tarjeta; el cuerpo flexible absorbe las diferencias de longitud del texto, de modo que ambos quedan alineados entre tarjetas de la misma fila y entre sí.
+Búsqueda por nombre e ingredientes sin distinguir tildes, filtros de categoría y porción, orden por popularidad/precio/nuevos, selección de promociones y favoritos. Se muestran inicialmente doce productos; Ver más añade doce sin cambiar filtros. La tarjeta abre un detalle con descripción completa, también en móvil. Precio y acción comparten una fila al pie en PC; en móvil el precio queda encima del control. El cuerpo flexible absorbe las diferencias de longitud del texto, manteniendo los precios y controles alineados entre tarjetas de la misma fila.
+
+Al agregar un producto, su tarjeta muestra − cantidad +, sincronizado con el carrito y su persistencia local. Reducir a cero restaura Agregar; el máximo es 99 unidades y el botón de aumentar se desactiva al alcanzarlo. El foco se conserva al agregar y vuelve a Agregar al retirar la última unidad; el contador anuncia los cambios a lectores de pantalla.
 
 Carrito local con cantidades, total y persistencia en `localStorage`. Favoritos persistentes. FavoriteButton es un componente React controlado por selected y onToggle, con un botón nativo y aria-pressed. El corazón confirma la selección con el vaivén de 500 ms del ejemplo aportado de Uiverse.io (SalladShooter); al quitarlo vuelve al contorno en 200 ms. Usa el icono y el estilo de las tarjetas existentes, sin checkbox oculto, IDs duplicados ni estilos globales del ejemplo. La animación se dispara sólo al pulsar, no al restaurar favoritos, y respeta movimiento reducido. El icono de Pollo a la brasa representa un pollo asado sobre una fuente. La selección se valida al leerla y se limita a 99 unidades por producto. No se envían pedidos ni se cobran importes: el carrito indica que la confirmación estará disponible próximamente. UI separada de servicios futuros de catálogo/pedidos.
 
@@ -20,9 +22,9 @@ Cuatro columnas en PC, tres en tablet; móvil compacto con tres columnas desde 3
 
 ## Validación
 
-Las 17 comprobaciones de Carta cubren catálogo, entrega de las 108 imágenes como WebP, filtros, búsqueda, favoritos, detalle, cantidades, persistencia y composición a 240/320/360/390/430/650/768/1024/1280/1440/1672/1920/2560 px. Se revisaron capturas de PC, móvil y tablet; se corrigieron recortes del banner, desbordes en anchos pequeños y descripciones estrechas en tablet. También se ejecutan las pruebas existentes de Inicio, acceso, registro y teléfono, además de lint, TypeScript y build. No se afirma cobertura de todos los dispositivos posibles.
+Las 19 comprobaciones de Carta cubren catálogo, entrega de las 108 imágenes como WebP, filtros, búsqueda, favoritos, detalle, cantidades, persistencia y composición a 240/320/360/390/430/650/768/1024/1280/1440/1672/1920/2560 px. Se revisaron capturas de PC, móvil y tablet; se corrigieron recortes del banner, desbordes en anchos pequeños y descripciones estrechas en tablet. No se afirma cobertura de todos los dispositivos posibles.
 
-Validación general anterior: 110 pruebas de Playwright aprobadas. Para el ajuste de alineación se ejecutaron las 17 pruebas de Carta, con mediciones de precio y botón por fila en 13 resoluciones; todas aprobadas. Lint sin errores y build con comprobación TypeScript aprobado.
+Validación general anterior: 110 pruebas de Playwright aprobadas. Para los controles de cantidad se ejecutaron las 19 pruebas de Carta, con mediciones de precio y botón por fila en 13 resoluciones y comprobaciones de sincronización, foco, persistencia y límite de 99 unidades en PC y móvil; todas aprobadas. Se revisaron capturas a 240, 390, 768 y 1672 px sin desbordamiento horizontal. Lint sin errores y build con comprobación TypeScript aprobado.
 
 ## Integración Git
 

@@ -75,7 +75,7 @@ test('favoritos, detalle y carrito conservan selección después de recargar', a
   await expect(page.getByRole('dialog')).toBeVisible();
   await expect(page.getByRole('dialog')).toContainText('Un pollo a la brasa entero');
   await page.getByRole('button', { name: 'Agregar a mi pedido' }).click();
-  await page.getByRole('button', { name: 'Agregar Pollo entero', exact: true }).click();
+  await page.getByRole('button', { name: 'Aumentar cantidad de Pollo entero', exact: true }).click();
   await page.reload();
   await page.getByRole('button', { name: 'Ver pedido, 2 productos', exact: true }).click();
   await expect(page.getByRole('dialog')).toContainText('S/ 125.80');
@@ -86,6 +86,35 @@ test('favoritos, detalle y carrito conservan selección después de recargar', a
   await page.getByRole('button', { name: 'Mis favoritos', exact: true }).click();
   await expect(page.locator('.product-card')).toHaveCount(1);
 });
+for (const width of [390, 1672]) {
+  test(`cantidad dentro de la tarjeta sincroniza carrito y persiste a ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 1000 });
+    await page.goto('/carta');
+    const card = page.locator('.product-card').first();
+    await card.getByRole('button', { name: 'Agregar Pollo entero', exact: true }).click();
+    await expect(card.getByRole('button', { name: 'Aumentar cantidad de Pollo entero' })).toBeFocused();
+    await card.getByRole('button', { name: 'Aumentar cantidad de Pollo entero' }).click();
+    await expect(card.locator('output')).toHaveText('2');
+    await page.getByRole('button', { name: 'Ver pedido, 2 productos', exact: true }).click();
+    await page.getByRole('button', { name: 'Quitar una unidad de Pollo entero' }).click();
+    await page.keyboard.press('Escape');
+    await expect(card.locator('output')).toHaveText('1');
+    await page.reload();
+    await expect(card.locator('output')).toHaveText('1');
+    await card.getByRole('button', { name: 'Reducir cantidad de Pollo entero' }).click();
+    await expect(card.getByRole('button', { name: 'Agregar Pollo entero', exact: true })).toBeFocused();
+    await expect(card.locator('output')).toBeHidden();
+    await expect(page.getByRole('button', { name: 'Ver pedido, 0 productos', exact: true })).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await page.evaluate(() => localStorage.setItem('lys-carta-cart', JSON.stringify({ 'pollo-01': 98 })));
+    await page.reload();
+    await card.getByRole('button', { name: 'Aumentar cantidad de Pollo entero' }).click();
+    await expect(card.locator('output')).toHaveText('99');
+    await expect(card.getByRole('button', { name: 'Aumentar cantidad de Pollo entero' })).toBeDisabled();
+    await card.getByRole('button', { name: 'Reducir cantidad de Pollo entero' }).click();
+    await expect(card.locator('output')).toHaveText('98');
+  });
+}
 for (const width of [240, 320, 360, 390, 430, 650, 768, 1024, 1280, 1440, 1672, 1920, 2560]) {
   test(`carta responsive a ${width}px sin desbordes ni imágenes rotas`, async ({ page }) => {
     await page.setViewportSize({ width, height: 1000 });
@@ -105,7 +134,7 @@ for (const width of [240, 320, 360, 390, 430, 650, 768, 1024, 1280, 1440, 1672, 
       const items = positions.filter(position => position.row === row);
       expect(Math.max(...items.map(item => item.price)) - Math.min(...items.map(item => item.price))).toBeLessThan(1);
       expect(Math.max(...items.map(item => item.add)) - Math.min(...items.map(item => item.add))).toBeLessThan(1);
-      for (const item of items) expect(Math.abs(item.price - item.add)).toBeLessThan(1);
+      if (width > 650) for (const item of items) expect(Math.abs(item.price - item.add)).toBeLessThan(1);
     }
     await page.locator('.product-card').last().scrollIntoViewIfNeeded();
     await expect.poll(() => page.locator('.product-card img').evaluateAll(images => images.every(image => (image as HTMLImageElement).complete && (image as HTMLImageElement).naturalWidth > 0))).toBe(true);
