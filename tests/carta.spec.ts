@@ -95,6 +95,18 @@ for (const width of [240, 320, 360, 390, 430, 650, 768, 1024, 1280, 1440, 1672, 
     await expect(page.locator('.product-card')).toHaveCount(12);
     await page.evaluate(() => document.fonts.ready);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    const positions = await page.locator('.product-card').evaluateAll(cards => cards.map(card => {
+      const cardBox = card.getBoundingClientRect();
+      const price = card.querySelector('.product-info strong')!.getBoundingClientRect();
+      const add = card.querySelector('.product-add')!.getBoundingClientRect();
+      return { row: Math.round(cardBox.top), price: price.top + price.height / 2, add: add.top + add.height / 2 };
+    }));
+    for (const row of new Set(positions.map(position => position.row))) {
+      const items = positions.filter(position => position.row === row);
+      expect(Math.max(...items.map(item => item.price)) - Math.min(...items.map(item => item.price))).toBeLessThan(1);
+      expect(Math.max(...items.map(item => item.add)) - Math.min(...items.map(item => item.add))).toBeLessThan(1);
+      for (const item of items) expect(Math.abs(item.price - item.add)).toBeLessThan(1);
+    }
     await page.locator('.product-card').last().scrollIntoViewIfNeeded();
     await expect.poll(() => page.locator('.product-card img').evaluateAll(images => images.every(image => (image as HTMLImageElement).complete && (image as HTMLImageElement).naturalWidth > 0))).toBe(true);
     if (width <= 650) {

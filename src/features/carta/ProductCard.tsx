@@ -8,8 +8,8 @@ export function ProductCard({ product, favorite, onFavorite, onAdd, onDetail }: 
       <img className="product-image" src={product.image} alt={product.description} width="640" height="480" loading="lazy" decoding="async" /></button>
       <button type="button" className="product-favorite" aria-label={`${favorite ? 'Quitar' : 'Guardar'} ${product.name} ${favorite ? 'de' : 'en'} favoritos`} aria-pressed={favorite} onClick={onFavorite}><Icon name="heart" /></button>
     </div>
-    <div className="product-info"><button className="product-name" type="button" onClick={onDetail}><h3>{product.name}</h3></button><p>{product.description}</p><strong>{soles(product.price)}</strong>
+    <div className="product-info"><button className="product-name" type="button" onClick={onDetail}><h3>{product.name}</h3></button><p>{product.description}</p><div className="product-purchase"><strong>{soles(product.price)}</strong>
       <button type="button" className="product-add" aria-label={`Agregar ${product.name}`} onClick={onAdd}><Icon name="cart" /><span>Agregar</span><span className="product-plus" aria-hidden="true">+</span></button>
-    </div>
+    </div></div>
   </article>;
 }
