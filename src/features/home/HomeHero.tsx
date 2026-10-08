@@ -16,7 +16,8 @@ export function HomeHero({ onAction }: { onAction: (section: string) => void }) 
   useEffect(() => {
     const size = window.innerWidth * window.devicePixelRatio > 1080 ? '2172' : '1080';
     const mobile = window.matchMedia('(max-width: 650px)').matches;
-    const sources = [mobile ? 'hero-mobile' : `hero-${size}`, mobile ? 'hero-compartir-mobile' : `hero-compartir-${size}`, 'parrillas-1080', 'title', 'title-compartir'];
+    const tablet = window.matchMedia('(max-width: 1100px)').matches;
+    const sources = [mobile ? 'hero-mobile' : `hero-${size}`, mobile ? 'hero-compartir-mobile' : tablet ? 'hero-compartir-tablet' : `hero-compartir-${size}`, 'parrillas-1080', 'title', 'title-compartir'];
     sources.forEach(source => {
       const image = new Image();
       image.src = `/images/home/${source}.webp`;
@@ -46,14 +47,15 @@ export function HomeHero({ onAction }: { onAction: (section: string) => void }) 
       <motion.picture key={slide.image} className={`home-hero-picture slide-${slide.image}`} initial={{ opacity: 0, scale: reduce ? 1 : 1.025, zIndex: 2 }} animate={{ opacity: 1, scale: 1, zIndex: 2 }} exit={{ opacity: .999, scale: 1, zIndex: 1 }} transition={{ duration: reduce ? 0 : .85, ease: easing }}>
         {current === 0 && <source media="(max-width: 650px)" srcSet="/images/home/hero-mobile.webp" />}
         {current === 1 && <source media="(max-width: 650px)" srcSet="/images/home/hero-compartir-mobile.webp" />}
-        <img src={`/images/home/${slide.image}-${current < 2 ? '2172' : '1080'}.webp`} srcSet={current < 2 ? `/images/home/${slide.image}-1080.webp 1080w, /images/home/${slide.image}-2172.webp 2172w` : undefined} sizes="100vw" alt={slide.alt} width={current < 2 ? 2172 : 1080} height={current === 0 ? 724 : current === 1 ? 543 : 432} fetchPriority="high" />
+        {current === 1 && <source media="(max-width: 1100px)" srcSet="/images/home/hero-compartir-tablet.webp" />}
+        <img src={`/images/home/${slide.image}-${current < 2 ? '2172' : '1080'}.webp`} srcSet={current < 2 ? `/images/home/${slide.image}-1080.webp 1080w, /images/home/${slide.image}-2172.webp 2172w` : undefined} sizes="100vw" alt={slide.alt} width={current < 2 ? 2172 : 1080} height={current < 2 ? 724 : 432} fetchPriority="high" />
       </motion.picture>
     </AnimatePresence>
     <div className="home-hero-inner home-container">
       <AnimatePresence mode="wait" initial={false}>
         <motion.div key={current} className="home-hero-copy" initial={{ opacity: 0, y: reduce ? 0 : 5 }} animate={{ opacity: 1, y: 0, transition: { duration: reduce ? 0 : .5, ease: easing } }} exit={{ opacity: 0, y: 0, transition: { duration: reduce ? 0 : .18 } }}>
           <h1>{current < 2 ? <><span className="sr-only">{slide.first} {slide.second}</span><img className="home-hero-title" src={current === 0 ? '/images/home/title.webp' : '/images/home/title-compartir.webp'} alt="" width="1400" height={current === 0 ? 519 : 468} /></> : <><span>{slide.first}</span><span className="home-brush-accent">{slide.second}</span></>}</h1>
-          <p>{current === 0 ? <><span className="hero-description-line">Auténtico pollo a la brasa, con el sabor de nuestra tierra</span>{' '}<span className="hero-description-line">y la tradición de siempre.</span></> : slide.description}</p>
+          <p>{current === 0 ? <><span className="hero-description-line">Auténtico pollo a la brasa, con el sabor de nuestra tierra</span>{' '}<span className="hero-description-line">y la tradición de siempre.</span></> : current === 1 ? <><span className="hero-description-line">Crujiente por fuera, jugoso por dentro</span>{' '}<span className="hero-description-line">y listo para disfrutar en cada momento.</span></> : slide.description}</p>
         </motion.div>
       </AnimatePresence>
       <div className="home-hero-actions">

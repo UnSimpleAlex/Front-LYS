@@ -20,6 +20,7 @@ test('descripciones seleccionables y banners sin colisiones en resoluciones inte
       expect(geometry.pointer).toBe('auto');
       expect(geometry.overflow).toBe(false);
       if (index === 2 && width <= 650) await expect(page.locator('.slide-hero-compartir img')).toHaveJSProperty('currentSrc', 'http://127.0.0.1:5173/images/home/hero-compartir-mobile.webp');
+      if (index === 2 && width > 650 && width <= 1100) await expect(page.locator('.slide-hero-compartir img')).toHaveJSProperty('currentSrc', 'http://127.0.0.1:5173/images/home/hero-compartir-tablet.webp');
     }
   }
   await page.locator('.home-hero-copy p').dblclick();
@@ -33,11 +34,14 @@ test('los dos primeros banners mantienen la misma altura en móvil, tablet y PC'
     await expect(page.getByRole('heading', { level: 1 })).toContainText('Sabor peruano');
     const hero = page.locator('.home-hero');
     const first = await hero.boundingBox();
+      const firstDescription = await page.locator('.home-hero-copy p').boundingBox();
     const firstButton = await page.locator('.home-hero-actions button').first().boundingBox();
     await page.getByRole('button', { name: 'Ver diapositiva 2' }).click();
     await expect(page.getByRole('heading', { level: 1 })).toContainText('Comparte el fuego');
     const second = await hero.boundingBox();
     expect(second!.height).toBe(first!.height);
+      const secondDescription = await page.locator('.home-hero-copy p').boundingBox();
+      expect(secondDescription!.y).toBeCloseTo(firstDescription!.y, 0);
     const secondButton = await page.locator('.home-hero-actions button').first().boundingBox();
     expect(secondButton!.y).toBe(firstButton!.y);
     expect(secondButton!.x).toBe(firstButton!.x);

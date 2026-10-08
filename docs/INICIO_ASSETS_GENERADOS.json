@@ -25,6 +25,19 @@
       "output": "public/images/home/hero-compartir-mobile.webp",
       "source": "exec-0ed16727-c0b0-4a59-b9e7-1e3aaea3caba.png",
       "prompt": "Recompose the supplied Peruvian parrilla website background as a mobile hero background approximately 1080 x 920. Preserve the same photoreal mixed grilled beef and chicken platter, fries, salad, white sauce bowls, Inca Kola bottle on right, wooden table and red Peruvian woven cloth. Food occupies bottom 45% and right lower half. Top 55% is light cream with delicate pale peach watercolor Andean mountains and light traditional Peruvian geometric motifs along edges, continuous illustrated background visible behind overlaid website lettering. Keep top and middle left especially clear and pale for readable text, no food behind title area. Blend mountains into lower scene seamlessly, not a flat cream rectangular blank band. Retain bottle's INCA KOLA label. No new typography, no UI, no buttons, no headline, no arrows. Edge-to-edge portrait-ish mobile banner composition."
+    },
+    {
+      "output": "public/images/home/hero-compartir-2172.webp",
+      "variants": [
+        "public/images/home/hero-compartir-1080.webp"
+      ],
+      "source": "codex-clipboard-76e2dbc1-4c1f-4c6a-8f5e-e93ee004c464.png",
+      "prompt": "Edit the supplied Peruvian parrilla background; preserve the same mixed grilled beef and chicken, fries, salad, sauces in white bowls, wooden board/table, red Peruvian textile and Inca Kola bottle (label retained). No text, no title, no UI, no buttons, no arrows. Keep light peach watercolor Andean mountains, pale cream space and traditional geometric textures. Create desktop website background at 2172 by 724, 3:1 aspect ratio. Extend/recompose vertically rather than cropping either side. Preserve the full original left border decorative motifs and eagle/llama across the leftmost 8%. Food stays in right 52% and bottom, not in left title/description zone. Pale clear cream with subtle mountains from x10% to x48%, y10% to y70% so lettering and description overlay is readable. Bottle entirely visible on right. Match the balance and scale of a roasted chicken banner: generous clear left half, food right half."
+    },
+    {
+      "output": "public/images/home/hero-compartir-tablet.webp",
+      "source": "codex-clipboard-76e2dbc1-4c1f-4c6a-8f5e-e93ee004c464.png",
+      "prompt": "Edit the supplied Peruvian parrilla background; preserve the same mixed grilled beef and chicken, fries, salad, sauces in white bowls, wooden board/table, red Peruvian textile and Inca Kola bottle (label retained). No text, no title, no UI, no buttons, no arrows. Keep light peach watercolor Andean mountains, pale cream space and traditional geometric textures. Create a landscape tablet website background 1536 by 710, about 2.16:1 ratio. Recompose food at moderate size confined to right 48% and bottom 30%, not giant close-up. Leave LEFT HALF from top through y72% light pale cream, subtle mountains only, clear for title and 3 lines of description. Food must not overlap the middle left. Keep decorative Peruvian texture visible along left edge, mountains at top/right; full scene continuous. Right-side food can crop slightly at far right like a tablet roasted chicken banner; fries and salad beside parrilla near bottom-right. No overlaid text."
     }
   ]
 }
