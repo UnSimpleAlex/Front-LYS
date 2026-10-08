@@ -7,10 +7,9 @@ const slides = [
   { first: 'Comparte el fuego', second: 'de nuestra cocina', description: 'Crujiente por fuera, jugoso por dentro y listo para disfrutar en cada momento.', image: 'hero-compartir', alt: 'Parrilla para compartir con papas, ensalada, cremas e Inca Kola' },
   { first: 'Sabores peruanos', second: 'en cada momento', description: 'Platos tradicionales, ingredientes frescos y el auténtico sabor a la brasa.', image: 'hero-tradicion', alt: 'Lomo saltado con papas, arroz chaufa, wantanes, cremas e Inca Kola' },
 ];
-const AUTO_ADVANCE_MS = 6000;
+const AUTO_ADVANCE_MS = 5000;
 export function HomeHero({ onAction }: { onAction: (section: string) => void }) {
   const [current, setCurrent] = useState(0);
-  const [userPaused, setUserPaused] = useState(false);
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
   const [touching, setTouching] = useState(false);
@@ -20,7 +19,7 @@ export function HomeHero({ onAction }: { onAction: (section: string) => void }) 
   const reduce = useReducedMotion();
   const slide = slides[current];
   const easing = [.25, .1, .25, 1] as const;
-  const paused = userPaused || hovered || focused || touching || !visible || !!reduce;
+  const paused = hovered || focused || touching || !visible || !!reduce;
   useEffect(() => {
     const onVisibility = () => setVisible(!document.hidden);
     document.addEventListener('visibilitychange', onVisibility);
@@ -88,7 +87,7 @@ export function HomeHero({ onAction }: { onAction: (section: string) => void }) 
     </div>
     <button className="carousel-arrow previous" type="button" aria-label="Diapositiva anterior" onClick={() => move(-1)}><Icon name="arrow" /></button>
     <button className="carousel-arrow next" type="button" aria-label="Diapositiva siguiente" onClick={() => move(1)}><Icon name="arrow" /></button>
-    <div className="carousel-dots" aria-label="Elegir diapositiva">{slides.map((item, index) => <button type="button" key={item.image} aria-label={`Ver diapositiva ${index + 1}`} aria-pressed={current === index} onClick={() => select(index)}><span /></button>)}{!reduce && <button type="button" className="carousel-play-toggle" aria-label={userPaused ? 'Reanudar carrusel automático' : 'Pausar carrusel automático'} aria-pressed={userPaused} onClick={() => setUserPaused(value => !value)}>{userPaused ? '▶' : 'Ⅱ'}</button>}</div>
+    <div className="carousel-dots" aria-label="Elegir diapositiva">{slides.map((item, index) => <button type="button" key={item.image} aria-label={`Ver diapositiva ${index + 1}`} aria-pressed={current === index} onClick={() => select(index)}><span /></button>)}</div>
     <p className="sr-only" role="status" aria-live={paused ? 'polite' : 'off'}>Diapositiva {current + 1} de {slides.length}: {slide.first} {slide.second}</p>
   </section>;
 }

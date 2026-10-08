@@ -40,7 +40,6 @@
 .carousel-dots button { width: 28px; height: 30px; border: 0; padding: 0; background: none; display: grid; place-items: center; }
 .carousel-dots span { width: 13px; height: 13px; background: #ffffffa6; border-radius: 50%; box-shadow: 0 0 2px #0005; }
 .carousel-dots [aria-pressed=true] span { background: var(--home-red); outline: 3px solid #fff; }
-.carousel-dots .carousel-play-toggle { color: #fff; font-size: 18px; font-weight: 700; text-shadow: 0 1px 3px #0008; }
 .service-benefits { padding-block: 26px; }
 .service-benefits > div { display: grid; grid-template-columns: repeat(5, 1fr); }
 .home-benefit { display: flex; align-items: center; justify-content: center; gap: 18px; padding-inline: 20px; min-width: 0; }
