@@ -38,7 +38,7 @@ export function useCarta() {
   const cartItems = products.filter(product => cart[product.id]).map(product => ({ product, count: cart[product.id] }));
   const count = cartItems.reduce((sum, item) => sum + item.count, 0);
   const total = cartItems.reduce((sum, item) => sum + item.count * item.product.price, 0);
-  return { category, query, size, sort, favoritesOnly, favorites, filtered, visible: filtered.slice(0, limit), quantities: cart, cartItems, count, total, announcement, add, quantity, favorite, reset,
+  return { category, query, size, sort, favoritesOnly, favorites, filtered, visible: filtered.slice(0, limit), cartItems, count, total, announcement, add, quantity, favorite, reset,
     setCategory: (value: string) => filter(setCategory, value), setQuery: (value: string) => filter(setQuery, value), setSize: (value: string) => filter(setSize, value), setSort: (value: Sort) => filter(setSort, value),
     setFavoritesOnly: (value: boolean) => filter(setFavoritesOnly, value), more: () => setLimit(previous => previous + 12) };
 }
