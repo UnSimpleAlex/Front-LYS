@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 const sizes = [[320, 568], [360, 800], [375, 812], [390, 844], [412, 915], [430, 932], [480, 900], [768, 1024], [1024, 768], [1280, 800], [1366, 768], [1440, 900], [1920, 1080]];
-test('carrusel automático avanza en bucle y permite pausar, leer y reanudar', async ({ page }) => {
+test('carrusel automático avanza en bucle incluso con mouse y foco sobre el banner', async ({ page }) => {
   await page.clock.install();
   await page.goto('/');
   const heading = page.getByRole('status');
@@ -13,15 +13,12 @@ test('carrusel automático avanza en bucle y permite pausar, leer y reanudar', a
   await page.clock.runFor(5000);
   await expect(heading).toContainText('Sabor peruano');
   await page.locator('.home-hero').hover();
-  await page.clock.runFor(14000);
-  await expect(heading).toContainText('Sabor peruano');
-  await page.mouse.move(0, 0);
-  await page.locator('.brand').focus();
-  await page.clock.runFor(5500);
+  await page.clock.runFor(5000);
   await expect(heading).toContainText('Comparte el fuego');
   await page.locator('.home-hero').focus();
-  await page.clock.runFor(14000);
-  await expect(heading).toContainText('Comparte el fuego');
+  await page.clock.runFor(5000);
+  await expect(heading).toContainText('Sabores peruanos');
+
 });
 test('carrusel respeta movimiento reducido y pausa al ocultar la página', async ({ page }) => {
   await page.clock.install();

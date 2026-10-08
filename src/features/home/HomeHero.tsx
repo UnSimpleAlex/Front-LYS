@@ -10,8 +10,6 @@ const slides = [
 const AUTO_ADVANCE_MS = 5000;
 export function HomeHero({ onAction }: { onAction: (section: string) => void }) {
   const [current, setCurrent] = useState(0);
-  const [hovered, setHovered] = useState(false);
-  const [focused, setFocused] = useState(false);
   const [touching, setTouching] = useState(false);
   const [visible, setVisible] = useState(() => !document.hidden);
   const [restart, setRestart] = useState(0);
@@ -19,7 +17,7 @@ export function HomeHero({ onAction }: { onAction: (section: string) => void }) 
   const reduce = useReducedMotion();
   const slide = slides[current];
   const easing = [.25, .1, .25, 1] as const;
-  const paused = hovered || focused || touching || !visible || !!reduce;
+  const paused = touching || !visible || !!reduce;
   useEffect(() => {
     const onVisibility = () => setVisible(!document.hidden);
     document.addEventListener('visibilitychange', onVisibility);
@@ -43,7 +41,7 @@ export function HomeHero({ onAction }: { onAction: (section: string) => void }) 
   }, []);
   function move(delta: number) { setCurrent(index => (index + delta + slides.length) % slides.length); setRestart(value => value + 1); }
   function select(index: number) { setCurrent(index); setRestart(value => value + 1); }
-  return <section className={`home-hero${current === 1 ? ' home-hero-sharing' : current === 2 ? ' home-hero-traditional' : ''}`} aria-roledescription="carrusel" aria-label="Sabores de nuestra cocina" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} onFocusCapture={() => setFocused(true)} onBlurCapture={event => { if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false); }} onKeyDown={event => {
+  return <section className={`home-hero${current === 1 ? ' home-hero-sharing' : current === 2 ? ' home-hero-traditional' : ''}`} aria-roledescription="carrusel" aria-label="Sabores de nuestra cocina" onKeyDown={event => {
     if (event.target !== event.currentTarget) return;
     if (event.key === 'ArrowRight') move(1);
     if (event.key === 'ArrowLeft') move(-1);
