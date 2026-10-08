@@ -5,7 +5,7 @@
 .loading-spit { position: absolute; width: 100%; height: 14px; top: 50%; transform: translateY(-50%); background: linear-gradient(#4b2414, #d99a62 35%, #552817 55%, #331809 80%, #a16b49); border-radius: 50%; mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent); }
 .loading-spit::before, .loading-spit::after { content: ''; position: absolute; top: -8px; width: 14px; height: 30px; border-radius: 45%; border: 2px solid #643b25; background: linear-gradient(90deg, #341a10, #ba8960 40%, #4c2917); }
 .loading-spit::before { left: 20%; } .loading-spit::after { right: 20%; }
-.loading-chicken { position: absolute; width: 48%; height: auto; left: 26%; top: 50%; transform-origin: center; animation: loading-roast-turn 3s linear infinite; }
+.loading-chicken { position: absolute; width: 48%; height: auto; left: 26%; top: 50%; transform-origin: center; animation: loading-roast-turn 3.6s ease-in-out infinite; }
 .loading-chicken-echo { position: absolute; width: 35%; height: auto; top: 50%; transform: translateY(-50%); opacity: .12; filter: blur(1px); }
 .echo-left { left: 8%; } .echo-right { right: 8%; }
 .loading-roast-shadow { position: absolute; bottom: 7%; left: 29%; width: 42%; height: 15px; border-radius: 50%; background: #754a3045; filter: blur(9px); }
@@ -20,8 +20,11 @@
 .loading-ornament span:last-child { transform: rotate(180deg); }
 .loading-ornament i { width: 12px; height: 12px; border: 3px solid var(--red); transform: rotate(45deg); }
 @keyframes loading-arrive { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-/* Giro ilustrado sobre el eje horizontal; el asador permanece fijo. */
-@keyframes loading-roast-turn { from { transform: translateY(-50%) rotateX(0deg); } to { transform: translateY(-50%) rotateX(360deg); } }
+/* Un giro corto conserva el volumen de la ilustración y evita el efecto de plano al voltearla. */
+@keyframes loading-roast-turn {
+  0%, 100% { transform: translateY(-50%) rotateX(-14deg) rotateZ(-2deg); }
+  50% { transform: translateY(-50%) rotateX(14deg) rotateZ(2deg); }
+}
 @keyframes loading-steam { 0% { opacity: 0; transform: translateY(8px); } 25% { opacity: .3; } 100% { opacity: 0; transform: translateY(-16px); } }
 @media (max-width: 1100px) {
   .route-loading { background: #fff; }

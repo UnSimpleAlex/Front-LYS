@@ -47,3 +47,18 @@ test('vista previa local mantiene la carga y permite volver a Carta', async ({ p
   await expect(page.getByRole('heading', { name: 'Nuestra carta', exact: true })).toBeVisible();
   await expect(page).toHaveURL(/\/carta$/);
 });
+
+test('pollo conserva volumen durante todo el ciclo de movimiento', async ({ page }) => {
+  await page.goto('/carta?preview=carga');
+  const chicken = page.locator('.loading-chicken');
+  await expect(chicken).toBeVisible();
+  const heights = await chicken.evaluate(el => {
+    const animation = el.getAnimations()[0];
+    animation.pause();
+    return [0, 900, 1800, 2700].map(time => {
+      animation.currentTime = time;
+      return el.getBoundingClientRect().height;
+    });
+  });
+  expect(Math.min(...heights) / Math.max(...heights)).toBeGreaterThan(.9);
+});
