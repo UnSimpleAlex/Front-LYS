@@ -14,7 +14,7 @@ const validFavorites = (value: unknown): value is string[] => Array.isArray(valu
 
 export function useCarta() {
   const [category, setCategory] = useState(new URLSearchParams(location.search).get('categoria') || 'todos');
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState(new URLSearchParams(location.search).get('buscar') || '');
   const [size, setSize] = useState('todos');
   const [sort, setSort] = useState<Sort>('popular');
   const [favoritesOnly, setFavoritesOnly] = useState(false);

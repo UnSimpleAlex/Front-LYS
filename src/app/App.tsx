@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { MotionConfig } from 'motion/react';
 import { RouteLoading } from '../components/RouteLoading';
-import { Header } from '../components/Header';
+import { SharedHeader } from '../components/SharedHeader';
 import { NoticeDialog, type Notice } from '../components/NoticeDialog';
 import { SignInPage } from '../pages/SignInPage';
 import { AuthLayout } from '../components/AuthLayout';
@@ -54,7 +54,7 @@ export function App() {
   }
   return <MotionConfig reducedMotion="user">
     <a className="skip-link" href="#contenido">Saltar al contenido</a>
-    {!carta && !promotions && <Header onSection={onSection} home={home} />}
+    {!carta && !promotions && <SharedHeader key={route} onSection={onSection} activeSection={home ? 'Inicio' : ''} onSearch={query => { window.history.pushState(null, '', `/carta?buscar=${encodeURIComponent(query)}`); setRoute('/carta'); window.scrollTo({ top: 0, behavior: 'instant' }); }} />}
     <Suspense fallback={<RouteLoading />}>{carta ? <CartaPage onAction={onSection} /> : promotions ? <PromotionsPage onAction={onSection} /> : home ? <HomePage onAction={onSection} /> : registration ? <AuthLayout registration><RegisterCard onLogin={() => navigate(false)} onLegal={kind => setNotice({ title: kind === 'terms' ? 'Términos y Condiciones' : 'Política de Privacidad', message: 'El documento oficial estará disponible antes de habilitar la creación de cuentas.' })} /></AuthLayout> : <SignInPage onHelp={openHelp} />}</Suspense>
     <NoticeDialog notice={notice} onClose={() => setNotice(null)} />
   </MotionConfig>;
