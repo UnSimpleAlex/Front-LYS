@@ -62,3 +62,16 @@ test('pollo conserva volumen durante todo el ciclo de movimiento', async ({ page
   });
   expect(Math.min(...heights) / Math.max(...heights)).toBeGreaterThan(.9);
 });
+
+for (const viewport of [{ width: 1366, height: 768 }, { width: 1920, height: 1080 }, { width: 1280, height: 600 }, { width: 1440, height: 480 }]) {
+  test(`carga PC sin scroll a ${viewport.width}x${viewport.height}`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    await page.goto('/carta?preview=carga');
+    await expect(page.getByRole('status')).toBeVisible();
+    const bounds = await page.locator('.loading-scene').boundingBox();
+    expect(bounds!.y).toBeGreaterThanOrEqual(0);
+    expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(viewport.height);
+    expect(await page.evaluate(() => document.documentElement.scrollHeight <= innerHeight)).toBe(true);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  });
+}

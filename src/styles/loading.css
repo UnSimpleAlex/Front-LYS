@@ -48,3 +48,12 @@
 }
 .loading-preview-back { position: fixed; top: 18px; left: 18px; z-index: 2; padding: 10px 14px; border: 1px solid #dedede; border-radius: 8px; background: #fff; text-decoration: none; font-size: 13px; }
 .loading-preview-back:hover { border-color: var(--red); color: var(--red); }
+
+/* La carga ocupa el espacio restante si hay navbar y se adapta a pantallas bajas. */
+@media (min-width: 1101px) {
+  #root:has(.route-loading) { height: 100dvh; }
+  .route-loading { min-height: 0; padding-block: clamp(12px, 4dvh, 50px); }
+  .loading-brand { max-height: min(240px, 26dvh); margin-bottom: min(24px, 3dvh); }
+  .loading-rotisserie { height: min(340px, 22vw, 36dvh); }
+  .loading-title { font-size: min(30px, 1.9vw, 4dvh); margin-block: min(14px, 2dvh) min(18px, 2dvh); }
+}

@@ -13,3 +13,5 @@ Assets finales en public/images/loading/chicken.webp (900×507, alpha) y backgro
 Validación: seis pruebas de carga aprobadas, incluyendo giro continuo, movimiento reducido, tamaños 390/768/1672 px, Inicio, registro y retorno desde la vista previa. Lint, TypeScript y build aprobados. Capturas PC, tablet y móvil revisadas.
 
 Ajuste de movimiento: siete pruebas de carga aprobadas, incluida una comprobación de que la altura visible del pollo conserva al menos el 90% durante todo el ciclo. Se revisaron ambas posiciones extremas.
+
+En PC, el contenedor raíz de carga ocupa 100dvh. La escena usa el espacio restante bajo el navbar y ajusta sus dimensiones al alto disponible, sin ocultar el scroll de las páginas normales.
