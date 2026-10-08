@@ -16,13 +16,15 @@ Al agregar un producto, su tarjeta muestra − cantidad +, sincronizado con el c
 
 Carrito local con cantidades, total y persistencia en `localStorage`. Favoritos persistentes. FavoriteButton es un componente React controlado por selected y onToggle, con un botón nativo y aria-pressed. El corazón confirma la selección con el vaivén de 500 ms del ejemplo aportado de Uiverse.io (SalladShooter); al quitarlo vuelve al contorno en 200 ms. Usa el icono y el estilo de las tarjetas existentes, sin checkbox oculto, IDs duplicados ni estilos globales del ejemplo. La animación se dispara sólo al pulsar, no al restaurar favoritos, y respeta movimiento reducido. El icono de Pollo a la brasa representa un pollo asado sobre una fuente. La selección se valida al leerla y se limita a 99 unidades por producto. No se envían pedidos ni se cobran importes: el carrito indica que la confirmación estará disponible próximamente. UI separada de servicios futuros de catálogo/pedidos.
 
+Al pasar el mouse por una tarjeta o enfocar sus acciones con teclado, un trazo rojo recorre su borde en 2.8 segundos. El SVG se ajusta al perímetro y no intercepta clics; sólo anima tarjetas activas. Con movimiento reducido se muestra un borde fijo.
+
 ## Responsive
 
 Cuatro columnas en PC, tres en tablet; móvil compacto con tres columnas desde 360 px y dos en anchos menores para legibilidad. Categorías compactas desplazables horizontalmente sin barra visible, con flechas en ambos extremos cuando hay contenido fuera de vista (desactivadas al llegar al límite). Se conserva el gesto táctil y el acceso por teclado. Ordenar por usa un desplegable con iconos, descripciones y selección marcada; admite flechas, Inicio/Fin, Enter, Escape y cierre al hacer clic fuera. Búsqueda accesible desde el navbar, filtros compactos y navegación inferior fija con espacio para el área segura. El header compartido conserva su altura y marca Carta como activa. Los diálogos usan scroll interno, foco nativo y Escape.
 
 ## Validación
 
-Las 19 comprobaciones de Carta cubren catálogo, entrega de las 108 imágenes como WebP, filtros, búsqueda, favoritos, detalle, cantidades, persistencia y composición a 240/320/360/390/430/650/768/1024/1280/1440/1672/1920/2560 px. Se revisaron capturas de PC, móvil y tablet; se corrigieron recortes del banner, desbordes en anchos pequeños y descripciones estrechas en tablet. No se afirma cobertura de todos los dispositivos posibles.
+Las 20 comprobaciones de Carta cubren catálogo, entrega de las 108 imágenes como WebP, filtros, búsqueda, favoritos, detalle, cantidades, persistencia y composición a 240/320/360/390/430/650/768/1024/1280/1440/1672/1920/2560 px. Se revisaron capturas de PC, móvil y tablet; se corrigieron recortes del banner, desbordes en anchos pequeños y descripciones estrechas en tablet. No se afirma cobertura de todos los dispositivos posibles.
 
 Validación general anterior: 110 pruebas de Playwright aprobadas. Para los controles de cantidad se ejecutaron las 19 pruebas de Carta, con mediciones de precio y botón por fila en 13 resoluciones y comprobaciones de sincronización, foco, persistencia y límite de 99 unidades en PC y móvil; todas aprobadas. Se revisaron capturas a 240, 390, 768 y 1672 px sin desbordamiento horizontal. Lint sin errores y build con comprobación TypeScript aprobado.
 
@@ -31,3 +33,5 @@ Validación general anterior: 110 pruebas de Playwright aprobadas. Para los cont
 Rama `feature/carta` basada en la versión de Inicio del PR #2. Su PR debe revisarse sobre esa rama hasta que Inicio se integre en `dev`; no mezclar `dev` ni `main` durante esta implementación.
 
 Último ajuste visual del selector: capturas de PC y móvil revisadas; las dos pruebas de cantidad, lint y build con TypeScript aprobados.
+
+Validación del borde animado: 19 pruebas existentes de Carta y una prueba nueva de hover, teclado, clics y movimiento reducido aprobadas. Lint, TypeScript y build aprobados; captura del borde revisada.

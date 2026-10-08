@@ -147,3 +147,25 @@ for (const width of [240, 320, 360, 390, 430, 650, 768, 1024, 1280, 1440, 1672, 
     expect(errors).toEqual([]);
   });
 }
+
+test('borde recorre la tarjeta en hover y respeta movimiento reducido', async ({ page }) => {
+  await page.setViewportSize({ width: 1672, height: 1000 });
+  await page.goto('/carta');
+  const card = page.locator('.product-card').first();
+  const border = card.locator('.product-border-trace');
+  const trace = border.locator('rect');
+  await expect(border).toHaveCSS('opacity', '0');
+  await card.hover();
+  await expect(border).toHaveCSS('opacity', '1');
+  const offset = await trace.evaluate(el => getComputedStyle(el).strokeDashoffset);
+  await expect.poll(() => trace.evaluate(el => getComputedStyle(el).strokeDashoffset)).not.toBe(offset);
+  await page.mouse.move(0, 0);
+  await expect(border).toHaveCSS('opacity', '0');
+  await card.getByRole('button', { name: 'Agregar Pollo entero', exact: true }).focus();
+  await expect(border).toHaveCSS('opacity', '1');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect(trace).toHaveCSS('animation-name', 'none');
+  await expect(trace).toHaveCSS('stroke-dasharray', 'none');
+  await card.getByRole('button', { name: 'Agregar Pollo entero', exact: true }).click();
+  await expect(card.locator('output')).toHaveText('1');
+});

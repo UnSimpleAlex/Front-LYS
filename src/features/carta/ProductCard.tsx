@@ -6,6 +6,7 @@ import { FavoriteButton } from './FavoriteButton';
 export function ProductCard({ product, favorite, count, onFavorite, onAdd, onQuantity, onDetail }: { product: Product; favorite: boolean; count: number; onFavorite: () => void; onAdd: () => void; onQuantity: (delta: number) => void; onDetail: () => void }) {
   const addButton = useRef<HTMLButtonElement>(null);
   return <article className="product-card">
+    <svg className="product-border-trace" aria-hidden="true" focusable="false"><rect x="1" y="1" rx="11" pathLength="100" /></svg>
     <div className={`product-photo${product.category === 'bebidas' ? ' product-photo-beverage' : ''}`}><button type="button" className="product-open" onClick={onDetail} aria-label={`Ver ${product.name}`}>
       {product.category === 'bebidas' && <img className="beverage-backdrop" src={product.image} alt="" aria-hidden="true" width="640" height="480" loading="lazy" decoding="async" />}
       <img className="product-image" src={product.image} alt={product.description} width="640" height="480" loading="lazy" decoding="async" /></button>
