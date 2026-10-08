@@ -45,6 +45,9 @@ export function App() {
     const message = section === 'Pedir ahora' ? 'Pronto podrás hacer tu pedido desde aquí.' : `La sección ${section.toLowerCase()} estará disponible pronto.`;
     setNotice({ title: section, message });
   }
+  if (import.meta.env.DEV && new URLSearchParams(window.location.search).get('preview') === 'carga') {
+    return <><a className="loading-preview-back" href={window.location.pathname}>← Volver a la página</a><RouteLoading /></>;
+  }
   return <MotionConfig reducedMotion="user">
     <a className="skip-link" href="#contenido">Saltar al contenido</a>
     {!carta && <Header onSection={onSection} home={home} />}

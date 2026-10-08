@@ -7,3 +7,5 @@ La escena aparece sólo si la carga supera 180 ms, mediante un temporizador con 
 CSS independiente cargado con App, sin esperar los estilos de las páginas lazy. Se retiró el fallback textual y su regla antigua de home.css. Responsive de PC, tablet y celular.
 
 Validación: cinco pruebas de carga aprobadas (390/768/1672 px, movimiento reducido, Inicio y registro), más las 18 pruebas existentes de Carta. Lint, TypeScript y build aprobados. Se revisaron capturas de PC y celular con carga demorada deliberadamente durante la verificación.
+
+Vista previa sólo en desarrollo: /carta?preview=carga mantiene la pantalla de carga y ofrece un enlace para volver a la ruta sin el parámetro. La condición import.meta.env.DEV excluye esta vista del build de producción.

@@ -35,3 +35,12 @@ for (const entry of [
     await expect(page.locator('.route-loading')).toHaveCount(0);
   });
 }
+
+test('vista previa local mantiene la carga y permite volver a Carta', async ({ page }) => {
+  await page.goto('/carta?preview=carga');
+  await expect(page.getByRole('status').filter({ hasText: 'Encendiendo el sabor' })).toBeVisible();
+  await expect(page.locator('.product-card')).toHaveCount(0);
+  await page.getByRole('link', { name: 'Volver a la página' }).click();
+  await expect(page.getByRole('heading', { name: 'Nuestra carta', exact: true })).toBeVisible();
+  await expect(page).toHaveURL(/\/carta$/);
+});
