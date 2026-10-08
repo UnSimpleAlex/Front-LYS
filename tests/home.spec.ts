@@ -8,9 +8,9 @@ test('descripciones seleccionables y banners sin colisiones en resoluciones inte
     await page.goto('/');
     await expect(page.getByRole('heading', { level: 1 })).toContainText('Sabor peruano');
     await page.evaluate(() => document.fonts.ready);
-    for (const index of [1, 2]) {
+    for (const index of [1, 2, 3]) {
       await page.getByRole('button', { name: `Ver diapositiva ${index}` }).click();
-      await expect(page.getByRole('heading', { level: 1 })).toContainText(index === 1 ? 'Sabor peruano' : 'Comparte el fuego');
+      await expect(page.getByRole('heading', { level: 1 })).toContainText(['Sabor peruano', 'Comparte el fuego', 'Sabores peruanos'][index - 1]);
       const geometry = await page.evaluate(() => {
         const p = document.querySelector('.home-hero-copy p')!;
         const actions = document.querySelector('.home-hero-actions')!;
@@ -19,17 +19,18 @@ test('descripciones seleccionables y banners sin colisiones en resoluciones inte
       });
       expect(geometry.gap, `${width}px, banner ${index}`).toBeGreaterThanOrEqual(4);
       expect(Math.abs(geometry.gap - geometry.above), `${width}px, descripción centrada`).toBeLessThan(1);
-      if (index === 2 && width <= 1100) expect(geometry.lines).toBeCloseTo(3, 1);
+      if (index >= 2 && width <= 1100) expect(geometry.lines).toBeCloseTo(3, 1);
       expect(geometry.pointer).toBe('auto');
       expect(geometry.overflow).toBe(false);
       if (index === 2 && width <= 650) await expect(page.locator('.slide-hero-compartir img')).toHaveJSProperty('currentSrc', 'http://127.0.0.1:5173/images/home/hero-compartir-mobile.webp');
       if (index === 2 && width > 650 && width <= 1100) await expect(page.locator('.slide-hero-compartir img')).toHaveJSProperty('currentSrc', 'http://127.0.0.1:5173/images/home/hero-compartir-tablet.webp');
+      if (index === 3 && width <= 650) await expect(page.locator('.slide-hero-tradicion img')).toHaveJSProperty('currentSrc', 'http://127.0.0.1:5173/images/home/hero-tradicion-mobile.webp');
     }
   }
-  await page.locator('.home-hero-copy p').dblclick();
+  await page.locator('.home-hero-copy p span').first().dblclick({ position: { x: 30, y: 10 } });
   expect(await page.evaluate(() => window.getSelection()?.toString().length)).toBeGreaterThan(0);
 });
-test('los dos primeros banners mantienen la misma altura en móvil, tablet y PC', async ({ page }) => {
+test('los tres banners mantienen altura de título y posición de acciones en móvil, tablet y PC', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   for (const width of [320, 390, 768, 1440, 1920]) {
     await page.setViewportSize({ width, height: 950 });
@@ -49,9 +50,15 @@ test('los dos primeros banners mantienen la misma altura en móvil, tablet y PC'
     expect(secondButton!.y).toBe(firstButton!.y);
     expect(secondButton!.x).toBe(firstButton!.x);
     await page.getByRole('button', { name: 'Ver diapositiva 3' }).click();
-    await expect(page.getByRole('heading', { level: 1 })).toContainText('Sabor a la leña');
+    await expect(page.getByRole('heading', { level: 1 })).toContainText('Sabores peruanos');
+    const third = await hero.boundingBox();
+    expect(third!.height).toBe(first!.height);
+    const thirdTitle = await page.locator('.home-hero-title').boundingBox();
+    expect(Math.abs(thirdTitle!.height * 383 / 520 - firstTitle!.height * 480 / 519)).toBeLessThan(1);
     const thirdButton = await page.locator('.home-hero-actions button').first().boundingBox();
     expect(thirdButton!.y).toBe(firstButton!.y);
+    expect(thirdButton!.x).toBe(firstButton!.x);
+    await expect(page.getByRole('button', { name: 'Ver nuestro menú', exact: true })).toBeVisible();
   }
 });
 test('membresía muestra tres rangos y abre el registro', async ({ page }) => {
@@ -105,7 +112,7 @@ test('carrusel cambia con flechas, indicadores y teclado', async ({ page }) => {
   await page.getByRole('button', { name: 'Diapositiva siguiente' }).click();
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Comparte el fuego');
   await page.getByRole('button', { name: 'Ver diapositiva 3' }).click();
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Sabor a la leña');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Sabores peruanos');
   await page.getByRole('region', { name: 'Sabores de nuestra cocina' }).focus();
   await page.keyboard.press('ArrowRight');
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Sabor peruano');

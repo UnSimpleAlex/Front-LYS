@@ -54,6 +54,30 @@
         "codex-clipboard-76e2dbc1-4c1f-4c6a-8f5e-e93ee004c464.png"
       ],
       "prompt": "Precise composition edit. Image 1 is the target wide chicken background: preserve EXACT canvas 2172x724 (3:1), all background mountains, empty cream left half, Peruvian left border, wooden tabletop, bottle, fries bowl, salad and white sauce bowls and their exact positions and scale. Replace ONLY the large whole roasted chicken and its red bowl at upper right with a raised thick wooden board piled with mixed grilled beef steak, cut steak and grilled chicken from image 2. Mixed grill mound must occupy EXACTLY the same rectangular footprint as original chicken+bowl: x62%-91%, y24%-66%. Do not flatten or shrink the grill. Other products unchanged. No lettering or UI. Photorealistic consistent light. This will be a tablet source that is cropped identically to first banner."
+    },
+    {
+      "output": "public/images/home/title-tradicion.webp",
+      "source": "codex-clipboard-2245df0d-6857-4fad-81be-585b0c8848fd.png",
+      "prompt": "Extract only the two-line brush lettering from this reference, preserving spelling, original brush style, underline and decorative red strokes. Exact text: first line 'Sabores peruanos' in black; second line 'en cada momento' in deep red #D30100 (RGB 211,1,0), matching first banner brand lettering. Transparent background, no shadow, no food, mountains, UI, description or buttons. Tight horizontal composition, about 1400x519 aspect ratio, entire lettering and strokes included. Do not add text."
+    },
+    {
+      "output": "public/images/home/hero-tradicion-2172.webp",
+      "variants": [
+        "public/images/home/hero-tradicion-1080.webp"
+      ],
+      "source": [
+        "codex-clipboard-eb29a4c0-f3d7-4bc8-85ed-b62393cf5eee.png",
+        "public/images/home/hero-2172.webp"
+      ],
+      "prompt": "Adapt this supplied clean Peruvian food banner to 2172x724, 3:1 ratio, for the third carousel slide. Preserve the actual lomo saltado beef with red onion and tomato, fries on a black hot plate and wooden board; fried rice bowl, wonton bowl, Inca Kola bottle and glass, three white sauce bowls, red Peruvian textile, peach Andean mountains and left decorative motifs. Recompose vertically without cropping the left border: clear pale cream left 48% for title/description/buttons. Food group occupies right half and lower right at the same visual scale and position as the chicken banner composition shown in image 2. Main plate from x55%-87%, y30%-80%, bottle from x90%-98%, y8%-80%, rice and wontons behind. Keep every product recognizable. No lettering, no UI, no buttons. Photorealistic same style."
+    },
+    {
+      "output": "public/images/home/hero-tradicion-mobile.webp",
+      "source": [
+        "public/images/home/hero-mobile.webp",
+        "codex-clipboard-eb29a4c0-f3d7-4bc8-85ed-b62393cf5eee.png"
+      ],
+      "prompt": "Precise-object-edit. Image 1 is the EDIT TARGET and its exact composition must remain: 1080x850 ratio, cream upper half, mountains, Peruvian borders, table, Inca Kola bottle and sauce cups all unchanged. Image 2 supplies food identity only. Replace ONLY the roasted chicken and red bowl at x48%-89%, y49%-79% with a large heap of lomo saltado strips of beef, tomato, red onion and fries on a RAISED black sizzling plate on thick wooden board at EXACT SAME bounding box. It must be as tall as the chicken, not moved to bottom foreground. Replace the fries bowl at x23%-50%, y64%-86% with a fried rice bowl of SAME size; replace salad bowl at x45%-72%, y73%-94% with a wonton bowl of SAME size. Preserve bottle and white sauces positions. Do not flatten or move the main lomo plate down. Keep pale left area readable through y58%. No text, lettering, UI, buttons or arrows."
     }
   ]
 }
