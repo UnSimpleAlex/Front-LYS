@@ -1,0 +1,83 @@
+{
+  "tool": "image_gen.imagegen (herramienta integrada)",
+  "assets": [
+    {
+      "output": "public/images/home/hero-mobile.webp",
+      "source": "exec-2e85b336-49e0-4eed-8f68-3795ec987f65.png",
+      "prompt": "Edit/recompose first image into a vertical mobile website hero background 1080 x 850 approximately, matching background composition of second reference (ignore all its UI/text). Preserve appetizing realistic Peruvian roasted chicken in red dish, Inca Kola bottle at right, fries, salad, little white cream bowls, wooden table and red textile bottom, beige mountain and beige Peruvian geometric textile ornaments. Top 40% pale beige empty space for website headline; left middle 40% pale cream clear area for description, chicken begins at about 45% height on right, foods fill bottom. NO text, letters, buttons, arrows, dots or navbar. Bottle label retain INCA KOLA exactly. Faithful to provided food and palette, edge-to-edge food scene, clean empty text areas. Produce one background image."
+    },
+    {
+      "output": "public/images/home/title.webp",
+      "source": "exec-2c7ad9a5-671e-4cd2-81ab-5f00fb695f3f.png",
+      "prompt": "Create only the isolated brush calligraphy headline from the reference. Transparent background, wide 2.7:1 lettering block, tightly composed. Exact text in two lines: first line \"Sabor peruano\" black bold expressive hand-painted brush lettering; second line \"en cada brasa\" vivid red bold flowing hand-painted brush lettering. Match reference headline closely including red brush underline below second line and small red brush emphasis rays. NO food, no background, no page UI. Only this headline on real transparency. High resolution clean reusable website image."
+    },
+    {
+      "output": "public/images/home/title-compartir.webp",
+      "source": "exec-3f6675d4-d814-4bda-9677-96cebac67b04.png",
+      "prompt": "Use case: background-extraction. Extract ONLY the large two-line brush lettering from the attached banner reference into a tightly framed wide transparent PNG asset for a website carousel. Exact first line: 'Comparte el fuego' in black. Exact second line: 'de nuestra cocina' in deep red. Preserve the reference's slanted expressive hand painted brush script, relative line sizes, red brush underline under cocina and small red energetic flourish marks to the left and right of the second line. Actual alpha transparency everywhere except lettering and those red decorations. Remove ALL background, mountains, patterns, food, supporting description, buttons, logos and any other elements. No shadows, no cream or white background, no new text. Keep letters complete with small safe margins; horizontal composition roughly 3.4:1."
+    },
+    {
+      "output": "public/images/home/title-compartir.webp",
+      "source": "exec-bf2d72dd-c56a-4d68-a847-f23166e3ee18.png",
+      "prompt": "Precise color-only edit of FIRST image (transparent title 'Comparte el fuego / de nuestra cocina'). Change ONLY red lettering 'de nuestra cocina', its underline and red flourish marks to the same vivid warm saturated red as the SECOND reference image's 'en cada brasa'. Match that reference red (approximately #ed0000, bright red, not dark burgundy). Preserve all exact lettering shapes, wording, brush texture, position, canvas size, black first line and real alpha transparency unchanged. No new marks, backgrounds, shadows or layout changes."
+    },
+    {
+      "output": "public/images/home/hero-compartir-mobile.webp",
+      "source": "exec-0ed16727-c0b0-4a59-b9e7-1e3aaea3caba.png",
+      "prompt": "Recompose the supplied Peruvian parrilla website background as a mobile hero background approximately 1080 x 920. Preserve the same photoreal mixed grilled beef and chicken platter, fries, salad, white sauce bowls, Inca Kola bottle on right, wooden table and red Peruvian woven cloth. Food occupies bottom 45% and right lower half. Top 55% is light cream with delicate pale peach watercolor Andean mountains and light traditional Peruvian geometric motifs along edges, continuous illustrated background visible behind overlaid website lettering. Keep top and middle left especially clear and pale for readable text, no food behind title area. Blend mountains into lower scene seamlessly, not a flat cream rectangular blank band. Retain bottle's INCA KOLA label. No new typography, no UI, no buttons, no headline, no arrows. Edge-to-edge portrait-ish mobile banner composition."
+    },
+    {
+      "output": "public/images/home/hero-compartir-2172.webp",
+      "variants": [
+        "public/images/home/hero-compartir-1080.webp"
+      ],
+      "source": "codex-clipboard-76e2dbc1-4c1f-4c6a-8f5e-e93ee004c464.png",
+      "prompt": "Edit the supplied Peruvian parrilla background; preserve the same mixed grilled beef and chicken, fries, salad, sauces in white bowls, wooden board/table, red Peruvian textile and Inca Kola bottle (label retained). No text, no title, no UI, no buttons, no arrows. Keep light peach watercolor Andean mountains, pale cream space and traditional geometric textures. Create desktop website background at 2172 by 724, 3:1 aspect ratio. Extend/recompose vertically rather than cropping either side. Preserve the full original left border decorative motifs and eagle/llama across the leftmost 8%. Food stays in right 52% and bottom, not in left title/description zone. Pale clear cream with subtle mountains from x10% to x48%, y10% to y70% so lettering and description overlay is readable. Bottle entirely visible on right. Match the balance and scale of a roasted chicken banner: generous clear left half, food right half."
+    },
+    {
+      "output": "public/images/home/hero-compartir-tablet.webp",
+      "source": "codex-clipboard-76e2dbc1-4c1f-4c6a-8f5e-e93ee004c464.png",
+      "prompt": "Edit the supplied Peruvian parrilla background; preserve the same mixed grilled beef and chicken, fries, salad, sauces in white bowls, wooden board/table, red Peruvian textile and Inca Kola bottle (label retained). No text, no title, no UI, no buttons, no arrows. Keep light peach watercolor Andean mountains, pale cream space and traditional geometric textures. Create a landscape tablet website background 1536 by 710, about 2.16:1 ratio. Recompose food at moderate size confined to right 48% and bottom 30%, not giant close-up. Leave LEFT HALF from top through y72% light pale cream, subtle mountains only, clear for title and 3 lines of description. Food must not overlap the middle left. Keep decorative Peruvian texture visible along left edge, mountains at top/right; full scene continuous. Right-side food can crop slightly at far right like a tablet roasted chicken banner; fries and salad beside parrilla near bottom-right. No overlaid text."
+    },
+    {
+      "output": "public/images/home/hero-compartir-mobile.webp",
+      "source": [
+        "public/images/home/hero-mobile.webp",
+        "codex-clipboard-76e2dbc1-4c1f-4c6a-8f5e-e93ee004c464.png"
+      ],
+      "prompt": "Precise composition edit. Image 1 is the target mobile chicken banner: preserve EXACT canvas 1080x850, all background mountains, pale empty upper half, Peruvian border, wooden tabletop, bottle, fries bowl, salad and white sauce bowls and their exact positions and scale. Replace ONLY the large whole roasted chicken and its red bowl in lower right with a raised thick wooden board piled with mixed grilled beef steak, cut steak and grilled chicken from image 2. Mixed grill mound must occupy EXACTLY the same rectangular footprint as the original chicken+bowl: x48%-90%, y49%-80%. Do not flatten or shrink the grill. Other products unchanged. No lettering or UI. Photorealistic consistent light."
+    },
+    {
+      "output": "public/images/home/hero-compartir-tablet.webp",
+      "source": [
+        "public/images/home/hero-2172.webp",
+        "codex-clipboard-76e2dbc1-4c1f-4c6a-8f5e-e93ee004c464.png"
+      ],
+      "prompt": "Precise composition edit. Image 1 is the target wide chicken background: preserve EXACT canvas 2172x724 (3:1), all background mountains, empty cream left half, Peruvian left border, wooden tabletop, bottle, fries bowl, salad and white sauce bowls and their exact positions and scale. Replace ONLY the large whole roasted chicken and its red bowl at upper right with a raised thick wooden board piled with mixed grilled beef steak, cut steak and grilled chicken from image 2. Mixed grill mound must occupy EXACTLY the same rectangular footprint as original chicken+bowl: x62%-91%, y24%-66%. Do not flatten or shrink the grill. Other products unchanged. No lettering or UI. Photorealistic consistent light. This will be a tablet source that is cropped identically to first banner."
+    },
+    {
+      "output": "public/images/home/title-tradicion.webp",
+      "source": "codex-clipboard-2245df0d-6857-4fad-81be-585b0c8848fd.png",
+      "prompt": "Extract only the two-line brush lettering from this reference, preserving spelling, original brush style, underline and decorative red strokes. Exact text: first line 'Sabores peruanos' in black; second line 'en cada momento' in deep red #D30100 (RGB 211,1,0), matching first banner brand lettering. Transparent background, no shadow, no food, mountains, UI, description or buttons. Tight horizontal composition, about 1400x519 aspect ratio, entire lettering and strokes included. Do not add text."
+    },
+    {
+      "output": "public/images/home/hero-tradicion-2172.webp",
+      "variants": [
+        "public/images/home/hero-tradicion-1080.webp"
+      ],
+      "source": [
+        "codex-clipboard-eb29a4c0-f3d7-4bc8-85ed-b62393cf5eee.png",
+        "public/images/home/hero-2172.webp"
+      ],
+      "prompt": "Adapt this supplied clean Peruvian food banner to 2172x724, 3:1 ratio, for the third carousel slide. Preserve the actual lomo saltado beef with red onion and tomato, fries on a black hot plate and wooden board; fried rice bowl, wonton bowl, Inca Kola bottle and glass, three white sauce bowls, red Peruvian textile, peach Andean mountains and left decorative motifs. Recompose vertically without cropping the left border: clear pale cream left 48% for title/description/buttons. Food group occupies right half and lower right at the same visual scale and position as the chicken banner composition shown in image 2. Main plate from x55%-87%, y30%-80%, bottle from x90%-98%, y8%-80%, rice and wontons behind. Keep every product recognizable. No lettering, no UI, no buttons. Photorealistic same style."
+    },
+    {
+      "output": "public/images/home/hero-tradicion-mobile.webp",
+      "source": [
+        "public/images/home/hero-mobile.webp",
+        "codex-clipboard-eb29a4c0-f3d7-4bc8-85ed-b62393cf5eee.png"
+      ],
+      "prompt": "Precise-object-edit. Image 1 is the EDIT TARGET and its exact composition must remain: 1080x850 ratio, cream upper half, mountains, Peruvian borders, table, Inca Kola bottle and sauce cups all unchanged. Image 2 supplies food identity only. Replace ONLY the roasted chicken and red bowl at x48%-89%, y49%-79% with a large heap of lomo saltado strips of beef, tomato, red onion and fries on a RAISED black sizzling plate on thick wooden board at EXACT SAME bounding box. It must be as tall as the chicken, not moved to bottom foreground. Replace the fries bowl at x23%-50%, y64%-86% with a fried rice bowl of SAME size; replace salad bowl at x45%-72%, y73%-94% with a wonton bowl of SAME size. Preserve bottle and white sauces positions. Do not flatten or move the main lomo plate down. Keep pale left area readable through y58%. No text, lettering, UI, buttons or arrows."
+    }
+  ]
+}
