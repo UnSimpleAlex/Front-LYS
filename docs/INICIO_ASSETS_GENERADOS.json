@@ -38,6 +38,22 @@
       "output": "public/images/home/hero-compartir-tablet.webp",
       "source": "codex-clipboard-76e2dbc1-4c1f-4c6a-8f5e-e93ee004c464.png",
       "prompt": "Edit the supplied Peruvian parrilla background; preserve the same mixed grilled beef and chicken, fries, salad, sauces in white bowls, wooden board/table, red Peruvian textile and Inca Kola bottle (label retained). No text, no title, no UI, no buttons, no arrows. Keep light peach watercolor Andean mountains, pale cream space and traditional geometric textures. Create a landscape tablet website background 1536 by 710, about 2.16:1 ratio. Recompose food at moderate size confined to right 48% and bottom 30%, not giant close-up. Leave LEFT HALF from top through y72% light pale cream, subtle mountains only, clear for title and 3 lines of description. Food must not overlap the middle left. Keep decorative Peruvian texture visible along left edge, mountains at top/right; full scene continuous. Right-side food can crop slightly at far right like a tablet roasted chicken banner; fries and salad beside parrilla near bottom-right. No overlaid text."
+    },
+    {
+      "output": "public/images/home/hero-compartir-mobile.webp",
+      "source": [
+        "public/images/home/hero-mobile.webp",
+        "codex-clipboard-76e2dbc1-4c1f-4c6a-8f5e-e93ee004c464.png"
+      ],
+      "prompt": "Precise composition edit. Image 1 is the target mobile chicken banner: preserve EXACT canvas 1080x850, all background mountains, pale empty upper half, Peruvian border, wooden tabletop, bottle, fries bowl, salad and white sauce bowls and their exact positions and scale. Replace ONLY the large whole roasted chicken and its red bowl in lower right with a raised thick wooden board piled with mixed grilled beef steak, cut steak and grilled chicken from image 2. Mixed grill mound must occupy EXACTLY the same rectangular footprint as the original chicken+bowl: x48%-90%, y49%-80%. Do not flatten or shrink the grill. Other products unchanged. No lettering or UI. Photorealistic consistent light."
+    },
+    {
+      "output": "public/images/home/hero-compartir-tablet.webp",
+      "source": [
+        "public/images/home/hero-2172.webp",
+        "codex-clipboard-76e2dbc1-4c1f-4c6a-8f5e-e93ee004c464.png"
+      ],
+      "prompt": "Precise composition edit. Image 1 is the target wide chicken background: preserve EXACT canvas 2172x724 (3:1), all background mountains, empty cream left half, Peruvian left border, wooden tabletop, bottle, fries bowl, salad and white sauce bowls and their exact positions and scale. Replace ONLY the large whole roasted chicken and its red bowl at upper right with a raised thick wooden board piled with mixed grilled beef steak, cut steak and grilled chicken from image 2. Mixed grill mound must occupy EXACTLY the same rectangular footprint as original chicken+bowl: x62%-91%, y24%-66%. Do not flatten or shrink the grill. Other products unchanged. No lettering or UI. Photorealistic consistent light. This will be a tablet source that is cropped identically to first banner."
     }
   ]
 }

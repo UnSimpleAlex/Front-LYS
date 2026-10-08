@@ -14,9 +14,12 @@ test('descripciones seleccionables y banners sin colisiones en resoluciones inte
       const geometry = await page.evaluate(() => {
         const p = document.querySelector('.home-hero-copy p')!;
         const actions = document.querySelector('.home-hero-actions')!;
-        return { gap: actions.getBoundingClientRect().top - p.getBoundingClientRect().bottom, pointer: getComputedStyle(p).pointerEvents, overflow: document.documentElement.scrollWidth > innerWidth };
+        const title = document.querySelector('.home-hero-copy h1')!;
+        return { gap: actions.getBoundingClientRect().top - p.getBoundingClientRect().bottom, above: p.getBoundingClientRect().top - title.getBoundingClientRect().bottom, lines: p.getBoundingClientRect().height / parseFloat(getComputedStyle(p).lineHeight), pointer: getComputedStyle(p).pointerEvents, overflow: document.documentElement.scrollWidth > innerWidth };
       });
       expect(geometry.gap, `${width}px, banner ${index}`).toBeGreaterThanOrEqual(4);
+      expect(Math.abs(geometry.gap - geometry.above), `${width}px, descripción centrada`).toBeLessThan(1);
+      if (index === 2 && width <= 1100) expect(geometry.lines).toBeCloseTo(3, 1);
       expect(geometry.pointer).toBe('auto');
       expect(geometry.overflow).toBe(false);
       if (index === 2 && width <= 650) await expect(page.locator('.slide-hero-compartir img')).toHaveJSProperty('currentSrc', 'http://127.0.0.1:5173/images/home/hero-compartir-mobile.webp');
@@ -34,14 +37,14 @@ test('los dos primeros banners mantienen la misma altura en móvil, tablet y PC'
     await expect(page.getByRole('heading', { level: 1 })).toContainText('Sabor peruano');
     const hero = page.locator('.home-hero');
     const first = await hero.boundingBox();
-      const firstDescription = await page.locator('.home-hero-copy p').boundingBox();
+    const firstTitle = await page.locator('.home-hero-title').boundingBox();
     const firstButton = await page.locator('.home-hero-actions button').first().boundingBox();
     await page.getByRole('button', { name: 'Ver diapositiva 2' }).click();
     await expect(page.getByRole('heading', { level: 1 })).toContainText('Comparte el fuego');
     const second = await hero.boundingBox();
     expect(second!.height).toBe(first!.height);
-      const secondDescription = await page.locator('.home-hero-copy p').boundingBox();
-      expect(secondDescription!.y).toBeCloseTo(firstDescription!.y, 0);
+    const secondTitle = await page.locator('.home-hero-title').boundingBox();
+    expect(secondTitle!.height).toBeCloseTo(firstTitle!.height, 0);
     const secondButton = await page.locator('.home-hero-actions button').first().boundingBox();
     expect(secondButton!.y).toBe(firstButton!.y);
     expect(secondButton!.x).toBe(firstButton!.x);
