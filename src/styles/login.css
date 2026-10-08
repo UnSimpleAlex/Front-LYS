@@ -16,6 +16,8 @@
 .brand { display: block; flex: 0 0 auto; width: clamp(195px, 16vw, 250px); }
 .desktop-nav { flex: 1; display: flex; align-items: center; justify-content: center; gap: clamp(16px, 2vw, 36px); }
 .nav-link, .login-link { font-size: clamp(14px, 1vw, 19px); }
+.site-header .nav-link, .site-header .login-link { transition: color 180ms ease-out; }
+.site-header .nav-link:hover, .site-header .login-link:hover, .site-header .nav-link:focus-visible, .site-header .login-link:focus-visible { color: var(--red); }
 .nav-link { padding-block: 16px; }
 .header-actions { display: flex; align-items: center; gap: clamp(16px, 2vw, 32px); }
 .login-link svg { width: 24px; height: 24px; }
