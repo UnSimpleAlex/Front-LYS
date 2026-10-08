@@ -1,7 +1,11 @@
 import type { SVGProps } from 'react';
 
-export type IconName = 'phone' | 'mail' | 'lock' | 'eye' | 'eye-off' | 'user' | 'arrow' | 'menu' | 'close' | 'check' | 'cart' | 'truck' | 'store' | 'table' | 'card' | 'gift' | 'flame' | 'leaf' | 'clock' | 'star' | 'percent' | 'mobile' | 'cutlery' | 'pin' | 'search' | 'heart' | 'grid' | 'chicken' | 'grill' | 'rice' | 'fries' | 'drink' | 'bowl' | 'home' | 'tag' | 'sort' | 'chevron' | 'users' | 'pumpkin';
+export type IconName = 'phone' | 'mail' | 'lock' | 'eye' | 'eye-off' | 'user' | 'arrow' | 'menu' | 'close' | 'check' | 'cart' | 'truck' | 'store' | 'table' | 'card' | 'gift' | 'flame' | 'leaf' | 'clock' | 'star' | 'percent' | 'mobile' | 'cutlery' | 'pin' | 'search' | 'heart' | 'grid' | 'chicken' | 'grill' | 'rice' | 'fries' | 'drink' | 'bowl' | 'home' | 'tag' | 'sort' | 'chevron' | 'users' | 'pumpkin' | 'trash' | 'receipt' | 'cash' | 'shield';
 const paths: Record<IconName, string[]> = {
+  trash: ['M3 6h18', 'M8 6V3h8v3', 'M5 6l1 16h12l1-16', 'M10 10v8', 'M14 10v8'],
+  receipt: ['M5 2h14v20l-3-2-4 2-4-2-3 2Z', 'M8 7h8', 'M8 11h8', 'M8 15h5'],
+  cash: ['M2 5h20v14H2Z', 'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z', 'M5 9v6', 'M19 9v6'],
+  shield: ['M12 2 3 6v6c0 6 9 10 9 10s9-4 9-10V6Z', 'm8 12 3 3 5-6'],
   users: ['M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z', 'M5 22v-4c0-7 14-7 14 0v4', 'M3 10a3 3 0 0 1 0-6', 'M21 10a3 3 0 0 0 0-6', 'M2 13c-2 2-1 6-1 7', 'M22 13c2 2 1 6 1 7'],
   pumpkin: ['M12 5c-8-6-15 17-2 17h4c13 0 6-23-2-17Z', 'M12 5V1l3 1', 'm6 11 3-2 1 3Z', 'm18 11-3-2-1 3Z', 'm7 16 3 2 2-1 2 1 3-2'],
   chevron: ['m6 9 6 6 6-6'],

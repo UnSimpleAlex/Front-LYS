@@ -4,7 +4,7 @@ for (const width of [240, 390, 768, 1366, 1920]) {
   test(`navbar uniforme en todas las paginas a ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     let baseline: unknown;
-    for (const route of ['/carta', '/', '/promociones', '/iniciar-sesion', '/registro']) {
+    for (const route of ['/carta', '/', '/carrito', '/promociones', '/iniciar-sesion', '/registro']) {
       await page.goto(route);
       await expect(page.locator('.site-header .brand img')).toBeVisible();
       await expect(page.locator('.route-loading')).toHaveCount(0);
@@ -31,6 +31,7 @@ test('busqueda y carrito disponibles desde inicio y login', async ({ page }) => 
   await page.locator('.product-add').first().click();
   await page.goto('/iniciar-sesion');
   await page.locator('.carta-cart-toggle').click();
-  await expect(page.getByRole('dialog', { name: 'Tu pedido' })).toBeVisible();
+  await expect(page).toHaveURL(/carrito$/);
+  await expect(page.locator('.cart-product-list li')).toHaveCount(1);
   await expect(page.locator('.cart-empty')).toHaveCount(0);
 });

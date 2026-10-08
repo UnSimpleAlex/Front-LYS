@@ -1,0 +1,31 @@
+[
+  {
+    "name": "hero-desktop",
+    "ref": "C:/Users/Usuario/Downloads/Diseño sin título/6.png",
+    "prompt": "Create ONLY the wide horizontal hero background from the supplied shopping cart webpage reference. Output a 5:1 ultra wide professional photo banner. NO text or lettering anywhere, NO UI, NO navbar, NO cards. Left 58% light ivory paper with very subtle Peruvian mountains and textile motifs and completely clear negative space for HTML title. Right 42% appetizing glossy authentic Peruvian pollo a la brasa whole roast chicken with golden fries in a warmly lit charcoal restaurant. Same photographic quality and composition as banner in reference, chicken on right edge. Seamless natural transition from ivory left to warm dark restaurant right.",
+    "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-d36dd30e-5a05-4f83-bbaf-47714672dc68.png"
+  },
+  {
+    "name": "hero-mobile",
+    "ref": "C:/Users/Usuario/Downloads/Diseño sin título/Movil/7.png",
+    "prompt": "Create ONLY the shopping cart hero background based on supplied reference. Wide horizontal 2.8:1 banner for mobile. NO text, lettering, navbar or UI. Left 54% uncluttered light ivory parchment with very subtle Peruvian mountains and textile detail. Right 46% delicious glossy whole Peruvian roast chicken and golden fries against warm charcoal restaurant. Keep left clear for title and subtitle. Whole composition suitable compact mobile crop, chicken on far right.",
+    "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-23ec1d2c-c210-40db-b103-0d7a30737037.png"
+  },
+  {
+    "name": "yape",
+    "ref": "C:/Users/Usuario/Downloads/Diseño sin título/Movil/10.png",
+    "prompt": "Reproduce ONLY the Yape payment app icon seen in the supplied reference, a clean purple rounded square with the white stylized lowercase yape wordmark and small white circular S/ mark above. One centered square icon, cropped tightly with generous transparent space only outside rounded square. No other elements, no UI, no caption, no QR. Faithful visual payment-method asset. Transparent background.",
+    "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-2db47c1d-841e-4730-b6d7-c8d030e80883.png"
+  },
+  {
+    "name": "plin",
+    "ref": "C:/Users/Usuario/Downloads/Diseño sin título/9.png",
+    "prompt": "Reproduce ONLY the Plin payment app icon seen in supplied reference: bright turquoise cyan rounded circular speech bubble shape with white lowercase plin wordmark, small tail lower left. Single centered clean icon, transparent outside, no extra text, no webpage or QR. Faithful payment-method visual asset.",
+    "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-6c97b4b1-a309-4e54-99a5-0a7532853d07.png"
+  },
+  {
+    "name": "result-background",
+    "path": "C:/Users/Usuario/.codex/generated_images/01a1123c-68b9-7732-9a73-76911a2414bc/exec-3ab85198-3df1-4b5e-bbf4-ac03f739660f.png",
+    "prompt": "Create a clean decorative website background for Peruvian roast chicken restaurant order-success page. Wide 16:9 white canvas with very pale warm peach fine hand-drawn line-art only along left and right edges: grilled chicken, french fries, rosemary herbs, tomatoes and sauce bowls. Central 78 percent of image must be entirely clean bright white, plenty of whitespace for UI content. Delicate diagonal brush-stroke textures and faint Andean geometric patterns in corners. Elegant editorial food illustration, subtle but visible at edges, no photography, no text, no logos, no QR, no people. White dominates 95 percent."
+  }
+]

@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
 import { MotionConfig } from 'motion/react';
 import { RouteLoading } from '../components/RouteLoading';
 import { SharedHeader } from '../components/SharedHeader';
@@ -8,6 +8,7 @@ import { AuthLayout } from '../components/AuthLayout';
 const HomePage = lazy(() => import('../pages/HomePage').then(module => ({ default: module.HomePage })));
 const CartaPage = lazy(() => import('../pages/CartaPage').then(module => ({ default: module.CartaPage })));
 const PromotionsPage = lazy(() => import('../pages/PromotionsPage').then(module => ({ default: module.PromotionsPage })));
+const CheckoutPage = lazy(() => import('../pages/CheckoutPage').then(module => ({ default: module.CheckoutPage })));
 const RegisterCard = lazy(() => import('../features/auth/RegisterCard').then(module => ({ default: module.RegisterCard })));
 
 export function App() {
@@ -17,6 +18,12 @@ export function App() {
   const home = route === '/';
   const carta = route === '/carta';
   const promotions = route === '/promociones';
+  const checkout = ['/carrito', '/checkout/entrega', '/checkout/pago', '/checkout/confirmacion', '/pedido-confirmado', '/mi-pedido'].includes(route);
+  const navigateRoute = useCallback((path: string) => {
+    window.history.pushState(null, '', path);
+    setRoute(path.split('?')[0]);
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, []);
   useEffect(() => {
     const url = new URL(window.location.href);
     if (url.searchParams.get('preview') === 'carga') { url.searchParams.delete('preview'); window.history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`); }
@@ -31,7 +38,7 @@ export function App() {
     setRoute(toRegistration ? '/registro' : '/iniciar-sesion');
     window.scrollTo({ top: 0, behavior: 'instant' });
   }
-  useEffect(() => { document.title = home ? 'Leñas y Sabores | Sabor peruano en cada brasa' : carta ? 'Nuestra carta | Leñas y Sabores' : promotions ? 'Promociones | Leñas y Sabores' : registration ? 'Registrarse | Leñas y Sabores' : 'Iniciar sesión | Leñas y Sabores'; }, [registration, home, carta, promotions]);
+  useEffect(() => { document.title = checkout ? 'Tu pedido | Leñas y Sabores' : home ? 'Leñas y Sabores | Sabor peruano en cada brasa' : carta ? 'Nuestra carta | Leñas y Sabores' : promotions ? 'Promociones | Leñas y Sabores' : registration ? 'Registrarse | Leñas y Sabores' : 'Iniciar sesión | Leñas y Sabores'; }, [registration, home, carta, promotions, checkout]);
 
   function openHelp(action: 'register' | 'recover') {
     if (action === 'register') navigate(true);
@@ -39,6 +46,7 @@ export function App() {
   }
 
   function onSection(section: string) {
+    if (section === 'Carrito' || section === 'Pedir ahora') { navigateRoute('/carrito'); return; }
     const cartaTargets: Record<string, string> = { Carta: '', 'Pollo a la brasa': 'pollo', Parrillas: 'parrillas', Combos: 'combos', 'Bebidas y acompañamientos': 'bebidas', 'Descubre combos': 'combos', 'Ver nuestro menú': '' };
     if (section in cartaTargets) { window.history.pushState(null, '', `/carta${cartaTargets[section] ? `?categoria=${cartaTargets[section]}` : ''}`); setRoute('/carta'); window.scrollTo({ top: 0, behavior: 'instant' }); return; }
     if (section === 'Promociones' || section === 'Todas las promociones') { window.history.pushState(null, '', '/promociones'); setRoute('/promociones'); window.scrollTo({ top: 0, behavior: 'instant' }); return; }
@@ -54,8 +62,8 @@ export function App() {
   }
   return <MotionConfig reducedMotion="user">
     <a className="skip-link" href="#contenido">Saltar al contenido</a>
-    {!carta && !promotions && <SharedHeader key={route} onSection={onSection} activeSection={home ? 'Inicio' : ''} onSearch={query => { window.history.pushState(null, '', `/carta?buscar=${encodeURIComponent(query)}`); setRoute('/carta'); window.scrollTo({ top: 0, behavior: 'instant' }); }} />}
-    <Suspense fallback={<RouteLoading />}>{carta ? <CartaPage onAction={onSection} /> : promotions ? <PromotionsPage onAction={onSection} /> : home ? <HomePage onAction={onSection} /> : registration ? <AuthLayout registration><RegisterCard onLogin={() => navigate(false)} onLegal={kind => setNotice({ title: kind === 'terms' ? 'Términos y Condiciones' : 'Política de Privacidad', message: 'El documento oficial estará disponible antes de habilitar la creación de cuentas.' })} /></AuthLayout> : <SignInPage onHelp={openHelp} />}</Suspense>
+    {!carta && !promotions && !checkout && <SharedHeader key={route} onSection={onSection} activeSection={home ? 'Inicio' : ''} onSearch={query => { window.history.pushState(null, '', `/carta?buscar=${encodeURIComponent(query)}`); setRoute('/carta'); window.scrollTo({ top: 0, behavior: 'instant' }); }} />}
+    <Suspense fallback={<RouteLoading />}>{checkout ? <CheckoutPage route={route} onNavigate={navigateRoute} onAction={onSection} /> : carta ? <CartaPage onAction={onSection} /> : promotions ? <PromotionsPage onAction={onSection} /> : home ? <HomePage onAction={onSection} /> : registration ? <AuthLayout registration><RegisterCard onLogin={() => navigate(false)} onLegal={kind => setNotice({ title: kind === 'terms' ? 'Términos y Condiciones' : 'Política de Privacidad', message: 'El documento oficial estará disponible antes de habilitar la creación de cuentas.' })} /></AuthLayout> : <SignInPage onHelp={openHelp} />}</Suspense>
     <NoticeDialog notice={notice} onClose={() => setNotice(null)} />
   </MotionConfig>;
 }

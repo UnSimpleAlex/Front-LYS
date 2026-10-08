@@ -106,7 +106,7 @@
   .promo-offer-card .promo-offer-border-trace rect { animation: none; stroke-dasharray: none; }
 }
 
-.promotions-page::before { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: url('/images/promotions/page-texture-white.webp') center top / 100% auto repeat-y; opacity: .08; }
+.promotions-page::before { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: url('/images/promotions/page-texture-white.webp') center top / 100% auto repeat-y; opacity: .14; }
 .promotions-container > section { margin-top: 18px; }
 .promo-offer-photo-beverage > img { object-fit: cover; object-position: center; }
 
