@@ -173,9 +173,8 @@ test('menú móvil y acciones pendientes tienen respuesta accesible', async ({ p
   await page.getByRole('navigation', { name: 'Navegación móvil' }).getByRole('button', { name: 'Promociones', exact: true }).click();
   await expect(menu).toHaveAttribute('aria-expanded', 'false');
   await page.getByRole('button', { name: 'Ver toda la carta' }).click();
-  await expect(page.getByRole('dialog')).toBeVisible();
-  await page.keyboard.press('Escape');
-  await expect(page.getByRole('dialog')).not.toBeVisible();
+  await expect(page).toHaveURL(/\/carta$/);
+  await expect(page.getByRole('heading', { name: 'Nuestra carta', exact: true })).toBeVisible();
 });
 test('gesto móvil y reducción de movimiento conservan el carrusel', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
