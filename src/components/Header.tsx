@@ -4,7 +4,8 @@ import { Icon } from './Icon';
 
 const sections = ['Inicio', 'Carta', 'Promociones', 'Nosotros', 'Locales', 'Contacto'];
 
-export function Header({ onSection, home = false, carta }: { onSection: (section: string) => void; home?: boolean; carta?: { query: string; onSearch: (query: string) => void; count: number; onCart: () => void } }) {
+export function Header({ onSection, home = false, carta, activeSection, theme }: { onSection: (section: string) => void; home?: boolean; activeSection?: string; theme?: string; carta?: { query: string; onSearch: (query: string) => void; count: number; onCart: () => void } }) {
+  const active = activeSection || (home ? 'Inicio' : carta ? 'Carta' : '');
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -21,12 +22,12 @@ export function Header({ onSection, home = false, carta }: { onSection: (section
     onSection(section);
   }
 
-  return <header className={`site-header${home ? ' home-header' : ''}${carta ? ' carta-header' : ''}`}>
+  return <header className={`site-header${home ? ' home-header' : ''}${carta ? ' carta-header' : ''}${theme === 'promotions' ? ' promotions-header' : ''}`}>
     <a className="brand" href="/" aria-label="Leñas y Sabores, inicio">
       <img src="/images/logo.webp" alt="Leñas y Sabores — Pollos & Parrillas" width="2048" height="682" />
     </a>
     <nav className="desktop-nav" aria-label="Navegación principal">
-      {sections.map((section) => <button key={section} type="button" className={(home && section === 'Inicio') || (carta && section === 'Carta') ? 'nav-link active' : 'nav-link'} aria-current={(home && section === 'Inicio') || (carta && section === 'Carta') ? 'page' : undefined} onClick={() => navigate(section)}>{section}</button>)}
+      {sections.map((section) => <button key={section} type="button" className={section === active ? 'nav-link active' : 'nav-link'} aria-current={section === active ? 'page' : undefined} onClick={() => navigate(section)}>{section}</button>)}
     </nav>
     <div className="header-actions">
       {carta && <><label className="carta-header-search"><Icon name="search" /><input type="search" aria-label="Buscar productos" placeholder="Buscar productos…" value={carta.query} onChange={event => carta.onSearch(event.target.value)} /></label><a href="#carta-search" className="carta-search-toggle" aria-label="Buscar en la carta"><Icon name="search" /></a><button type="button" className="carta-cart-toggle" aria-label={`Ver pedido, ${carta.count} productos`} onClick={carta.onCart}><Icon name="cart" />{carta.count > 0 && <span>{carta.count}</span>}</button></>}

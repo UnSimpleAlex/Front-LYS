@@ -171,8 +171,9 @@ test('menú móvil y acciones pendientes tienen respuesta accesible', async ({ p
   const menu = page.getByRole('button', { name: 'Abrir menú' });
   await menu.click();
   await page.getByRole('navigation', { name: 'Navegación móvil' }).getByRole('button', { name: 'Promociones', exact: true }).click();
-  await expect(menu).toHaveAttribute('aria-expanded', 'false');
-  await page.getByRole('button', { name: 'Ver toda la carta' }).click();
+  await expect(page.getByRole('heading', { name: 'Promociones que dan susto' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Abrir menú' })).toHaveAttribute('aria-expanded', 'false');
+  await page.getByRole('navigation', { name: 'Navegación inferior' }).getByRole('button', { name: 'Carta', exact: true }).click();
   await expect(page).toHaveURL(/\/carta$/);
   await expect(page.getByRole('heading', { name: 'Nuestra carta', exact: true })).toBeVisible();
 });

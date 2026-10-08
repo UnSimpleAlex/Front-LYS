@@ -1,9 +1,10 @@
 import { useEffect, useRef } from 'react';
+import '../styles/embers.css';
 
 type Ember = { x: number; y: number; size: number; angle: number; born: number; drift: number };
 
 /** Brasas decorativas: sólo se dibujan mientras hay partículas vivas. */
-export function LoadingEmbers() {
+export function EmberTrail() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -88,5 +89,5 @@ export function LoadingEmbers() {
       pointer.removeEventListener('change', clear);
     };
   }, []);
-  return <canvas ref={canvasRef} className="loading-embers" aria-hidden="true" />;
+  return <canvas ref={canvasRef} className="ember-trail" aria-hidden="true" />;
 }

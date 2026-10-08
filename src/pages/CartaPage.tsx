@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Header } from '../components/Header';
-import { Icon, type IconName } from '../components/Icon';
+import { BottomNavigation } from '../components/BottomNavigation';
+import { Icon } from '../components/Icon';
 import { HomeFooter } from '../features/home/HomeFooter';
 import { categories, type Product } from '../features/carta/catalog';
 import { useCarta } from '../features/carta/useCarta';
@@ -33,7 +34,7 @@ export function CartaPage({ onAction }: { onAction: (section: string) => void })
       </div>
       <HomeFooter onAction={onAction} />
     </main>
-    <nav className="carta-bottom-nav" aria-label="Navegación inferior">{[{ name: 'Inicio', icon: 'home' }, { name: 'Carta', icon: 'cutlery' }, { name: 'Promociones', icon: 'tag' }, { name: 'Locales', icon: 'pin' }].map(item => <button key={item.name} type="button" aria-current={item.name === 'Carta' ? 'page' : undefined} onClick={() => action(item.name)}><Icon name={item.icon as IconName} /><span>{item.name}</span></button>)}<a href="/iniciar-sesion"><Icon name="user" /><span>Mi cuenta</span></a></nav>
+    <BottomNavigation active="Carta" onAction={action} />
     <p className="sr-only" role="status">{carta.announcement}</p>
     <ProductDetail product={detail} onClose={() => setDetail(null)} onAdd={carta.add} /><CartaCart open={cartOpen} items={carta.cartItems} total={carta.total} onClose={() => setCartOpen(false)} onQuantity={carta.quantity} />
   </>;
