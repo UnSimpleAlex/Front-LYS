@@ -24,7 +24,7 @@ export function PromotionsPage({ onAction }: { onAction: (section: string) => vo
   return <>
     <Header onSection={action} activeSection="Promociones" theme="promotions" carta={{ query: cart.query, onSearch: cart.setQuery, count: cart.count, onCart: () => setCartOpen(true) }} />
     <main className="promotions-page" id="contenido"><EmberTrail />
-      <section className="promotions-hero" aria-labelledby="promotions-title"><picture className="promotions-hero-background"><source media="(max-width: 650px)" srcSet="/images/promotions/hero-mobile.webp" /><img src="/images/promotions/hero-desktop.webp" alt="Pollo a la brasa y papas en una edición de Halloween" width="1920" height="360" fetchPriority="high" /></picture>
+      <section className="promotions-hero" aria-labelledby="promotions-title"><picture className="promotions-hero-background"><source media="(max-width: 650px)" srcSet="/images/promotions/hero-mobile-v2.webp" /><img src="/images/promotions/hero-desktop-v3.webp" alt="Pollo a la brasa y papas en una edición de Halloween" width="1920" height="360" fetchPriority="high" /></picture>
         <div className="promotions-hero-copy"><h1 id="promotions-title"><span className="sr-only">Promociones que dan susto</span><img src="/images/promotions/title.webp" alt="" width="1200" height="420" /></h1><p>Sabores de temporada, por tiempo limitado</p></div>
         <p className="promotions-hero-note">El buen<br />pollo <span>también<br />da miedo…</span><br />de lo rico<br />que es</p>
       </section>

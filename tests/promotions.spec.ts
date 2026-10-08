@@ -4,11 +4,11 @@ test('promociones filtra, busca y agrega la cantidad al carrito compartido', asy
   await page.setViewportSize({ width: 1920, height: 1080 });
   await page.goto('/promociones');
   await expect(page.getByRole('heading', { name: 'Promociones que dan susto' })).toBeVisible();
-  await expect(page.locator('.promo-offer-card')).toHaveCount(3);
+  await expect(page.locator('.promo-offer-card')).toHaveCount(15);
   await page.getByRole('button', { name: 'Bebidas', exact: true }).click();
-  await expect(page.locator('.promo-offer-card')).toHaveCount(2);
+  await expect(page.locator('.promo-offer-card')).toHaveCount(3);
   await page.getByRole('button', { name: 'Todas', exact: true }).click();
-  await page.getByRole('searchbox', { name: 'Buscar productos' }).fill('familiar');
+  await page.getByRole('searchbox', { name: 'Buscar productos' }).fill('Combo Familiar del Terror');
   await expect(page.locator('.promo-offer-card')).toHaveCount(1);
   const card = page.locator('.promo-offer-card');
   await card.getByRole('button', { name: 'Aumentar cantidad de Combo Familiar del Terror' }).click();
@@ -32,14 +32,14 @@ test('búsqueda vacía y restauración de promociones', async ({ page }) => {
   await page.getByRole('searchbox', { name: 'Buscar productos' }).fill('no-existe');
   await expect(page.getByRole('heading', { name: 'No encontramos esa promoción' })).toBeVisible();
   await page.getByRole('button', { name: 'Ver todas las promociones' }).click();
-  await expect(page.locator('.promo-offer-card')).toHaveCount(3);
+  await expect(page.locator('.promo-offer-card')).toHaveCount(15);
 });
 
 for (const width of [240, 320, 360, 390, 430, 600, 768, 1024, 1280, 1440, 1920, 2560]) {
   test(`promociones responsive a ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.goto('/promociones');
-    await expect(page.locator('.promo-offer-card')).toHaveCount(3);
+    await expect(page.locator('.promo-offer-card')).toHaveCount(15);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     for (const img of await page.locator('main img').all()) { await img.scrollIntoViewIfNeeded(); await expect.poll(() => img.evaluate(el => (el as HTMLImageElement).naturalWidth)).toBeGreaterThan(0); }
     if (width <= 650) {
@@ -54,10 +54,11 @@ for (const width of [240, 320, 360, 390, 430, 600, 768, 1024, 1280, 1440, 1920, 
 
 test('brasas visibles al mouse y desactivadas con movimiento reducido', async ({ page }) => {
   await page.goto('/promociones');
-  const canvas = page.locator('.ember-trail');
+  await expect(page.locator('.promo-offer-card')).toHaveCount(15);
+  const canvas = page.locator('main.promotions-page .ember-trail');
   await expect(canvas).toBeVisible();
   await expect.poll(() => canvas.evaluate(el => (el as HTMLCanvasElement).width)).toBeGreaterThan(0);
-  const hasPixels = () => canvas.evaluate(el => { const c = el as HTMLCanvasElement; return c.getContext('2d')!.getImageData(0, 0, c.width, c.height).data.some((v, i) => i % 4 === 3 && v > 0); });
+  const hasPixels = () => canvas.evaluate(el => { const c = el as HTMLCanvasElement; return c.width > 0 && c.height > 0 && c.getContext('2d')!.getImageData(0, 0, c.width, c.height).data.some((v, i) => i % 4 === 3 && v > 0); });
   await page.mouse.move(100, 450);
   await page.mouse.move(200, 450, { steps: 8 });
   await expect.poll(hasPixels).toBe(true);
@@ -65,4 +66,21 @@ test('brasas visibles al mouse y desactivadas con movimiento reducido', async ({
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.mouse.move(300, 450, { steps: 8 });
   expect(await hasPixels()).toBe(false);
+});
+
+test('cada categoría ofrece al menos tres promociones propias y el contorno naranja recorre la tarjeta', async ({ page }) => {
+  await page.goto('/promociones');
+  for (const category of ['Combos', 'Familiares', 'Individuales', 'Bebidas', 'Acompañamientos']) {
+    await page.getByRole('button', { name: category, exact: true }).click();
+    await expect.poll(() => page.locator('.promo-offer-card').count()).toBeGreaterThanOrEqual(3);
+    if (category === 'Bebidas') await expect(page.locator('.promo-offer-grid')).toContainText('Inca Kola');
+  }
+  const card = page.locator('.promo-offer-card').first();
+  await card.hover();
+  const trace = card.locator('.promo-offer-border-trace');
+  await expect(trace).toHaveCSS('opacity', '1');
+  await expect(trace.locator('rect')).toHaveCSS('stroke', 'rgb(242, 122, 0)');
+  await expect(trace.locator('rect')).toHaveCSS('animation-name', 'promo-border-travel');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect(trace.locator('rect')).toHaveCSS('animation-name', 'none');
 });
