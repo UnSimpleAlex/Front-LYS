@@ -17,7 +17,7 @@
 .carta-hero-copy { position: absolute; left: 5%; top: 50%; transform: translateY(-50%); width: 38%; text-align: center; color: #fff; }
 .carta-hero h1 { margin: 0; }
 .carta-hero h1 img { width: 100%; height: clamp(85px, 8.5vw, 155px); object-fit: contain; display: block; }
-.carta-hero p { margin: 8px 0 0; font-size: clamp(15px, 1.7vw, 28px); }
+.carta-hero p { margin: 8px 0 0; font-family: Caveat, 'DM Sans', cursive; font-weight: 600; line-height: 1.15; font-size: clamp(15px, 1.7vw, 28px); }
 .carta-tagline-mobile, .carta-ornament { display: none; }
 .carta-container { width: 93%; max-width: 1800px; margin-inline: auto; padding-bottom: 50px; }
 .carta-toolbar { display: flex; gap: 12px; align-items: center; margin-top: 12px; padding: 10px 12px; border: 1px solid #f1f1f3; border-radius: 18px; box-shadow: 0 10px 26px #00000006; }
