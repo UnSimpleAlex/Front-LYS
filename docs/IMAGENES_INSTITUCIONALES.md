@@ -71,3 +71,18 @@ Nueva referencia del propietario: captura `codex-clipboard-deec404a-83a7-4754-bf
 
 ### about-restaurant-hero.webp · herramienta integrada image_gen
 Create one photorealistic landscape 1536x1024 decorative website hero image matching this precise composition: a Peruvian wood-fire roast chicken restaurant interior in the BACKGROUND, large red wall on upper right with tasteful simple white flame emblem and exact white sign 'LEÑAS Y SABORES', smaller 'Pollos & Parrillas'; rustic dark wooden tables and chairs, warm hanging copper lamps, amber cozy lighting, plants near far right. In FOREGROUND bottom center-right a large glossy golden whole roasted chicken with black char marks on a dark round wooden serving platter, generous chunky golden french fries on LEFT of chicken, little bowls of green, red and creamy dipping sauces at lower left of platter. Eye-level close food shot and recognizable spacious restaurant behind. Photo silhouette surrounded by rough horizontal white paint-brush edges fading to CLEAN WHITE background. Main subject concentrated in rightmost 80%, far left 20% white empty. Background WHITE not cream. Add only two small thin red diagonal brush accents next to platter left edge, fine pale pink herb line art at far upper left and far lower right. No headings, buttons, UI, watermark, extra labels. This is an imagined restaurant illustration for decorative use, not actual documentary photo. Crisp premium realistic restaurant food photography.
+
+## Locales: carrusel y vistas interiores
+
+La página sigue la referencia de «Nuestro local»: galería de tres imágenes a la izquierda, panel de dirección/horario/teléfono y enlace de búsqueda en Google Maps a la derecha. En móvil se apilan. Se conserva la fachada local-concept.webp y se generan dos interiores coherentes con ella. Son ilustraciones referenciales, identificadas como tales, no fotografías del negocio.
+
+Modo: herramienta integrada image_gen. Referencia arquitectónica: public/images/information/local-concept.webp. Archivos finales: public/images/information/local-interior-dining.webp y public/images/information/local-interior-window.webp. Se convierten de PNG a WebP sin cambiar la composición.
+
+Prompt común:
+Generate a photorealistic imagined interior view of the SAME Peruvian restaurant shown in the reference façade. Reference role: architectural and lighting continuity, not edit target. Match horizontal warm cedar wood ceiling, cream walls with subtle rooster mural, natural wood tables and chairs, woven wicker pendant lights, black metal framed glass frontage, lush potted greenery, cozy amber lighting at dusk. Landscape 3:2 architectural editorial photograph, full bleed, no collage, no borders, no UI, no captions or watermarks.
+
+local-interior-dining.webp:
+View one: standing just inside the front entrance looking across the spacious dining room toward the wood-fired chicken grill and steel extraction hood at back. Tables neatly set, a few families dining naturally in middle distance. Premium inviting realistic interior, straight vertical lines.
+
+local-interior-window.webp:
+View two: reverse angle from a quiet corner of the dining room looking toward the large glass front windows and door with twilight trees outside. Foreground neatly set wooden table with a plated roast chicken and fries; wider room visible, wicker pendants and warm wood overhead, a few diners discreetly in background. Distinct camera angle from first interior, same architecture.

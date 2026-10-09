@@ -120,3 +120,22 @@ test('preferencias y notificaciones leídas funcionan y persisten', async ({ pag
   await page.getByRole('button', { name: 'Marcar todas como leídas' }).click();
   await expect(page.locator('.notification-dot:not(.read)')).toHaveCount(0);
 });
+
+test('locales permite recorrer la galería y abrir la dirección real', async ({ page }) => {
+  await page.goto('/locales');
+  const photo = page.locator('.local-gallery-frame img');
+  await expect(photo).toHaveAttribute('src', /local-concept/);
+  await page.getByRole('button', { name: 'Imagen anterior', exact: true }).click();
+  await expect(photo).toHaveAttribute('src', /local-interior-window/);
+  await page.getByRole('button', { name: 'Imagen siguiente', exact: true }).click();
+  await expect(photo).toHaveAttribute('src', /local-concept/);
+  await page.getByRole('button', { name: 'Imagen siguiente', exact: true }).press('ArrowRight');
+  await expect(photo).toHaveAttribute('src', /local-interior-dining/);
+  await page.getByRole('button', { name: 'Ver imagen 3', exact: true }).click();
+  await expect(photo).toHaveAttribute('src', /local-interior-window/);
+  await expect(page.getByRole('button', { name: 'Ver imagen 3', exact: true })).toHaveAttribute('aria-current', 'true');
+  const maps = new URL((await page.getByRole('link', { name: 'Ver en Google Maps' }).getAttribute('href'))!);
+  expect(maps.hostname).toBe('www.google.com');
+  expect(maps.searchParams.get('query')).toContain('Los Palomares Mz. D Lt. 5');
+  await expect(page.locator('.local-visit-panel')).toContainText('947 540 597');
+});

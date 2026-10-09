@@ -1,0 +1,57 @@
+.locations-page { background: #fff; padding: 36px 0 56px; }
+.locations-page::before { content: none; }
+.locations-page .info-container { width: min(1600px, 94%); }
+.locations-page .local-visit-heading { text-align: center; margin: 0 auto 30px; }
+.locations-page .local-visit-heading h1 { margin: 0 0 10px; font-family: Knewave, Caveat, cursive; font-size: clamp(42px, 5.6vw, 86px); font-weight: 400; line-height: 1.35; letter-spacing: -.04em; }
+.locations-page .local-visit-heading h1 span { color: #ed0000; position: relative; display: inline-block; }
+.locations-page .local-visit-heading h1 span::after { content: ''; position: absolute; height: 5px; background: #ed0000; border-radius: 100%; bottom: 0; left: 6%; width: 90%; transform: rotate(-3deg); }
+.locations-page .local-visit-heading p { margin: 0; color: #727e99; font-size: clamp(15px, 1.6vw, 25px); line-height: 1.5; }
+.locations-page .local-visit-layout { display: grid; grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+.locations-page .local-gallery { min-width: 0; }
+.locations-page .local-gallery-frame { position: relative; border-radius: 18px; overflow: hidden; aspect-ratio: 2.04; background: #efe8e2; }
+.locations-page .local-gallery-frame > img { display: block; height: 100%; width: 100%; object-fit: cover; }
+.locations-page .local-gallery-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: clamp(40px, 3.8vw, 60px); height: clamp(40px, 3.8vw, 60px); padding: 12px; border-radius: 50%; border: none; color: #141414; background: #fff; box-shadow: 0 2px 12px #0002; cursor: pointer; }
+.locations-page .local-gallery-arrow svg { width: 100%; height: 100%; }
+.locations-page .local-gallery-previous { left: 14px; }
+.locations-page .local-gallery-next { right: 14px; }
+.locations-page .local-gallery-previous svg { transform: rotate(90deg); }
+.locations-page .local-gallery-next svg { transform: rotate(-90deg); }
+.locations-page .local-gallery-dots { display: flex; justify-content: center; margin-top: 8px; }
+.locations-page .local-gallery-dots button { width: 28px; height: 32px; border: 0; background: transparent; display: grid; place-items: center; cursor: pointer; }
+.locations-page .local-gallery-dots span { width: 12px; height: 12px; border-radius: 50%; background: #dcdfe4; }
+.locations-page .local-gallery-dots [aria-current] span { background: #ed0000; }
+.locations-page .local-gallery-caption { text-align: center; font-size: 11px; color: #747474; margin: 0; }
+.locations-page .local-visit-panel { padding: clamp(20px, 2vw, 32px); border: 1px solid #f0f0f0; border-radius: 20px; background: #fff; box-shadow: 0 8px 30px #24202008; }
+.locations-page .local-visit-detail { display: flex; align-items: center; gap: 20px; padding: 16px 0 24px; }
+.locations-page .local-visit-detail + .local-visit-detail { border-top: 1px solid #e4e7ed; padding-top: 24px; }
+.locations-page .local-visit-icon { width: 64px; height: 64px; flex: 0 0 64px; border-radius: 50%; background: #fff0f1; display: grid; place-items: center; color: #ed0000; }
+.locations-page .local-visit-icon svg { width: 36px; height: 36px; }
+.locations-page .local-visit-detail h2 { font-size: 18px; line-height: 1.35; margin: 0 0 6px; color: #111; }
+.locations-page .local-visit-detail p, .locations-page .local-visit-detail a { font-size: 15px; line-height: 1.5; color: #727e99; margin: 0; overflow-wrap: anywhere; }
+.locations-page .local-visit-detail a { text-decoration: none; }
+.locations-page .local-maps-button { display: flex; justify-content: center; align-items: center; gap: 14px; padding: 19px 12px; border-radius: 14px; background: #ed0000; color: #fff; text-decoration: none; font-size: 17px; line-height: 1.4; text-align: center; }
+.locations-page .local-maps-button svg { width: 25px; height: 25px; flex-shrink: 0; }
+.locations-page button:focus-visible, .locations-page a:focus-visible { outline: 3px solid #252525; outline-offset: 4px; }
+@media (max-width: 1100px) {
+  .locations-page .local-visit-layout { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 18px; }
+  .locations-page .local-gallery-frame { aspect-ratio: 1.45; }
+  .locations-page .local-visit-icon { width: 48px; height: 48px; flex-basis: 48px; }
+  .locations-page .local-visit-icon svg { width: 28px; height: 28px; }
+  .locations-page .local-visit-detail { gap: 12px; }
+}
+@media (max-width: 800px) {
+  .locations-page { padding: 24px 0 38px; }
+  .locations-page .local-visit-layout { grid-template-columns: minmax(0, 1fr); }
+  .locations-page .local-gallery-frame { aspect-ratio: 1.6; }
+  .locations-page .local-visit-heading { margin-bottom: 24px; }
+  .locations-page .local-visit-panel { padding: 18px 22px; }
+}
+@media (max-width: 360px) {
+  .locations-page .local-visit-heading h1 { font-size: 36px; }
+  .locations-page .local-visit-panel { padding: 14px; }
+  .locations-page .local-visit-detail { align-items: start; gap: 10px; }
+  .locations-page .local-visit-detail h2 { font-size: 16px; }
+  .locations-page .local-visit-icon { width: 38px; height: 38px; flex-basis: 38px; }
+  .locations-page .local-maps-button { gap: 8px; font-size: 14px; }
+  .locations-page .local-maps-button svg { width: 18px; }
+}

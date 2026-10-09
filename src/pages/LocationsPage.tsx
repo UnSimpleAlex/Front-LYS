@@ -1,8 +1,53 @@
-import { lazy, Suspense } from 'react';
+import { useState } from 'react';
 import { Icon } from '../components/Icon';
-import { PageHero, InformationNavigation, ContactDetails, SocialLinks } from '../features/information/InformationShared';
+import { InformationNavigation } from '../features/information/InformationShared';
 import { business } from '../features/information/business';
-const BusinessMap = lazy(() => import('../features/information/BusinessMap').then(module => ({ default: module.BusinessMap })));
+import '../styles/locations-reference.css';
+
+const photos = [
+  { src: '/images/information/local-concept.webp', alt: 'Vista exterior referencial de Leñas y Sabores' },
+  { src: '/images/information/local-interior-dining.webp', alt: 'Vista interior referencial del salón y las parrillas' },
+  { src: '/images/information/local-interior-window.webp', alt: 'Vista interior referencial de las mesas junto a las ventanas' },
+];
+const googleMaps = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(`${business.name}, ${business.address}, ${business.reference}, ${business.district}`);
+
 export function LocationsPage({ onAction }: { onAction: (action: string) => void }) {
-  return <><main id="contenido" className="information-page locations-page"><div className="info-container"><PageHero eyebrow="Nuestro local" title="Visítanos en" accent="Carabayllo" description="Disfruta de nuestro delicioso pollo a la leña y parrillas en un ambiente familiar." /><section className="locations-layout"><figure className="local-photo"><img src="/images/information/local-concept.webp" width="1536" height="1024" alt="Ilustración conceptual de una fachada de Leñas y Sabores" /><figcaption>Ilustración referencial del local</figcaption></figure><div className="info-card local-information"><div className="info-section-title"><Icon name="pin" /><div><p className="info-eyebrow">Nuestra ubicación</p><h2>Carabayllo, Lima</h2></div></div><Suspense fallback={<p>Cargando mapa…</p>}><BusinessMap /></Suspense><p className="local-address"><strong>{business.address}</strong><br />{business.reference}</p><ContactDetails /><SocialLinks onAction={onAction} /></div></section></div></main><InformationNavigation active="Locales" onAction={onAction} /></>;
+  const [selected, setSelected] = useState(0);
+  const move = (direction: number) => setSelected(current => (current + direction + photos.length) % photos.length);
+
+  return <>
+    <main id="contenido" className="information-page locations-page">
+      <div className="info-container">
+        <header className="local-visit-heading">
+          <h1>Nuestro <span>local</span></h1>
+          <p>Disfruta de nuestro auténtico sabor en un ambiente acogedor.</p>
+        </header>
+        <section className="local-visit-layout" aria-label="Conoce nuestro local">
+          <div className="local-gallery" role="region" aria-roledescription="carrusel" aria-label="Imágenes del local" onKeyDown={event => {
+            if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+              event.preventDefault();
+              move(event.key === 'ArrowLeft' ? -1 : 1);
+            }
+          }}>
+            <div className="local-gallery-frame">
+              <img src={photos[selected].src} alt={photos[selected].alt} width="1536" height="1024" />
+              <button className="local-gallery-arrow local-gallery-previous" aria-label="Imagen anterior" onClick={() => move(-1)}><Icon name="chevron" /></button>
+              <button className="local-gallery-arrow local-gallery-next" aria-label="Imagen siguiente" onClick={() => move(1)}><Icon name="chevron" /></button>
+            </div>
+            <div className="local-gallery-dots" aria-label="Seleccionar imagen">
+              {photos.map((photo, index) => <button key={photo.src} aria-label={`Ver imagen ${index + 1}`} aria-current={selected === index ? 'true' : undefined} onClick={() => setSelected(index)}><span /></button>)}
+            </div>
+            <p className="local-gallery-caption" aria-live="polite">Imagen {selected + 1} de 3 · Ilustraciones referenciales del local</p>
+          </div>
+          <aside className="local-visit-panel" aria-label="Información para visitarnos">
+            <div className="local-visit-detail"><span className="local-visit-icon"><Icon name="pin" /></span><div><h2>Nuestra ubicación</h2><p>{business.address}<br />{business.reference}<br />{business.district}</p></div></div>
+            <div className="local-visit-detail"><span className="local-visit-icon"><Icon name="clock" /></span><div><h2>Horario de atención</h2><p>{business.hours}</p></div></div>
+            <div className="local-visit-detail"><span className="local-visit-icon"><Icon name="phone" /></span><div><h2>Contáctanos</h2><a href="tel:+51947540597">+51 {business.phone}</a></div></div>
+            <a className="local-maps-button" href={googleMaps} target="_blank" rel="noopener noreferrer"><Icon name="pin" /><span>Ver en Google Maps</span><Icon name="arrow" /></a>
+          </aside>
+        </section>
+      </div>
+    </main>
+    <InformationNavigation active="Locales" onAction={onAction} />
+  </>;
 }
