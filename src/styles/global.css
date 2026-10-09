@@ -26,3 +26,6 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 .notice-dialog .primary-button { min-height: 48px; font-size: 18px; letter-spacing: 0; }
 .dialog-close { position: absolute; right: 8px; top: 8px; width: 44px; height: 44px; display: grid; place-items: center; border: 0; background: none; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+
+/* Fondos blancos para todas las superficies de página. */
+body,.auth-page,.auth-layout,.home-page,.information-page,.account-page,.carta-page,.promotions-page,.checkout-page{background-color:#fff!important}

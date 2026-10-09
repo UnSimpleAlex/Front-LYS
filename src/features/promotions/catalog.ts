@@ -1,3 +1,4 @@
+import { getOperations, subscribeOperations } from '../operations/operationsStore';
 import { products, type Product } from '../carta/catalog';
 import type { IconName } from '../../components/Icon';
 
@@ -46,3 +47,6 @@ export const promotions: Promotion[] = seasonalPromotions.map((promotion, index)
   const label = promotionLabels[index % promotionLabels.length];
   return { ...promotion, badge: label.name, badgeIcon: label.icon, badgeTone: label.tone };
 });
+
+function updateOffers(){const state=getOperations();const today=new Date().toISOString().slice(0,10);const created:Promotion[]=state.offers.filter(o=>o.active&&o.type!=='Cupón'&&o.start<=today&&o.end>=today&&o.used<o.limit).flatMap(o=>{const p=state.products.find(p=>p.id===o.productId&&p.active&&(p.stock??0)>0);return p?[{...p,id:'offer-'+o.id,name:o.name,originalPrice:p.price,price:Math.round(p.price*(1-o.percent/100)*100)/100,badge:'-'+o.percent+'%',badgeIcon:'tag',badgeTone:'red',filters:[p.category,o.type==='Combo'?'combos':'individuales']} as Promotion]:[];});promotions.splice(0,promotions.length,...created,...seasonalPromotions.map((p,i)=>({...p,badge:promotionLabels[i%promotionLabels.length].name,badgeIcon:promotionLabels[i%promotionLabels.length].icon,badgeTone:promotionLabels[i%promotionLabels.length].tone})));}
+updateOffers();subscribeOperations(updateOffers);

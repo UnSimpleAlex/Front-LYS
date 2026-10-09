@@ -1,7 +1,9 @@
+import { getOperations, orderTotal } from '../operations/operationsStore';
+import { currentUser } from '../../services/localAuth';
 import { cartProducts } from '../carta/cartStore';
 import type { Receipt } from '../checkout/useCheckout';
 import { savedReceipt, receiptHistory } from '../checkout/receiptStorage';
-export type AccountOrder = Receipt & { status: 'Registrado' | 'En preparación' | 'Entregado' | 'Cancelado'; example?: boolean };
+export type AccountOrder = Receipt & { status: 'Registrado' | 'En preparación' | 'Listo' | 'En camino' | 'Entregado' | 'Cancelado'; example?: boolean };
 const statuses: AccountOrder['status'][] = ['Entregado', 'En preparación', 'Cancelado', 'Entregado'];
 export function exampleOrders(): AccountOrder[] {
   return statuses.map((status, index) => {
@@ -13,5 +15,5 @@ export function accountOrders(): AccountOrder[] {
   const receipt = savedReceipt();
   const found = receiptHistory();
   if (receipt && !found.some(order => order.code === receipt.code)) found.unshift(receipt);
-  return found.map(order => ({ ...order, status: 'Registrado' }));
+  return getOperations().orders.filter(o=>o.customerId===currentUser()?.id&&!o.draft).map(o=>({code:o.id,date:o.created,items:o.items,delivery:{mode:o.channel==='Recojo'?'pickup':'delivery',address:o.address,district:'',label:'',reference:'',instructions:o.notes,name:o.customer,phone:o.phone,email:o.email,store:'Local principal'},method:({Tarjeta:'card',Yape:'yape',Plin:'plin',Efectivo:'cash'} as const)[o.method as 'Tarjeta']||'cash',subtotal:o.items.reduce((s,l)=>s+l.count*l.product.price,0),shipping:o.shipping,discount:o.discount,total:orderTotal(o),status:o.status==='Recibido'?'Registrado':o.status}));
 }
