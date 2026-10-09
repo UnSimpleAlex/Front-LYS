@@ -18,6 +18,7 @@ export function DeliveryMap({ point, onChange }: { point?: DeliveryPoint | null;
   const map = useRef<L.Map | null>(null);
   const marker = useRef<L.Marker | null>(null);
   const tiles = useRef<L.TileLayer | null>(null);
+  const accuracyArea = useRef<L.Circle | null>(null);
   const select = useRef(onChange);
   const active = useRef(false);
   const geoRequest = useRef(0);
@@ -55,7 +56,7 @@ export function DeliveryMap({ point, onChange }: { point?: DeliveryPoint | null;
       geoRequest.current += 1;
       window.clearTimeout(timeout);
       observer.disconnect();
-      instance.remove(); map.current = null; marker.current = null; tiles.current = null;
+      instance.remove(); map.current = null; marker.current = null; tiles.current = null; accuracyArea.current = null;
     };
   }, []);
 
@@ -68,7 +69,7 @@ export function DeliveryMap({ point, onChange }: { point?: DeliveryPoint | null;
       placed.on('dragend', () => { const position = placed.getLatLng().wrap(); selectManually({ lat: Number(position.lat.toFixed(6)), lng: Number(position.lng.toFixed(6)) }); });
       marker.current = placed;
     } else marker.current.setLatLng([point.lat, point.lng]);
-    instance.setView([point.lat, point.lng], Math.max(instance.getZoom(), 16), { animate: false });
+    instance.setView([point.lat, point.lng], Math.max(instance.getZoom(), 18), { animate: false });
   }, [point]);
 
   function locate() {
@@ -80,13 +81,17 @@ export function DeliveryMap({ point, onChange }: { point?: DeliveryPoint | null;
       const next = { lat: position.coords.latitude, lng: position.coords.longitude };
       setLocating(false);
       if (!validPoint(next)) { setGeoMessage('No pudimos obtener una ubicación válida. Marca el punto en el mapa.'); return; }
+      map.current?.invalidateSize({ pan: false });
+      map.current?.setView([next.lat, next.lng], 18, { animate: false });
+      accuracyArea.current?.remove();
+      if (map.current && Number.isFinite(position.coords.accuracy)) accuracyArea.current = L.circle([next.lat, next.lng], { radius: position.coords.accuracy, color: '#2563eb', weight: 1, fillOpacity: 0.08, interactive: false }).addTo(map.current);
       select.current({ lat: Number(next.lat.toFixed(6)), lng: Number(next.lng.toFixed(6)) });
-      setGeoMessage(`Ubicación encontrada (precisión aproximada: ${Math.round(position.coords.accuracy)} m). Ajusta el marcador hasta la entrada de tu domicilio.`);
+      setGeoMessage(`Ubicación encontrada (precisión aproximada: ${Math.round(position.coords.accuracy)} m). ${position.coords.accuracy > 150 ? 'Tu dispositivo dio una ubicación aproximada; mueve el marcador hasta tu domicilio.' : 'Ajusta el marcador hasta la entrada de tu domicilio.'}`);
     }, error => {
       if (!active.current || request !== geoRequest.current) return;
       setLocating(false);
       setGeoMessage(error.code === 1 ? 'No se autorizó el acceso a tu ubicación. Puedes seleccionar el punto en el mapa.' : 'No pudimos obtener tu ubicación. Inténtalo de nuevo o marca el punto en el mapa.');
-    }, { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 });
+    }, { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 });
   }
 
   return <section className="delivery-map-picker" aria-labelledby="delivery-map-title">
@@ -94,7 +99,7 @@ export function DeliveryMap({ point, onChange }: { point?: DeliveryPoint | null;
     <p id="delivery-map-instructions">Toca el mapa para marcar la entrada de tu domicilio o arrastra el marcador. Completa también la calle, el número y el distrito.</p>
     <div className="delivery-map-canvas" ref={container} role="region" aria-label="Mapa para seleccionar la ubicación de entrega" aria-describedby="delivery-map-instructions" />
     <div className="delivery-map-actions"><button type="button" className="checkout-text-button" onClick={() => { const center = map.current?.getCenter().wrap(); if (center) selectManually({ lat: Number(center.lat.toFixed(6)), lng: Number(center.lng.toFixed(6)) }); }}>Marcar el centro del mapa</button>{validPoint(point) && <button type="button" className="checkout-text-button" onClick={() => selectManually(null)}>Quitar ubicación</button>}</div>
-    <p role="status" className="delivery-map-selection">{validPoint(point) ? `Punto seleccionado: ${point.lat.toFixed(6)}, ${point.lng.toFixed(6)}` : 'Todavía no seleccionaste un punto en el mapa.'}</p>
+    <p role="status" className="delivery-map-selection"><Icon name="pin" />{validPoint(point) ? `Punto seleccionado: ${point.lat.toFixed(6)}, ${point.lng.toFixed(6)}` : 'Todavía no seleccionaste un punto en el mapa.'}</p>
     {geoMessage && <p className="delivery-map-message" role="status">{geoMessage}</p>}
     {tileStatus === 'loading' && <p className="delivery-map-message" role="status">Cargando mapa…</p>}
     {tileStatus === 'error' && <p className="delivery-map-message" role="status">No pudimos cargar parte del mapa. Revisa tu conexión; puedes continuar con la dirección escrita. <button type="button" className="checkout-text-button" onClick={() => { setTileStatus('loading'); tiles.current?.redraw(); }}>Reintentar</button></p>}

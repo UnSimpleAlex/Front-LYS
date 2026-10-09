@@ -56,6 +56,9 @@ test('ubicación actual solo se usa al pulsar el botón y permite ajustar el pun
   await page.getByRole('button', { name: 'Usar mi ubicación', exact: true }).click();
   await expect(page.locator('.delivery-map-selection')).toHaveText('Punto seleccionado: -12.119000, -76.991000');
   await expect(page.locator('.delivery-map-message')).toContainText('25 m');
+  await expect(page.locator('.leaflet-tile').first()).toHaveAttribute('src', /\/18\//);
+  await page.getByRole('button', { name: 'Marcar el centro del mapa' }).click();
+  await expect(page.locator('.delivery-map-selection')).toHaveText('Punto seleccionado: -12.119000, -76.991000');
   await page.getByRole('button', { name: 'Quitar ubicación' }).click();
   await expect(page.locator('.delivery-map-pin')).toHaveCount(0);
 });

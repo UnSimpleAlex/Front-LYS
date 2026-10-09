@@ -1,6 +1,6 @@
 # Mapa real de entrega
 
-En `/checkout/entrega` el cliente puede tocar el mapa, arrastrar el marcador o desplazarlo con las flechas del teclado y pulsar «Marcar el centro del mapa». «Usar mi ubicación» solicita geolocalización únicamente al pulsarlo, sujeto al permiso del navegador. En producción requiere HTTPS (localhost permite pruebas). Una selección manual cancela el resultado de una solicitud de ubicación pendiente.
+En `/checkout/entrega` el cliente puede tocar el mapa, arrastrar el marcador o desplazarlo con las flechas del teclado y pulsar «Marcar el centro del mapa». «Usar mi ubicación» solicita geolocalización únicamente al pulsarlo, sujeto al permiso del navegador. En producción requiere HTTPS (localhost permite pruebas). Una selección manual cancela el resultado de una solicitud de ubicación pendiente. Se solicita una posición nueva (maximumAge: 0), alta precisión y hasta 20 segundos de espera; el mapa centra esa posición a zoom 18. Un círculo representa el margen de precisión recibido, sin prometer precisión GPS cuando el dispositivo solo ofrece una ubicación aproximada.
 
 El mapa inicial de Lima es solo contexto: no se asigna una dirección ni un punto automáticamente. La calle, número, distrito y referencia se completan en el formulario; no se realiza búsqueda ni geocodificación inversa. Cambiar calle o distrito descarta el punto anterior. El punto es opcional, de modo que un error de conexión o permiso denegado no bloquea el formulario.
 
