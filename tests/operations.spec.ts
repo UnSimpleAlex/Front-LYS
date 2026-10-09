@@ -75,14 +75,12 @@ test("pedido compartido: salón → cocina → entrega → caja → comprobante 
   await expect(
     page
       .getByRole("heading", { name: "Pedidos pendientes de cobro" })
-      .locator("..")
-      .locator(".."),
+      .locator("xpath=ancestor::section[1]"),
   ).toContainText("No hay pedidos pendientes");
   await expect(
     page
       .getByRole("heading", { name: "Pagos recientes" })
-      .locator("..")
-      .locator(".."),
+      .locator("xpath=ancestor::section[1]"),
   ).toContainText("Pagado");
   await page
     .getByRole("button", { name: "Emitir comprobante", exact: true })
@@ -222,7 +220,7 @@ for (const width of [240, 390, 768, 1024, 1920])
               .map((i) => i.getAttribute("src")),
           ),
       ).toEqual([]);
-      if ([390, 1920].includes(width))
+      if ([390, 768, 1920].includes(width))
         await page.screenshot({
           path: `test-results/ops-${route.replaceAll("/", "-")}-${width}.png`,
           fullPage: true,
@@ -333,4 +331,33 @@ test("administración vincula catálogo, cupones, stock y caja entre pestañas",
     if (!blocked) throw new Error("Salón editó configuración");
   });
   await expect(second.locator(".login-link")).toContainText("Demo Salón");
+});
+
+test("inventario muestra el formulario al editar o crear y guarda el insumo", async ({
+  page,
+}) => {
+  await setup(page);
+  await login(page, "administrador");
+  await page.goto("/administrador/inventario");
+  await expect(
+    page.getByRole("heading", { name: "Nuevo / Editar insumo" }),
+  ).toHaveCount(0);
+  await page.getByRole("button", { name: "Nuevo insumo" }).click();
+  const form = page.locator('section[data-panel="Nuevo / Editar insumo"]');
+  await form.getByLabel("Nombre", { exact: true }).fill("Aceite de prueba");
+  await form.getByLabel("Categoría", { exact: true }).fill("Aceites");
+  await form.getByLabel("Unidad", { exact: true }).fill("litros");
+  await form.getByLabel("Stock actual", { exact: true }).fill("15");
+  await form.getByLabel("Stock mínimo", { exact: true }).fill("20");
+  await form.getByLabel("Costo unitario (S/)", { exact: true }).fill("10");
+  await form.getByRole("button", { name: "Guardar insumo" }).click();
+  await expect(form).toHaveCount(0);
+  const row = page.locator("tbody tr").filter({ hasText: "Aceite de prueba" });
+  await expect(row).toContainText("Stock bajo");
+  await row.getByRole("button", { name: "Editar", exact: true }).click();
+  await expect(form.getByLabel("Nombre", { exact: true })).toHaveValue(
+    "Aceite de prueba",
+  );
+  await form.getByRole("button", { name: "Cerrar formulario" }).click();
+  await expect(form).toHaveCount(0);
 });
