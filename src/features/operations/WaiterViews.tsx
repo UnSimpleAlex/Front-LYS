@@ -1,3 +1,4 @@
+import { OperationsTable } from "./OperationsTable";
 import { Icon, ProductSummary } from "./OperationsVisuals";
 import { dateText, printLocal } from "./operationsFiles";
 import { useState } from "react";
@@ -492,7 +493,7 @@ export function WaiterViews({
             }
           >
             <div className="ops-table-wrap">
-              <table>
+              <OperationsTable>
                 <thead>
                   <tr>
                     <th>Mesa</th>
@@ -531,7 +532,7 @@ export function WaiterViews({
                     </tr>
                   ))}
                 </tbody>
-              </table>
+              </OperationsTable>
             </div>
             {!orders.length && <Empty />}
             <button
@@ -764,7 +765,7 @@ export function WaiterViews({
           <div className="ops-two-main">
             <Panel title="Pedidos de salón">
               <div className="ops-table-wrap">
-                <table>
+                <OperationsTable>
                   <thead>
                     <tr>
                       <th>Mesa</th>
@@ -864,7 +865,7 @@ export function WaiterViews({
                         </tr>
                       ))}
                   </tbody>
-                </table>
+                </OperationsTable>
               </div>
               {!orders.length && <Empty />}
             </Panel>

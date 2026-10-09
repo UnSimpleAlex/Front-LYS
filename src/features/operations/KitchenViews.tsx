@@ -1,3 +1,4 @@
+import { OperationsTable } from "./OperationsTable";
 import { Icon, ProductSummary } from "./OperationsVisuals";
 import { dateText, downloadCsv } from "./operationsFiles";
 import { useState } from "react";
@@ -375,7 +376,7 @@ export function KitchenViews({
               />
             </div>
             <div className="ops-table-wrap">
-              <table>
+              <OperationsTable>
                 <thead>
                   <tr>
                     <th>Pedido</th>
@@ -415,7 +416,7 @@ export function KitchenViews({
                     </tr>
                   ))}
                 </tbody>
-              </table>
+              </OperationsTable>
             </div>
             {!filtered.length && <Empty />}
           </Panel>
@@ -490,7 +491,7 @@ export function KitchenViews({
               onChange={setFilter}
             />
             <div className="ops-table-wrap">
-              <table>
+              <OperationsTable>
                 <thead>
                   <tr>
                     <th>Pedido</th>
@@ -542,7 +543,7 @@ export function KitchenViews({
                       </tr>
                     ))}
                 </tbody>
-              </table>
+              </OperationsTable>
             </div>
           </Panel>
         </>

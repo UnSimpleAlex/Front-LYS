@@ -1,3 +1,4 @@
+import { OperationsTable } from "./OperationsTable";
 import { SupplySummary, Icon, UserSummary } from "./OperationsVisuals";
 import { readUpload } from "./imageUpload";
 import { useState } from "react";
@@ -111,7 +112,7 @@ export function ProductManager({
             </select>
           </div>
           <div className="ops-table-wrap">
-            <table>
+            <OperationsTable>
               <thead>
                 <tr>
                   {[
@@ -170,10 +171,14 @@ export function ProductManager({
                     </td>
                     <td>
                       <div className="ops-actions">
-                        <button onClick={() => setProduct({ ...p })}>
+                        <button
+                          title={`Editar ${p.name}`}
+                          onClick={() => setProduct({ ...p })}
+                        >
                           <Icon name="edit" /> Editar
                         </button>
                         <button
+                          title={`Desactivar ${p.name}`}
                           onClick={() => notify(() => deleteProduct(p.id))}
                         >
                           <Icon name="trash" /> Desactivar
@@ -183,7 +188,7 @@ export function ProductManager({
                   </tr>
                 ))}
               </tbody>
-            </table>
+            </OperationsTable>
           </div>
           <div className="ops-pagination">
             <span>{rows.length} productos</span>
@@ -384,7 +389,7 @@ export function PromotionManager({
             />
           </div>
           <div className="ops-table-wrap">
-            <table>
+            <OperationsTable>
               <thead>
                 <tr>
                   <th>Promoción</th>
@@ -470,7 +475,7 @@ export function PromotionManager({
                     </tr>
                   ))}
               </tbody>
-            </table>
+            </OperationsTable>
             {!data.offers.length && (
               <Empty>Crea una promoción para mostrarla en la carta.</Empty>
             )}
@@ -686,7 +691,7 @@ export function UserManager({
             )}
           </div>
           <div className="ops-table-wrap">
-            <table>
+            <OperationsTable>
               <thead>
                 <tr>
                   <th>Usuario</th>
@@ -752,7 +757,7 @@ export function UserManager({
                     </tr>
                   ))}
               </tbody>
-            </table>
+            </OperationsTable>
             {!users.length && <Empty />}
           </div>
         </Panel>
@@ -1020,7 +1025,7 @@ export function InventoryManager({
               onChange={(e) => setSearch(e.target.value)}
             />
             <div className="ops-table-wrap">
-              <table>
+              <OperationsTable>
                 <thead>
                   <tr>
                     {[
@@ -1078,7 +1083,7 @@ export function InventoryManager({
                       </tr>
                     ))}
                 </tbody>
-              </table>
+              </OperationsTable>
             </div>
             {movement && (
               <form

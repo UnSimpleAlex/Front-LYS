@@ -1,3 +1,4 @@
+import { OperationsTable } from "./OperationsTable";
 import {
   Icon,
   ProductSummary,
@@ -100,7 +101,7 @@ export function CashViews({
     );
   const transactions = (
     <div className="ops-table-wrap">
-      <table>
+      <OperationsTable>
         <thead>
           <tr>
             {[
@@ -165,7 +166,7 @@ export function CashViews({
               );
             })}
         </tbody>
-      </table>
+      </OperationsTable>
       {!data.payments.length && <Empty>No hay pagos registrados.</Empty>}
     </div>
   );
@@ -337,7 +338,7 @@ export function CashViews({
               onChange={setFilter}
             />
             <div className="ops-table-wrap">
-              <table>
+              <OperationsTable>
                 <thead>
                   <tr>
                     <th>Pedido</th>
@@ -386,7 +387,7 @@ export function CashViews({
                       </tr>
                     ))}
                 </tbody>
-              </table>
+              </OperationsTable>
               {pending.length > pendingLimit && (
                 <button
                   className="ops-outline"
@@ -558,7 +559,7 @@ export function CashViews({
               onChange={(e) => setSearch(e.target.value)}
             />
             <div className="ops-table-wrap">
-              <table>
+              <OperationsTable>
                 <thead>
                   <tr>
                     <th>Serie y número</th>
@@ -605,7 +606,7 @@ export function CashViews({
                       </tr>
                     ))}
                 </tbody>
-              </table>
+              </OperationsTable>
               {!data.vouchers.length && <Empty />}
             </div>
           </Panel>

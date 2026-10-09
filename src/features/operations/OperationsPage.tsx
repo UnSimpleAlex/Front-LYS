@@ -16,6 +16,7 @@ import "../../styles/operations.css";
 import "../../styles/operations-fidelity.css";
 import "../../styles/operations-fidelity-layout.css";
 import "../../styles/operations-fidelity-responsive.css";
+import "../../styles/operations-adaptive.css";
 const menus: Record<string, [string, string, IconName][]> = {
   cocina: [
     ["", "Panel cocina", "chef"],
@@ -189,13 +190,15 @@ export function OperationsPage({
         </a>
         <button
           className="ops-menu"
-          aria-label="Abrir menú del panel"
+          aria-label={menu ? "Cerrar menú del panel" : "Abrir menú del panel"}
           aria-expanded={menu}
+          aria-controls="ops-navigation"
           onClick={() => setMenu(!menu)}
         >
           <Icon name="menu" />
         </button>
         <nav
+          id="ops-navigation"
           className={menu ? "open" : ""}
           aria-label={`Navegación ${roleNames[role as Role]}`}
         >
@@ -249,6 +252,8 @@ export function OperationsPage({
           </button>
           <button
             className="ops-user"
+            aria-label={`Cuenta de ${user.name}`}
+            title={`${user.name} · ${roleNames[user.role]}`}
             aria-expanded={profile}
             onClick={() => setProfile(!profile)}
           >

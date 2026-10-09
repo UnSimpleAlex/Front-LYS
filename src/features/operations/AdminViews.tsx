@@ -1,3 +1,4 @@
+import { OperationsTable } from "./OperationsTable";
 import {
   SupplySummary,
   Icon,
@@ -125,7 +126,7 @@ export function AdminViews({
   );
   const table = (
     <div className="ops-table-wrap">
-      <table>
+      <OperationsTable>
         <thead>
           <tr>
             {[
@@ -181,7 +182,7 @@ export function AdminViews({
             </tr>
           ))}
         </tbody>
-      </table>
+      </OperationsTable>
       {!filtered.length && <Empty />}
     </div>
   );
