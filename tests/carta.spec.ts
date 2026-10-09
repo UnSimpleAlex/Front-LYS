@@ -78,11 +78,11 @@ test('favoritos, detalle y carrito conservan selección después de recargar', a
   await page.getByRole('button', { name: 'Agregar Pollo entero', exact: true }).click();
   await page.reload();
   await page.getByRole('button', { name: 'Ver pedido, 2 productos', exact: true }).click();
-  await expect(page.getByRole('dialog')).toContainText('S/ 125.80');
+  await expect(page).toHaveURL(/carrito$/);
+  await expect(page.locator('.checkout-totals')).toContainText('S/ 125.80');
   await page.getByRole('button', { name: 'Quitar una unidad de Pollo entero' }).click();
-  await expect(page.getByRole('dialog')).toContainText('S/ 62.90');
-  await page.keyboard.press('Escape');
-  await expect(page.getByRole('dialog')).toHaveCount(0);
+  await expect(page.locator('.checkout-totals')).toContainText('S/ 62.90');
+  await page.getByRole('navigation', { name: 'Navegación principal' }).getByRole('button', { name: 'Carta', exact: true }).click();
   await page.getByRole('button', { name: 'Mis favoritos', exact: true }).click();
   await expect(page.locator('.product-card')).toHaveCount(1);
 });

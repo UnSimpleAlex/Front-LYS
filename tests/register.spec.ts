@@ -45,10 +45,12 @@ test('registro valida campos, coincidencia, términos y navegación sin simular 
   await page.keyboard.press('Escape');
   await page.getByRole('checkbox').check();
   await page.getByRole('button', { name: 'Crear cuenta', exact: true }).click();
-  await expect(page.getByRole('status')).toContainText('Tus datos no se han enviado');
+  await expect(page).toHaveURL(/mi-cuenta$/);
+  expect(await page.evaluate(()=>localStorage.getItem('lys-session-v1'))).not.toBeNull();
+  await page.evaluate(async()=>{const auth=await import(String('/src/services/localAuth.ts')) as typeof import('../src/services/localAuth');auth.logoutLocal();});
+  await page.goto('/registro');
   await page.getByRole('button', { name: 'Continuar con Google' }).click();
   await expect(page.getByRole('status')).toContainText('Google');
-  expect(await page.evaluate(() => localStorage.length + sessionStorage.length)).toBe(0);
   await page.getByRole('button', { name: 'Iniciar sesión', exact: true }).click();
   await expect(page).toHaveURL(/\/iniciar-sesion$/);
   await page.goBack();

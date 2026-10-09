@@ -156,7 +156,7 @@ test('carrusel cambia con flechas, indicadores y teclado', async ({ page }) => {
 });
 test('inicio conserva login, registro y retorno con el historial', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('link', { name: 'Iniciar sesión', exact: true }).first().click();
+  await page.getByRole('link', { name: 'Iniciar Session', exact: true }).first().click();
   await expect(page).toHaveURL(/\/iniciar-sesion$/);
   await page.getByRole('button', { name: 'Crear cuenta', exact: true }).click();
   await expect(page).toHaveURL(/\/registro$/);

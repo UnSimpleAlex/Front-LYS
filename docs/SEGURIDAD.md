@@ -28,3 +28,6 @@ No registrar passwords, tokens, cookies completas, datos completos de tarjetas n
 
 ## Checklist de release
 Sin secretos en Git; permisos/RLS revisados; inputs validados; roles probados; errores seguros; dependencias revisadas; logs limpios; archivos protegidos.
+
+## Simulación local de sesión y roles
+La etapa local usa PBKDF2 para no persistir contraseñas en texto plano, pero localStorage y los permisos frontend no son una frontera de seguridad. No hay credenciales bancarias ni datos de tarjeta guardados. Registro público crea cliente; creación de personal exige administrador. Ver [alcance y migración](PANELES_ROLES_LOCAL.md).

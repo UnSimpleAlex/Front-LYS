@@ -21,3 +21,7 @@ Antes de actualizar revisar changelog, breaking changes, pruebas e integración 
 ## Movimiento en Inicio
 
 Motion 14.0.0 (MIT), importado desde `motion/react`, sin Motion+ ni GSAP. Se usa para el carrusel, menú y estados de interacción, con reducción de movimiento. Instalación auditada sin vulnerabilidades. Registro y Home se cargan por separado para evitar cargar metadatos de celulares en Inicio.
+
+## Mapa de entrega
+
+Leaflet 1.9.4 (BSD-2-Clause), con @types/leaflet 1.9.21 (MIT) en desarrollo. Integración directa con el ciclo de vida de React, sin wrapper adicional. Se carga dentro del checkout diferido; el fragmento de checkout completo pesa aproximadamente 187 kB (54 kB gzip). Lockfile actualizado y auditoría sin vulnerabilidades.
