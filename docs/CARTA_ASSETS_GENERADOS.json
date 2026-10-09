@@ -1,0 +1,567 @@
+{
+  "mode": "built-in image_gen",
+  "assets": [
+    {
+      "name": "hero-desktop",
+      "prompt": "Create a photorealistic restaurant website banner BACKGROUND with no text. Canvas 2172x724 (3:1). IMPORTANT CROPPING-SAFE COMPOSITION: all food must fit inside a NARROW horizontal band from y=260 to y=505, only 34% of total canvas height, on the right half x=1000 to 2172. Zoom out dramatically. The WHOLE roast chicken is only 220 pixels tall and fully visible, surrounded by fries spread horizontally to its right, a salad bowl behind to the left and three tiny sauce bowls in a horizontal row in front. Do NOT fill the canvas vertically with food. Vast empty dark brown grill background above and wooden table below the food band. A small warm charcoal flame glow in the distance. Left half x=0..980 is dark warm brown with no food and reserved for title. Along far-left edge a vertical muted tan Peruvian geometric textile motif runs full canvas height. Premium glossy caramelized authentic pollo a la brasa, golden fries, bright salad, yellow/green/red sauces in dark bowls. One contiguous photograph no lines no split panels no typography no letters no watermarks no interface. Whole food arrangement shallow and wide to survive a desktop hero crop to 7:1.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-e0edd2d1-7100-4713-90d5-f1e0ce31b637.png"
+    },
+    {
+      "name": "hero-mobile",
+      "prompt": "Edit this Peruvian restaurant menu hero into a wide mobile header EXACTLY 1600x630 pixels (2.54:1), not a tall photograph. Preserve warm cream parchment and faint mountains on left half, red traditional Peruvian woven textile behind food on right, small red geometric textile motif bottom far-left. Entire juicy glossy golden charcoal-roasted whole chicken on a wooden platter with French fries and two small sauce bowls occupies the right 55%, and must be fully visible from top to bottom with room above, no extreme closeup crop. Leave left 44% clear cream negative space for a separate stacked title and subtitle. Professional appetizing food photograph. No letters, no title, no logos, no text, no UI. Wide panoramic canvas 2.54:1.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-dd4363d0-4a37-482d-b72d-d234dd04374f.png"
+    },
+    {
+      "name": "title-desktop",
+      "prompt": "Use case: ads-marketing. Asset type: standalone headline lettering, genuinely transparent alpha background. Exact text 'Nuestra carta' on ONE horizontal line. 'Nuestra' in white hand-painted brush script; 'carta' in vivid brand red #ED0000 matching the same expressive energetic brush lettering. Thin red painted underline beneath carta. Wide tight composition 3:1, strokes with natural brush texture, professionally legible Spanish letters. Nothing else; no background, no food, no mockup, no shadow, no watermark.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-eec10126-7750-432c-8395-66dce4b906c7.png"
+    },
+    {
+      "name": "title-mobile",
+      "prompt": "Use case: ads-marketing. Asset type: standalone headline lettering, genuinely transparent alpha background. Exact text 'Nuestra' on first line in dark espresso brown black, 'carta' on second line in vivid red #ED0000. Very expressive thick hand-painted brush script as a Peruvian pollo a la brasa brand, natural brush texture. Red brush underline below carta and three small red emphasis strokes to the right of Nuestra. Tight landscape composition approximately 1.4:1. No background, food, other text, shadow or watermark.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-1e26648c-9801-45fc-b788-8b773fe1e2fd.png"
+    },
+    {
+      "name": "products/pollo-01",
+      "prompt": "Use case: product-mockup. Asset type: single restaurant menu product photograph, landscape 3:2, no text/UI/watermark. Product: Pollo entero. Exact serving to depict: Un pollo a la brasa entero, jugoso y dorado, con papas fritas y ensalada fresca. Show the correct number and cut of chicken, not a whole chicken unless specified. Premium photoreal Peruvian polleria photography, warm golden appetizing light, dark rustic table, softly blurred charcoal restaurant background, no people. Single complete serving, all listed accompaniments visible. Camera three-quarter view. Entire plate centered within the middle 65% of image width and middle 55% height, generous margins above and below so it can crop to a wide menu card. No unrelated food, no drink unless specified, no captions, no collage.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-b489f27a-98a7-4e2e-a72f-6f98044ff2a1.png"
+    },
+    {
+      "name": "products/pollo-02",
+      "prompt": "Use case: product-mockup. Asset type: single restaurant menu product photograph, landscape 3:2, no text/UI/watermark. Product: 1/4 de pollo. Exact serving to depict: Un cuarto de pollo a la brasa, con papas fritas y ensalada de lechuga y tomate. Show the correct number and cut of chicken, not a whole chicken unless specified. Premium photoreal Peruvian polleria photography, warm golden appetizing light, dark rustic table, softly blurred charcoal restaurant background, no people. Single complete serving, all listed accompaniments visible. Camera three-quarter view. Entire plate centered within the middle 65% of image width and middle 55% height, generous margins above and below so it can crop to a wide menu card. No unrelated food, no drink unless specified, no captions, no collage.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-bae544a5-e090-43d9-a2cc-e678d11cc8d9.png"
+    },
+    {
+      "name": "products/pollo-03",
+      "prompt": "Use case: product-mockup. Asset type: single restaurant menu product photograph, landscape 3:2, no text/UI/watermark. Product: 1/2 pollo. Exact serving to depict: Medio pollo a la brasa con papas fritas y ensalada para compartir. Show the correct number and cut of chicken, not a whole chicken unless specified. Premium photoreal Peruvian polleria photography, warm golden appetizing light, dark rustic table, softly blurred charcoal restaurant background, no people. Single complete serving, all listed accompaniments visible. Camera three-quarter view. Entire plate centered within the middle 65% of image width and middle 55% height, generous margins above and below so it can crop to a wide menu card. No unrelated food, no drink unless specified, no captions, no collage.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-eb7dbfb1-e2e1-4687-9311-9da6542980ec.png"
+    },
+    {
+      "name": "products/pollo-04",
+      "prompt": "Use case: product-mockup. Asset type: single restaurant menu product photograph, landscape 3:2, no text/UI/watermark. Product: Alitas BBQ (6u). Exact serving to depict: Seis alitas glaseadas en salsa BBQ, acompañadas de papas fritas. Show the correct number and cut of chicken, not a whole chicken unless specified. Premium photoreal Peruvian polleria photography, warm golden appetizing light, dark rustic table, softly blurred charcoal restaurant background, no people. Single complete serving, all listed accompaniments visible. Camera three-quarter view. Entire plate centered within the middle 65% of image width and middle 55% height, generous margins above and below so it can crop to a wide menu card. No unrelated food, no drink unless specified, no captions, no collage.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-54572a14-39e1-45a6-b682-ca73949878d6.png"
+    },
+    {
+      "name": "products/pollo-05",
+      "prompt": "Use case: product-mockup. Asset type: single restaurant menu product photograph, landscape 3:2, no text/UI/watermark. Product: 1/8 de pollo. Exact serving to depict: Una pieza pequeña de pollo a la brasa con papas fritas y ensalada. Show the correct number and cut of chicken, not a whole chicken unless specified. Premium photoreal Peruvian polleria photography, warm golden appetizing light, dark rustic table, softly blurred charcoal restaurant background, no people. Single complete serving, all listed accompaniments visible. Camera three-quarter view. Entire plate centered within the middle 65% of image width and middle 55% height, generous margins above and below so it can crop to a wide menu card. No unrelated food, no drink unless specified, no captions, no collage.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-b084e317-aace-4f02-b05f-9daee9eda32d.png"
+    },
+    {
+      "name": "products/pollo-06",
+      "prompt": "Use case: product-mockup. Asset type: single restaurant menu product photograph, landscape 3:2, no text/UI/watermark. Product: Pechuga a la brasa. Exact serving to depict: Una pechuga de pollo a la brasa con papas fritas y ensalada fresca. Show the correct number and cut of chicken, not a whole chicken unless specified. Premium photoreal Peruvian polleria photography, warm golden appetizing light, dark rustic table, softly blurred charcoal restaurant background, no people. Single complete serving, all listed accompaniments visible. Camera three-quarter view. Entire plate centered within the middle 65% of image width and middle 55% height, generous margins above and below so it can crop to a wide menu card. No unrelated food, no drink unless specified, no captions, no collage.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-b7709bac-9936-4f76-a3f1-c66d5b16de06.png"
+    },
+    {
+      "name": "products/pollo-07",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Pierna a la brasa. Depict precisely: Una pierna con encuentro de pollo a la brasa, papas fritas y ensalada.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-e28258f1-6861-4f23-9a87-f0d476b241d0.png"
+    },
+    {
+      "name": "products/pollo-08",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Alitas picantes (6u). Depict precisely: Seis alitas de pollo bañadas en salsa roja picante, con papas fritas.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-9dde2826-7c7d-4c7e-ae69-558e91df58c9.png"
+    },
+    {
+      "name": "products/pollo-09",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Alitas al ajo (6u). Depict precisely: Seis alitas doradas con mantequilla de ajo y perejil, con papas fritas.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-d60f5d4f-75db-4fe7-b262-36a99f65b349.png"
+    },
+    {
+      "name": "products/pollo-10",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Alitas familiares (12u). Depict precisely: Doce alitas BBQ para compartir, con una porción grande de papas fritas.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-334219ab-c404-4c1c-9ca9-942dc45ccc5a.png"
+    },
+    {
+      "name": "products/pollo-11",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Pollo deshuesado. Depict precisely: Pechuga y muslo deshuesados a la brasa, servidos con papas fritas y ensalada.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-17fe005a-1609-4759-8272-79652f0f983d.png"
+    },
+    {
+      "name": "products/pollo-12",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Dúo de pollos. Depict precisely: Dos pollos enteros a la brasa con dos porciones grandes de papas y ensalada.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-9d5f44c8-681b-45fc-83cc-a5938e723ad4.png"
+    },
+    {
+      "name": "products/parrillas-01",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Anticuchos. Depict precisely: Tres brochetas tradicionales de corazón de res, con papas doradas y choclo. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-c956b2b6-0ea8-4207-a400-6380aebbe41a.png"
+    },
+    {
+      "name": "products/parrillas-02",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Parrilla mixta. Depict precisely: Res, pollo, chorizo y salchicha a la parrilla, con papas fritas y ensalada. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-dce2b141-0d6c-40de-a924-598cca9b3031.png"
+    },
+    {
+      "name": "products/parrillas-03",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Bife a la parrilla. Depict precisely: Un bife de res con marcas de parrilla, papas doradas y tomates asados. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-24855fbb-d0c0-4829-b175-e8be4efcae46.png"
+    },
+    {
+      "name": "products/parrillas-04",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Pechuga a la parrilla. Depict precisely: Filete de pechuga a la parrilla, con papas doradas y ensalada. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-9e4a5e8d-0e18-47c0-a618-63dfc4fced0a.png"
+    },
+    {
+      "name": "products/parrillas-05",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Chorizos parrilleros. Depict precisely: Dos chorizos a la parrilla con papas doradas y salsa criolla. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-0ad5693a-aa23-4eb2-a542-f9a6ca6f8263.png"
+    },
+    {
+      "name": "products/parrillas-06",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Brochetas de pollo. Depict precisely: Tres brochetas de pollo con pimiento y cebolla, acompañadas de papas fritas. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-228d30ab-a599-479c-bbf8-50e10a6740de.png"
+    },
+    {
+      "name": "products/parrillas-07",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Brochetas de res. Depict precisely: Tres brochetas de res con pimiento y cebolla, con papas doradas. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-e79e2bd7-475f-43c8-9680-f5677d3ca81f.png"
+    },
+    {
+      "name": "products/parrillas-08",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Costillas BBQ. Depict precisely: Costillas de cerdo glaseadas en BBQ, con papas fritas y ensalada. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-720ee7cb-ee88-411f-ae37-b2d81bc4092c.png"
+    },
+    {
+      "name": "products/parrillas-09",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Chuleta de cerdo. Depict precisely: Chuleta a la parrilla con papas doradas y tomates asados. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-17e344de-9877-43bf-9dc3-7407c0d0ebf7.png"
+    },
+    {
+      "name": "products/parrillas-10",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Parrilla para dos. Depict precisely: Dos bifes de res, dos chorizos y pechuga a la parrilla, con papas y ensalada. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-14934d46-8de8-4f73-9762-5ffaba9f6f2c.png"
+    },
+    {
+      "name": "products/parrillas-11",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Parrilla familiar. Depict precisely: Res, pollo, costillas y cuatro chorizos a la parrilla, con papas grandes y ensalada. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-6bfcf966-a6dc-4112-8112-c4c0488a9b8f.png"
+    },
+    {
+      "name": "products/parrillas-12",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Mollejitas a la parrilla. Depict precisely: Mollejas de pollo doradas a la parrilla con papas y salsa criolla. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-59979eca-bcde-4631-b34d-4844b7e1f958.png"
+    },
+    {
+      "name": "products/combos-01",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Combo personal. Depict precisely: Un cuarto de pollo a la brasa, papas fritas, ensalada y vaso de gaseosa amarilla. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-1266178b-b294-43c5-a833-a4c1ddf31213.png"
+    },
+    {
+      "name": "products/combos-02",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Combo familiar. Depict precisely: Un pollo entero a la brasa, papas grandes, ensalada y gaseosa amarilla de 1.5 L. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-b3b009d5-a3ec-40b1-bcaf-e7e3e932bd89.png"
+    },
+    {
+      "name": "products/combos-03",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Combo para dos. Depict precisely: Medio pollo a la brasa, papas fritas, ensalada y dos vasos de gaseosa amarilla. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-0fbd7683-0cb8-4248-8496-258d98ad902c.png"
+    },
+    {
+      "name": "products/combos-04",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Combo brasa y chaufa. Depict precisely: Un cuarto de pollo a la brasa, chaufa de pollo y papas fritas. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-6d795afc-5687-4f90-b00c-5fc89ff2405d.png"
+    },
+    {
+      "name": "products/combos-05",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Combo alitas. Depict precisely: Seis alitas BBQ, papas fritas y vaso de gaseosa oscura. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-ebf5bdd9-a692-492b-990b-d13c3fad2bcf.png"
+    },
+    {
+      "name": "products/combos-06",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Combo anticuchero. Depict precisely: Tres anticuchos con papas doradas, choclo y vaso de chicha morada. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-e5bd947f-57d5-4378-8967-292972cfc095.png"
+    },
+    {
+      "name": "products/combos-07",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Combo parrillero. Depict precisely: Parrilla de res y pollo, papas fritas, ensalada y dos vasos de gaseosa amarilla. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-c2e474f3-63c5-4be7-9ec7-cb2f685aee9d.png"
+    },
+    {
+      "name": "products/combos-08",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Combo dúo brasa. Depict precisely: Dos pollos a la brasa, papas grandes, ensalada y dos botellas de gaseosa amarilla. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-d02ff909-c6db-4843-82a8-4c17e4e9287c.png"
+    },
+    {
+      "name": "products/combos-09",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Combo saltado. Depict precisely: Lomo saltado con arroz blanco y un vaso de chicha morada. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-39a37af0-cb6c-4ca3-aad8-5a4eecfaa73e.png"
+    },
+    {
+      "name": "products/combos-10",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Combo chaufero. Depict precisely: Chaufa de pollo, seis wantanes fritos y vaso de gaseosa amarilla. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-d0b52f9c-dc98-4539-9397-d51c582a8252.png"
+    },
+    {
+      "name": "products/combos-11",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Combo brasa y alitas. Depict precisely: Medio pollo a la brasa, seis alitas BBQ, papas fritas y ensalada. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-a34a398b-c13c-4965-8ac3-fca257aef762.png"
+    },
+    {
+      "name": "products/combos-12",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Combo gran mesa. Depict precisely: Pollo entero a la brasa, chaufa de pollo, papas grandes y jarra de chicha morada. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-a1e1f019-2d04-48cb-8118-e5cc05b438a1.png"
+    },
+    {
+      "name": "products/chaufas-01",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Chaufa de pollo. Depict precisely: Arroz al wok con trozos de pollo, huevo, cebolla china y un toque de sillao. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-f12a5064-d4fe-488b-8170-c5e84730efd1.png"
+    },
+    {
+      "name": "products/chaufas-02",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Chaufa de res. Depict precisely: Arroz al wok con dados de res, huevo y cebolla china. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-257b44a1-9cbe-4a82-81a1-717fca94e705.png"
+    },
+    {
+      "name": "products/chaufas-03",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Chaufa mixto. Depict precisely: Arroz salteado al wok con pollo, res, huevo y cebolla china. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-ad7999ff-050c-4da1-9cbe-d3a890c3643a.png"
+    },
+    {
+      "name": "products/chaufas-04",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Chaufa de cerdo. Depict precisely: Arroz al wok con cerdo dorado, huevo y cebolla china. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-db7e4027-2bab-4df7-ab78-bbbf79914fed.png"
+    },
+    {
+      "name": "products/chaufas-05",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Chaufa de la brasa. Depict precisely: Arroz chaufa con pollo a la brasa deshilachado, huevo y cebolla china. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-8ccc6c29-249e-4836-8377-784b22962b76.png"
+    },
+    {
+      "name": "products/chaufas-06",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Chaufa con chorizo. Depict precisely: Arroz salteado con rodajas de chorizo, pollo, huevo y cebolla china. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-44d6f183-f571-4756-94b4-d5d58b3bbd00.png"
+    },
+    {
+      "name": "products/chaufas-07",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Chaufa vegetariano. Depict precisely: Arroz al wok con huevo, zanahoria, brócoli, pimiento y cebolla china. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-735a39f7-018e-43b1-ae25-a881dcf62f33.png"
+    },
+    {
+      "name": "products/chaufas-08",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Chaufa de pollo picante. Depict precisely: Arroz al wok con pollo, huevo y ají rojo picado. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-42b25197-646e-41a7-b322-ebf75e04d364.png"
+    },
+    {
+      "name": "products/chaufas-09",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Chaufa de pollo con wantán. Depict precisely: Chaufa de pollo y huevo acompañado de cuatro wantanes fritos. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-8e578236-8822-4779-8c9e-4772fbb46fcd.png"
+    },
+    {
+      "name": "products/chaufas-10",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Chaufa mixto para dos. Depict precisely: Porción para dos de chaufa con pollo, res y huevo. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-c6eb6ece-728d-49cc-b8ba-31d8ae7e6344.png"
+    },
+    {
+      "name": "products/chaufas-11",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Chaufa familiar de pollo. Depict precisely: Una fuente grande de arroz chaufa con pollo, huevo y cebolla china. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-28b2bbb9-d4bb-4a35-980e-75d8b0914e56.png"
+    },
+    {
+      "name": "products/chaufas-12",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Chaufa familiar mixto. Depict precisely: Una fuente familiar de arroz al wok con pollo, res, cerdo y huevo. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-3d62fde1-c413-4d90-ab98-ec46532a6d54.png"
+    },
+    {
+      "name": "products/saltados-01",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Lomo saltado. Depict precisely: Tiras de res al wok con cebolla roja, tomate y papas fritas, acompañado de arroz blanco. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-8fcff2f6-ffec-4b85-805e-f307a7ea26da.png"
+    },
+    {
+      "name": "products/saltados-02",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Pollo saltado. Depict precisely: Tiras de pollo al wok con cebolla roja, tomate y papas fritas, con arroz blanco. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-c659329f-7e27-4bc5-a746-f5e363dde496.png"
+    },
+    {
+      "name": "products/saltados-03",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Saltado mixto. Depict precisely: Res y pollo salteados con cebolla, tomate y papas fritas, con arroz blanco. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-32395131-7184-4d40-86fd-5caa6ea58f12.png"
+    },
+    {
+      "name": "products/saltados-04",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Tallarin saltado de pollo. Depict precisely: Tallarines al wok con tiras de pollo, cebolla roja, tomate y cebolla china. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-4629a62c-9c3a-485c-a1cd-08d619c622ae.png"
+    },
+    {
+      "name": "products/saltados-05",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Tallarin saltado de res. Depict precisely: Tallarines al wok con tiras de res, tomate y cebolla roja. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-d428009e-e660-4fd3-b2eb-ca58140a45b1.png"
+    },
+    {
+      "name": "products/saltados-06",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Tallarin saltado mixto. Depict precisely: Tallarines salteados con res, pollo, tomate y cebolla. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-d4969d59-ea9b-4e79-93c6-711706c31775.png"
+    },
+    {
+      "name": "products/saltados-07",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Saltado de cerdo. Depict precisely: Tiras de cerdo al wok con tomate, cebolla roja y papas fritas, con arroz blanco. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-4e66a109-589c-4775-ac38-2621b0d6b7aa.png"
+    },
+    {
+      "name": "products/saltados-08",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Lomo saltado picante. Depict precisely: Lomo al wok con ají amarillo, cebolla roja, tomate y papas, con arroz blanco. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-a27352d3-6d9d-453b-8ce0-3f3e0ec8cf4c.png"
+    },
+    {
+      "name": "products/saltados-09",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Pollo saltado con verduras. Depict precisely: Pollo salteado con brócoli, zanahoria, pimiento y cebolla, con arroz blanco. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-bdfb6b6f-e3f6-4582-9ca9-ee866749902f.png"
+    },
+    {
+      "name": "products/saltados-10",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Lomo saltado para dos. Depict precisely: Fuente de lomo saltado con tomate, cebolla, papas y dos porciones de arroz blanco. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-3d05fdce-4eae-40e8-b66a-6c3cc87dfa44.png"
+    },
+    {
+      "name": "products/saltados-11",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Pollo saltado familiar. Depict precisely: Fuente grande de pollo saltado con papas, tomate, cebolla y arroz blanco. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-40df8213-4725-461f-91a6-9a0feb5ac3ee.png"
+    },
+    {
+      "name": "products/saltados-12",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Tallarin mixto familiar. Depict precisely: Fuente familiar de tallarines al wok con pollo, res, tomate y cebolla. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-3663fd53-1c64-4c20-a4de-da78965217c4.png"
+    },
+    {
+      "name": "products/acompanamientos-01",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Salchipapas. Depict precisely: Papas fritas con rodajas de salchicha, mayonesa y kétchup. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-66b1eeef-cb37-4767-94c6-dcf2e03db0b8.png"
+    },
+    {
+      "name": "products/acompanamientos-02",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Wantán frito (6u). Depict precisely: Seis wantanes crocantes rellenos de pollo, con salsa de tamarindo. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-0a2a26fb-fa67-4cbf-8ab0-6bb788e8912a.png"
+    },
+    {
+      "name": "products/acompanamientos-03",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Papas fritas personales. Depict precisely: Una porción de papas fritas doradas y crocantes. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-5857782e-56e0-4864-8b2a-c13d644bb70f.png"
+    },
+    {
+      "name": "products/acompanamientos-04",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Papas fritas grandes. Depict precisely: Una fuente grande de papas fritas para compartir. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-a406e8f9-0f37-4b60-bde0-ab51db53857f.png"
+    },
+    {
+      "name": "products/acompanamientos-05",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Papas doradas. Depict precisely: Rodajas de papa doradas con perejil y sal. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-d863e6d9-743a-4128-bc43-0e8bf3a67d91.png"
+    },
+    {
+      "name": "products/acompanamientos-06",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Ensalada fresca. Depict precisely: Lechuga, tomate, zanahoria rallada y cebolla roja. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-35d51d25-58cb-49ff-a106-201423d4c45f.png"
+    },
+    {
+      "name": "products/acompanamientos-07",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Ensalada familiar. Depict precisely: Fuente grande de lechuga, tomate, zanahoria y cebolla roja. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-8be8d1ca-1426-47d0-8c4a-4d2d9bafa907.png"
+    },
+    {
+      "name": "products/acompanamientos-08",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Arroz blanco. Depict precisely: Una porción de arroz blanco graneado. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-3abf62f1-929c-4f63-924f-4eab2e6ed16b.png"
+    },
+    {
+      "name": "products/acompanamientos-09",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Choclo con queso. Depict precisely: Choclo peruano cocido con una porción de queso fresco. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-65a4befd-9946-4424-9c19-43a2f14eef52.png"
+    },
+    {
+      "name": "products/acompanamientos-10",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Yuca frita. Depict precisely: Bastones de yuca dorada y crocante con ají amarillo. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-ee429b25-e35d-46ae-a261-6f956f37567d.png"
+    },
+    {
+      "name": "products/acompanamientos-11",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Salchipapas familiares. Depict precisely: Fuente de papas fritas y rodajas de salchicha, con mayonesa y kétchup. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-98987cde-5205-4099-b03c-a70c7e675864.png"
+    },
+    {
+      "name": "products/acompanamientos-12",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Wantán para compartir (12u). Depict precisely: Doce wantanes fritos de pollo, con salsa de tamarindo. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-d60230d3-11b8-4e57-a27e-3d2e50dd23ff.png"
+    },
+    {
+      "name": "products/bebidas-01",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Inca Kola personal. Depict precisely: Botella personal de gaseosa amarilla Inca Kola de 500 ml, bien fría.  Show only the specified beverage, complete bottle or glass or pitcher at correct scale, visible full height centered, no food. Label text only if it is the named beverage's packaging.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-a6518f52-0269-43a9-9011-369f8f1d1d1c.png"
+    },
+    {
+      "name": "products/bebidas-02",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Inca Kola 1.5 L. Depict precisely: Botella de gaseosa amarilla Inca Kola de 1.5 litros para compartir.  Show only the specified beverage, complete bottle or glass or pitcher at correct scale, visible full height centered, no food. Label text only if it is the named beverage's packaging.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-9aad95e7-d2dc-4421-ab85-57647da7c59b.png"
+    },
+    {
+      "name": "products/bebidas-03",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Coca-Cola personal. Depict precisely: Botella personal de Coca-Cola de 500 ml, bien fría.  Show only the specified beverage, complete bottle or glass or pitcher at correct scale, visible full height centered, no food. Label text only if it is the named beverage's packaging.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-5c8a1fa7-d1b3-4a6f-a368-d75476f67e41.png"
+    },
+    {
+      "name": "products/bebidas-04",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Coca-Cola 1.5 L. Depict precisely: Botella de Coca-Cola de 1.5 litros para compartir.  Show only the specified beverage, complete bottle or glass or pitcher at correct scale, visible full height centered, no food. Label text only if it is the named beverage's packaging.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-d294a028-19fc-4596-832c-11fce3ef994e.png"
+    },
+    {
+      "name": "products/bebidas-05",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Chicha morada personal. Depict precisely: Vaso de chicha morada de maíz morado, con hielo y una rodaja de limón.  Show only the specified beverage, complete bottle or glass or pitcher at correct scale, visible full height centered, no food. Label text only if it is the named beverage's packaging.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-591bc72f-ea8a-4d4a-99b4-c1c4fb62af38.png"
+    },
+    {
+      "name": "products/bebidas-06",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Jarra de chicha morada. Depict precisely: Jarra de un litro de chicha morada con hielo y rodajas de limón.  Show only the specified beverage, complete bottle or glass or pitcher at correct scale, visible full height centered, no food. Label text only if it is the named beverage's packaging.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-0b0dd9ba-48e9-410e-a48a-f123c8cebb79.png"
+    },
+    {
+      "name": "products/bebidas-07",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Limonada personal. Depict precisely: Vaso de limonada fresca con hielo y rodajas de limón.  Show only the specified beverage, complete bottle or glass or pitcher at correct scale, visible full height centered, no food. Label text only if it is the named beverage's packaging.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-f161f646-351e-4207-be48-1f239bcce34e.png"
+    },
+    {
+      "name": "products/bebidas-08",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Jarra de limonada. Depict precisely: Jarra de un litro de limonada, con hielo y rodajas de limón.  Show only the specified beverage, complete bottle or glass or pitcher at correct scale, visible full height centered, no food. Label text only if it is the named beverage's packaging.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-0c931011-8fc1-47b2-9553-56feb4998d0b.png"
+    },
+    {
+      "name": "products/bebidas-09",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Maracuyá personal. Depict precisely: Vaso de refresco de maracuyá amarillo con hielo.  Show only the specified beverage, complete bottle or glass or pitcher at correct scale, visible full height centered, no food. Label text only if it is the named beverage's packaging.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-850185f2-b915-45f3-9845-1f41fc2d2ed0.png"
+    },
+    {
+      "name": "products/bebidas-10",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Jarra de maracuyá. Depict precisely: Jarra de un litro de refresco de maracuyá con hielo.  Show only the specified beverage, complete bottle or glass or pitcher at correct scale, visible full height centered, no food. Label text only if it is the named beverage's packaging.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-559b16f0-8862-4b60-ae52-ee82cc8eec31.png"
+    },
+    {
+      "name": "products/bebidas-11",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Agua sin gas. Depict precisely: Botella transparente de agua sin gas de 625 ml, bien fría.  Show only the specified beverage, complete bottle or glass or pitcher at correct scale, visible full height centered, no food. Label text only if it is the named beverage's packaging.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-283156e5-4a66-4c84-a51c-c5deebf31203.png"
+    },
+    {
+      "name": "products/bebidas-12",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Agua con gas. Depict precisely: Botella transparente de agua con gas de 625 ml, con burbujas.  Show only the specified beverage, complete bottle or glass or pitcher at correct scale, visible full height centered, no food. Label text only if it is the named beverage's packaging.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-9c9f7b8c-ab09-4641-9e07-8b5e0ffa2333.png"
+    },
+    {
+      "name": "products/salsas-01",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Ají de la casa. Depict precisely: Crema amarilla de ají de pollería, suave y cremosa, en un pocillo. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-b68caec6-88b9-4e23-99c8-4698adf4b0bb.png"
+    },
+    {
+      "name": "products/salsas-02",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Ají picante. Depict precisely: Salsa roja de ají intenso con pequeñas semillas, en un pocillo. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-31429d45-44d5-43ce-8fd7-1000549b3689.png"
+    },
+    {
+      "name": "products/salsas-03",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Mayonesa de la casa. Depict precisely: Mayonesa blanca cremosa preparada con un toque de limón, en un pocillo. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-21dd7ca6-caf5-484f-a59b-73919e1accad.png"
+    },
+    {
+      "name": "products/salsas-04",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Salsa de ajo. Depict precisely: Crema blanca de ajo con finas hierbas, en un pocillo. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-2cf1314b-a425-41fd-8726-23a6ee912156.png"
+    },
+    {
+      "name": "products/salsas-05",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Chimichurri. Depict precisely: Salsa de perejil, ajo y aceite con textura de hierbas picadas, en un pocillo. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-cebab3ac-4068-43da-9acb-2fe26a4dc9ec.png"
+    },
+    {
+      "name": "products/salsas-06",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Salsa BBQ. Depict precisely: Salsa BBQ oscura, brillante y ligeramente ahumada, en un pocillo. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-3b084312-16f0-4321-82b6-9a26aa6cc930.png"
+    },
+    {
+      "name": "products/salsas-07",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Salsa de tamarindo. Depict precisely: Salsa agridulce de tamarindo de color marrón ámbar, en un pocillo. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-f439de55-7645-4b3c-acf6-5be0374cf07c.png"
+    },
+    {
+      "name": "products/salsas-08",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Kétchup. Depict precisely: Salsa de tomate roja y cremosa, en un pocillo. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-a5f92a9a-af93-4744-a5db-eead0fbd11d9.png"
+    },
+    {
+      "name": "products/salsas-09",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Crema de rocoto. Depict precisely: Crema rosada anaranjada de rocoto peruano, en un pocillo. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-70186782-0069-4f88-90f5-00b53223d05a.png"
+    },
+    {
+      "name": "products/salsas-10",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Ají verde. Depict precisely: Crema verde de ají y cilantro fresco, en un pocillo. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-6b5165bd-9fcd-4ecd-b895-199b2987741c.png"
+    },
+    {
+      "name": "products/salsas-11",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Trío de cremas. Depict precisely: Tres pocillos con ají amarillo, mayonesa blanca y ají verde. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-ab5c230f-0a1b-447e-9ff5-c8af4016f5b8.png"
+    },
+    {
+      "name": "products/salsas-12",
+      "prompt": "Use case: product-mockup. Single premium photoreal Peruvian polleria menu product photograph, landscape 3:2. Warm golden light, dark rustic wood table, blurred charcoal restaurant background, no people. Show the entire correct serving and all described accompaniments; no unrelated food. Center serving within middle 70% width and 60% height with generous margins so crop to wide menu card works. No text, captions, UI, collage or watermark. Product: Selección de salsas. Depict precisely: Seis pocillos con ají amarillo, rocoto, mayonesa, BBQ, chimichurri y tamarindo. ",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-108c378e-8f96-436b-9fae-d484bf169f39.png"
+    },
+    {
+      "name": "categories/pollo",
+      "prompt": "Create one photorealistic isolated food cutout for a mobile restaurant menu category tile: a complete glossy charcoal-roasted Peruvian chicken on small dark oval platter. All subject fully visible centered in middle 80% of a square canvas. Warm realistic studio food lighting, appealing and detailed, slightly elevated 3/4 view, no table, no background, no text, no labels, no collage. Transparent alpha background.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-b6ff3187-620a-45f8-bcd7-10bd5dc3865b.png"
+    },
+    {
+      "name": "categories/parrillas",
+      "prompt": "Create one photorealistic isolated food cutout for a mobile restaurant menu category tile: a grilled beef steak with neat crosshatch sear on small dark platter. All subject fully visible centered in middle 80% of a square canvas. Warm realistic studio food lighting, appealing and detailed, slightly elevated 3/4 view, no table, no background, no text, no labels, no collage. Transparent alpha background.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-74b6edf7-3b7b-432f-9fe3-c00e87aa8ebe.png"
+    },
+    {
+      "name": "categories/combos",
+      "prompt": "Create one photorealistic isolated food cutout for a mobile restaurant menu category tile: a quarter charcoal-roasted chicken with golden French fries and a glass of dark cola together on a small platter. All subject fully visible centered in middle 80% of a square canvas. Warm realistic studio food lighting, appealing and detailed, slightly elevated 3/4 view, no table, no background, no text, no labels, no collage. Transparent alpha background.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-a8adbf78-6fa1-4c72-9a43-cca383aa328b.png"
+    },
+    {
+      "name": "categories/chaufas",
+      "prompt": "Create one photorealistic isolated food cutout for a mobile restaurant menu category tile: a mound of Peruvian chicken chaufa fried rice with egg and green onion on a white plate. All subject fully visible centered in middle 80% of a square canvas. Warm realistic studio food lighting, appealing and detailed, slightly elevated 3/4 view, no table, no background, no text, no labels, no collage. Transparent alpha background.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-ce9f2d77-65ba-4716-bd63-278395895e40.png"
+    },
+    {
+      "name": "categories/saltados",
+      "prompt": "Create one photorealistic isolated food cutout for a mobile restaurant menu category tile: a Peruvian lomo saltado with beef strips red onions tomatoes fries on a small black skillet. All subject fully visible centered in middle 80% of a square canvas. Warm realistic studio food lighting, appealing and detailed, slightly elevated 3/4 view, no table, no background, no text, no labels, no collage. Transparent alpha background.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-c933cc3c-9497-4fae-82c7-57c47554baf9.png"
+    },
+    {
+      "name": "categories/acompanamientos",
+      "prompt": "Create one photorealistic isolated food cutout for a mobile restaurant menu category tile: a golden pile of thick French fries on a small white plate. All subject fully visible centered in middle 80% of a square canvas. Warm realistic studio food lighting, appealing and detailed, slightly elevated 3/4 view, no table, no background, no text, no labels, no collage. Transparent alpha background.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-36ab9365-0ef1-45b2-b747-2ed63d04c246.png"
+    },
+    {
+      "name": "categories/bebidas",
+      "prompt": "Create one photorealistic isolated food cutout for a mobile restaurant menu category tile: a glass of chilled purple chicha morada with ice and a lemon slice. All subject fully visible centered in middle 80% of a square canvas. Warm realistic studio food lighting, appealing and detailed, slightly elevated 3/4 view, no table, no background, no text, no labels, no collage. Transparent alpha background.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-14c40ed0-9875-451e-86ce-5175b1d46d82.png"
+    },
+    {
+      "name": "categories/salsas",
+      "prompt": "Create one photorealistic isolated food cutout for a mobile restaurant menu category tile: three small bowls of yellow aji mayonnaise, green huacatay sauce and red rocoto sauce. All subject fully visible centered in middle 80% of a square canvas. Warm realistic studio food lighting, appealing and detailed, slightly elevated 3/4 view, no table, no background, no text, no labels, no collage. Transparent alpha background.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-d939d597-f456-420b-85de-325028d78880.png"
+    },
+    {
+      "name": "combos-02-incakola",
+      "prompt": "Replace ONLY the generic yellow soda bottle with a realistic 1.5 liter Inca Kola bottle, yellow soda, blue cap and authentic blue-yellow label clearly reading INCA KOLA. Preserve exactly the single whole chicken, fries, salad, table, lighting, restaurant background and overall framing. Second image is packaging reference only.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-2cbbc176-f126-4faa-801b-461004493405.png",
+      "final": "public\\images\\carta\\products\\combos-02-incakola.webp",
+      "references": [
+        "public/images/carta/products/combos-02.webp",
+        "public/images/carta/products/bebidas-02.webp"
+      ],
+      "tool": "built-in image_gen"
+    },
+    {
+      "name": "combos-08-incakola",
+      "prompt": "Replace ONLY BOTH generic yellow soda bottles with recognizable Inca Kola bottles, yellow soda, blue caps and blue-yellow labels clearly reading INCA KOLA. Keep exactly two whole roast chickens, fries and salad, original table, lighting, background and composition. Second image is packaging reference only.",
+      "path": "C:\\Users\\Usuario\\.codex\\generated_images\\01a1123c-68b9-7732-9a73-76911a2414bc\\exec-b9c9b125-a9fc-4543-9f1d-d0fef02874a7.png",
+      "final": "public\\images\\carta\\products\\combos-08-incakola.webp",
+      "references": [
+        "public/images/carta/products/combos-08.webp",
+        "public/images/carta/products/bebidas-02.webp"
+      ],
+      "tool": "built-in image_gen"
+    }
+  ]
+}
