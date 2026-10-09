@@ -26,4 +26,4 @@ El historial recupera los comprobantes de checkout en la pestaña, valida su est
 
 Los mapas/sugerencias se interceptan en pruebas para no depender de los servicios públicos. Las capturas de PC/tablet/móvil se guardan en `test-results/` (ignorado por Git).
 
-Nosotros muestra únicamente el encabezado y la imagen PNG seleccionada por el propietario (about-restaurant-selected.png), conservando su transparencia. Se retiraron la línea de tiempo, misión, visión y valores, junto con el botón que apuntaba a la historia eliminada. El footer global permanece.
+Nosotros conserva el encabezado y la imagen PNG seleccionada por el propietario (about-restaurant-selected.png), con transparencia. Debajo se incorporó la nueva referencia de Misión, Visión y Valores: tres tarjetas con textos HTML, iconos rojos y fondo ilustrado de montañas y leña. En móvil se apilan las tarjetas. La línea de tiempo anterior y su botón permanecen retirados; se conserva el footer global.
