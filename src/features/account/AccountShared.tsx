@@ -9,5 +9,5 @@ export function AccountEmpty({ title, description, action, onAction }: { title: 
   return <div className="account-empty info-card"><span className="info-icon-circle"><Icon name="flame" /></span><h2>{title}</h2><p>{description}</p>{action && <button type="button" className="primary-button" onClick={onAction}>{action}<Icon name="arrow" /></button>}</div>;
 }
 export function AccountPromo({ onAction }: { onAction: (action: string) => void }) {
-  return <aside className="account-promo"><img src="/images/home/pollo-640.webp" alt="Pollo a la brasa" loading="lazy" /><div><h3>¿Antojo de un nuevo pedido?</h3><p>Tu próximo momento para compartir empieza aquí.</p><button type="button" className="primary-button" onClick={() => onAction('Carta')}>Ver nuestra carta <Icon name="arrow" /></button></div></aside>;
+  return <aside className="account-promo"><img src="/images/carta/products/pollo-01.webp" alt="Pollo a la brasa" loading="lazy" /><div><h3>¿Antojo de un nuevo pedido?</h3><p>Tu próximo momento para compartir empieza aquí.</p><button type="button" className="primary-button" onClick={() => onAction('Carta')}>Ver nuestra carta <Icon name="arrow" /></button></div></aside>;
 }

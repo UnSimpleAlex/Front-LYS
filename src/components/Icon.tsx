@@ -1,7 +1,8 @@
 import type { SVGProps } from 'react';
 
-export type IconName = 'phone' | 'mail' | 'lock' | 'eye' | 'eye-off' | 'user' | 'arrow' | 'menu' | 'close' | 'check' | 'cart' | 'truck' | 'store' | 'table' | 'card' | 'gift' | 'flame' | 'leaf' | 'clock' | 'star' | 'percent' | 'mobile' | 'cutlery' | 'pin' | 'search' | 'heart' | 'grid' | 'chicken' | 'grill' | 'rice' | 'fries' | 'drink' | 'bowl' | 'home' | 'tag' | 'sort' | 'chevron' | 'users' | 'pumpkin' | 'trash' | 'receipt' | 'cash' | 'shield';
+export type IconName = 'target' | 'phone' | 'mail' | 'lock' | 'eye' | 'eye-off' | 'user' | 'arrow' | 'menu' | 'close' | 'check' | 'cart' | 'truck' | 'store' | 'table' | 'card' | 'gift' | 'flame' | 'leaf' | 'clock' | 'star' | 'percent' | 'mobile' | 'cutlery' | 'pin' | 'search' | 'heart' | 'grid' | 'chicken' | 'grill' | 'rice' | 'fries' | 'drink' | 'bowl' | 'home' | 'tag' | 'sort' | 'chevron' | 'users' | 'pumpkin' | 'trash' | 'receipt' | 'cash' | 'shield';
 const paths: Record<IconName, string[]> = {
+  target: ['M12 2a10 10 0 1 0 10 10', 'M12 6a6 6 0 1 0 6 6', 'M12 10a2 2 0 1 0 2 2', 'm12 12 9-9', 'M17 2v5h5'],
   trash: ['M3 6h18', 'M8 6V3h8v3', 'M5 6l1 16h12l1-16', 'M10 10v8', 'M14 10v8'],
   receipt: ['M5 2h14v20l-3-2-4 2-4-2-3 2Z', 'M8 7h8', 'M8 11h8', 'M8 15h5'],
   cash: ['M2 5h20v14H2Z', 'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z', 'M5 9v6', 'M19 9v6'],

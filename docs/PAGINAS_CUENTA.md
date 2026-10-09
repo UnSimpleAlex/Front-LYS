@@ -4,7 +4,7 @@ Rutas: `/nosotros`, `/locales`, `/contacto`, `/mi-cuenta` y subrutas `pedidos`, 
 
 ## Recursos y datos públicos
 
-Se reutilizan DM Sans, Caveat, fotos WebP del catálogo/home y fondos de checkout. No se generaron imágenes ni se presentó una fachada ficticia como fotografía del restaurante.
+Se conservan DM Sans y Caveat. Tras la nueva instrucción del propietario se generaron diez imágenes (nueve activas y una variante) para reproducir los fondos, escenas de la historia, fachada conceptual e ilustración de Mi cuenta de las referencias. Se optimizaron a WebP en `public/images/information/`. La fachada se identifica como ilustración referencial, no como fotografía real del restaurante. Los textos siguen siendo HTML editable. Ver `IMAGENES_INSTITUCIONALES.md` para prompts y archivos.
 
 Los datos proporcionados por el propietario están centralizados en `src/features/information/business.ts`: C. Turístico Los Palomares Mz. D Lt. 5, frente a la Planta Eléctrica San Benito, Carabayllo; 947 540 597; ventas@lenasysabores.store; 12 m. a 11 p. m. No se inventaron días de atención ni enlaces a redes sociales.
 
