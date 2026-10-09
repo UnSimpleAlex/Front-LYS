@@ -1,0 +1,8 @@
+import { lazy, Suspense } from 'react';
+import { Icon } from '../components/Icon';
+import { PageHero, InformationFooter, ContactDetails, WhatsAppCard } from '../features/information/InformationShared';
+import { business } from '../features/information/business';
+const BusinessMap = lazy(() => import('../features/information/BusinessMap').then(module => ({ default: module.BusinessMap })));
+export function LocationsPage({ onAction }: { onAction: (action: string) => void }) {
+  return <><main id="contenido" className="information-page"><div className="info-container"><PageHero eyebrow="Nuestro local" title="Visítanos en" accent="Carabayllo" description="Disfruta de nuestro delicioso pollo a la leña y parrillas en un ambiente familiar." /><section className="locations-layout"><figure className="local-photo"><img src="/images/home/hero-compartir-1080.webp" width="1080" height="608" alt="Pollo a la brasa y acompañamientos de Leñas y Sabores" /><figcaption><span>Pollos & Parrillas</span><strong>El verdadero sabor a la leña</strong><p>Te esperamos en Los Palomares, Carabayllo.</p></figcaption></figure><div className="info-card local-information"><div className="info-section-title"><Icon name="pin" /><div><p className="info-eyebrow">Nuestra ubicación</p><h2>Carabayllo, Lima</h2></div></div><Suspense fallback={<p>Cargando mapa…</p>}><BusinessMap /></Suspense><p className="local-address"><strong>{business.address}</strong><br />{business.reference}</p><ContactDetails /><WhatsAppCard /></div></section></div></main><InformationFooter active="Locales" onAction={onAction} /></>;
+}
