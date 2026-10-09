@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Header } from '../components/Header';
 import { BottomNavigation } from '../components/BottomNavigation';
 import { Icon } from '../components/Icon';
-import { HomeFooter } from '../features/home/HomeFooter';
 import { categories, type Product } from '../features/carta/catalog';
 import { useCarta } from '../features/carta/useCarta';
 import { ProductCard } from '../features/carta/ProductCard';
@@ -31,7 +30,6 @@ export function CartaPage({ onAction }: { onAction: (section: string) => void })
           {carta.filtered.length ? <><div className="carta-product-grid">{carta.visible.map(product => <ProductCard key={product.id} product={product} favorite={carta.favorites.includes(product.id)} onFavorite={() => carta.favorite(product.id)} onAdd={() => carta.add(product.id)} onDetail={() => setDetail(product)} />)}</div>{carta.visible.length < carta.filtered.length && <button type="button" className="carta-load-more" onClick={carta.more}>Ver más productos <Icon name="arrow" /></button>}</> : <div className="carta-no-results"><Icon name="search" /><h3>No encontramos ese antojo</h3><p>Prueba con otro nombre o cambia los filtros.</p><button type="button" onClick={carta.reset}>Ver toda la carta</button></div>}
         </section>
       </div>
-      <HomeFooter onAction={onAction} />
     </main>
     <BottomNavigation active="Carta" onAction={action} />
     <p className="sr-only" role="status">{carta.announcement}</p>

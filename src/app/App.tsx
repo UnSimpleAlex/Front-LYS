@@ -4,6 +4,7 @@ import { RouteLoading } from '../components/RouteLoading';
 import { SharedHeader } from '../components/SharedHeader';
 import { NoticeDialog, type Notice } from '../components/NoticeDialog';
 import { SignInPage } from '../pages/SignInPage';
+import { HomeFooter } from '../features/home/HomeFooter';
 import { AuthLayout } from '../components/AuthLayout';
 const HomePage = lazy(() => import('../pages/HomePage').then(module => ({ default: module.HomePage })));
 const CartaPage = lazy(() => import('../pages/CartaPage').then(module => ({ default: module.CartaPage })));
@@ -72,6 +73,7 @@ export function App() {
     <a className="skip-link" href="#contenido">Saltar al contenido</a>
     {!carta && !promotions && !checkout && <SharedHeader key={route} onSection={onSection} activeSection={home ? 'Inicio' : account ? 'Mi cuenta' : route === '/nosotros' ? 'Nosotros' : route === '/locales' ? 'Locales' : route === '/contacto' ? 'Contacto' : ''} onSearch={query => { window.history.pushState(null, '', `/carta?buscar=${encodeURIComponent(query)}`); setRoute('/carta'); window.scrollTo({ top: 0, behavior: 'instant' }); }} />}
     <Suspense fallback={<RouteLoading />}>{account ? <AccountPage route={route} onNavigate={navigateRoute} onAction={onSection} /> : information ? (route === '/nosotros' ? <AboutPage onAction={onSection} /> : route === '/locales' ? <LocationsPage onAction={onSection} /> : <ContactPage onAction={onSection} />) : checkout ? <CheckoutPage route={route} onNavigate={navigateRoute} onAction={onSection} /> : carta ? <CartaPage onAction={onSection} /> : promotions ? <PromotionsPage onAction={onSection} /> : home ? <HomePage onAction={onSection} /> : registration ? <AuthLayout registration><RegisterCard onLogin={() => navigate(false)} onLegal={kind => setNotice({ title: kind === 'terms' ? 'Términos y Condiciones' : 'Política de Privacidad', message: 'El documento oficial estará disponible antes de habilitar la creación de cuentas.' })} /></AuthLayout> : <SignInPage onHelp={openHelp} />}</Suspense>
+    {(home || carta || promotions || checkout || information || account) && <HomeFooter onAction={onSection} />}
     <NoticeDialog notice={notice} onClose={() => setNotice(null)} />
   </MotionConfig>;
 }

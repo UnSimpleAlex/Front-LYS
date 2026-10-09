@@ -10,6 +10,8 @@ Los datos proporcionados por el propietario están centralizados en `src/feature
 
 El mapa de Locales/Contacto muestra la zona y una búsqueda de Los Palomares en OpenStreetMap. No coloca un marcador de restaurante sin coordenadas confirmadas. La ubicación exacta queda pendiente. La selección de domicilios reutiliza Leaflet, sugerencias Photon y ubicación actual opcional.
 
+El footer de Inicio se comparte desde `App` en todas las páginas públicas, checkout y Mi cuenta. Login y registro no muestran footer. La navegación móvil de cada sección se conserva.
+
 ## Comportamiento frontend
 
 Contacto valida el formulario y prepara enlaces `mailto:`/WhatsApp. El cliente confirma el envío en su aplicación; no se afirma que se haya enviado un mensaje desde el sitio.
