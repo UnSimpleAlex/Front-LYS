@@ -247,3 +247,6 @@
  .about-page .about-history { padding-top: 0; }
 }
 @media(max-width:340px) { .about-brand-copy .primary-button { font-size: 12px; gap: 7px; padding: 9px 12px; } }
+
+/* La imagen elegida tiene bordes transparentes y se muestra completa. */
+.about-page .about-brand-image { width: 100%; max-width: 100%; margin: 0; }

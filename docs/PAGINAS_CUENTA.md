@@ -25,3 +25,5 @@ El historial recupera los comprobantes de checkout en la pestaña, valida su est
 `tests/information-account.spec.ts` cubre rutas a 240, 280, 320, 390, 768, 1024, 1440 y 1920 px; datos de ejemplo explícitos; imágenes; errores del navegador; formularios; enlaces de contacto; persistencia en la pestaña; CRUD; precarga de checkout; favoritos/carrito; filtros/detalles/repetir pedidos; avisos leídos y preferencias.
 
 Los mapas/sugerencias se interceptan en pruebas para no depender de los servicios públicos. Las capturas de PC/tablet/móvil se guardan en `test-results/` (ignorado por Git).
+
+Nosotros muestra únicamente el encabezado y la imagen PNG seleccionada por el propietario (about-restaurant-selected.png), conservando su transparencia. Se retiraron la línea de tiempo, misión, visión y valores, junto con el botón que apuntaba a la historia eliminada. El footer global permanece.
