@@ -1,3 +1,4 @@
+import { Icon, ProductSummary } from "./OperationsVisuals";
 import { dateText, downloadCsv } from "./operationsFiles";
 import { useState } from "react";
 import {
@@ -10,7 +11,7 @@ import {
   type Status,
 } from "./operationsStore";
 import {
-  Bars,
+  ColumnChart,
   Badge,
   Empty,
   LineChart,
@@ -62,45 +63,169 @@ export function KitchenViews({
   );
   const advance = (id: string, status: Status) =>
     notify(() => changeStatus(id, status));
-  const hourly = Array.from({ length: 12 }, (_, i) => ({
-    label: `${i + 12}h`,
-    value: orders.filter((o) => new Date(o.created).getHours() === i + 12)
-      .length,
+  const categoryTimes = ["Pollos", "Combos", "Parrillas", "Delivery"].map(
+    (label) => {
+      const matches = completed.filter((o) =>
+        label === "Delivery"
+          ? o.channel === "Delivery"
+          : o.items.some(
+              (l) =>
+                l.product.category ===
+                (label === "Pollos" ? "pollo" : label.toLowerCase()),
+            ),
+      );
+      return {
+        label,
+        value:
+          matches.reduce(
+            (s, o) =>
+              s + (Date.parse(o.ready!) - Date.parse(o.accepted!)) / 60000,
+            0,
+          ) / Math.max(1, matches.length),
+      };
+    },
+  );
+  const firstHour = Math.min(
+    8,
+    ...orders.map((o) => new Date(o.created).getHours()),
+  );
+  const lastHour = Math.max(
+    22,
+    ...orders.map((o) => new Date(o.created).getHours()),
+  );
+  const hourly = Array.from({ length: lastHour - firstHour + 1 }, (_, i) => ({
+    label: `${i + firstHour}h`,
+    value: orders.filter(
+      (o) => new Date(o.created).getHours() === i + firstHour,
+    ).length,
   }));
   return (
     <>
       <Stats
-        entries={[
-          {
-            label:
-              section === "historial"
-                ? "Pedidos registrados"
-                : "Pedidos pendientes",
-            value:
-              section === "historial"
-                ? orders.length
-                : orders.filter((o) => o.status === "Recibido").length,
-            icon: "receipt",
-          },
-          {
-            label: "En preparación",
-            value: orders.filter((o) => o.status === "En preparación").length,
-            icon: "grill",
-            tone: "gold",
-          },
-          {
-            label: "Tiempo promedio",
-            value: `${average} min`,
-            icon: "clock",
-            tone: "gold",
-          },
-          {
-            label: "Pedidos a tiempo",
-            value: `${completed.length ? Math.round((completed.filter((o) => (Date.parse(o.ready!) - Date.parse(o.accepted!)) / 60000 <= state.settings.target).length / completed.length) * 100) : 0}%`,
-            icon: "check",
-            tone: "green",
-          },
-        ]}
+        entries={
+          section === "pedidos"
+            ? [
+                {
+                  label: "Nuevos",
+                  value: orders.filter((o) => o.status === "Recibido").length,
+                  icon: "receipt",
+                  hint: "Pendientes de aceptación",
+                },
+                {
+                  label: "Delivery",
+                  value: current.filter((o) => o.channel === "Delivery").length,
+                  icon: "scooter",
+                  hint: "Pedidos entrantes",
+                },
+                {
+                  label: "Mesas",
+                  value: current.filter((o) => o.channel === "Salón").length,
+                  icon: "table",
+                  tone: "gold",
+                  hint: "Pedidos en salón",
+                },
+                {
+                  label: "Tiempo de espera",
+                  value: `${Math.round(current.reduce((s, o) => s + minutes(o.created), 0) / Math.max(1, current.length))} min`,
+                  icon: "clock",
+                  tone: "gold",
+                  hint: "Promedio actual",
+                },
+              ]
+            : section === "historial"
+              ? [
+                  {
+                    label: "Pedidos registrados",
+                    value: orders.length,
+                    icon: "receipt",
+                    hint: "Total procesados",
+                  },
+                  {
+                    label: "Completados",
+                    value: orders.filter((o) => o.status === "Entregado")
+                      .length,
+                    icon: "check",
+                    tone: "green",
+                    hint: "Entregados al cliente",
+                  },
+                  {
+                    label: "Cancelados",
+                    value: orders.filter((o) => o.status === "Cancelado")
+                      .length,
+                    icon: "close",
+                    tone: "gray",
+                    hint: "No se prepararon",
+                  },
+                  {
+                    label: "Tiempo promedio",
+                    value: `${average} min`,
+                    icon: "clock",
+                    tone: "gold",
+                    hint: "Desde aceptación a listo",
+                  },
+                ]
+              : section === "tiempos"
+                ? [
+                    {
+                      label: "Tiempo promedio",
+                      value: `${average} min`,
+                      icon: "clock",
+                      tone: "gold",
+                      hint: "Desde inicio del turno",
+                    },
+                    {
+                      label: "Pedidos fuera de tiempo",
+                      value: late.length,
+                      icon: "bell",
+                      hint: "Requieren atención",
+                    },
+                    {
+                      label: "Eficiencia de cocina",
+                      value: `${completed.length ? Math.round((completed.filter((o) => (Date.parse(o.ready!) - Date.parse(o.accepted!)) / 60000 <= state.settings.target).length / completed.length) * 100) : 0}%`,
+                      icon: "check",
+                      tone: "green",
+                      hint: "Pedidos a tiempo",
+                    },
+                    {
+                      label: "Mejor tiempo",
+                      value: `${completed.length ? Math.round(Math.min(...completed.map((o) => (Date.parse(o.ready!) - Date.parse(o.accepted!)) / 60000))) : 0} min`,
+                      icon: "trophy",
+                      tone: "gold",
+                      hint: "Pedidos completados",
+                    },
+                  ]
+                : [
+                    {
+                      label: "Pedidos pendientes",
+                      value: orders.filter((o) => o.status === "Recibido")
+                        .length,
+                      icon: "receipt",
+                      hint: "Esperando confirmación o preparación",
+                    },
+                    {
+                      label: "En preparación",
+                      value: orders.filter((o) => o.status === "En preparación")
+                        .length,
+                      icon: "chef",
+                      tone: "gold",
+                      hint: "Cocinándose actualmente",
+                    },
+                    {
+                      label: "Tiempo promedio",
+                      value: `${average} min`,
+                      icon: "clock",
+                      tone: "gold",
+                      hint: "Desde aceptación a listo",
+                    },
+                    {
+                      label: "Pedidos a tiempo",
+                      value: `${completed.length ? Math.round((completed.filter((o) => (Date.parse(o.ready!) - Date.parse(o.accepted!)) / 60000 <= state.settings.target).length / completed.length) * 100) : 0}%`,
+                      icon: "chart",
+                      tone: "green",
+                      hint: "Pedidos preparados dentro de la meta",
+                    },
+                  ]
+        }
       />
       {section === "" ? (
         <div className="ops-kanban">
@@ -116,6 +241,7 @@ export function KitchenViews({
                     .map((order) => (
                       <OrderCard
                         compact
+                        target={state.settings.target}
                         key={order.id}
                         order={order}
                         onDetail={setDetail}
@@ -134,7 +260,7 @@ export function KitchenViews({
                     className="ops-outline"
                     onClick={() => navigate("/cocina/historial")}
                   >
-                    Ver historial completo
+                    <Icon name="clock" /> Ver historial completo
                   </button>
                 )}
               </Panel>
@@ -167,6 +293,7 @@ export function KitchenViews({
                 )
                 .map((order) => (
                   <OrderCard
+                    target={state.settings.target}
                     key={order.id}
                     order={order}
                     onDetail={setDetail}
@@ -192,7 +319,7 @@ export function KitchenViews({
                   >
                     <strong>#{order.id}</strong>
                     <Badge value={order.channel} />
-                    <p>{order.items[0]?.product.name}</p>
+                    <ProductSummary order={order} />
                     <span>{minutes(order.created)} min</span>
                   </button>
                 ))}
@@ -220,7 +347,7 @@ export function KitchenViews({
                   )
                 }
               >
-                Descargar historial
+                <Icon name="download" /> Descargar historial
               </button>
             }
           >
@@ -269,7 +396,9 @@ export function KitchenViews({
                         <Badge value={o.channel} />
                       </td>
                       <td>{o.table ? `Mesa ${o.table}` : o.customer}</td>
-                      <td>{o.items[0]?.product.name}</td>
+                      <td>
+                        <ProductSummary order={o} />
+                      </td>
                       <td>{dateText(o.created)}</td>
                       <td>{o.ready ? dateText(o.ready) : "Pendiente"}</td>
                       <td>
@@ -280,7 +409,7 @@ export function KitchenViews({
                           className="ops-outline"
                           onClick={() => setDetail(o)}
                         >
-                          Ver
+                          <Icon name="eye" /> Ver
                         </button>
                       </td>
                     </tr>
@@ -291,7 +420,7 @@ export function KitchenViews({
             {!filtered.length && <Empty />}
           </Panel>
           <Panel title="Rendimiento de hoy">
-            <Bars values={hourly} />
+            <ColumnChart values={hourly} />
             <p>
               Total de productos preparados:{" "}
               {completed.reduce(
@@ -303,7 +432,7 @@ export function KitchenViews({
         </div>
       ) : (
         <>
-          <div className="ops-two-main">
+          <div className="ops-time-overview">
             <Panel title="Tiempo promedio por hora">
               <LineChart
                 values={hourly.map((h) => ({
@@ -329,6 +458,9 @@ export function KitchenViews({
                 }))}
               />
             </Panel>
+            <Panel title="Preparación por categoría">
+              <ColumnChart values={categoryTimes} />
+            </Panel>
             <Panel title="Alertas de cocina">
               {late.map((o) => (
                 <button
@@ -343,7 +475,7 @@ export function KitchenViews({
                   <p>
                     #{o.id} · {o.items[0]?.product.name}
                   </p>
-                  Ver pedido
+                  <Icon name="arrow" /> Ver pedido
                 </button>
               ))}
               {!late.length && (
@@ -377,7 +509,9 @@ export function KitchenViews({
                     .map((o) => (
                       <tr key={o.id}>
                         <td>#{o.id}</td>
-                        <td>{o.items[0]?.product.name}</td>
+                        <td>
+                          <ProductSummary order={o} />
+                        </td>
                         <td>{dateText(o.accepted || o.created)}</td>
                         <td>{minutes(o.accepted || o.created)} min</td>
                         <td>{state.settings.target} min</td>
@@ -402,7 +536,7 @@ export function KitchenViews({
                             className="ops-outline"
                             onClick={() => setDetail(o)}
                           >
-                            Ver
+                            <Icon name="eye" /> Ver
                           </button>
                         </td>
                       </tr>

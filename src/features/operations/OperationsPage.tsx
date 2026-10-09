@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Icon, type IconName } from "../../components/Icon";
+import { Icon, type IconName } from "./OperationsVisuals";
 import {
   logoutLocal,
   roleNames,
@@ -13,38 +13,41 @@ import { AdminViews } from "./AdminViews";
 import { useOperations, changeStatus } from "./operationsStore";
 import { OrderCard, Empty } from "./OperationsUI";
 import "../../styles/operations.css";
+import "../../styles/operations-fidelity.css";
+import "../../styles/operations-fidelity-layout.css";
+import "../../styles/operations-fidelity-responsive.css";
 const menus: Record<string, [string, string, IconName][]> = {
   cocina: [
-    ["", "Panel cocina", "chicken"],
+    ["", "Panel cocina", "chef"],
     ["pedidos", "Pedidos", "receipt"],
     ["historial", "Historial", "clock"],
-    ["tiempos", "Control de tiempos", "sort"],
+    ["tiempos", "Control de tiempos", "chart"],
   ],
   mesera: [
     ["", "Dashboard", "home"],
     ["mesas", "Mesas", "table"],
-    ["nuevo-pedido", "Nuevo pedido", "cart"],
+    ["nuevo-pedido", "Nuevo pedido", "plus"],
     ["pedidos", "Pedidos", "receipt"],
     ["cierre-mesa", "Cierre de mesa", "card"],
   ],
   caja: [
-    ["", "Dashboard caja", "sort"],
+    ["", "Dashboard caja", "chart"],
     ["cobros", "Cobros", "card"],
     ["comprobantes", "Comprobantes", "receipt"],
     ["apertura", "Apertura de caja", "cash"],
-    ["cierre", "Cierre de caja", "lock"],
+    ["cierre", "Cierre de caja", "power"],
     ["historial", "Historial", "clock"],
   ],
   administrador: [
-    ["", "Dashboard", "sort"],
-    ["productos", "Productos", "grid"],
+    ["", "Dashboard", "chart"],
+    ["productos", "Productos", "box"],
     ["promociones", "Promociones", "tag"],
     ["clientes", "Clientes", "users"],
     ["usuarios", "Usuarios", "user"],
     ["pedidos", "Pedidos", "receipt"],
-    ["reportes", "Reportes", "sort"],
-    ["inventario", "Inventario", "grid"],
-    ["configuracion", "Configuración", "shield"],
+    ["reportes", "Reportes", "chart"],
+    ["inventario", "Inventario", "box"],
+    ["configuracion", "Configuración", "settings"],
   ],
   delivery: [["", "Entregas", "truck"]],
 };
@@ -212,6 +215,7 @@ export function OperationsPage({
         </nav>
         <div className="ops-header-right">
           <span className="ops-date">
+            <Icon name="calendar" />
             {new Date().toLocaleDateString("es-PE", {
               weekday: "short",
               day: "numeric",
@@ -226,15 +230,21 @@ export function OperationsPage({
                 ? "Caja abierta"
                 : "Caja cerrada"
               : state.settings.open
-                ? "Local abierto"
+                ? role === "cocina"
+                  ? "Cocina activa"
+                  : role === "mesera"
+                    ? "Turno activo"
+                    : "Local abierto"
                 : "Local cerrado"}
+            {role !== "administrador" && <small>{state.settings.hours}</small>}
           </span>
           <button
+            className="ops-notification-toggle"
             aria-label="Notificaciones de pedidos"
             aria-expanded={notifications}
             onClick={() => setNotifications(!notifications)}
           >
-            <Icon name="receipt" />
+            <Icon name="bell" />
             <sup>{pending.length}</sup>
           </button>
           <button
@@ -242,7 +252,9 @@ export function OperationsPage({
             aria-expanded={profile}
             onClick={() => setProfile(!profile)}
           >
-            <Icon name="user" />
+            <span className="ops-avatar">
+              <Icon name="user" />
+            </span>
             <span>
               {user.name}
               <small>{roleNames[user.role]}</small>

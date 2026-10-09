@@ -1,3 +1,4 @@
+import { SupplySummary, Icon, UserSummary } from "./OperationsVisuals";
 import { readUpload } from "./imageUpload";
 import { useState } from "react";
 import { categories } from "../carta/catalog";
@@ -57,7 +58,7 @@ export function ProductManager({
       p.name.toLowerCase().includes(search.toLowerCase()),
   );
   return (
-    <>
+    <div className="ops-manager-layout">
       <Stats
         entries={[
           { label: "Total productos", value: data.products.length },
@@ -138,7 +139,20 @@ export function ProductManager({
                         </div>
                       </div>
                     </td>
-                    <td>{categories.find((c) => c.id === p.category)?.name}</td>
+                    <td>
+                      <span className="ops-category-label">
+                        <Icon
+                          name={
+                            p.category === "bebidas"
+                              ? "drink"
+                              : p.category === "parrillas"
+                                ? "grill"
+                                : "chicken"
+                          }
+                        />
+                        {categories.find((c) => c.id === p.category)?.name}
+                      </span>
+                    </td>
                     <td>{money(p.price)}</td>
                     <td>{p.stock}</td>
                     <td>
@@ -157,12 +171,12 @@ export function ProductManager({
                     <td>
                       <div className="ops-actions">
                         <button onClick={() => setProduct({ ...p })}>
-                          Editar
+                          <Icon name="edit" /> Editar
                         </button>
                         <button
                           onClick={() => notify(() => deleteProduct(p.id))}
                         >
-                          Desactivar
+                          <Icon name="trash" /> Desactivar
                         </button>
                       </div>
                     </td>
@@ -249,8 +263,13 @@ export function ProductManager({
                 }
               />
             </label>
-            <label>
+            <label className="ops-upload-label">
               Imagen del producto
+              <span className="ops-upload-surface">
+                <Icon name="grid" />
+                <span>Haz clic para subir una imagen</span>
+                <small>JPG, PNG o WebP · Máx. 5 MB</small>
+              </span>
               <input
                 type="file"
                 accept="image/png,image/jpeg,image/webp"
@@ -266,11 +285,13 @@ export function ProductManager({
                 }}
               />
             </label>
-            <img
-              className="ops-upload-preview"
-              src={product.image}
-              alt="Vista previa del producto"
-            />
+            {product.image !== "/images/logo.webp" && (
+              <img
+                className="ops-upload-preview"
+                src={product.image}
+                alt="Vista previa del producto"
+              />
+            )}
             {error && <p role="alert">{error}</p>}
             <label>
               Stock
@@ -294,11 +315,13 @@ export function ProductManager({
               />
               Producto disponible
             </label>
-            <button className="ops-primary">Guardar producto</button>
+            <button className="ops-primary">
+              <Icon name="save" /> Guardar producto
+            </button>
           </form>
         </Panel>
       </div>
-    </>
+    </div>
   );
 }
 const blankOffer = (): Offer => ({
@@ -382,6 +405,16 @@ export function PromotionManager({
                   .map((o) => (
                     <tr key={o.id}>
                       <td>
+                        <div className="ops-promotion-photo">
+                          <img
+                            src={
+                              data.products.find((p) => p.id === o.productId)
+                                ?.image || "/images/promotions/familiar.webp"
+                            }
+                            alt=""
+                          />
+                          <span>-{o.percent}%</span>
+                        </div>
                         <strong>{o.name}</strong>
                         <small>
                           {o.percent}% ·{" "}
@@ -414,7 +447,7 @@ export function PromotionManager({
                       <td>
                         <div className="ops-actions">
                           <button onClick={() => setOffer({ ...o })}>
-                            Editar
+                            <Icon name="edit" /> Editar
                           </button>
                           <button
                             onClick={() =>
@@ -430,7 +463,7 @@ export function PromotionManager({
                               )
                             }
                           >
-                            Duplicar
+                            <Icon name="copy" /> Duplicar
                           </button>
                         </div>
                       </td>
@@ -556,7 +589,9 @@ export function PromotionManager({
               />
               Promoción activa
             </label>
-            <button className="ops-primary">Guardar promoción</button>
+            <button className="ops-primary">
+              <Icon name="save" /> Guardar promoción
+            </button>
           </form>
         </Panel>
       </div>
@@ -673,8 +708,7 @@ export function UserManager({
                   .map((u) => (
                     <tr key={u.id}>
                       <td>
-                        <strong>{u.name}</strong>
-                        <small>{u.phone}</small>
+                        <UserSummary name={u.name} detail={u.phone} />
                       </td>
                       <td>{u.email}</td>
                       <td>
@@ -698,8 +732,12 @@ export function UserManager({
                       </td>
                       <td>
                         <div className="ops-actions">
-                          <button onClick={() => setView(u)}>Ver</button>
-                          <button onClick={() => select(u)}>Editar</button>
+                          <button onClick={() => setView(u)}>
+                            <Icon name="eye" /> Ver
+                          </button>
+                          <button onClick={() => select(u)}>
+                            <Icon name="edit" /> Editar
+                          </button>
                           <button
                             onClick={() =>
                               notify(() =>
@@ -707,7 +745,7 @@ export function UserManager({
                               )
                             }
                           >
-                            Desactivar
+                            <Icon name="trash" /> Desactivar
                           </button>
                         </div>
                       </td>
@@ -864,6 +902,7 @@ export function InventoryManager({
   const [tab, setTab] = useState("Insumos");
   const [search, setSearch] = useState("");
   const [supply, setSupply] = useState(blankSupply);
+  const [editingSupply, setEditingSupply] = useState(false);
   const [movement, setMovement] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [provider, setProvider] = useState<Supplier>({
@@ -902,7 +941,9 @@ export function InventoryManager({
             {data.suppliers.map((p) => (
               <p key={p.id}>
                 {p.name} · {p.phone} · {p.email}
-                <button onClick={() => setProvider(p)}>Editar</button>
+                <button onClick={() => setProvider(p)}>
+                  <Icon name="edit" /> Editar
+                </button>
               </p>
             ))}
           </Panel>
@@ -951,7 +992,9 @@ export function InventoryManager({
                   }
                 />
               </label>
-              <button className="ops-primary">Guardar proveedor</button>
+              <button className="ops-primary">
+                <Icon name="save" /> Guardar proveedor
+              </button>
             </form>
           </Panel>
         </div>
@@ -960,7 +1003,12 @@ export function InventoryManager({
           <Panel
             title={tab === "Alertas" ? "Alertas de stock" : "Insumos"}
             action={
-              <button onClick={() => setSupply(blankSupply())}>
+              <button
+                onClick={() => {
+                  setSupply(blankSupply());
+                  setEditingSupply(true);
+                }}
+              >
                 ＋ Nuevo insumo
               </button>
             }
@@ -997,8 +1045,7 @@ export function InventoryManager({
                     .map((s) => (
                       <tr key={s.id}>
                         <td>
-                          <strong>{s.name}</strong>
-                          <small>{s.category}</small>
+                          <SupplySummary name={s.name} detail={s.category} />
                         </td>
                         <td>{s.stock}</td>
                         <td>{s.unit}</td>
@@ -1010,16 +1057,21 @@ export function InventoryManager({
                         </td>
                         <td>
                           <div className="ops-actions">
-                            <button onClick={() => setSupply({ ...s })}>
-                              Editar
+                            <button
+                              onClick={() => {
+                                setSupply({ ...s });
+                                setEditingSupply(true);
+                              }}
+                            >
+                              <Icon name="edit" /> Editar
                             </button>
                             <button onClick={() => setMovement(s.id)}>
-                              Registrar movimiento
+                              <Icon name="plus" /> Registrar movimiento
                             </button>
                             <button
                               onClick={() => notify(() => deleteSupply(s.id))}
                             >
-                              Eliminar
+                              <Icon name="trash" /> Eliminar
                             </button>
                           </div>
                         </td>
@@ -1048,63 +1100,104 @@ export function InventoryManager({
                     onChange={(e) => setQuantity(Number(e.target.value))}
                   />
                 </label>
-                <button className="ops-primary">Guardar movimiento</button>
+                <button className="ops-primary">
+                  <Icon name="save" /> Guardar movimiento
+                </button>
               </form>
             )}
           </Panel>
           <div>
-            <Panel title="Nuevo / Editar insumo">
-              <form
-                className="ops-form"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  notify(() => {
-                    saveSupply(supply);
-                    setSupply(blankSupply());
-                  });
-                }}
-              >
-                {(["name", "category", "unit"] as const).map((field) => (
-                  <label key={field}>
-                    {field === "name"
-                      ? "Nombre"
-                      : field === "category"
-                        ? "Categoría"
-                        : "Unidad"}
-                    <input
-                      required
-                      value={supply[field]}
-                      onChange={(e) =>
-                        setSupply({ ...supply, [field]: e.target.value })
-                      }
+            <Panel title="Alertas de stock">
+              {data.supplies
+                .filter((s) => s.stock < s.min)
+                .map((s) => (
+                  <button
+                    className="ops-stock-alert"
+                    key={s.id}
+                    onClick={() => {
+                      setSupply({ ...s });
+                      setEditingSupply(true);
+                    }}
+                  >
+                    <SupplySummary
+                      name={s.name}
+                      detail={`Stock actual: ${s.stock} ${s.unit} | Mín: ${s.min}`}
                     />
-                  </label>
+                    <Badge value="Stock bajo" />
+                    <Icon name="chevron" />
+                  </button>
                 ))}
-                {(["stock", "min", "cost"] as const).map((field) => (
-                  <label key={field}>
-                    {field === "stock"
-                      ? "Stock actual"
-                      : field === "min"
-                        ? "Stock mínimo"
-                        : "Costo unitario (S/)"}
-                    <input
-                      required
-                      type="number"
-                      min="0"
-                      step="0.01"
-                      value={supply[field]}
-                      onChange={(e) =>
-                        setSupply({
-                          ...supply,
-                          [field]: Number(e.target.value),
-                        })
-                      }
-                    />
-                  </label>
-                ))}
-                <button className="ops-primary">Guardar insumo</button>
-              </form>
+              {!data.supplies.some((s) => s.stock < s.min) && (
+                <Empty>Todos los insumos tienen stock suficiente.</Empty>
+              )}
             </Panel>
+            {editingSupply && (
+              <Panel
+                title="Nuevo / Editar insumo"
+                action={
+                  <button
+                    className="ops-outline"
+                    onClick={() => setEditingSupply(false)}
+                  >
+                    <Icon name="close" /> Cerrar formulario
+                  </button>
+                }
+              >
+                <form
+                  className="ops-form"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    notify(() => {
+                      saveSupply(supply);
+                      setSupply(blankSupply());
+                      setEditingSupply(false);
+                    });
+                  }}
+                >
+                  {(["name", "category", "unit"] as const).map((field) => (
+                    <label key={field}>
+                      {field === "name"
+                        ? "Nombre"
+                        : field === "category"
+                          ? "Categoría"
+                          : "Unidad"}
+                      <input
+                        required
+                        value={supply[field]}
+                        onChange={(e) =>
+                          setSupply({ ...supply, [field]: e.target.value })
+                        }
+                      />
+                    </label>
+                  ))}
+                  {(["stock", "min", "cost"] as const).map((field) => (
+                    <label key={field}>
+                      {field === "stock"
+                        ? "Stock actual"
+                        : field === "min"
+                          ? "Stock mínimo"
+                          : "Costo unitario (S/)"}
+                      <input
+                        required
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        value={supply[field]}
+                        onChange={(e) =>
+                          setSupply({
+                            ...supply,
+                            [field]: Number(e.target.value),
+                          })
+                        }
+                      />
+                    </label>
+                  ))}
+                  <button className="ops-primary">
+                    <Icon name="save" /> Guardar insumo
+                  </button>
+                </form>
+              </Panel>
+            )}
             <Panel title="Últimos movimientos">
               {data.movements.slice(0, 6).map((m) => (
                 <p key={m.id}>

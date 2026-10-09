@@ -1,3 +1,9 @@
+import {
+  Icon,
+  ProductSummary,
+  UserSummary,
+  PaymentMark,
+} from "./OperationsVisuals";
 import { dateText, downloadCsv, printLocal } from "./operationsFiles";
 import { useState } from "react";
 import {
@@ -39,6 +45,7 @@ export function CashViews({
   );
   const data = useOperations();
   const [selected, setSelected] = useState("");
+  const [pendingLimit, setPendingLimit] = useState(8);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("Todos");
   const [method, setMethod] = useState("Efectivo");
@@ -126,7 +133,12 @@ export function CashViews({
                   <td>{dateText(p.date)}</td>
                   <td>#{p.orderId}</td>
                   <td>{o?.customer}</td>
-                  <td>{p.method}</td>
+                  <td>
+                    <span className="ops-method-label">
+                      <PaymentMark name={p.method} />
+                      {p.method}
+                    </span>
+                  </td>
                   <td>{money(p.amount)}</td>
                   <td>{money(p.change)}</td>
                   <td>
@@ -135,16 +147,16 @@ export function CashViews({
                   <td>
                     <div className="ops-actions">
                       <button onClick={() => o && setDetail(o)}>
-                        Ver detalle
+                        <Icon name="eye" /> Ver detalle
                       </button>
                       <button onClick={() => notify(() => o && printOrder(o))}>
-                        Imprimir
+                        <Icon name="print" /> Imprimir
                       </button>
                       {!p.refunded && shift?.id === p.shiftId && (
                         <button
                           onClick={() => notify(() => refundPayment(p.id))}
                         >
-                          Reembolsar
+                          <Icon name="arrow" /> Reembolsar
                         </button>
                       )}
                     </div>
@@ -345,6 +357,7 @@ export function CashViews({
                           .toLowerCase()
                           .includes(search.toLowerCase()),
                     )
+                    .slice(0, pendingLimit)
                     .map((o) => (
                       <tr
                         key={o.id}
@@ -352,8 +365,12 @@ export function CashViews({
                       >
                         <td>#{o.id}</td>
                         <td>{o.table ? `Mesa ${o.table}` : o.channel}</td>
-                        <td>{o.customer}</td>
-                        <td>{o.items[0]?.product.name}</td>
+                        <td>
+                          <UserSummary name={o.customer} />
+                        </td>
+                        <td>
+                          <ProductSummary order={o} />
+                        </td>
                         <td>{money(orderTotal(o))}</td>
                         <td>
                           <button
@@ -363,13 +380,21 @@ export function CashViews({
                               setReceived("");
                             }}
                           >
-                            Cobrar
+                            <Icon name="card" /> Cobrar
                           </button>
                         </td>
                       </tr>
                     ))}
                 </tbody>
               </table>
+              {pending.length > pendingLimit && (
+                <button
+                  className="ops-outline"
+                  onClick={() => setPendingLimit(pendingLimit + 8)}
+                >
+                  <Icon name="plus" /> Ver más pedidos
+                </button>
+              )}
               {!pending.length && (
                 <Empty>No hay pedidos pendientes de cobro.</Empty>
               )}
@@ -381,65 +406,74 @@ export function CashViews({
                 <h3>
                   Pedido #{order.id} · {order.customer}
                 </h3>
-                <div className="ops-detail-lines">
-                  {order.items.map((l) => (
-                    <div key={l.product.id}>
-                      <span>
-                        {l.count} {l.product.name}
-                      </span>
-                      <strong>{money(l.product.price * l.count)}</strong>
+                <div className="ops-payment-process">
+                  <div className="ops-payment-summary">
+                    <h3>Resumen del pedido</h3>
+                    <div className="ops-detail-lines">
+                      {order.items.map((l) => (
+                        <div key={l.product.id}>
+                          <span>
+                            {l.count} {l.product.name}
+                          </span>
+                          <strong>{money(l.product.price * l.count)}</strong>
+                        </div>
+                      ))}
                     </div>
-                  ))}
+                    <div className="ops-total">
+                      Total a cobrar <strong>{money(orderTotal(order))}</strong>
+                    </div>
+                  </div>
+                  <div className="ops-payment-controls">
+                    <h3>Método de pago</h3>
+                    <Tabs
+                      options={data.settings.methods}
+                      value={method}
+                      onChange={setMethod}
+                    />
+                    <form
+                      className="ops-form"
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        notify(() => {
+                          processPayment(
+                            order.id,
+                            method,
+                            method === "Efectivo"
+                              ? Number(received)
+                              : orderTotal(order),
+                          );
+                          setSelected(order.id);
+                          setReceived("");
+                        });
+                      }}
+                    >
+                      {method === "Efectivo" && (
+                        <>
+                          <label>
+                            Monto recibido
+                            <input
+                              required
+                              min={orderTotal(order)}
+                              type="number"
+                              step="0.01"
+                              value={received}
+                              onChange={(e) => setReceived(e.target.value)}
+                            />
+                          </label>
+                          <strong>
+                            Vuelto:{" "}
+                            {money(
+                              Math.max(0, Number(received) - orderTotal(order)),
+                            )}
+                          </strong>
+                        </>
+                      )}
+                      <button className="ops-primary">
+                        <Icon name="check" /> Procesar pago
+                      </button>
+                    </form>
+                  </div>
                 </div>
-                <div className="ops-total">
-                  Total a cobrar <strong>{money(orderTotal(order))}</strong>
-                </div>
-                <h3>Método de pago</h3>
-                <Tabs
-                  options={data.settings.methods}
-                  value={method}
-                  onChange={setMethod}
-                />
-                <form
-                  className="ops-form"
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    notify(() => {
-                      processPayment(
-                        order.id,
-                        method,
-                        method === "Efectivo"
-                          ? Number(received)
-                          : orderTotal(order),
-                      );
-                      setSelected(order.id);
-                      setReceived("");
-                    });
-                  }}
-                >
-                  {method === "Efectivo" && (
-                    <>
-                      <label>
-                        Monto recibido
-                        <input
-                          required
-                          min={orderTotal(order)}
-                          type="number"
-                          step="0.01"
-                          value={received}
-                          onChange={(e) => setReceived(e.target.value)}
-                        />
-                      </label>
-                      <strong>
-                        Vuelto:{" "}
-                        {money(
-                          Math.max(0, Number(received) - orderTotal(order)),
-                        )}
-                      </strong>
-                    </>
-                  )}
-                  <button className="ops-primary">Procesar pago</button>
-                </form>
                 {!shift && (
                   <button
                     className="ops-outline"
@@ -456,7 +490,7 @@ export function CashViews({
               className="ops-outline"
               onClick={() => navigate("/caja/comprobantes")}
             >
-              Emitir comprobante
+              <Icon name="receipt" /> Emitir comprobante
             </button>
           </Panel>
         </div>
@@ -464,7 +498,7 @@ export function CashViews({
           title="Pagos recientes"
           action={
             <button onClick={() => navigate("/caja/historial")}>
-              Ver todos →
+              <Icon name="arrow" /> Ver todos →
             </button>
           }
         >
@@ -513,7 +547,7 @@ export function CashViews({
                   )
                 }
               >
-                Exportar Excel (CSV)
+                <Icon name="download" /> Exportar Excel (CSV)
               </button>
             }
           >
@@ -565,7 +599,7 @@ export function CashViews({
                               )
                             }
                           >
-                            Ver / Imprimir PDF
+                            <Icon name="print" /> Ver / Imprimir PDF
                           </button>
                         </td>
                       </tr>
@@ -638,7 +672,9 @@ export function CashViews({
                 <strong>{money(paidOrder ? orderTotal(paidOrder) : 0)}</strong>
               </div>
               <p>Comprobante de simulación local, sin valor tributario.</p>
-              <button className="ops-primary">Emitir comprobante</button>
+              <button className="ops-primary">
+                <Icon name="receipt" /> Emitir comprobante
+              </button>
             </form>
           </Panel>
         </div>
@@ -665,7 +701,9 @@ export function CashViews({
           <Panel
             title="Historial de pagos"
             action={
-              <button onClick={exportPayments}>Exportar Excel (CSV)</button>
+              <button onClick={exportPayments}>
+                <Icon name="download" /> Exportar Excel (CSV)
+              </button>
             }
           >
             <div className="ops-toolbar">
@@ -715,7 +753,7 @@ export function CashViews({
             title="Cobros recientes"
             action={
               <button onClick={() => navigate("/caja/cobros")}>
-                Ver todos →
+                <Icon name="arrow" /> Ver todos →
               </button>
             }
           >
@@ -756,7 +794,11 @@ export function CashViews({
         </div>
         <Panel
           title="Últimas transacciones"
-          action={<button onClick={exportPayments}>Exportar</button>}
+          action={
+            <button onClick={exportPayments}>
+              <Icon name="download" /> Exportar
+            </button>
+          }
         >
           {transactions}
         </Panel>

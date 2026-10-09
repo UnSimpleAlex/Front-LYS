@@ -1,3 +1,9 @@
+import {
+  SupplySummary,
+  Icon,
+  UserSummary,
+  PaymentMark,
+} from "./OperationsVisuals";
 import { dateText, downloadCsv, printLocal } from "./operationsFiles";
 import { readUpload } from "./imageUpload";
 import { useEffect, useState } from "react";
@@ -85,6 +91,7 @@ export function AdminViews({
   const best = data.products
     .map((p) => ({
       label: p.name,
+      image: p.image,
       value: orders
         .filter((o) => o.status !== "Cancelado")
         .flatMap((o) => o.items)
@@ -141,7 +148,9 @@ export function AdminViews({
             <tr key={o.id} className={o.id === order?.id ? "selected-row" : ""}>
               <td>#{o.id}</td>
               <td>{dateText(o.created)}</td>
-              <td>{o.customer}</td>
+              <td>
+                <UserSummary name={o.customer} />
+              </td>
               <td>{o.table ? `Mesa ${o.table}` : o.channel}</td>
               <td>
                 <div className="ops-product-cell">
@@ -166,7 +175,7 @@ export function AdminViews({
                     setDetail(o);
                   }}
                 >
-                  Ver detalle
+                  <Icon name="eye" /> Ver detalle
                 </button>
               </td>
             </tr>
@@ -207,7 +216,7 @@ export function AdminViews({
                   className="ops-primary"
                   onClick={() => notify(() => saveSettings(settings))}
                 >
-                  Guardar cambios
+                  <Icon name="save" /> Guardar cambios
                 </button>
               </div>
             }
@@ -265,7 +274,10 @@ export function AdminViews({
                 {paymentMethods.map((m) => (
                   <article key={m}>
                     <header>
-                      <h3>{m}</h3>
+                      <h3 className="ops-method-label">
+                        <PaymentMark name={m} />
+                        {m}
+                      </h3>
                       <button
                         className={`ops-switch ${settings.methods.includes(m) ? "on" : ""}`}
                         aria-label={`Activar ${m}`}
@@ -280,7 +292,15 @@ export function AdminViews({
                         }
                       />
                     </header>
-                    <p>Disponible en caja y al elegir el pago del pedido.</p>
+                    <p>
+                      {m === "Efectivo"
+                        ? "Pago en efectivo en tienda o contra entrega."
+                        : m === "Tarjeta"
+                          ? "Visa, Mastercard, American Express y más."
+                          : m === "Transferencia"
+                            ? "Transferencias desde cualquier banco."
+                            : `Pago rápido y seguro con ${m}.`}
+                    </p>
                     {(m === "Yape" || m === "Plin") && (
                       <>
                         <label>
@@ -310,7 +330,16 @@ export function AdminViews({
                             alt={`QR configurado para ${m}`}
                           />
                         ) : (
-                          <small>Sin QR configurado</small>
+                          <div className="ops-qr-placeholder">
+                            <img
+                              className="ops-qr"
+                              src={`/images/checkout/qr-${m.toLowerCase()}-demo.svg`}
+                              alt="QR de muestra"
+                            />
+                            <small>
+                              QR de muestra · configura el de tu negocio
+                            </small>
+                          </div>
                         )}
                       </>
                     )}
@@ -448,7 +477,9 @@ export function AdminViews({
                   <option key={s}>{s}</option>
                 ))}
               </select>
-              <button onClick={exportOrders}>Exportar</button>
+              <button onClick={exportOrders}>
+                <Icon name="download" /> Exportar
+              </button>
             </div>
             {table}
           </Panel>
@@ -508,14 +539,14 @@ export function AdminViews({
                         )
                       }
                     >
-                      Avanzar estado
+                      <Icon name="sort" /> Avanzar estado
                     </button>
                     <button
                       onClick={() =>
                         notify(() => changeStatus(order.id, "Cancelado"))
                       }
                     >
-                      Cancelar pedido
+                      <Icon name="close" /> Cancelar pedido
                     </button>
                   </div>
                 )}
@@ -603,7 +634,7 @@ export function AdminViews({
               )
             }
           >
-            Exportar PDF / Imprimir
+            <Icon name="download" /> Exportar PDF / Imprimir
           </button>
           <button
             onClick={() =>
@@ -620,7 +651,7 @@ export function AdminViews({
               )
             }
           >
-            Exportar Excel (CSV)
+            <Icon name="download" /> Exportar Excel (CSV)
           </button>
         </div>
         <Stats
@@ -713,7 +744,7 @@ export function AdminViews({
           title="Ventas últimos 7 días"
           action={
             <button onClick={() => navigate("/administrador/reportes")}>
-              Ver detalle →
+              <Icon name="eye" /> Ver detalle →
             </button>
           }
         >
@@ -737,10 +768,10 @@ export function AdminViews({
             .filter((s) => s.stock < s.min)
             .map((s) => (
               <p key={s.id}>
-                <strong>{s.name}</strong>
-                <small>
-                  {s.stock} {s.unit} · Stock mínimo: {s.min}
-                </small>
+                <SupplySummary
+                  name={s.name}
+                  detail={`${s.stock} ${s.unit} · Stock mínimo: ${s.min}`}
+                />
               </p>
             ))}
         </Panel>
@@ -749,7 +780,9 @@ export function AdminViews({
         title="Pedidos recientes"
         action={
           <div className="ops-actions">
-            <button onClick={exportOrders}>Exportar</button>
+            <button onClick={exportOrders}>
+              <Icon name="download" /> Exportar
+            </button>
             <button onClick={() => notify(seedExampleOrders)}>
               Cargar pedidos de ejemplo
             </button>

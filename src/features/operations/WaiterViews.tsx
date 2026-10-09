@@ -1,3 +1,4 @@
+import { Icon, ProductSummary } from "./OperationsVisuals";
 import { dateText, printLocal } from "./operationsFiles";
 import { useState } from "react";
 import { currentUser } from "../../services/localAuth";
@@ -60,6 +61,8 @@ export function TableMap({
             aria-pressed={selected === t.id}
             onClick={() => onSelect(t.id)}
           >
+            <i className="ops-chair-left" aria-hidden="true" />
+            <i className="ops-chair-right" aria-hidden="true" />
             <strong>M{t.id}</strong>
             <Badge value={t.status} />
             <small>{t.seats} personas</small>
@@ -262,14 +265,14 @@ export function NewOrder({
               disabled={!lines.length}
               onClick={() => submit(true)}
             >
-              Guardar como pendiente
+              <Icon name="save" /> Guardar como pendiente
             </button>
             <button
               className="ops-primary"
               disabled={!lines.length}
               onClick={() => submit(false)}
             >
-              Enviar a cocina
+              <Icon name="send" /> Enviar a cocina
             </button>
           </div>
         </Panel>
@@ -377,7 +380,7 @@ export function WaiterViews({
               )
             }
           >
-            Guardar notas
+            <Icon name="save" /> Guardar notas
           </button>
         </>
       ) : tab === "Historial" ? (
@@ -410,7 +413,7 @@ export function WaiterViews({
                   className="ops-primary"
                   onClick={() => notify(() => changeStatus(o.id, "Entregado"))}
                 >
-                  Entregar pedido
+                  <Icon name="serve" /> Entregar pedido
                 </button>
               )}
             </div>
@@ -429,7 +432,7 @@ export function WaiterViews({
           className="ops-primary"
           onClick={() => navigate(`/mesera/nuevo-pedido?mesa=${selected}`)}
         >
-          Agregar pedido
+          <Icon name="plus" /> Agregar pedido
         </button>
         <button
           className="ops-blue"
@@ -438,7 +441,7 @@ export function WaiterViews({
             notify(() => updateTable(selected, { status: "Solicita cuenta" }))
           }
         >
-          Solicitar cuenta
+          <Icon name="receipt" /> Solicitar cuenta
         </button>
         <button
           className="ops-green"
@@ -446,7 +449,7 @@ export function WaiterViews({
             notify(() => updateTable(selected, { status: "Libre" }))
           }
         >
-          Liberar mesa
+          <Icon name="table" /> Liberar mesa
         </button>
         <button
           className="ops-outline"
@@ -484,7 +487,7 @@ export function WaiterViews({
                 className="ops-outline"
                 onClick={() => navigate("/mesera/pedidos")}
               >
-                Ver todos
+                <Icon name="arrow" /> Ver todos
               </button>
             }
           >
@@ -503,8 +506,17 @@ export function WaiterViews({
                   {orders.slice(0, 5).map((o) => (
                     <tr key={o.id}>
                       <td>M{o.table}</td>
-                      <td>{o.items[0]?.product.name}</td>
-                      <td>{dateText(o.created)}</td>
+                      <td>
+                        <ProductSummary order={o} />
+                      </td>
+                      <td>
+                        <time dateTime={o.created} title={dateText(o.created)}>
+                          {new Date(o.created).toLocaleTimeString("es-PE", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </time>
+                      </td>
                       <td>
                         <Badge value={o.status} />
                       </td>
@@ -513,7 +525,7 @@ export function WaiterViews({
                           className="ops-outline"
                           onClick={() => setDetail(o)}
                         >
-                          Ver
+                          <Icon name="eye" /> Ver
                         </button>
                       </td>
                     </tr>
@@ -526,7 +538,7 @@ export function WaiterViews({
               className="ops-primary"
               onClick={() => navigate("/mesera/nuevo-pedido")}
             >
-              Nuevo pedido
+              <Icon name="plus" /> Nuevo pedido
             </button>
           </Panel>
         </div>
@@ -599,6 +611,11 @@ export function WaiterViews({
                 </h3>
                 {o.items.map((line) => (
                   <div className="ops-cart-line" key={line.product.id}>
+                    <img
+                      className="ops-consumption-photo"
+                      src={line.product.image}
+                      alt=""
+                    />
                     <span>{line.product.name}</span>
                     <strong>{money(line.product.price * line.count)}</strong>
                     {o.status === "Recibido" && (
@@ -677,7 +694,7 @@ export function WaiterViews({
                   )
                 }
               >
-                Solicitar cuenta
+                <Icon name="receipt" /> Solicitar cuenta
               </button>
               <button
                 className="ops-outline"
@@ -695,7 +712,7 @@ export function WaiterViews({
                   )
                 }
               >
-                Imprimir cuenta
+                <Icon name="print" /> Imprimir cuenta
               </button>
               <button
                 className="ops-outline"
@@ -703,7 +720,7 @@ export function WaiterViews({
                   navigate(`/mesera/nuevo-pedido?mesa=${selected}`)
                 }
               >
-                Agregar producto
+                <Icon name="plus" /> Agregar producto
               </button>
               <button
                 className="ops-green"
@@ -711,7 +728,7 @@ export function WaiterViews({
                   notify(() => updateTable(selected, { status: "Libre" }))
                 }
               >
-                Liberar mesa
+                <Icon name="table" /> Liberar mesa
               </button>
             </div>
           </Panel>
@@ -741,7 +758,7 @@ export function WaiterViews({
               className="ops-primary"
               onClick={() => navigate("/mesera/nuevo-pedido")}
             >
-              Nuevo pedido
+              <Icon name="plus" /> Nuevo pedido
             </button>
           </div>
           <div className="ops-two-main">
@@ -775,8 +792,20 @@ export function WaiterViews({
                         <tr key={o.id}>
                           <td>{o.table}</td>
                           <td>#{o.id}</td>
-                          <td>{o.items[0]?.product.name}</td>
-                          <td>{dateText(o.created)}</td>
+                          <td>
+                            <ProductSummary order={o} />
+                          </td>
+                          <td>
+                            <time
+                              dateTime={o.created}
+                              title={dateText(o.created)}
+                            >
+                              {new Date(o.created).toLocaleTimeString("es-PE", {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })}
+                            </time>
+                          </td>
                           <td>{money(orderTotal(o))}</td>
                           <td>
                             <Badge value={o.draft ? "Borrador" : o.status} />
@@ -787,14 +816,14 @@ export function WaiterViews({
                                 className="ops-outline"
                                 onClick={() => setDetail(o)}
                               >
-                                Ver detalle
+                                <Icon name="eye" /> Ver detalle
                               </button>
                               {o.draft ? (
                                 <button
                                   className="ops-primary"
                                   onClick={() => notify(() => sendDraft(o.id))}
                                 >
-                                  Enviar a cocina
+                                  <Icon name="send" /> Enviar a cocina
                                 </button>
                               ) : o.status === "Listo" ? (
                                 <button
@@ -805,7 +834,7 @@ export function WaiterViews({
                                     )
                                   }
                                 >
-                                  Entregar
+                                  <Icon name="serve" /> Entregar
                                 </button>
                               ) : null}
                               <button
@@ -816,7 +845,7 @@ export function WaiterViews({
                                   )
                                 }
                               >
-                                Agregar producto
+                                <Icon name="plus" /> Agregar producto
                               </button>
                               <button
                                 className="ops-outline"
@@ -828,7 +857,7 @@ export function WaiterViews({
                                   )
                                 }
                               >
-                                Solicitar cuenta
+                                <Icon name="receipt" /> Solicitar cuenta
                               </button>
                             </div>
                           </td>
@@ -839,19 +868,29 @@ export function WaiterViews({
               </div>
               {!orders.length && <Empty />}
             </Panel>
-            <Panel title="Pedidos por estado">
-              <Bars
-                values={[
-                  "Recibido",
-                  "En preparación",
-                  "Listo",
-                  "Entregado",
-                ].map((label) => ({
-                  label,
-                  value: orders.filter((o) => o.status === label).length,
-                }))}
-              />
-            </Panel>
+            <div>
+              <Panel title="Pedidos por estado">
+                <Bars
+                  values={[
+                    "Recibido",
+                    "En preparación",
+                    "Listo",
+                    "Entregado",
+                  ].map((label) => ({
+                    label,
+                    value: orders.filter((o) => o.status === label).length,
+                  }))}
+                />
+              </Panel>
+              <aside className="ops-service-banner">
+                <strong>
+                  Buen servicio,
+                  <br />
+                  grandes momentos
+                </strong>
+                <p>Leñas y Sabores</p>
+              </aside>
+            </div>
           </div>
         </>
       )}

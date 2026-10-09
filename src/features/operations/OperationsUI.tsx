@@ -1,6 +1,7 @@
+import { iconFor } from "./operationsVisualNames";
 import { dateText } from "./operationsFiles";
 import type { ReactNode } from "react";
-import { Icon, type IconName } from "../../components/Icon";
+import { Icon, PaymentMark, type IconName } from "./OperationsVisuals";
 import { AccountDialog } from "../account/AccountShared";
 import {
   money,
@@ -19,10 +20,36 @@ export function Panel({
   children: ReactNode;
   action?: ReactNode;
 }) {
+  const count = title.match(/\((\d+)\)$/)?.[1];
+  const label = count ? title.replace(/\s*\(\d+\)$/, "") : title;
+  const captions: Record<string, string> = {
+    Nuevos: "Pedidos por confirmar",
+    "En preparación": "Pedidos en cocina",
+    "Listos para entregar": "Pedidos listos en pase",
+    Completados: "Pedidos entregados",
+    "Mapa del salón": "Estado en tiempo real de todas las mesas",
+    "Pedidos recientes": "Últimos pedidos registrados en el sistema",
+    "Lista de productos": "Gestiona los productos de tu carta.",
+    "Roles y permisos":
+      "Cada rol tiene permisos específicos dentro del sistema.",
+    "Rendimiento de hoy": "Pedidos por hora en cocina",
+    "Alertas de cocina": "Pedidos que requieren atención inmediata.",
+    "Resumen del turno": "Información general del turno de caja",
+    "Emitir comprobante": "Genera un comprobante desde un pedido.",
+  };
   return (
-    <section className="ops-panel">
+    <section className="ops-panel" data-panel={label}>
       <header>
-        <h2>{title}</h2>
+        <div className="ops-panel-title">
+          <span className="ops-panel-icon">
+            <Icon name={iconFor(label)} />
+          </span>
+          <div>
+            <h2 aria-label={title}>{label}</h2>
+            {captions[label] && <p>{captions[label]}</p>}
+          </div>
+        </div>
+        {count && <span className="ops-panel-count">{count}</span>}
         {action}
       </header>
       {children}
@@ -45,7 +72,7 @@ export function Stats({
       {entries.map((item) => (
         <div className={`ops-stat ${item.tone || ""}`} key={item.label}>
           <span className="ops-stat-icon">
-            <Icon name={item.icon || "receipt"} />
+            <Icon name={item.icon || iconFor(item.label)} />
           </span>
           <div>
             <p>{item.label}</p>
@@ -58,10 +85,42 @@ export function Stats({
   );
 }
 export function Badge({ value }: { value: string }) {
+  const badgeIcon: IconName =
+    value.startsWith("Mesa") || value === "Salón"
+      ? "table"
+      : value === "Delivery"
+        ? "scooter"
+        : [
+              "Caja",
+              "Administración",
+              "Salón",
+              "Cocina",
+              "Delivery",
+              "Combo",
+              "Descuento",
+              "Cupón",
+            ].includes(value)
+          ? iconFor(value)
+          : "check";
   return (
     <span
-      className={`ops-badge ${["Entregado", "Pagado", "Libre", "Activo", "En stock", "Emitido"].includes(value) ? "green" : ["En preparación", "Reservada", "Por vencer"].includes(value) ? "gold" : ["Listo", "En camino", "Solicita cuenta"].includes(value) ? "blue" : ["Cancelado", "Inactivo"].includes(value) ? "gray" : "red"}`}
+      className={`ops-badge ${["Entregado", "Pagado", "Libre", "Activo", "En stock", "Emitido"].includes(value) ? "green" : ["En preparación", "Reservada", "Por vencer"].includes(value) || value.startsWith("Mesa") ? "gold" : ["Listo", "En camino", "Solicita cuenta"].includes(value) ? "blue" : ["Cancelado", "Inactivo"].includes(value) ? "gray" : "red"}`}
     >
+      {value.startsWith("Mesa") ||
+      [
+        "Delivery",
+        "Salón",
+        "Cocina",
+        "Administración",
+        "Caja",
+        "Combo",
+        "Descuento",
+        "Cupón",
+      ].includes(value) ? (
+        <Icon name={badgeIcon} />
+      ) : (
+        <i className="ops-status-dot" />
+      )}
       {value}
     </span>
   );
@@ -92,7 +151,14 @@ export function Tabs({
           aria-pressed={value === option}
           onClick={() => onChange(option)}
         >
-          {option}
+          {["Efectivo", "Yape", "Plin", "Tarjeta", "Transferencia"].includes(
+            option,
+          ) ? (
+            <PaymentMark name={option} />
+          ) : (
+            <Icon name={iconFor(option)} />
+          )}
+          <span>{option}</span>
         </button>
       ))}
     </div>
@@ -103,11 +169,13 @@ export function OrderCard({
   onDetail,
   onStatus,
   compact = false,
+  target = 20,
 }: {
   order: Order;
   onDetail: (order: Order) => void;
   onStatus?: (id: string, status: Status) => void;
   compact?: boolean;
+  target?: number;
 }) {
   const next =
     order.status === "Recibido"
@@ -117,15 +185,60 @@ export function OrderCard({
         : order.status === "Listo" && order.channel === "Delivery"
           ? "En camino"
           : "Entregado";
+  if (compact && order.status === "Entregado")
+    return (
+      <button className="ops-completed-row" onClick={() => onDetail(order)}>
+        <span className="ops-completed-check">
+          <Icon name="check" />
+        </span>
+        <span>
+          <strong>#{order.id}</strong>
+          <small>
+            Entregado:{" "}
+            {new Date(order.delivered || order.created).toLocaleTimeString(
+              "es-PE",
+              { hour: "2-digit", minute: "2-digit" },
+            )}
+          </small>
+        </span>
+        <span>
+          <Badge value={order.table ? `Mesa ${order.table}` : order.channel} />
+          <small>
+            <Icon name="clock" />
+            {order.accepted && order.ready
+              ? Math.round(
+                  (Date.parse(order.ready) - Date.parse(order.accepted)) /
+                    60000,
+                )
+              : minutes(order.created)}{" "}
+            min
+          </small>
+        </span>
+        <Icon name="chevron" />
+      </button>
+    );
   return (
-    <article className={`ops-order-card ${compact ? "compact" : ""}`}>
+    <article
+      className={`ops-order-card ${compact ? "compact" : ""}`}
+      data-status={order.status}
+    >
       <header>
         <strong>#{order.id}</strong>
         <Badge value={order.table ? `Mesa ${order.table}` : order.channel} />
       </header>
       <div className="ops-order-time">
-        <span>{dateText(order.created)}</span>
-        <strong>{minutes(order.accepted || order.created)} min</strong>
+        <span>
+          <Icon name="clock" />
+          {compact
+            ? order.status === "Recibido"
+              ? `Hace ${minutes(order.created)} min.`
+              : `${order.status === "Listo" ? "Listo" : "Iniciado"}: ${new Date(order.status === "Listo" ? order.ready || order.created : order.accepted || order.created).toLocaleTimeString("es-PE", { hour: "2-digit", minute: "2-digit" })}`
+            : dateText(order.created)}
+        </span>
+        <strong>
+          <Icon name="clock" />
+          {minutes(order.accepted || order.created)} min
+        </strong>
       </div>
       <div className="ops-order-products">
         <img src={order.items[0]?.product.image} alt="" />
@@ -137,13 +250,29 @@ export function OrderCard({
           ))}
         </div>
       </div>
-      {order.notes && <p className="ops-order-note">{order.notes}</p>}
+      {order.status === "En preparación" && (
+        <div className="ops-order-progress">
+          <progress
+            max={100}
+            value={Math.min(
+              100,
+              (minutes(order.accepted || order.created) / target) * 100,
+            )}
+          />
+          <small>En preparación…</small>
+        </div>
+      )}
+      <p className={order.notes ? "ops-order-note" : "ops-order-note neutral"}>
+        <Icon name="receipt" />
+        {order.notes || "Sin observaciones"}
+      </p>
       <div className="ops-card-actions">
         {onStatus && !["Entregado", "Cancelado"].includes(order.status) && (
           <button
             className="ops-primary"
             onClick={() => onStatus(order.id, next)}
           >
+            <Icon name={order.status === "Recibido" ? "check" : "serve"} />
             {order.status === "Recibido"
               ? "Aceptar pedido"
               : order.status === "En preparación"
@@ -154,7 +283,7 @@ export function OrderCard({
           </button>
         )}
         <button className="ops-outline" onClick={() => onDetail(order)}>
-          Ver detalle
+          <Icon name="receipt" /> Ver detalle
         </button>
       </div>
     </article>
@@ -201,14 +330,17 @@ export function OrderDetail({
 export function Bars({
   values,
 }: {
-  values: { label: string; value: number }[];
+  values: { label: string; value: number; image?: string }[];
 }) {
   const maximum = Math.max(1, ...values.map((v) => v.value));
   return (
     <div className="ops-bars">
       {values.map((item) => (
         <div key={item.label}>
-          <span>{item.label}</span>
+          <span className="ops-bar-label">
+            {item.image && <img src={item.image} alt="" />}
+            {item.label}
+          </span>
           <div>
             <i style={{ width: `${(item.value / maximum) * 100}%` }} />
           </div>
@@ -314,6 +446,84 @@ export function Donut({
           </p>
         ))}
       </div>
+    </div>
+  );
+}
+
+export function ColumnChart({
+  values,
+}: {
+  values: { label: string; value: number }[];
+}) {
+  const max = Math.max(
+    4,
+    Math.ceil(Math.max(0, ...values.map((v) => v.value)) / 4) * 4,
+  );
+  const step = 510 / Math.max(1, values.length);
+  return (
+    <div className="ops-chart ops-column-chart">
+      <svg
+        viewBox="0 0 600 300"
+        role="img"
+        aria-label="Distribución por categoría u hora"
+      >
+        {Array.from({ length: 5 }, (_, i) => (
+          <g key={i}>
+            <path d={`M45 ${245 - i * 50}H580`} stroke="#e9edf3" />
+            <text
+              x="32"
+              y={250 - i * 50}
+              textAnchor="end"
+              fontSize="14"
+              fill="#74849e"
+            >
+              {Math.round((max * i) / 4)}
+            </text>
+          </g>
+        ))}
+        {values.map((v, i) => (
+          <g
+            key={
+              values.length <= 12 || i % 2 === 0 || i === values.length - 1
+                ? v.label
+                : ""
+            }
+          >
+            <rect
+              x={52 + i * step}
+              y={245 - (v.value / max) * 200}
+              width={step * 0.65}
+              height={(v.value / max) * 200}
+              rx="3"
+              fill={
+                values.length > 5
+                  ? "#c58721"
+                  : ["#d79b25", "#ed0017", "#9b8b80", "#78859a"][i % 4]
+              }
+            />
+            <text
+              x={52 + i * step + step * 0.325}
+              y="274"
+              fontSize="13"
+              textAnchor="middle"
+              fill="#6a7b96"
+            >
+              {v.label}
+            </text>
+            {values.length <= 5 && (
+              <text
+                x={52 + i * step + step * 0.325}
+                y={232 - (v.value / max) * 200}
+                fontSize="15"
+                textAnchor="middle"
+                fill="#102044"
+              >
+                {Math.round(v.value)} min
+              </text>
+            )}
+          </g>
+        ))}
+      </svg>
     </div>
   );
 }
