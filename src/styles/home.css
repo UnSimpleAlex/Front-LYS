@@ -263,3 +263,19 @@
 }
 
 @media (max-width: 650px) { #root:has(.carta-bottom-nav) .home-footer { padding-bottom: calc(76px + env(safe-area-inset-bottom)); } }
+
+.specialty-card, .promotion-card { transition: box-shadow 220ms ease-out, border-color 220ms ease-out; }
+.specialty-card > img, .promotion-card > img { transition: transform 350ms cubic-bezier(.16, 1, .3, 1); }
+.round-arrow { transition: background-color 180ms ease-out; }
+.round-arrow svg { transition: transform 220ms ease-out; }
+@media (hover: hover) and (pointer: fine) {
+ .specialty-card:hover, .promotion-card:hover { border-color: #e00000; box-shadow: 0 12px 26px #36150730; }
+ .specialty-card:hover > img, .promotion-card:hover > img { transform: scale(1.055); }
+ .specialty-card:hover .round-arrow { background: #ba0010; }
+ .specialty-card:hover .round-arrow svg { transform: translateX(4px); }
+}
+.specialty-card:focus-visible, .promotion-card:focus-visible { outline: 3px solid var(--home-red); outline-offset: 4px; box-shadow: 0 10px 22px #36150725; }
+@media (prefers-reduced-motion: reduce) {
+ .specialty-card, .promotion-card, .specialty-card > img, .promotion-card > img, .round-arrow, .round-arrow svg { transition: none; }
+ .specialty-card:hover > img, .promotion-card:hover > img, .specialty-card:hover .round-arrow svg { transform: none; }
+}
