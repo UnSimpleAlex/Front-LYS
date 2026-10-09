@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
+import type { DeliveryPoint } from './location';
 import type { Product } from '../carta/catalog';
 
 export type PaymentMethod = 'card' | 'yape' | 'plin' | 'cash';
-export type DeliveryDraft = { mode: 'delivery' | 'pickup'; address: string; district: string; label: string; reference: string; instructions: string; name: string; phone: string; email: string; store: string };
+export type DeliveryDraft = { mode: 'delivery' | 'pickup'; address: string; district: string; label: string; reference: string; instructions: string; name: string; phone: string; email: string; store: string; location?: DeliveryPoint | null };
 export type CartItem = { product: Product; count: number };
 export type Receipt = { code: string; date: string; items: CartItem[]; delivery: DeliveryDraft; method: PaymentMethod; subtotal: number; shipping: number; discount: number; total: number };
 export const paymentNames: Record<PaymentMethod, string> = { card: 'Tarjeta de crédito/débito', yape: 'Yape', plin: 'Plin', cash: 'Efectivo al recibir' };

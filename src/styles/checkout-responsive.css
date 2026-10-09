@@ -321,21 +321,6 @@
 .checkout-estimate>svg:nth-of-type(2),.checkout-estimate>p {
   display:none
 }
-.checkout-map-address {
-  left:44%;
-  max-width:70%;
-  padding:12px;
-  gap:8px
-}
-.checkout-map-address strong {
-  font-size:12px
-}
-.checkout-map-zoom {
-  right:10px
-}
-.checkout-map-caption {
-  font-size:9px
-}
 .checkout-payment-methods {
   grid-template-columns:1fr 1fr;
   gap:10px

@@ -4,7 +4,7 @@ La cabecera compartida abre `/carrito` desde Carta, Promociones, Inicio y autent
 
 ## Recorrido
 - `/carrito`: cantidades de 1 a 99, eliminar, favoritos, vaciar, recomendaciones y cupón de prueba BRASA10 (10% del subtotal).
-- `/checkout/entrega`: delivery o recojo, direcciones editables con diálogo, referencia, instrucciones y contacto. Delivery de prueba S/7; recojo S/0. Mapa ilustrado referencial, sin geolocalización real.
+- `/checkout/entrega`: delivery o recojo, direcciones editables con diálogo, referencia, instrucciones y contacto. Delivery de prueba S/7; recojo S/0. Mapa real OpenStreetMap con Leaflet: selección manual, marcador arrastrable y ubicación actual opcional al pulsar el botón. Coordenadas conservadas en la revisión y el comprobante. Ver `MAPA_ENTREGA_UI.md`.
 - `/checkout/pago`: tarjeta con datos de prueba, Yape, Plin o efectivo con vuelto calculado. Facturación opcional. Las validaciones del formulario bloquean el avance si faltan datos.
 - `/checkout/confirmacion`: revisar productos, cantidades, entrega, contacto, pago y volver para editar.
 - `/pedido-confirmado`: comprobante con código LYS-DEMO, fecha actual y total. Vacía el carrito. `/mi-pedido` muestra ese comprobante.

@@ -1,5 +1,9 @@
 import { test, expect, type Page } from '@playwright/test';
 
+test.beforeEach(async ({ page }) => {
+  await page.route('https://tile.openstreetmap.org/**', route => route.fulfill({ contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256"><rect width="256" height="256" fill="#e8eee7"/></svg>' }));
+});
+
 async function seed(page: Page) {
   await page.addInitScript(() => { if (!localStorage.getItem('checkout-seeded')) { localStorage.setItem('lys-carta-cart', JSON.stringify({ 'pollo-01': 1, 'acompanamientos-01': 1, 'bebidas-01': 1 })); localStorage.setItem('checkout-seeded', '1'); } });
   await page.goto('/carrito');
