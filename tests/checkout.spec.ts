@@ -122,3 +122,21 @@ for (const width of [240, 390, 768, 1024, 1920]) {
     expect(errors).toEqual([]);
   });
 }
+
+test('historial de mi cuenta conserva dos pedidos realizados desde checkout', async ({ page }) => {
+  await seed(page);
+  for (let index = 0; index < 2; index++) {
+    await delivery(page, true);
+    await payment(page, 'Efectivo');
+    await page.getByRole('button', { name: 'Confirmar pedido', exact: true }).click();
+    await expect(page).toHaveURL(/pedido-confirmado$/);
+    await page.goto('/mi-cuenta/pedidos');
+    await expect(page.locator('.account-order')).toHaveCount(index + 1);
+    await page.getByRole('button', { name: 'Ver detalle', exact: true }).first().click();
+    await expect(page.getByRole('dialog')).toContainText('No se ha realizado un cobro');
+    await page.getByRole('dialog').getByRole('button', { name: 'Cerrar', exact: true }).click();
+    if (index === 0) await page.getByRole('button', { name: 'Volver a pedir', exact: true }).first().click();
+  }
+  await page.reload();
+  await expect(page.locator('.account-order')).toHaveCount(2);
+});

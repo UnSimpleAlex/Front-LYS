@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { getAccount } from '../account/accountStore';
 import { AddressAutocomplete } from './AddressAutocomplete';
 import { DistrictSelect } from './DistrictSelect';
 import { DeliveryMap } from './DeliveryMap';
@@ -6,9 +7,9 @@ import type { DeliveryPoint } from './location';
 import { Icon } from '../../components/Icon';
 import type { DeliveryDraft } from './useCheckout';
 
-type Address = { label: string; address: string; district: string; location?: DeliveryPoint | null };
+type Address = { label: string; address: string; district: string; location?: DeliveryPoint | null; reference?: string };
 export function DeliveryStep({ value, onChange, onContinue }: { value: DeliveryDraft; onChange: (value: DeliveryDraft) => void; onContinue: () => void }) {
-  const [addresses, setAddresses] = useState<Address[]>(() => value.address ? [{ label: value.label, address: value.address, district: value.district, location: value.location }] : []);
+  const [addresses, setAddresses] = useState<Address[]>(() => { const saved = getAccount().addresses.map(item => ({ label: item.label, address: item.street, district: item.district, reference: item.reference, location: item.point })); if (value.address && !saved.some(item => item.address === value.address)) saved.unshift({ label: value.label, address: value.address, district: value.district, location: value.location || null, reference: value.reference }); return saved; });
   const [addressDraft, setAddressDraft] = useState<Address>({ label: 'Casa', address: '', district: '' });
   const [editing, setEditing] = useState(false);
   const dialog = useRef<HTMLDialogElement>(null);

@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
+import { getAccount } from '../account/accountStore';
+import { savedReceipt, saveReceipt } from './receiptStorage';
 import type { DeliveryPoint } from './location';
 import type { Product } from '../carta/catalog';
 
@@ -8,15 +10,9 @@ export type CartItem = { product: Product; count: number };
 export type Receipt = { code: string; date: string; items: CartItem[]; delivery: DeliveryDraft; method: PaymentMethod; subtotal: number; shipping: number; discount: number; total: number };
 export const paymentNames: Record<PaymentMethod, string> = { card: 'Tarjeta de crédito/débito', yape: 'Yape', plin: 'Plin', cash: 'Efectivo al recibir' };
 const emptyDelivery: DeliveryDraft = { mode: 'delivery', address: '', district: '', label: 'Casa', reference: '', instructions: '', name: '', phone: '', email: '', store: 'Local principal' };
-function savedReceipt(): Receipt | null {
-  try {
-    const value = JSON.parse(sessionStorage.getItem('lys-demo-order') || 'null');
-    return value && typeof value.code === 'string' && value.code.startsWith('LYS-DEMO-') && Array.isArray(value.items) && value.items.length && value.items.every((item: CartItem) => item.product && typeof item.product.name === 'string' && Number.isInteger(item.count) && item.count > 0) && value.delivery && typeof value.delivery.address === 'string' && value.method in paymentNames && Number.isFinite(value.total) && value.total >= 0 ? value : null;
-  } catch { return null; }
-}
 export function useCheckout(items: CartItem[]) {
-  const [delivery, setDelivery] = useState<DeliveryDraft>(emptyDelivery);
-  const [method, setMethod] = useState<PaymentMethod>('card');
+  const [delivery, setDelivery] = useState<DeliveryDraft>(() => { const account = getAccount(); const address = account.addresses.find(item => item.primary) || account.addresses[0]; return { ...emptyDelivery, name: account.profile.name, phone: account.profile.phone, email: account.profile.email, instructions: account.profile.notes, ...(address ? { address: address.street, district: address.district, label: address.label, reference: address.reference, location: address.point } : {}) }; });
+  const [method, setMethod] = useState<PaymentMethod>(() => (getAccount().preferredPayment || 'card') as PaymentMethod);
   const [paymentReady, setPaymentReady] = useState(false);
   const [coupon, setCoupon] = useState('');
   const [couponApplied, setCouponApplied] = useState(false);
@@ -42,8 +38,7 @@ export function useCheckout(items: CartItem[]) {
     setBusy(true);
     const order: Receipt = { code: `LYS-DEMO-${crypto.randomUUID().slice(0, 8).toUpperCase()}`, date: new Date().toISOString(), items: items.map(item => ({ ...item })), delivery: { ...delivery }, method, ...totals };
     setReceipt(order);
-    // Solo se conserva el comprobante de demostración. No se guardan datos de tarjeta ni códigos de aprobación.
-    try { sessionStorage.setItem('lys-demo-order', JSON.stringify(order)); } catch { /* El comprobante permanece en esta sesión de React. */ }
+    saveReceipt(order);
     clearCart(); setBusy(false); return true;
   }
   return { delivery, setDelivery, method, selectPayment, paymentReady, setPaymentReady, deliveryReady, coupon, setCoupon, couponApplied, couponMessage, applyCoupon, receipt, busy, finish, ...totals };

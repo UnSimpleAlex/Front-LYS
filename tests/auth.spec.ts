@@ -35,9 +35,9 @@ test('menú móvil y diálogos funcionan con teclado y restauran el foco', async
   await expect(toggle).toHaveAttribute('aria-expanded', 'false');
   await toggle.click();
   await page.getByRole('navigation', { name: 'Navegación móvil' }).getByRole('button', { name: 'Nosotros', exact: true }).click();
-  await expect(page.getByRole('dialog')).toBeVisible();
-  await page.keyboard.press('Escape');
-  await expect(page.getByRole('dialog')).not.toBeVisible();
+  await expect(page).toHaveURL(/nosotros$/);
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Carabayllo');
+  await page.goBack();
   const recovery = page.getByRole('button', { name: '¿Olvidaste tu contraseña?' });
   await recovery.click();
   await expect(page.getByRole('heading', { name: 'Recuperar contraseña' })).toBeVisible();
