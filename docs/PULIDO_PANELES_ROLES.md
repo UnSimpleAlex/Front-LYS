@@ -20,3 +20,13 @@ Limitaciones visuales: datos de ejemplo adaptados al catálogo actual; tipograf�
 
 
 Resultados: batería completa de 194 pruebas aprobada; después de los últimos ajustes de legibilidad, 9 pruebas operativas aprobadas. Lint y compilación TypeScript/Vite aprobados.
+
+## Corrección de navegación y controles responsive
+
+Tras las capturas de botones cortados, se compactaron el navbar, los títulos, indicadores, paneles e imágenes de tablas. La navegación usa una fila en PC y un menú desplegable por debajo de 1280px, con cuenta y notificaciones accesibles. Se conserva el logo.
+
+Las tablas ahora se adaptan al ancho de su propio panel: conservan las filas cuando caben y muestran tarjetas con etiquetas y acciones completas cuando falta espacio. Productos mantiene una tabla compacta desde 800px de panel, con acciones mediante iconos y nombres accesibles; el formulario ya no se estira a toda la altura del listado.
+
+Validación de esta corrección: 24 rutas a 240, 390, 768, 1024, 1280, 1366, 1440 y 1920px. Además del ancho de la página, se comprueba que cada tabla y sus botones quepan completamente, así como la altura del navbar, sus nueve opciones y la navegación con el menú abierto. Se mantienen las pruebas del flujo de pedidos, permisos, persistencia e inventario.
+
+Resultado final: 13 pruebas operativas aprobadas, incluido el menú completo en ocho resoluciones. Lint y compilación aprobados. Las capturas de móvil, tablet y PC se revisaron visualmente; las acciones no requieren desplazamiento horizontal dentro de las tablas.

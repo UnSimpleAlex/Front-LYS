@@ -184,7 +184,7 @@ const routes = [
   "/administrador/pedidos",
   "/administrador/reportes",
 ];
-for (const width of [240, 390, 768, 1024, 1920])
+for (const width of [240, 390, 768, 1024, 1280, 1366, 1440, 1920])
   test(`24 pantallas operativas responsive a ${width}px`, async ({ page }) => {
     test.setTimeout(120000);
     await page.setViewportSize({ width, height: 1080 });
@@ -220,7 +220,37 @@ for (const width of [240, 390, 768, 1024, 1920])
               .map((i) => i.getAttribute("src")),
           ),
       ).toEqual([]);
-      if ([390, 768, 1920].includes(width))
+      expect(
+        await page
+          .locator(".ops-table-wrap")
+          .evaluateAll((tables) =>
+            tables
+              .filter((table) => table.scrollWidth > table.clientWidth + 1)
+              .map((table) =>
+                table.closest("section")?.getAttribute("data-panel"),
+              ),
+          ),
+      ).toEqual([]);
+      expect(
+        await page.locator(".ops-table-wrap button").evaluateAll((buttons) =>
+          buttons
+            .filter((button) => {
+              const rect = button.getBoundingClientRect();
+              const panel = button
+                .closest(".ops-table-wrap")!
+                .getBoundingClientRect();
+              return (
+                rect.width &&
+                (rect.left < panel.left - 1 || rect.right > panel.right + 1)
+              );
+            })
+            .map(
+              (button) =>
+                button.textContent || button.getAttribute("aria-label"),
+            ),
+        ),
+      ).toEqual([]);
+      if ([390, 768, 1366, 1920].includes(width))
         await page.screenshot({
           path: `test-results/ops-${route.replaceAll("/", "-")}-${width}.png`,
           fullPage: true,
@@ -360,4 +390,43 @@ test("inventario muestra el formulario al editar o crear y guarda el insumo", as
   );
   await form.getByRole("button", { name: "Cerrar formulario" }).click();
   await expect(form).toHaveCount(0);
+});
+
+test("navbar compacto y menú completo en móvil, tablet y PC", async ({
+  page,
+}) => {
+  await setup(page);
+  await login(page, "administrador");
+  for (const width of [240, 390, 768, 1024, 1280, 1366, 1440, 1920]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/administrador/productos");
+    await expect(page.locator("h1")).toHaveText("Gestión de productos");
+    expect(
+      await page
+        .locator(".ops-header")
+        .evaluate((header) => header.getBoundingClientRect().height),
+    ).toBeLessThanOrEqual(82);
+    const toggle = page.getByRole("button", { name: "Abrir menú del panel" });
+    if (await toggle.isVisible()) await toggle.click();
+    const navigation = page.getByRole("navigation", {
+      name: "Navegación Administración",
+    });
+    await expect(navigation.getByRole("button")).toHaveCount(9);
+    expect(
+      await navigation.getByRole("button").evaluateAll((buttons) =>
+        buttons
+          .filter((button) => {
+            const rect = button.getBoundingClientRect();
+            return !rect.width || rect.left < 0 || rect.right > innerWidth;
+          })
+          .map((button) => button.textContent),
+      ),
+    ).toEqual([]);
+    await navigation
+      .getByRole("button", { name: "Inventario", exact: true })
+      .click();
+    await expect(page).toHaveURL(/administrador\/inventario$/);
+    if (await page.locator(".ops-menu").isVisible())
+      await expect(page.locator(".ops-header nav")).toBeHidden();
+  }
 });
