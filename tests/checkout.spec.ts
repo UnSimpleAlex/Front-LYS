@@ -1,6 +1,7 @@
+import { clientSession } from './localSession';
 import { test, expect, type Page } from '@playwright/test';
 
-test.beforeEach(async ({ page }) => { await page.route('https://photon.komoot.io/**', route => route.fulfill({ json: { features: [] } }));
+test.beforeEach(async ({ page }) => { await clientSession(page); await page.route('https://photon.komoot.io/**', route => route.fulfill({ json: { features: [] } }));
   await page.route('https://tile.openstreetmap.org/**', route => route.fulfill({ contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256"><rect width="256" height="256" fill="#e8eee7"/></svg>' }));
 });
 
@@ -53,7 +54,7 @@ for (const method of ['Tarjeta', 'Yape', 'Plin', 'Efectivo']) {
     await expect(page.getByRole('heading', { name: '¡Pedido confirmado!' })).toBeVisible();
     await expect(page.locator('.checkout-total strong')).toHaveText(total!);
     expect(await page.evaluate(() => JSON.parse(localStorage.getItem('lys-carta-cart')!))).toEqual({});
-    const receipt = await page.evaluate(() => sessionStorage.getItem('lys-demo-order'));
+    const receipt = await page.evaluate(() => localStorage.getItem('lys-demo-order-'+localStorage.getItem('lys-session-v1')));
     expect(receipt).not.toContain('4111111111111111'); expect(receipt).not.toContain('123456');
     await page.reload();
     await expect(page.getByRole('heading', { name: '¡Pedido confirmado!' })).toBeVisible();
@@ -133,7 +134,7 @@ test('historial de mi cuenta conserva dos pedidos realizados desde checkout', as
     await page.goto('/mi-cuenta/pedidos');
     await expect(page.locator('.account-order')).toHaveCount(index + 1);
     await page.getByRole('button', { name: 'Ver detalle', exact: true }).first().click();
-    await expect(page.getByRole('dialog')).toContainText('No se ha realizado un cobro');
+    await expect(page.getByRole('dialog')).toContainText('Pedido vinculado');
     await page.getByRole('dialog').getByRole('button', { name: 'Cerrar', exact: true }).click();
     if (index === 0) await page.getByRole('button', { name: 'Volver a pedir', exact: true }).first().click();
   }

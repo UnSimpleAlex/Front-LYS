@@ -1,3 +1,4 @@
+import { clientSession } from './localSession';
 import { test, expect, type Page } from '@playwright/test';
 
 const tile = '<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256"><rect width="256" height="256" fill="#e9eee7"/><path d="M0 64h256M0 192h256M64 0v256M192 0v256" stroke="white" stroke-width="16"/></svg>';
@@ -10,6 +11,7 @@ async function openDelivery(page: Page) {
 test.beforeEach(async ({ page }) => { await page.route('https://photon.komoot.io/**', route => route.fulfill({ json: { features: [] } })); await page.route('https://tile.openstreetmap.org/**', route => route.fulfill({ contentType: 'image/svg+xml', body: tile })); });
 
 test('selección manual, arrastre, teclado, edición y recibo conservan las coordenadas', async ({ page }) => {
+  await clientSession(page);
   await openDelivery(page);
   await page.getByLabel('Dirección de entrega', { exact: false }).fill('Av. de prueba 123');
   await page.getByRole('combobox', { name: 'Distrito *', exact: true }).selectOption('Comas');

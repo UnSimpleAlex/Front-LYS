@@ -1131,3 +1131,6 @@ que otro desarrollador pueda entenderlo
 ```
 
 El objetivo de 5 000 a 10 000 usuarios concurrentes debe tratarse como un **requisito de diseño y de validación**, no como una promesa automática de capacidad.
+
+## Paneles locales por rol
+Servicios de sesión y operaciones desacoplados en localAuth y operationsStore. Las 24 rutas usan el mismo estado local que catálogo, checkout y cuenta. Ver [Paneles por rol](PANELES_ROLES_LOCAL.md).

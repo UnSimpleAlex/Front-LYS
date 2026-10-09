@@ -156,16 +156,12 @@ test('carrusel cambia con flechas, indicadores y teclado', async ({ page }) => {
 });
 test('inicio conserva login, registro y retorno con el historial', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('link', { name: 'Mi cuenta', exact: true }).first().click();
-  await expect(page).toHaveURL(/mi-cuenta$/);
-  await page.locator('.account-demo-banner').getByRole('link', { name: 'Iniciar sesión', exact: true }).click();
+  await page.getByRole('link', { name: 'Iniciar Session', exact: true }).first().click();
   await expect(page).toHaveURL(/\/iniciar-sesion$/);
   await page.getByRole('button', { name: 'Crear cuenta', exact: true }).click();
   await expect(page).toHaveURL(/\/registro$/);
   await page.goBack();
   await expect(page.getByRole('heading', { name: 'Inicia sesión', exact: true })).toBeVisible();
-  await page.goBack();
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Mi cuenta');
   await page.goBack();
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Sabor peruano');
 });

@@ -19,8 +19,8 @@ test('valida el formulario y no simula una sesión autenticada', async ({ page }
   await page.getByRole('checkbox').uncheck();
   await expect(page.getByRole('checkbox')).not.toBeChecked();
   await page.getByRole('button', { name: 'Iniciar sesión', exact: true }).click();
-  await expect(page.getByRole('status')).toContainText('estará disponible pronto');
-  expect(await page.evaluate(() => ({ local: localStorage.length, session: sessionStorage.length }))).toEqual({ local: 0, session: 0 });
+  await expect(page.getByRole('alert')).toContainText('Correo o contraseña incorrectos');
+  expect(await page.evaluate(() => localStorage.getItem('lys-session-v1'))).toBeNull();
   await page.getByRole('button', { name: 'Continuar con Google' }).click();
   await expect(page.getByRole('status')).toContainText('Google');
 });
@@ -36,7 +36,7 @@ test('menú móvil y diálogos funcionan con teclado y restauran el foco', async
   await toggle.click();
   await page.getByRole('navigation', { name: 'Navegación móvil' }).getByRole('button', { name: 'Nosotros', exact: true }).click();
   await expect(page).toHaveURL(/nosotros$/);
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Carabayllo');
+  await expect(page.getByRole('heading', { level: 1, name:'Más que una pollería, somos tradición' })).toBeVisible();
   await page.goBack();
   const recovery = page.getByRole('button', { name: '¿Olvidaste tu contraseña?' });
   await recovery.click();

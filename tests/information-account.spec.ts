@@ -1,13 +1,15 @@
+import { clientSession } from './localSession';
 import { test, expect } from '@playwright/test';
 const routes = ['/nosotros', '/locales', '/contacto', '/mi-cuenta', '/mi-cuenta/pedidos', '/mi-cuenta/direcciones', '/mi-cuenta/datos', '/mi-cuenta/metodos-pago', '/mi-cuenta/notificaciones', '/mi-cuenta/favoritos'];
 test.beforeEach(async ({ page }) => {
+  await clientSession(page);
   await page.route('https://tile.openstreetmap.org/**', route => route.fulfill({ contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256"><rect width="256" height="256" fill="#e8eee7"/></svg>' }));
   await page.route('https://photon.komoot.io/**', route => route.fulfill({ json: { features: [] } }));
 });
 for (const width of [240, 280, 320, 390, 768, 1024, 1440, 1920]) {
   test(`secciones sin desbordamientos a ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 960 });
-    await page.addInitScript(() => { localStorage.setItem('lys-carta-favorites', JSON.stringify(['pollo-01','parrillas-01'])); sessionStorage.setItem('lys-account-demo', JSON.stringify({ profile: { name: 'Cliente Prueba', email: 'prueba@example.com', phone: '987654321' }, addresses: [{ id: 'test-address', label: 'Casa', street: 'Av. Los Pinos 123', district: 'Carabayllo', reference: 'Frente al parque', primary: true, point: null }], preferredPayment: 'yape' })); });
+    await page.addInitScript(() => { localStorage.setItem('lys-carta-favorites-'+localStorage.getItem('lys-session-v1'), JSON.stringify(['pollo-01','parrillas-01'])); localStorage.setItem('lys-account-'+localStorage.getItem('lys-session-v1'), JSON.stringify({ profile: { name: 'Cliente Prueba', email: 'prueba@example.com', phone: '987654321' }, addresses: [{ id: 'test-address', label: 'Casa', street: 'Av. Los Pinos 123', district: 'Carabayllo', reference: 'Frente al parque', primary: true, point: null }], preferredPayment: 'yape' })); });
     const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
     for (const route of routes) {
       await page.goto(route);
@@ -101,7 +103,7 @@ test('pedidos de ejemplo, filtros, detalle y volver a pedir', async ({ page }) =
 test('favoritos comparten catálogo y carrito, sin inventar favoritos guardados', async ({ page }) => {
   await page.goto('/mi-cuenta/favoritos');
   await expect(page.getByRole('heading', { name: 'Aquí van tus favoritos' })).toBeVisible();
-  await page.evaluate(() => localStorage.setItem('lys-carta-favorites', JSON.stringify(['pollo-01', 'parrillas-01'])));
+  await page.evaluate(() => localStorage.setItem('lys-carta-favorites-' + localStorage.getItem('lys-session-v1'), JSON.stringify(['pollo-01', 'parrillas-01'])));
   await page.reload();
   await expect(page.locator('.account-favorites .product-card')).toHaveCount(2);
   await page.locator('.product-add').first().click();
