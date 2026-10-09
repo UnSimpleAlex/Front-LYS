@@ -79,8 +79,8 @@ test('navegación de PC visible con el espacio equivalente a zoom de 200% a 500%
     await contact.focus();
     await expect(contact).toBeInViewport();
     await contact.click();
-    await expect(page.getByRole('dialog')).toBeVisible();
-    await page.keyboard.press('Escape');
+    await expect(page).toHaveURL(/contacto$/);
+    await expect(page.locator('.contact-page')).toBeVisible();
     await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
     await expect(page.getByRole('banner')).toBeInViewport();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);

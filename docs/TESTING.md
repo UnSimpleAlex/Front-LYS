@@ -32,3 +32,6 @@ No hacer merge si fallan las pruebas obligatorias. Corregir flaky tests; no norm
 
 ## Cobertura
 Usarla como señal, no como objetivo absoluto. Priorizar módulos de mayor riesgo.
+
+## Paneles conectados
+La suite operations.spec.ts verifica el recorrido salón/cocina/caja, restricciones de rol, persistencia, stock, caja digital y 24 pantallas en cinco resoluciones. Ver [guía de verificación](PANELES_ROLES_LOCAL.md).

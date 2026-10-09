@@ -77,7 +77,7 @@
 .promotion-duo .promotion-copy { color: #16110b; }
 .promotion-duo .promotion-price { color: #e00000; }
 .footer-phrase::after { content: ''; display: block; height: 3px; width: 60%; margin: 5px auto; background: var(--home-red); transform: rotate(-6deg); }
-.home-footer { background: #20201e; color: #ddd; font-size: 13px; }
+.home-footer { --home-red: #ed0000; background: #20201e; color: #ddd; font-size: 13px; }
 .footer-main { display: grid; grid-template-columns: 17% 31% 20% 13% 1fr; align-items: center; gap: 22px; padding-block: 18px; }
 .footer-main > * + * { border-left: 1px solid #555; padding-left: 22px; }
 .footer-logo img { width: 100%; height: auto; display: block; filter: url('#footer-logo-color'); }
@@ -261,3 +261,5 @@
 @media (max-width: 380px) {
   .home-hero-sharing .home-hero-copy p, .home-hero-traditional .home-hero-copy p { width: 64%; }
 }
+
+@media (max-width: 650px) { #root:has(.carta-bottom-nav) .home-footer { padding-bottom: calc(76px + env(safe-area-inset-bottom)); } }

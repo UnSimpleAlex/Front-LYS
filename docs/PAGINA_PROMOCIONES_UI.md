@@ -48,3 +48,6 @@ La lista muestra seis promociones al principio. Ver más productos agrega otras 
 Se reducen los precios promocionales manteniendo los precios anteriores: familiar 64.90 (ahorro 25), parrilla 49.90 (ahorro 20) y dúo 34.90 (ahorro 18). El carrito utiliza los mismos precios del catálogo.
 
 Validación: pruebas de paginación, filtros, carrito y comparación de dimensiones con Carta, además de responsive de 240 a 2560 px; lint y build correctos.
+
+## Etiquetas y orden de promociones
+Las 15 promociones se distribuyen entre cinco «EDICIÓN HALLOWEEN», cinco «LA MÁS PEDIDA» y cinco «SOLO POR TEMPORADA». El selector accesible reutiliza CartaSort y coloca primero las promociones de la etiqueta seleccionada, respetando categoría, búsqueda y paginación de seis elementos. Los detalles decorativos del fondo se muestran con opacidad .14 sobre blanco. Agregar y el icono del pedido abren el carrito compartido descrito en CARRITO_COMPRAS_UI.md.

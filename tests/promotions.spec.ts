@@ -15,15 +15,14 @@ test('promociones filtra, busca y agrega la cantidad al carrito compartido', asy
   await expect(card.getByLabel('Cantidad', { exact: true })).toHaveText('2');
   await card.getByRole('button', { name: 'Agregar Combo Familiar del Terror' }).click();
   await page.getByRole('button', { name: 'Ver pedido, 2 productos' }).click();
-  await expect(page.getByRole('dialog')).toContainText('S/ 129.80');
-  await page.getByRole('button', { name: 'Cerrar pedido' }).click();
+  await expect(page.locator('.checkout-totals')).toContainText('S/ 129.80');
+  await expect(page).toHaveURL(/carrito$/);
   await page.getByRole('navigation', { name: 'Navegación principal' }).getByRole('button', { name: 'Carta', exact: true }).click();
   await expect(page).toHaveURL(/\/carta$/);
   await page.getByRole('button', { name: 'Ver pedido, 2 productos' }).click();
-  await expect(page.getByRole('dialog')).toContainText('Combo Familiar del Terror');
+  await expect(page.locator('.cart-product-list')).toContainText('Combo Familiar del Terror');
   await page.reload();
-  await page.getByRole('button', { name: 'Ver pedido, 2 productos' }).click();
-  await expect(page.getByRole('dialog')).toContainText('S/ 129.80');
+  await expect(page.locator('.checkout-totals')).toContainText('S/ 129.80');
 });
 
 test('búsqueda vacía y restauración de promociones', async ({ page }) => {
@@ -116,3 +115,16 @@ for (const width of [390, 768, 1920]) {
     expect(await page.locator('.carta-categories button').first().evaluate(el => ({ height: el.getBoundingClientRect().height, background: getComputedStyle(el).backgroundColor }))).toEqual(dimensions);
   });
 }
+
+test('cada etiqueta tiene cinco promociones y el selector prioriza el grupo elegido', async ({ page }) => {
+  await page.goto('/promociones');
+  for (const name of ['Edición Halloween', 'La más pedida', 'Solo por temporada']) {
+    await page.getByRole('combobox', { name: 'Ordenar promociones por etiqueta' }).click();
+    await page.getByRole('option', { name, exact: true }).click();
+    await expect(page.locator('.promo-offer-badge').first()).toHaveText(name.toUpperCase());
+    expect(await page.locator('.promo-offer-badge').allTextContents()).toEqual(expect.arrayContaining(Array(5).fill(name.toUpperCase())));
+    await page.getByRole('button', { name: 'Ver más productos' }).click();
+    await page.getByRole('button', { name: 'Ver más productos' }).click();
+    expect((await page.locator('.promo-offer-badge').allTextContents()).filter(label => label === name.toUpperCase())).toHaveLength(5);
+  }
+});

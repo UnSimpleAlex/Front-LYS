@@ -1,3 +1,4 @@
+import { getOperations, subscribeOperations } from '../operations/operationsStore';
 import { products, type Product } from '../carta/catalog';
 import type { IconName } from '../../components/Icon';
 
@@ -20,7 +21,7 @@ function seasonalOffer(sourceId: string, name: string, price: number, originalPr
   return { ...product, id: `promo-${sourceId}`, category: 'promociones', name, price, originalPrice, filters, promo: true, badge: 'PRECIO DE TEMPORADA', badgeIcon: 'clock', badgeTone: 'orange' };
 }
 
-export const promotions: Promotion[] = [
+const seasonalPromotions: Promotion[] = [
   ...featuredPromotions,
   seasonalOffer('combos-08', 'Doble Brasa de Medianoche', 99.90, 129.90, ['combos', 'familiares']),
   seasonalOffer('combos-12', 'Banquete de la Noche', 74.90, 94.90, ['combos', 'familiares']),
@@ -35,3 +36,17 @@ export const promotions: Promotion[] = [
   seasonalOffer('acompanamientos-12', 'Wantanes Encantados (12u)', 15.90, 21.90, ['acompanamientos']),
   seasonalOffer('acompanamientos-11', 'Salchipapas del Terror', 21.90, 29.90, ['acompanamientos']),
 ];
+
+
+export const promotionLabels = [
+  { id: 'halloween', name: 'EDICIÓN HALLOWEEN', icon: 'pumpkin' as const, tone: 'orange' as const },
+  { id: 'popular', name: 'LA MÁS PEDIDA', icon: 'flame' as const, tone: 'red' as const },
+  { id: 'seasonal', name: 'SOLO POR TEMPORADA', icon: 'clock' as const, tone: 'orange' as const },
+];
+export const promotions: Promotion[] = seasonalPromotions.map((promotion, index) => {
+  const label = promotionLabels[index % promotionLabels.length];
+  return { ...promotion, badge: label.name, badgeIcon: label.icon, badgeTone: label.tone };
+});
+
+function updateOffers(){const state=getOperations();const today=new Date().toISOString().slice(0,10);const created:Promotion[]=state.offers.filter(o=>o.active&&o.type!=='Cupón'&&o.start<=today&&o.end>=today&&o.used<o.limit).flatMap(o=>{const p=state.products.find(p=>p.id===o.productId&&p.active&&(p.stock??0)>0);return p?[{...p,id:'offer-'+o.id,name:o.name,originalPrice:p.price,price:Math.round(p.price*(1-o.percent/100)*100)/100,badge:'-'+o.percent+'%',badgeIcon:'tag',badgeTone:'red',filters:[p.category,o.type==='Combo'?'combos':'individuales']} as Promotion]:[];});promotions.splice(0,promotions.length,...created,...seasonalPromotions.map((p,i)=>({...p,badge:promotionLabels[i%promotionLabels.length].name,badgeIcon:promotionLabels[i%promotionLabels.length].icon,badgeTone:promotionLabels[i%promotionLabels.length].tone})));}
+updateOffers();subscribeOperations(updateOffers);
