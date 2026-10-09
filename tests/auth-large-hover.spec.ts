@@ -1,5 +1,24 @@
 import { test, expect } from '@playwright/test';
 
+test('el navbar permanece encima de las tarjetas de inicio durante el hover', async ({page}) => {
+  await page.setViewportSize({width:1366,height:768});
+  await page.goto('/');
+  for (const selector of ['.specialty-card','.promotion-card','.membership-pass']) {
+    const card=page.locator(selector).first();
+    await card.scrollIntoViewIfNeeded();
+    await card.hover();
+    await page.waitForTimeout(450);
+    await card.evaluate(element => window.scrollBy(0,element.getBoundingClientRect().top-20));
+    const coveredByHeader=await card.evaluate(element => {
+      const rect=element.getBoundingClientRect();
+      const header=document.querySelector('.site-header')!;
+      const hit=document.elementFromPoint(rect.left+rect.width/2,40);
+      return hit !== null && header.contains(hit);
+    });
+    expect(coveredByHeader).toBe(true);
+  }
+});
+
 for (const [width, height] of [[1920,1080],[2560,1440],[3440,1440],[3840,2160]]) {
   for (const route of ['/iniciar-sesion','/registro']) {
     test(`${route} mantiene una composición legible en ${width}×${height}`, async ({page}, testInfo) => {

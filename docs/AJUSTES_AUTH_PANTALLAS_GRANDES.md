@@ -13,3 +13,5 @@ Las tarjetas de especialidades y promociones ahora muestran elevación, borde ro
 - Lint y compilación aprobados; detector de Impeccable sin hallazgos.
 
 Las comprobaciones de navegadores usan ventanas simuladas; no equivalen a pruebas en cada dispositivo físico.
+
+El contenido de inicio tiene un contexto de capas independiente para que el hover y el foco de sus tarjetas, incluidas las credenciales de membresía, permanezcan debajo del navbar. Una prueba desplaza cada tipo de tarjeta hasta la cabecera y verifica que esta conserva la prioridad visual.
