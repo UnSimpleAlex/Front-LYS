@@ -1,3 +1,4 @@
+import { DemoAccess } from './DemoAccess';
 import { useState, type FormEvent } from 'react';
 import { Icon, GoogleIcon } from '../../components/Icon';
 import { AuthField } from './AuthField';
@@ -48,5 +49,6 @@ export function SignInCard({ onHelp }: { onHelp: (action: 'register' | 'recover'
     <button className="google-button" type="button" disabled={pending} onClick={() => void submit()}>{pending && provider === 'google' ? <span className="spinner" aria-hidden="true" /> : <GoogleIcon />}<span>{pending && provider === 'google' ? 'Conectando con Google…' : 'Continuar con Google'}</span></button>
     <div className="register-divider"><span>¿No tienes una cuenta?</span><button className="text-link" type="button" onClick={() => onHelp('register')}>Crear cuenta</button></div>
     {message && <p key={status + message} className={`auth-message ${status}`} role={status === 'error' ? 'alert' : 'status'}>{status === 'success' && <Icon name="check" />}<span>{message}</span></p>}
+    <DemoAccess/>
   </section>;
 }
