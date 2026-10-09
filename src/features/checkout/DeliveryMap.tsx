@@ -5,7 +5,7 @@ import '../../styles/delivery-map.css';
 import { Icon } from '../../components/Icon';
 import { validPoint, type DeliveryPoint } from './location';
 
-const defaultCenter: L.LatLngTuple = [-12.0464, -77.0428];
+const defaultCenter: L.LatLngTuple = [-11.94, -77.07];
 const tileUrl = import.meta.env.VITE_MAP_TILE_URL || 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
 const attribution = import.meta.env.VITE_MAP_ATTRIBUTION || '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 const pin = L.divIcon({

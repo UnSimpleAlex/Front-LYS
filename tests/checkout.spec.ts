@@ -1,6 +1,6 @@
 import { test, expect, type Page } from '@playwright/test';
 
-test.beforeEach(async ({ page }) => {
+test.beforeEach(async ({ page }) => { await page.route('https://photon.komoot.io/**', route => route.fulfill({ json: { features: [] } }));
   await page.route('https://tile.openstreetmap.org/**', route => route.fulfill({ contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256"><rect width="256" height="256" fill="#e8eee7"/></svg>' }));
 });
 
@@ -15,7 +15,7 @@ async function delivery(page: Page, pickup = false) {
   if (pickup) await page.getByRole('radio', { name: /Recojo en local/ }).check();
   else {
     await page.getByLabel('Dirección de entrega', { exact: false }).fill('Av. Los Pinos 123');
-    await page.getByRole('textbox', { name: 'Distrito *', exact: true }).fill('Surco');
+    await page.getByRole('combobox', { name: 'Distrito *', exact: true }).selectOption('Comas');
     await page.getByRole('textbox', { name: 'Referencia *', exact: true }).fill('Frente al parque');
   }
   await page.getByLabel('Nombre completo', { exact: false }).fill('Cliente de prueba');
@@ -76,7 +76,7 @@ test('cantidades, cupón, nueva dirección, edición y restricciones de formular
   const dialog = page.getByRole('dialog', { name: 'Agregar dirección' });
   await dialog.getByLabel('Nombre de la dirección').fill('Casa');
   await dialog.getByLabel('Calle y número').fill('Av. Los Pinos 123');
-  await dialog.getByLabel('Distrito').fill('Surco');
+  await dialog.getByLabel('Distrito', { exact: false }).selectOption('Comas');
   await dialog.getByRole('button', { name: 'Guardar dirección' }).click();
   await expect(dialog).not.toBeVisible();
   await page.getByRole('textbox', { name: 'Referencia *', exact: true }).fill('Frente al parque');
@@ -110,7 +110,7 @@ for (const width of [240, 390, 768, 1024, 1920]) {
     await check('carrito');
     await page.getByRole('button', { name: 'Continuar compra' }).click(); await check('entrega');
     await page.getByLabel('Dirección de entrega', { exact: false }).fill('Av. Los Pinos 123');
-    await page.getByRole('textbox', { name: 'Distrito *', exact: true }).fill('Surco');
+    await page.getByRole('combobox', { name: 'Distrito *', exact: true }).selectOption('Comas');
     await page.getByRole('textbox', { name: 'Referencia *', exact: true }).fill('Frente al parque');
     await page.getByLabel('Nombre completo', { exact: false }).fill('Cliente de prueba');
     await page.getByLabel('Celular', { exact: false }).fill('987654321');

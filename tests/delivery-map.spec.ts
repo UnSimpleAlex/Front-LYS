@@ -7,12 +7,12 @@ async function openDelivery(page: Page) {
   await page.getByRole('button', { name: 'Continuar compra' }).click();
   await expect(page.getByRole('region', { name: 'Mapa para seleccionar la ubicación de entrega' })).toBeVisible();
 }
-test.beforeEach(async ({ page }) => { await page.route('https://tile.openstreetmap.org/**', route => route.fulfill({ contentType: 'image/svg+xml', body: tile })); });
+test.beforeEach(async ({ page }) => { await page.route('https://photon.komoot.io/**', route => route.fulfill({ json: { features: [] } })); await page.route('https://tile.openstreetmap.org/**', route => route.fulfill({ contentType: 'image/svg+xml', body: tile })); });
 
 test('selección manual, arrastre, teclado, edición y recibo conservan las coordenadas', async ({ page }) => {
   await openDelivery(page);
   await page.getByLabel('Dirección de entrega', { exact: false }).fill('Av. de prueba 123');
-  await page.getByRole('textbox', { name: 'Distrito *', exact: true }).fill('Lima');
+  await page.getByRole('combobox', { name: 'Distrito *', exact: true }).selectOption('Comas');
   await page.getByRole('textbox', { name: 'Referencia *', exact: true }).fill('Frente al parque');
   await page.getByLabel('Nombre completo', { exact: false }).fill('Cliente prueba');
   await page.getByLabel('Celular', { exact: false }).fill('987654321');

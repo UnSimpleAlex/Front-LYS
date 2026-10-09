@@ -25,3 +25,19 @@
 .delivery-map-selection svg { width: 18px; height: 18px; color: #e60008; flex-shrink: 0; }
 .delivery-map-picker .delivery-map-message { color: #454c58; }
 .delivery-map-actions button { text-decoration: underline; text-underline-offset: 4px; }
+
+.address-autocomplete { position: relative; min-width: 0; }
+.address-autocomplete > label, .delivery-district > label { display: block; margin-bottom: 6px; font-size: 14px; }
+.address-autocomplete label span, .delivery-district label span { color: #e60008; }
+.address-autocomplete > input, .delivery-district > select { width: 100%; min-height: 44px; box-sizing: border-box; }
+.address-autocomplete-menu { position: absolute; top: 100%; left: 0; right: 0; z-index: 20; margin-top: 6px; background: #fff; border: 1px solid #d9dde2; border-radius: 10px; overflow: hidden; }
+.address-autocomplete-menu ul { padding: 0; margin: 0; list-style: none; max-height: 250px; overflow-y: auto; }
+.address-autocomplete-menu li { display: flex; align-items: flex-start; gap: 10px; padding: 12px; cursor: pointer; border-bottom: 1px solid #eceef1; }
+.address-autocomplete-menu li:hover, .address-autocomplete-menu li[aria-selected="true"] { background: #f3f4f5; }
+.address-autocomplete-menu li svg { width: 18px; height: 18px; flex-shrink: 0; color: #e60008; }
+.address-autocomplete-menu strong { display: block; font-size: 14px; overflow-wrap: anywhere; }
+.address-autocomplete-menu small { display: block; color: #666e7b; font-size: 12px; margin-top: 3px; overflow-wrap: anywhere; }
+.address-autocomplete-menu p:empty { display: none; }
+.address-autocomplete-menu p { margin: 0; padding: 10px 12px; font-size: 12px; color: #555d68; }
+.address-autocomplete-menu .address-search-credit { padding: 8px 12px; background: #fafafa; margin: 0; font-size: 10px; }
+.delivery-other-district { display: block; margin-top: 10px; }
