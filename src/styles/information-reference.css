@@ -250,3 +250,4 @@
 
 /* La imagen elegida tiene bordes transparentes y se muestra completa. */
 .about-page .about-brand-image { width: 100%; max-width: 100%; margin: 0; }
+.about-brand-title-image { display: block; width: 100%; max-width: 490px; height: auto; }

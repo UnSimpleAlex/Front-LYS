@@ -8,6 +8,11 @@ Archivos finales: `public/images/information/`. Diez imágenes, aproximadamente 
 
 ## Prompts de generación
 
+### about-title.png
+Lettering transparente generado con la herramienta integrada image_gen. Archivo final: public/images/information/about-title.png. El encabezado mantiene su texto alternativo accesible.
+
+Generate a standalone typographic graphic on a fully TRANSPARENT background, landscape wide canvas closely fitted around TWO LINES of text. Exact Spanish text line 1: 'Más que una pollería,' in BLACK. Exact line 2: 'somos tradición' in bright vivid RED #f00000. This should match the small Peruvian restaurant website reference: first line is bold condensed hand-painted brush lettering, visibly slanted to the right, narrow tall letters, rough subtle hand-painted edges, like a natural sign painter, not bubbly or blocky. Second line is significantly larger bold flowing italic brush script, connected lowercase letters, dynamic handwritten strokes with rounded brush terminals, natural rhythm and elegant descenders. Left aligned both lines; line 2 about 1.3 times the height of line 1. Tight line spacing, finished text only, no other artwork, no underline, no ornaments, no shadows, no background, no gradients. Keep both accents over á and í correct, the ñ in pollería? exact word pollería uses í and no ñ. Exact word tradición includes ó. Render exact wording 'Más que una pollería,' and 'somos tradición'. Do not add any other text. High quality crisp typography asset to be placed in a web header, all letters fully inside image.
+
 ### principles-background.png
 Fondo generado con la herramienta integrada image_gen para la nueva referencia de Misión, Visión y Valores. Archivo final: public/images/information/principles-background.png. Los textos y tarjetas se implementan en HTML/CSS y no forman parte del bitmap.
 
