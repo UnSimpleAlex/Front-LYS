@@ -8,6 +8,11 @@ Archivos finales: `public/images/information/`. Diez imágenes, aproximadamente 
 
 ## Prompts de generación
 
+### principles-background-v2.png
+Fondo derivado de la nueva referencia del propietario mediante la herramienta integrada image_gen. Archivo final: public/images/information/principles-background-v2.png. Se retiraron del bitmap los iconos y textos para conservar el contenido HTML responsive.
+
+Edit supplied image to extract its EXACT decorative background as a website asset. Preserve the very light white paper background, gray pencil mountains and terraced farmland on far left, gray pencil flames and stacked firewood on far right, and three red outline leaves at edges exactly in the same style, placement, scale and framing. Remove ALL central content: the three red circular icons, all red little rays, every word, all black text, all red dots and underlines, both vertical divider lines. Replace removed central content with seamlessly matching plain white paper. Keep wide 4:1 aspect ratio, same composition and lateral illustration edges. No new artwork, no letters, no icons, no circles, no cards, no dividers. This is solely the original lateral decorative background with blank central 65 percent for live HTML content.
+
 ### about-title.png
 Lettering transparente generado con la herramienta integrada image_gen. Archivo final: public/images/information/about-title.png. El encabezado mantiene su texto alternativo accesible.
 

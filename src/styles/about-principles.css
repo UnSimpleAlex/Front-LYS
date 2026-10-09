@@ -1,43 +1,33 @@
-.about-page .about-principles { padding: 28px 0 40px; background: #fff url('/images/information/principles-background.png') center / cover no-repeat; text-align: center; }
+/* Columnas abiertas sobre el fondo de la referencia. */
+.about-page .about-principles { padding: 38px 0 40px; background: #fff url('/images/information/principles-background-v2.png') center / cover no-repeat; text-align: center; }
 .about-page .about-principles .info-container { max-width: 1180px; }
-.about-page .about-principles-divider { display: flex; justify-content: center; align-items: center; gap: 20px; color: #f00000; }
-.about-page .about-principles-divider::before,.about-page .about-principles-divider::after { content: ''; width: 85px; height: 1px; background: currentColor; }
-.about-page .about-principles-divider > svg { width: 25px; height: 28px; fill: currentColor; stroke-width: 1; }
-.about-page .about-principles h2 { font-family: Knewave,Caveat,cursive; font-weight: 400; font-size: clamp(27px,3.3vw,46px); line-height: 1.2; color: #090909; margin: 8px 0 28px; }
-.about-page .about-principles h2 > span { position: relative; display: inline-block; font-family: Caveat,cursive; font-size: 1.45em; font-weight: 700; line-height: 1; color: #f00000; }
-.about-page .about-principles h2 > span::after { content: ''; position: absolute; left: -2%; right: -5%; bottom: -17px; height: 13px; border-top: 8px solid currentColor; border-radius: 50%; transform: rotate(-4deg); }
-.about-page .about-principles-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 14px; max-width: 900px; margin: auto; }
-.about-page .about-principle-card { display: flex; align-items: center; flex-direction: column; padding: 18px 14px 12px; background: #ffffffed; border: 1px solid #eaeaea; border-radius: 45% 45% 45% 45% / 8% 8% 8% 8%; box-shadow: 0 8px 22px #00000006; min-width: 0; }
-.about-page .about-principle-icon { position: relative; display: grid; place-items: center; width: 88px; aspect-ratio: 1; color: #fff; background: #f00000; border-radius: 50%; border: 4px double white; outline: 2px dashed #f00000; outline-offset: 2px; margin: 0 0 7px; }
+.about-page .about-principles-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); max-width: 1040px; margin: auto; }
+.about-page .about-principle-card { position: relative; display: flex; align-items: center; flex-direction: column; padding: 12px 18px; min-width: 0; }
+.about-page .about-principle-card + .about-principle-card::before { content: ''; position: absolute; top: 40px; bottom: 42px; left: 0; width: 1px; background: linear-gradient(transparent,#bdbdbd 30%,#bdbdbd 70%,transparent); }
+.about-page .about-principle-icon { position: relative; display: grid; place-items: center; width: 104px; aspect-ratio: 1; color: #fff; background: #f00000; border-radius: 50%; border: 4px double white; outline: 2px dashed #f00000; outline-offset: 2px; margin: 0 0 12px; }
 .about-page .about-principle-icon > svg { width: 65%; height: 65%; stroke-width: 1.8; }
 .about-page .about-principle-icon::before,.about-page .about-principle-icon::after { content: ''; position: absolute; width: 20px; height: 16px; border-top: 3px solid #f00000; border-bottom: 3px solid #f00000; top: 57%; }
 .about-page .about-principle-icon::before { left: -40px; transform: rotate(32deg) skewY(-12deg); }
 .about-page .about-principle-icon::after { right: -40px; transform: rotate(-32deg) skewY(12deg); }
-.about-page .about-principle-card h3 { position: relative; font-family: Knewave,Caveat,cursive; color: #090909; font-size: 29px; font-weight: 400; line-height: 1.15; margin: 0 0 18px; }
-.about-page .about-principle-card h3::after { content: ''; position: absolute; bottom: -10px; left: 25%; width: 50%; height: 2px; background: #f00000; }
-.about-page .about-principle-card p,.about-page .about-principle-values { font-size: 17px; line-height: 1.4; color: #191919; margin: 0 0 8px; }
-.about-page .about-principle-values { list-style: none; display: flex; justify-content: center; flex-wrap: wrap; max-width: 290px; padding: 0; column-gap: 8px; }
-.about-page .about-principle-values li:not(:last-child)::after { content: '•'; color: #f00000; margin-left: 8px; }
-.about-page .about-principle-decoration { display: flex; align-items: center; justify-content: center; color: #f00000; margin-top: auto; height: 32px; }
-.about-page .about-principle-decoration > svg { width: 140px; height: 32px; }
-.about-page .about-principle-decoration.about-principles-divider > svg { width: 25px; height: 28px; }
-.about-page .about-principle-decoration.about-principles-divider::before,.about-page .about-principle-decoration.about-principles-divider::after { width: 55px; }
-.about-page .about-principle-cutlery.about-principles-divider > svg { fill: none; stroke-width: 1.8; }
+.about-page .about-principle-card h2 { position: relative; font-family: Knewave,Caveat,cursive; color: #090909; font-size: 34px; font-weight: 400; line-height: 1.15; margin: 0 0 24px; }
+.about-page .about-principle-card h2::after { content: ''; position: absolute; bottom: -12px; left: 30%; width: 40%; height: 1px; background: #f00000; }
+.about-page .about-principle-card p,.about-page .about-principle-values { font-size: 19px; line-height: 1.4; color: #191919; margin: 0; }
+.about-page .about-principle-values { list-style: none; display: grid; grid-template-columns: auto auto; gap: 0 23px; padding: 0; }
+.about-page .about-principle-values li { position: relative; }
+.about-page .about-principle-values li:nth-child(odd)::after { content: '•'; color: #f00000; position: absolute; right: -17px; }
 @media(max-width:800px) {
- .about-page .about-principles-grid { gap: 10px; }
- .about-page .about-principle-card { padding: 18px 10px 12px; }
- .about-page .about-principle-icon::before { left: -24px; width: 13px; }
- .about-page .about-principle-icon::after { right: -24px; width: 13px; }
- .about-page .about-principle-decoration.about-principles-divider { gap: 10px; }
- .about-page .about-principle-decoration.about-principles-divider::before,.about-page .about-principle-decoration.about-principles-divider::after { width: 32px; }
+ .about-page .about-principle-card { padding-inline: 10px; }
+ .about-page .about-principle-icon { width: 84px; }
+ .about-page .about-principle-icon::before { left: -27px; width: 13px; }
+ .about-page .about-principle-icon::after { right: -27px; width: 13px; }
+ .about-page .about-principle-card h2 { font-size: 29px; }
+ .about-page .about-principle-card p,.about-page .about-principle-values { font-size: 16px; }
 }
 @media(max-width:600px) {
- .about-page .about-principles { background-size: auto 100%; padding-top: 25px; }
- .about-page .about-principles h2 { font-size: clamp(24px,6vw,32px); margin-bottom: 28px; }
- .about-page .about-principles-grid { grid-template-columns: minmax(0,1fr); max-width: 320px; gap: 14px; }
- .about-page .about-principle-card { padding: 18px 16px 12px; }
+ .about-page .about-principles { background-size: auto 100%; padding: 20px 0 30px; }
+ .about-page .about-principles-grid { grid-template-columns: minmax(0,1fr); max-width: 320px; gap: 28px; }
+ .about-page .about-principle-card { padding: 15px 8px 20px; }
+ .about-page .about-principle-card + .about-principle-card::before { left: 15%; right: 15%; width: auto; height: 1px; top: -14px; bottom: auto; background: linear-gradient(90deg,transparent,#bdbdbd,transparent); }
  .about-page .about-principle-icon { width: 78px; }
- .about-page .about-principle-card h3 { font-size: 28px; }
- .about-page .about-principle-card p,.about-page .about-principle-values { font-size: 16px; }
- .about-page .about-principle-decoration { margin-top: 5px; }
+ .about-page .about-principle-card h2 { font-size: 28px; margin-bottom: 22px; }
 }
