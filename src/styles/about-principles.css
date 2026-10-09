@@ -11,7 +11,8 @@
 .about-page .about-principle-icon::after { right: -40px; transform: rotate(-32deg) skewY(12deg); }
 .about-page .about-principle-card h2 { position: relative; font-family: Knewave,Caveat,cursive; color: #090909; font-size: 34px; font-weight: 400; line-height: 1.15; margin: 0 0 24px; }
 .about-page .about-principle-card h2::after { content: ''; position: absolute; bottom: -12px; left: 30%; width: 40%; height: 1px; background: #f00000; }
-.about-page .about-principle-card p,.about-page .about-principle-values { font-size: 19px; line-height: 1.4; color: #191919; margin: 0; }
+.about-page .about-principle-title { display: block; width: auto; height: 44px; max-width: 170px; object-fit: contain; }
+.about-page .about-principle-card p,.about-page .about-principle-values { font-size: var(--about-body-font-size); line-height: 1.45; color: #191919; margin: 0; }
 .about-page .about-principle-values { list-style: none; display: grid; grid-template-columns: auto auto; gap: 0 23px; padding: 0; }
 .about-page .about-principle-values li { position: relative; }
 .about-page .about-principle-values li:nth-child(odd)::after { content: '•'; color: #f00000; position: absolute; right: -17px; }
@@ -21,7 +22,7 @@
  .about-page .about-principle-icon::before { left: -27px; width: 13px; }
  .about-page .about-principle-icon::after { right: -27px; width: 13px; }
  .about-page .about-principle-card h2 { font-size: 29px; }
- .about-page .about-principle-card p,.about-page .about-principle-values { font-size: 16px; }
+ .about-page .about-principle-title { height: 40px; max-width: 155px; }
 }
 @media(max-width:600px) {
  .about-page .about-principles { background-size: auto 100%; padding: 20px 0 30px; }

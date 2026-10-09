@@ -19,15 +19,15 @@ export function AboutPage({ onAction }: { onAction: (action: string) => void }) 
         <div className="about-principles-grid">
           <article className="about-principle-card">
             <span className="about-principle-icon"><Icon name="target" /></span>
-            <h2>Misión</h2><p>Brindar sabor, calidad<br />y calidez en cada visita.</p>
+            <h2><img className="about-principle-title" src="/images/information/title-mision.png" alt="Misión" /></h2><p>Brindar sabor, calidad<br />y calidez en cada visita.</p>
           </article>
           <article className="about-principle-card">
             <span className="about-principle-icon"><Icon name="eye" /></span>
-            <h2>Visión</h2><p>Ser la pollería favorita<br />de las familias de la región.</p>
+            <h2><img className="about-principle-title" src="/images/information/title-vision.png" alt="Visión" /></h2><p>Ser la pollería favorita<br />de las familias de la región.</p>
           </article>
           <article className="about-principle-card">
             <span className="about-principle-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" aria-hidden="true"><path d="M3 8 7 3h10l4 5-9 14ZM3 8h18M7 3l5 19 5-19M7 8l5-5 5 5" /></svg></span>
-            <h2>Valores</h2><ul className="about-principle-values"><li>Calidad</li><li>Cercanía</li><li>Honestidad</li><li>Pasión</li></ul>
+            <h2><img className="about-principle-title" src="/images/information/title-valores.png" alt="Valores" /></h2><ul className="about-principle-values"><li>Calidad</li><li>Cercanía</li><li>Honestidad</li><li>Pasión</li></ul>
           </article>
         </div>
       </div>

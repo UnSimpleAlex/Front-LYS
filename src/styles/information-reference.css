@@ -219,7 +219,7 @@
 }
 
 /* Encabezado Nosotros según la nueva referencia del propietario. */
-.about-page { background: #fff; }
+.about-page { --about-body-font-size: clamp(14px,1.12vw,20px); background: #fff; }
 .about-brand-hero { display: grid; grid-template-columns: minmax(0,.85fr) minmax(0,1.15fr); grid-template-rows: max-content max-content; align-content: center; align-items: center; gap: 0 16px; padding-block: 35px 20px; }
 .about-brand-copy { display: contents; }
 .about-brand-heading { grid-column: 1; grid-row: 1; align-self: end; }
@@ -227,7 +227,7 @@
 .about-brand-copy .info-eyebrow { font-size: clamp(10px,.8vw,15px); margin-bottom: 18px; }
 .about-brand-copy h1 { font-family: Knewave, Caveat, cursive; font-weight: 400; font-size: clamp(30px,3.6vw,65px); line-height: 1.15; letter-spacing: -.035em; margin: 0 0 20px; }
 .about-brand-copy h1 span { display: block; font-family: Caveat,cursive; font-size: 1.4em; font-weight: 700; color: #ed0000; line-height: 1; }
-.about-brand-description > p { font-size: clamp(14px,1.12vw,20px); line-height: 1.45; color: #555; margin: 0 0 12px; max-width: 610px; }
+.about-brand-description > p { font-size: var(--about-body-font-size); line-height: 1.45; color: #555; margin: 0 0 12px; max-width: 610px; }
 .about-brand-copy .primary-button { font-size: clamp(12px,1vw,17px); margin-top: 5px; min-height: 44px; padding: 10px 18px; border-radius: 8px; }
 .about-brand-copy .primary-button svg { width: 19px; height: 19px; }
 .about-brand-image { display: block; width: 114%; max-width: none; height: auto; margin-left: -10%; }
@@ -236,7 +236,7 @@
 @media(max-width:800px) {
  .about-brand-hero { grid-template-columns: minmax(0,1fr) minmax(0,1fr); padding-top: 24px; }
  .about-brand-copy h1 { font-size: clamp(28px,4.3vw,42px); }
- .about-brand-description > p { font-size: 14px; }
+ .about-page { --about-body-font-size: 14px; }
  .about-brand-image { width: 125%; margin-left: -20%; }
 }
 @media(max-width:580px) {
@@ -245,7 +245,7 @@
  .about-brand-description { grid-row: 3; }
  .about-brand-copy h1 { font-size: clamp(29px,8vw,44px); max-width: 460px; }
  .about-brand-copy h1 span { font-size: 1.5em; }
- .about-brand-description > p { font-size: 15px; }
+ .about-page { --about-body-font-size: 15px; }
  .about-brand-image { width: 112%; margin: -5px 0 0 -12%; }
  .about-page .about-history { padding-top: 0; }
 }
