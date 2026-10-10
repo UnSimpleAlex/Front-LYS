@@ -25,7 +25,6 @@ export function ContactPage({ onAction }: { onAction: (action: string) => void }
       <header className="contact-banner">
         <div className="contact-banner-inner">
           <div><p>CONTACTO</p><h1>Conecta <span>con nosotros</span></h1></div>
-          <p className="contact-banner-description">¿Tienes alguna consulta,<br/>sugerencia o un pedido especial?<br/>Estamos para ayudarte.</p>
         </div>
       </header>
       <div className="info-container contact-reference-grid">

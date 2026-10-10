@@ -6,7 +6,6 @@
 .contact-reference .contact-banner h1 { font-family:Caveat,cursive; font-weight:700; font-size:clamp(58px,5.3vw,88px); line-height:.85; margin:0; letter-spacing:-.045em; color:#fff; }
 .contact-banner h1 span { display:block; color:var(--contact-red); margin-left:40px; padding-bottom:18px; position:relative; }
 .contact-banner h1 span::after { content:''; position:absolute; bottom:0; left:6%; width:78%; height:4px; background:var(--contact-red); border-radius:50%; transform:rotate(-5deg); }
-.contact-banner-description { border-left:1px solid #fffc; padding:12px 0 12px 24px; font-size:17px; line-height:1.4; margin:20px 0 0; }
 .contact-reference .info-container { width:min(1540px,94%); }
 .contact-reference-grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.2fr) minmax(0,1fr); align-items:start; gap:16px; padding-top:20px; }
 .contact-reference-card { min-width:0; border:1px solid #eceef1; border-radius:22px; padding:clamp(18px,1.6vw,30px); background:#fff; box-shadow:0 8px 24px #17213604; }
@@ -72,7 +71,6 @@
  .contact-reference-grid { grid-template-columns:minmax(0,1fr); gap:16px; }
  .contact-reference-side { grid-column:auto; grid-template-columns:minmax(0,1fr); }
  .contact-banner-inner { flex-direction:column; align-items:flex-start; gap:18px; padding-block:28px; }
- .contact-banner-description { margin:0; padding:0 0 0 14px; font-size:15px; }
  .contact-reference .contact-banner h1 { font-size:64px; }
  .contact-reference-card { padding:20px; border-radius:18px; }
  .contact-reference .contact-reference-card h2 { font-size:27px; }
