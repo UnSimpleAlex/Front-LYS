@@ -117,3 +117,20 @@
  .local-welcome { padding:12px; gap:10px; }
 }
 .local-parking::before { content: ""; position: absolute; width: 28px; height: 32px; border: 2px solid currentColor; border-radius: 6px; } .local-parking { position: relative; } @media (min-width: 701px) and (max-width: 1199px) { .local-gallery-frame { flex: none; aspect-ratio: 1.2; min-height: 0; } }
+/* El rótulo conserva los trazos de pincel y el fondo mantiene los adornos suaves. */
+.locations-page::before { content: ''; position: absolute; inset: 0; height: auto; z-index: -1; background: #fff url('/images/information/local-background-v2.png') center / 100% 100% no-repeat; }
+.local-title-image { width: 100%; max-width: 430px; height: auto; display: block; margin-inline: auto; }
+.locations-page .local-visit-heading h1 { line-height: 1; }
+.local-address { position: relative; }
+.local-address::after { content: ''; position: absolute; right: -16px; top: 88px; width: 55px; height: 135px; opacity: .55; pointer-events: none; background: url('/images/information/local-route.svg') center / contain no-repeat; }
+.local-hours { position: relative; }
+.local-hours::after { content: ''; position: absolute; right: 0; bottom: 0; width: 76px; height: 76px; opacity: .14; pointer-events: none; background: url('/images/information/local-clock.svg') center / contain no-repeat; }
+@media (min-width: 1200px) { .local-title-image { max-height: 34vh; width: auto; max-width: 100%; } }
+@media (max-width: 1199px) { .local-title-image { width: min(100%, 270px); } }
+@media (max-width: 700px) {
+ .local-title-image { width: min(76%, 280px); }
+ .locations-page::before { background-size: auto 800px; background-position: center top; }
+ .local-address::after { width: 32px; right: -12px; opacity: .25; }
+}
+@media (min-width: 1200px) and (max-height: 720px) { .local-title-image { max-height: 30vh; } }
+.locations-page::before { opacity: .68; }
