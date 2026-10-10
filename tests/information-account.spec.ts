@@ -158,6 +158,11 @@ for (const [width, height] of [[1366, 591], [1250, 650], [1440, 900], [1920, 108
     });
     await expect.poll(fits).toBeTruthy();
     await expect(page.getByText('¿Tienes alguna consulta,')).toHaveCount(0);
+    await expect(page.getByText('Estamos para ti', { exact: true })).toHaveCount(0);
+    expect(await page.locator('.contact-layout').evaluate(node => {
+      const rect = node.getBoundingClientRect();
+      return Math.abs(rect.left - (innerWidth - rect.right));
+    })).toBeLessThanOrEqual(1);
     await page.getByLabel('Nombre completo').fill('Cliente de prueba');
     await page.getByLabel('Correo electrónico').fill('prueba@example.com');
     await page.getByLabel('Teléfono', { exact: true }).fill('987654321');

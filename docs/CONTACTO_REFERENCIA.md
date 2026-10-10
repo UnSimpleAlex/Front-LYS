@@ -9,3 +9,5 @@ Desde 1200 px la composición ocupa el alto disponible bajo el navbar, sin foote
 WhatsApp, teléfono, correo, Instagram y horario utilizan los SVG locales de Bootstrap Icons (MIT), con licencia en `docs/licenses/bootstrap-icons.txt`. Instagram conserva la acción existente mientras no haya un enlace oficial configurado. La fotografía interior, Knewave para «Hablemos» y Caveat para «mensaje» aproximan los recursos de la maqueta; no se utiliza una captura de pantalla como interfaz.
 
 Verificación visual en 1774×887, 1366×591, 1024×768, 768×1024, 390×844 y 240×800. Pruebas de formulario, enlaces, pantalla completa en cinco tamaños de PC y ausencia de desbordamiento en móvil/tablet.
+
+El conjunto formulario + canales tiene márgenes laterales iguales en escritorio; se retiró el rótulo superior «Estamos para ti». La fotografía permanece decorativa y no desplaza el eje de la composición.
