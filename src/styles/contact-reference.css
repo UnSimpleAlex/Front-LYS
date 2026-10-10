@@ -104,3 +104,68 @@
 }
 .contact-reference-side { align-items:start; }
 @media(min-width:701px) and (max-width:900px) { .contact-fields { grid-template-columns:minmax(0,1fr); } }
+
+.contact-edit { display:block; margin:12px auto 0; padding:8px 14px; border:1px solid #d8dde6; border-radius:8px; background:white; color:#263248; font:inherit; cursor:pointer; }
+@media(min-width:1200px) {
+ .contact-reference { --contact-header-height:64px; height:calc(100dvh - var(--contact-header-height)); min-height:0; display:flex; flex-direction:column; padding-bottom:16px; }
+ .contact-reference ~ .home-footer { display:none; }
+ .contact-banner { flex:0 0 auto; }
+ .contact-banner-inner { min-height:0; height:clamp(120px,23vh,236px); padding-block:12px; }
+ .contact-reference .contact-banner h1 { font-size:clamp(48px,8vh,88px); }
+ .contact-reference-grid { flex:1; min-height:0; grid-template-rows:minmax(0,1fr); align-items:stretch; padding-top:16px; }
+ .contact-reference-card { padding:clamp(14px,2vh,24px); }
+ .contact-reference .contact-reference-card h2 { font-size:clamp(23px,3vh,34px); }
+ .contact-reference .contact-reference-card > p { font-size:clamp(13px,1.7vh,16px); margin-bottom:10px; }
+ .contact-channels { display:flex; flex-direction:column; }
+ .contact-channel-list { flex:1; min-height:0; grid-template-rows:repeat(4,minmax(0,1fr)); gap:8px; }
+ .contact-channel { padding:8px 10px; gap:12px; }
+ .contact-red-icon { width:clamp(42px,7vh,62px); height:clamp(42px,7vh,62px); flex-basis:clamp(42px,7vh,62px); }
+ .contact-reference .contact-channel h3 { font-size:clamp(14px,2vh,18px); }
+ .contact-channel strong { font-size:clamp(12px,1.8vh,16px); }
+ .contact-reference .contact-channel p { font-size:clamp(11px,1.5vh,13px); }
+ .contact-message { display:flex; flex-direction:column; min-height:0; }
+ .contact-message form { flex:1; min-height:0; display:flex; flex-direction:column; }
+ .contact-fields { flex:0 0 auto; gap:clamp(8px,1.5vh,14px); margin-top:clamp(4px,1.5vh,16px); }
+ .contact-reference input,.contact-reference select { height:clamp(40px,6vh,56px); padding-block:8px; }
+ .contact-fields label > svg { top:calc(50% - 10px); }
+ .contact-message-field { flex:1; min-height:74px; margin-top:clamp(8px,1.5vh,16px); }
+ .contact-reference textarea { height:100%; min-height:74px; resize:none; }
+ .contact-send { flex:0 0 auto; min-height:44px; margin-top:clamp(8px,1.5vh,18px); padding:10px; }
+ .contact-reference .contact-privacy { margin-top:8px; font-size:11px; }
+ .contact-reference-side { min-height:0; grid-template-rows:minmax(0,1fr) auto; gap:12px; align-items:stretch; }
+ .contact-reference .contact-location,.contact-reference .contact-quick { padding:clamp(12px,2vh,20px); }
+ .contact-location { display:flex; flex-direction:column; min-height:0; }
+ .contact-reference .business-map { flex:1; min-height:0; display:flex; flex-direction:column; }
+ .contact-reference .business-map-canvas { flex:1; height:auto; min-height:55px; }
+ .contact-reference .business-map-caption { flex:0 0 auto; }
+ .contact-maps-link { flex:0 0 auto; padding:8px; margin-top:8px; }
+ .contact-quick-links { margin-top:8px; }
+ .contact-quick-links span { width:clamp(40px,6vh,54px); height:clamp(40px,6vh,54px); }
+ .contact-message form:has(.info-prepared) > :not(.info-prepared) { display:none; }
+ .contact-reference .info-prepared { margin:auto 0; padding:18px; }
+}
+@media(min-width:1200px) and (max-width:1250px) and (min-device-width:1280px) and (hover:hover) and (pointer:fine) {
+ .contact-reference { --contact-header-height:104px; }
+}
+@media(min-width:1200px) and (max-height:650px) {
+ .contact-reference { padding-bottom:10px; }
+ .contact-banner-inner { height:90px; padding-block:4px; }
+ .contact-reference .contact-banner h1 { font-size:30px; }
+ .contact-banner h1 span { padding-bottom:6px; }
+ .contact-reference-grid { padding-top:10px; gap:12px; }
+ .contact-reference .contact-reference-card h2 { font-size:22px; }
+ .contact-reference .contact-red-icon svg { width:26px; height:26px; }
+ .contact-reference .contact-quick > p { font-size:12px; margin-bottom:6px; }
+ .contact-reference .contact-quick { padding:8px; }
+ .contact-reference .contact-location { padding:8px; }
+ .contact-reference-side { gap:8px; }
+ .contact-reference .business-map-canvas { min-height:75px; }
+ .contact-reference .contact-quick h2 { margin-bottom:4px; }
+ .contact-channel { padding-block:4px; }
+ .contact-quick-links span { width:32px; height:32px; }
+ .contact-quick-links { margin-top:4px; gap:4px; }
+ .contact-quick-links strong { font-size:12px; }
+ .contact-quick-links small { font-size:11px; }
+ .contact-reference .business-map-caption { font-size:10px; gap:2px; padding:4px 8px; }
+ .contact-reference .business-map-caption strong { display:none; }
+}
