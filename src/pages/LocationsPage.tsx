@@ -21,7 +21,7 @@ export function LocationsPage({ onAction }: { onAction: (action: string) => void
         <section className="local-visit-layout" aria-label="Conoce nuestro local">
           <div className="local-introduction">
             <header className="local-visit-heading">
-              <h1><img className="local-title-image" src="/images/information/local-title-v2.png" alt="Nuestro local" width="1642" height="949" /></h1>
+              <h1><img className="local-title-image" src="/images/information/local-title-v3.png" alt="Nuestro local" width="1642" height="949" /></h1>
               <p>Te esperamos para disfrutar de nuestro auténtico sabor en un ambiente acogedor.</p>
             </header>
             <div className="local-benefits">

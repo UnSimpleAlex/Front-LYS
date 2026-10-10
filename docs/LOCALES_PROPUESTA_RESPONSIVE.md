@@ -16,3 +16,10 @@ Herramienta integrada Imagegen, usando la propuesta como referencia visual:
 - `public/images/information/local-background-v2.png`: fondo blanco panorámico. Prompt: ilustraciones periféricas muy suaves en melocotón y taupe, gallina a la izquierda, hojas y cítricos abajo, cebolla arriba y hierbas a la derecha; centro despejado, sin texto, fotos, logos ni interfaz, manteniendo blanco como color dominante.
 
 Los recursos originales generados se conservan en la carpeta de Imagegen y se copian al proyecto. Las tres fotografías previas no se modifican.
+
+### Refinamiento de color y blanco puro
+
+- `local-title-v3.png`, editado con Imagegen: cambiar únicamente las gotas laterales al mismo rojo de “local”, preservando la caligrafía y el alfa transparente.
+- `local-ornaments-v3.png`, editado con Imagegen: eliminar fondo y textura de papel, dejando los dibujos periféricos sobre alfa transparente.
+- La página y el panel usan blanco `#fff`; los adornos se superponen al 12% de opacidad. Ruta y reloj decorativos también se suavizan.
+- Verificación de geometría en 390, 768, 1280, 1904 y 2560 px: miniaturas con anchos iguales (diferencia menor de 0,02 px), galería y panel con bordes superior e inferior alineados en PC/tablet, sin desbordamiento horizontal. PC conserva ausencia de scroll vertical. Capturas revisadas en PC y móvil.
