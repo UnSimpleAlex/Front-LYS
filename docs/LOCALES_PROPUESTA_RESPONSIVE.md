@@ -29,3 +29,5 @@ Los recursos originales generados se conservan en la carpeta de Imagegen y se co
 Las tres fotografías del carrusel se sustituyen por los archivos entregados por el usuario el 9 de octubre, optimizados a WebP sin cambiar su composición. Iconos blancos sobre rojo sólido, botón de Maps blanco, bienvenida gris neutro y adornos en escala de grises al 9% reemplazan los tonos pastel. Descripción, ubicación, horario y bienvenida mantienen el texto centrado en todas las resoluciones, según la última indicación del usuario. Los beneficios también centran su texto y conservan el bloque alineado bajo el rótulo.
 
 Verificación: capturas en 390×844, 768×1024, 1366×591, 1672×941 y 1920×1080, sin desbordamiento horizontal; las tres resoluciones de PC no tienen scroll vertical. Carrusel circular y enlace de Maps verificados con la prueba existente; compilación y lint correctos.
+
+Las tres imágenes comparten la altura del marco de la primera. Las fotografías se posicionan dentro de ese marco con recorte centrado (`object-fit: cover`), de modo que sus proporciones originales no cambien la altura de la galería. Verificado al recorrer las tres imágenes en PC, tablet y móvil.
