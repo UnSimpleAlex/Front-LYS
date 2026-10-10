@@ -134,11 +134,11 @@
 }
 @media (min-width: 1200px) and (max-height: 720px) { .local-title-image { max-height: 30vh; } }
 .locations-page::before { opacity: .09; filter: grayscale(1); }
-.locations-page .local-visit-heading p { text-align: left; }
-.local-visit-panel .local-detail-heading { justify-content: flex-start; }
-.local-address, .local-hours-copy { text-align: left; }
-.local-hours-copy { padding-left: calc(clamp(44px,4vw,68px) + 16px); }
-.locations-page .local-hours-copy p + p { justify-content: flex-start; }
+.locations-page .local-visit-heading p { text-align: center; }
+.local-visit-panel .local-detail-heading { justify-content: center; }
+.local-address, .local-hours-copy { text-align: center; }
+.local-hours-copy { padding-left: 0; }
+.locations-page .local-hours-copy p + p { justify-content: center; }
 .local-maps-button { margin-inline: auto; }
 .local-welcome { justify-content: center; }
 .local-welcome > div { flex: 1; min-width: 0; text-align: center; }
@@ -152,13 +152,4 @@
 .local-maps-button { display: flex; width: 100%; }
 .local-phone { color: #26303d; font-size: clamp(14px,1.05vw,20px); }
 .local-parking { font-size: clamp(28px,2.5vw,42px); font-weight: 500; }
-@media (min-width:1200px) and (max-height:720px) {
- .local-hours-copy { padding-left:54px; }
-}
-@media (max-width:700px) {
- .locations-page .local-visit-heading p { text-align:center; }
- .local-hours-copy { padding-left:0; text-align:center; }
- .locations-page .local-hours-copy p + p { justify-content:center; }
- .local-visit-panel .local-detail-heading { justify-content:center; }
- .local-address { text-align:center; }
-}
+.local-benefits > div > div { flex: 1; min-width: 0; text-align: center; }
