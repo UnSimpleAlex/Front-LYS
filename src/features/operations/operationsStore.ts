@@ -850,6 +850,119 @@ export function saveSettings(settings: Settings) {
     throw new Error("Revisa la configuración.");
   publish({ ...state, settings });
 }
+export function seedKitchenPreview() {
+  requireRole(["administrador", "cocina"]);
+  if (state.orders.some((order) => order.customerId === "kitchen-preview"))
+    throw new Error("La muestra de cocina ya está cargada.");
+  const now = Date.now();
+  const names = [
+    "Carlos Mendoza",
+    "Ana Torres",
+    "Luis García",
+    "María López",
+    "Juan Pérez",
+    "Lucía Sánchez",
+    "Andrés Vega",
+    "Sofía Morales",
+  ];
+  const stages: Status[] = [
+    "Recibido",
+    "Recibido",
+    "Recibido",
+    "Recibido",
+    "Recibido",
+    "En preparación",
+    "En preparación",
+    "En preparación",
+    "Listo",
+    "Listo",
+    "En camino",
+    ...Array<Status>(10).fill("Entregado"),
+    "Cancelado",
+    "Cancelado",
+  ];
+  const foods = state.products.filter((product) =>
+    ["pollo", "combos", "parrillas"].includes(product.category),
+  );
+  const timestamp = (ago: number) => new Date(now - ago * 60000).toISOString();
+  const orders: Order[] = stages.map((status, index) => {
+    const channel: Channel = ["Delivery", "Salón", "Recojo"][
+      index % 3
+    ] as Channel;
+    const preparation = [11, 17, 22, 28][index % 4];
+    const age =
+      index < 5
+        ? [8, 12, 15, 5, 18][index]
+        : index < 8
+          ? [12, 16, 65][index - 5]
+          : index < 11
+            ? 30 + index
+            : 60 + (index - 11) * 22;
+    const created = timestamp(age);
+    const accepted = timestamp(Math.max(0, age - 1));
+    const ready = new Date(
+      Date.parse(accepted) + preparation * 60000,
+    ).toISOString();
+    const product =
+      foods[index % Math.max(1, foods.length)] ||
+      state.products[index % state.products.length];
+    const items: Line[] = [{ product, count: 1 }];
+    const side = state.products.find(
+      (item) => item.id === "acompanamientos-01",
+    );
+    const drink = state.products.find((item) => item.id === "bebidas-01");
+    if (side) items.push({ product: side, count: 1 });
+    if (drink && index % 2 === 0) items.push({ product: drink, count: 1 });
+    const prepared = ["Listo", "En camino", "Entregado"].includes(status);
+    return {
+      id: `COCINA-DEMO-${String(index + 1).padStart(3, "0")}`,
+      customerId: "kitchen-preview",
+      customer: names[index % names.length],
+      phone: "",
+      email: "",
+      address:
+        channel === "Delivery"
+          ? [
+              "Av. Primavera 123, Santiago de Surco",
+              "Calle Los Robles 456, Miraflores",
+              "Av. Javier Prado 1234, Lima",
+            ][index % 3]
+          : "",
+      channel,
+      table: channel === "Salón" ? (index % 12) + 1 : null,
+      items,
+      notes:
+        index === 0 || index === 3
+          ? "Urgente · pedido de demostración"
+          : "Datos de demostración",
+      status,
+      created,
+      ...(status !== "Recibido" && status !== "Cancelado" ? { accepted } : {}),
+      ...(prepared ? { ready } : {}),
+      ...(status === "Entregado"
+        ? { delivered: new Date(Date.parse(ready) + 4 * 60000).toISOString() }
+        : {}),
+      discount: 0,
+      shipping: channel === "Delivery" ? 7 : 0,
+      method: "Efectivo",
+      paid: false,
+      history: [
+        { status: "Recibido", date: created },
+        ...(status !== "Recibido" && status !== "Cancelado"
+          ? [{ status: "En preparación", date: accepted }]
+          : []),
+        ...(prepared ? [{ status: "Listo", date: ready }] : []),
+        ...(status === "Entregado" ||
+        status === "En camino" ||
+        status === "Cancelado"
+          ? [{ status, date: timestamp(Math.max(0, age - preparation - 5)) }]
+          : []),
+      ],
+    };
+  });
+  publish({ ...state, orders: [...orders, ...state.orders] });
+}
+
 export function seedExampleOrders() {
   requireRole(["administrador"]);
   if (state.orders.some((o) => o.customerId === "example"))

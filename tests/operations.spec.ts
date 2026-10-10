@@ -515,3 +515,47 @@ test("panel cocina: referencia responsive, búsqueda y filtros de pedidos", asyn
   await page.getByRole("button", { name: "Ver historial completo" }).click();
   await expect(page).toHaveURL(/\/cocina\/historial$/);
 });
+
+
+test("cocina: referencias, muestra persistente y filtros en tres páginas", async ({ page }) => {
+  test.setTimeout(120000);
+  await setup(page);
+  await login(page, "cocina");
+  await page.goto("/cocina/pedidos");
+  await page.getByRole("button", { name: "Cargar muestra de cocina" }).click();
+  await expect(page.locator(".kr-incoming-card")).toHaveCount(10);
+  await page.reload();
+  await expect(page.getByRole("button", { name: "Cargar muestra de cocina" })).toHaveCount(0);
+  const errors: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
+  for (const width of [240, 390, 768, 1024, 1280, 1672, 1920, 2560]) {
+    await page.setViewportSize({ width, height: 941 });
+    for (const route of ["pedidos", "historial", "tiempos"]) {
+      await page.goto(`/cocina/${route}`);
+      await expect(page.locator(".ops-page-heading h1")).toBeVisible();
+      await page.evaluate(() => document.fonts.ready);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy();
+      expect(await page.locator('.ops-content img').evaluateAll(images => images.every(image => image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0))).toBeTruthy();
+      if ([390, 768, 1672].includes(width)) await page.screenshot({ path: `test-results/kitchen-${route}-${width}.png`, fullPage: true });
+    }
+  }
+  expect(errors).toEqual([]);
+  await page.goto("/cocina/pedidos");
+  await page.getByLabel("Buscar pedidos entrantes").fill("COCINA-DEMO-001");
+  await expect(page.locator(".kr-incoming-card")).toHaveCount(1);
+  await page.getByRole("button", { name: "Aceptar pedido", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Marcar listo", exact: true })).toBeVisible();
+  await page.goto("/cocina/historial");
+  await expect(page.locator("tbody tr")).toHaveCount(12);
+  await page.getByLabel("Buscar historial", { exact: true }).fill("COCINA-DEMO-012");
+  await expect(page.locator("tbody tr")).toHaveCount(1);
+  const download = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Exportar historial" }).click();
+  expect((await download).suggestedFilename()).toContain("historial-cocina");
+  await page.getByLabel("Desde fecha del historial").fill("2099-01-01");
+  await expect(page.locator("tbody tr")).toHaveCount(0);
+  await page.goto("/cocina/tiempos");
+  await page.getByLabel("Buscar pedidos en curso").fill("COCINA-DEMO-008");
+  await expect(page.locator("tbody tr")).toHaveCount(1);
+  await expect(page.locator("tbody tr")).toContainText("Retrasado");
+});

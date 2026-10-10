@@ -7,6 +7,7 @@ import {
   changeStatus,
   getOperations,
   minutes,
+  seedKitchenPreview,
   useOperations,
   type Order,
   type Status,
@@ -197,6 +198,18 @@ export function KitchenViews({
           onDetail={setDetail}
         />
       )}
+      {section &&
+        !orders.some((order) => order.customerId === "kitchen-preview") && (
+          <div className="kr-demo">
+            <button
+              className="ops-outline"
+              onClick={() => notify(seedKitchenPreview)}
+            >
+              Cargar muestra de cocina
+            </button>
+            <small>Pedidos de demostración guardados en este navegador.</small>
+          </div>
+        )}
       {detail && (
         <OrderDetail
           order={
