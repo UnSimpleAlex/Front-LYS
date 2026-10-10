@@ -141,3 +141,33 @@ test('locales permite recorrer la galería y abrir la dirección real', async ({
   expect(maps.searchParams.get('query')).toContain('Los Palomares Mz. D Lt. 5');
   await expect(page.locator('.local-visit-panel')).toContainText('947 540 597');
 });
+
+for (const [width, height] of [[1366, 591], [1250, 650], [1440, 900], [1920, 1080], [2560, 1440]]) {
+  test(`contacto ocupa la pantalla de PC a ${width}x${height}`, async ({ page }) => {
+    await page.setViewportSize({ width, height });
+    await page.goto('/contacto');
+    await expect(page.getByRole('button', { name: 'Enviar mensaje' })).toBeVisible();
+    await page.evaluate(() => document.fonts.ready);
+    const fits = () => page.evaluate(() => {
+      const root = document.documentElement;
+      const controls = [...document.querySelectorAll('.contact-channel, .contact-send, .contact-maps-link, .contact-quick-links a, .contact-quick-links button')];
+      return root.scrollHeight <= innerHeight + 1 && root.scrollWidth <= innerWidth + 1 && controls.every(control => {
+        const rect = control.getBoundingClientRect();
+        return rect.top >= 0 && rect.bottom <= innerHeight;
+      });
+    });
+    await expect.poll(fits).toBeTruthy();
+    await expect(page.getByText('¿Tienes alguna consulta,')).toHaveCount(0);
+    await page.getByLabel('Nombre completo').fill('Cliente de prueba');
+    await page.getByLabel('Correo electrónico').fill('prueba@example.com');
+    await page.getByLabel('Teléfono *').fill('987654321');
+    await page.getByLabel('Asunto *').selectOption('Eventos y reservas');
+    await page.getByLabel('Mensaje *').fill('Quisiera consultar una reserva familiar.');
+    await page.getByRole('button', { name: 'Enviar mensaje' }).click();
+    await expect(page.getByRole('link', { name: 'Abrir correo' })).toBeInViewport();
+    await expect(page.getByRole('link', { name: 'Abrir WhatsApp' })).toBeInViewport();
+    await expect.poll(() => page.evaluate(() => document.documentElement.scrollHeight <= innerHeight + 1)).toBeTruthy();
+    await page.getByRole('button', { name: 'Editar mensaje' }).click();
+    await expect(page.getByLabel('Mensaje *')).toHaveValue('Quisiera consultar una reserva familiar.');
+  });
+}
