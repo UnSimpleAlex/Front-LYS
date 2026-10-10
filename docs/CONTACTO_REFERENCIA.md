@@ -9,3 +9,7 @@ El formulario valida los campos y prepara enlaces con la consulta completa para 
 Se reutilizan la fotografía interior existente, Caveat para los títulos manuscritos, los iconos y el mapa interactivo de Carabayllo. El punto exacto del restaurante sigue pendiente de confirmar; Google Maps abre una búsqueda con la dirección completa. El mapa no es una imagen estática del pin de la referencia.
 
 Validación: composición revisada en PC y tablet, capturas móviles; sin desbordamiento horizontal en 240, 390, 768, 1024, 1366, 1672, 1920 y 2560 px. Prueba funcional existente del formulario y enlaces adaptada al botón «Enviar mensaje», y pruebas responsive de las secciones.
+
+En PC (desde 1200 px), Contacto ocupa el alto disponible bajo el navbar, sin scroll de página ni footer. El banner contiene únicamente el título; se retiraron el texto auxiliar y su separador. La altura del banner, los controles y el mapa se adaptan al alto de la ventana. Móvil y tablet conservan el desplazamiento natural.
+
+Al preparar una consulta en PC, las opciones para abrir correo o WhatsApp sustituyen visualmente el formulario para mantenerlas visibles. «Editar mensaje» recupera los campos con sus valores. Validación adicional en 1366×591, 1250×650, 1440×900, 1920×1080 y 2560×1440, antes y después de preparar el mensaje.
