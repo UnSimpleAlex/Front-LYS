@@ -32,6 +32,28 @@
 .locations-page .local-maps-button { display: flex; justify-content: center; align-items: center; gap: 14px; padding: 19px 12px; border-radius: 14px; background: #ed0000; color: #fff; text-decoration: none; font-size: 17px; line-height: 1.4; text-align: center; }
 .locations-page .local-maps-button svg { width: 25px; height: 25px; flex-shrink: 0; }
 .locations-page button:focus-visible, .locations-page a:focus-visible { outline: 3px solid #252525; outline-offset: 4px; }
+@media (min-width: 1024px) {
+  .locations-page { height: calc(100dvh - 64px); padding: clamp(12px, 2vh, 28px) 0; }
+  .locations-page ~ .home-footer { display: none; }
+  .locations-page .info-container { height: 100%; display: flex; flex-direction: column; min-height: 0; }
+  .locations-page .local-visit-heading { flex-shrink: 0; margin-bottom: clamp(12px, 2vh, 24px); }
+  .locations-page .local-visit-heading h1 { font-size: clamp(38px, 7vh, 76px); line-height: 1.15; margin-bottom: 8px; }
+  .locations-page .local-visit-heading p { font-size: clamp(15px, 2.3vh, 22px); }
+  .locations-page .local-visit-layout { flex: 1; min-height: 0; align-items: stretch; }
+  .locations-page .local-gallery { display: flex; flex-direction: column; min-height: 0; }
+  .locations-page .local-gallery-frame { flex: 1; min-height: 0; aspect-ratio: auto; }
+  .locations-page .local-gallery-dots, .locations-page .local-gallery-caption { flex-shrink: 0; }
+  .locations-page .local-visit-panel { min-height: 0; padding: clamp(12px, 2vh, 28px); display: flex; flex-direction: column; justify-content: space-between; }
+  .locations-page .local-visit-detail { gap: 12px; padding: clamp(6px, 1.5vh, 20px) 0; }
+  .locations-page .local-visit-detail + .local-visit-detail { padding-top: clamp(6px, 1.5vh, 20px); }
+  .locations-page .local-visit-icon { width: clamp(38px, 6vh, 64px); height: clamp(38px, 6vh, 64px); flex-basis: clamp(38px, 6vh, 64px); }
+  .locations-page .local-visit-detail h2 { font-size: clamp(15px, 2.3vh, 18px); margin-bottom: 4px; }
+  .locations-page .local-visit-detail p, .locations-page .local-visit-detail a { font-size: clamp(13px, 1.9vh, 15px); line-height: 1.4; }
+  .locations-page .local-maps-button { padding: clamp(10px, 2vh, 19px) 8px; font-size: clamp(14px, 2vh, 17px); }
+}
+@media (min-width: 1024px) and (max-width: 1250px) and (min-device-width: 1280px) and (hover: hover) and (pointer: fine) {
+  .locations-page { height: calc(100dvh - 104px); }
+}
 @media (max-width: 1100px) {
   .locations-page .local-visit-layout { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 18px; }
   .locations-page .local-gallery-frame { aspect-ratio: 1.45; }
