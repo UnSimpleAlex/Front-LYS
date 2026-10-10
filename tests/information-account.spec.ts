@@ -26,16 +26,16 @@ for (const width of [240, 280, 320, 390, 768, 1024, 1440, 1920]) {
 }
 test('contacto prepara enlaces reales sin enviar mensajes automáticamente', async ({ page }) => {
   await page.goto('/contacto');
-  await expect(page.getByRole('link', { name: /947 540 597/ }).first()).toHaveAttribute('href', 'tel:+51947540597');
+  await expect(page.getByRole('link', { name: /Llamar/ })).toHaveAttribute('href', 'tel:+51947540597');
   await expect(page.getByRole('link', { name: /WhatsApp/ }).first()).toHaveAttribute('href', 'https://wa.me/51947540597');
-  await page.getByRole('button', { name: 'Preparar mensaje' }).click();
+  await page.getByRole('button', { name: 'Enviar mensaje' }).click();
   await expect(page.locator('.info-prepared')).toHaveCount(0);
   await page.getByLabel('Nombre completo').fill('Cliente de prueba');
   await page.getByLabel('Correo electrónico').fill('prueba@example.com');
   await page.getByLabel('Teléfono *').fill('987654321');
   await page.getByLabel('Asunto *').selectOption('Eventos y reservas');
   await page.getByLabel('Mensaje *').fill('Quisiera consultar una reserva familiar.');
-  await page.getByRole('button', { name: 'Preparar mensaje' }).click();
+  await page.getByRole('button', { name: 'Enviar mensaje' }).click();
   await expect(page.locator('.info-prepared')).toContainText('Tu mensaje está listo');
   const href = await page.getByRole('link', { name: 'Abrir correo' }).getAttribute('href');
   expect(decodeURIComponent(href!)).toContain('Quisiera consultar una reserva familiar.');
