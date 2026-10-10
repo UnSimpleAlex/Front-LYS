@@ -140,6 +140,8 @@
 .local-hours-copy { padding-left: 0; }
 .locations-page .local-hours-copy p + p { justify-content: center; }
 .local-maps-button { margin-inline: auto; }
+.local-welcome { justify-content: center; }
+.local-welcome > div { flex: 1; min-width: 0; text-align: center; }
 @media (min-width: 701px) {
  .local-benefits { width: fit-content; max-width: 100%; margin-inline: auto; }
  .local-benefits > div { gap: 16px; }
