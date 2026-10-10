@@ -1,79 +1,119 @@
-.locations-page { background: #fff; padding: 36px 0 56px; }
-.locations-page::before { content: none; }
-.locations-page .info-container { width: min(1600px, 94%); }
-.locations-page .local-visit-heading { text-align: center; margin: 0 auto 30px; }
-.locations-page .local-visit-heading h1 { margin: 0 0 10px; font-family: Knewave, Caveat, cursive; font-size: clamp(42px, 5.6vw, 86px); font-weight: 400; line-height: 1.35; letter-spacing: -.04em; }
-.locations-page .local-visit-heading h1 span { color: #ed0000; position: relative; display: inline-block; }
-.locations-page .local-visit-heading h1 span::after { content: ''; position: absolute; height: 5px; background: #ed0000; border-radius: 100%; bottom: 0; left: 6%; width: 90%; transform: rotate(-3deg); }
-.locations-page .local-visit-heading p { margin: 0; color: #727e99; font-size: clamp(15px, 1.6vw, 25px); line-height: 1.5; }
-.locations-page .local-visit-layout { display: grid; grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr); gap: 24px; align-items: start; }
-.locations-page .local-gallery { min-width: 0; }
-.locations-page .local-gallery-frame { position: relative; border-radius: 18px; overflow: hidden; aspect-ratio: 2.04; background: #efe8e2; }
-.locations-page .local-gallery-frame > img { display: block; height: 100%; width: 100%; object-fit: cover; }
-.locations-page .local-gallery-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: clamp(40px, 3.8vw, 60px); height: clamp(40px, 3.8vw, 60px); padding: 12px; border-radius: 50%; border: none; color: #141414; background: #fff; box-shadow: 0 2px 12px #0002; cursor: pointer; }
-.locations-page .local-gallery-arrow svg { width: 100%; height: 100%; }
-.locations-page .local-gallery-previous { left: 14px; }
-.locations-page .local-gallery-next { right: 14px; }
-.locations-page .local-gallery-previous svg { transform: rotate(90deg); }
-.locations-page .local-gallery-next svg { transform: rotate(-90deg); }
-.locations-page .local-gallery-dots { display: flex; justify-content: center; margin-top: 8px; }
-.locations-page .local-gallery-dots button { width: 28px; height: 32px; border: 0; background: transparent; display: grid; place-items: center; cursor: pointer; }
-.locations-page .local-gallery-dots span { width: 12px; height: 12px; border-radius: 50%; background: #dcdfe4; }
-.locations-page .local-gallery-dots [aria-current] span { background: #ed0000; }
-.locations-page .local-gallery-caption { text-align: center; font-size: 11px; color: #747474; margin: 0; }
-.locations-page .local-visit-panel { padding: clamp(20px, 2vw, 32px); border: 1px solid #f0f0f0; border-radius: 20px; background: #fff; box-shadow: 0 8px 30px #24202008; }
-.locations-page .local-visit-detail { display: flex; align-items: center; gap: 20px; padding: 16px 0 24px; }
-.locations-page .local-visit-detail + .local-visit-detail { border-top: 1px solid #e4e7ed; padding-top: 24px; }
-.locations-page .local-visit-icon { width: 64px; height: 64px; flex: 0 0 64px; border-radius: 50%; background: #fff0f1; display: grid; place-items: center; color: #ed0000; }
-.locations-page .local-visit-icon svg { width: 36px; height: 36px; }
-.locations-page .local-visit-detail h2 { font-size: 18px; line-height: 1.35; margin: 0 0 6px; color: #111; }
-.locations-page .local-visit-detail p, .locations-page .local-visit-detail a { font-size: 15px; line-height: 1.5; color: #727e99; margin: 0; overflow-wrap: anywhere; }
-.locations-page .local-visit-detail a { text-decoration: none; }
-.locations-page .local-maps-button { display: flex; justify-content: center; align-items: center; gap: 14px; padding: 19px 12px; border-radius: 14px; background: #ed0000; color: #fff; text-decoration: none; font-size: 17px; line-height: 1.4; text-align: center; }
-.locations-page .local-maps-button svg { width: 25px; height: 25px; flex-shrink: 0; }
-.locations-page button:focus-visible, .locations-page a:focus-visible { outline: 3px solid #252525; outline-offset: 4px; }
-@media (min-width: 1024px) {
-  .locations-page { height: calc(100dvh - 64px); padding: clamp(12px, 2vh, 28px) 0; }
-  .locations-page ~ .home-footer { display: none; }
-  .locations-page .info-container { height: 100%; display: flex; flex-direction: column; min-height: 0; }
-  .locations-page .local-visit-heading { flex-shrink: 0; margin-bottom: clamp(12px, 2vh, 24px); }
-  .locations-page .local-visit-heading h1 { font-size: clamp(38px, 7vh, 76px); line-height: 1.15; margin-bottom: 8px; }
-  .locations-page .local-visit-heading p { font-size: clamp(15px, 2.3vh, 22px); }
-  .locations-page .local-visit-layout { flex: 1; min-height: 0; align-items: stretch; }
-  .locations-page .local-gallery { display: flex; flex-direction: column; min-height: 0; }
-  .locations-page .local-gallery-frame { flex: 1; min-height: 0; aspect-ratio: auto; }
-  .locations-page .local-gallery-dots, .locations-page .local-gallery-caption { flex-shrink: 0; }
-  .locations-page .local-visit-panel { min-height: 0; padding: clamp(12px, 2vh, 28px); display: flex; flex-direction: column; justify-content: space-between; }
-  .locations-page .local-visit-detail { gap: 12px; padding: clamp(6px, 1.5vh, 20px) 0; }
-  .locations-page .local-visit-detail + .local-visit-detail { padding-top: clamp(6px, 1.5vh, 20px); }
-  .locations-page .local-visit-icon { width: clamp(38px, 6vh, 64px); height: clamp(38px, 6vh, 64px); flex-basis: clamp(38px, 6vh, 64px); }
-  .locations-page .local-visit-detail h2 { font-size: clamp(15px, 2.3vh, 18px); margin-bottom: 4px; }
-  .locations-page .local-visit-detail p, .locations-page .local-visit-detail a { font-size: clamp(13px, 1.9vh, 15px); line-height: 1.4; }
-  .locations-page .local-maps-button { padding: clamp(10px, 2vh, 19px) 8px; font-size: clamp(14px, 2vh, 17px); }
+.locations-page { --local-red:#ed0000; background:#fff; padding:32px 0; position:relative; isolation:isolate; }
+.locations-page::before { content:none; }
+.locations-page .info-container { width:min(1880px,96%); }
+.locations-page .local-visit-layout { display:grid; grid-template-columns:minmax(0,.95fr) minmax(0,1.65fr) minmax(0,1fr); gap:clamp(20px,2vw,36px); }
+.local-introduction { display:flex; flex-direction:column; justify-content:center; padding:0 12px; min-width:0; }
+.locations-page .local-visit-heading h1 { margin:0 0 28px; font-family:Knewave,Caveat,cursive; font-size:clamp(58px,6.1vw,126px); font-weight:400; line-height:1.15; letter-spacing:-.05em; text-align:center; }
+.local-visit-heading h1 span { display:block; color:var(--local-red); position:relative; padding-bottom:12px; }
+.local-visit-heading h1 span::after { content:''; position:absolute; height:5px; background:var(--local-red); bottom:0; left:20%; width:65%; border-radius:100%; transform:rotate(-7deg); }
+.locations-page .local-visit-heading p { color:#72798c; font-size:clamp(17px,1.45vw,25px); line-height:1.35; max-width:340px; margin:0 auto 24px; }
+.local-benefits { display:grid; gap:10px; max-width:340px; width:100%; margin-inline:auto; }
+.local-benefits > div { display:flex; align-items:center; gap:16px; }
+.locations-page .local-benefits h2 { font-size:clamp(15px,1.1vw,20px); margin:0 0 5px; color:#111; letter-spacing:-.025em; }
+.locations-page .local-benefits p { font-size:clamp(13px,1vw,17px); margin:0; color:#72798c; line-height:1.3; }
+.local-visit-icon { width:clamp(44px,4vw,68px); height:clamp(44px,4vw,68px); flex:0 0 clamp(44px,4vw,68px); border-radius:50%; background:#fff0f2; display:grid; place-items:center; color:var(--local-red); }
+.locations-page .local-visit-icon svg { width:55%; height:55%; }
+.local-parking { font-size:28px; font-weight:700; }
+.local-gallery { min-width:0; display:flex; flex-direction:column; gap:12px; }
+.local-gallery-frame { position:relative; min-height:0; border-radius:24px; overflow:hidden; aspect-ratio:1.62; background:#eee; }
+.local-gallery-frame > img { width:100%; height:100%; display:block; object-fit:cover; }
+.local-gallery-arrow { position:absolute; top:50%; transform:translateY(-50%); width:50px; height:50px; border-radius:50%; border:0; display:grid; place-items:center; background:#fff; color:#111; box-shadow:0 2px 10px #0002; }
+.local-gallery-previous { left:16px; }
+.local-gallery-next { right:16px; }
+.local-gallery-previous svg { transform:rotate(90deg); }
+.local-gallery-next svg { transform:rotate(-90deg); }
+.local-photo-counter { position:absolute; bottom:14px; left:18px; padding:4px 10px; border-radius:5px; background:#0009; color:#fff; font-size:16px; }
+.local-gallery-dots { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
+.local-gallery-dots button { padding:4px; border:2px solid transparent; border-radius:18px; background:transparent; min-width:0; }
+.local-gallery-dots button[aria-current] { border-color:var(--local-red); }
+.local-gallery-dots img { display:block; width:100%; aspect-ratio:1.5; height:auto; object-fit:cover; border-radius:12px; }
+.local-visit-panel { min-width:0; border:1px solid #ececf0; border-radius:24px; padding:clamp(20px,2vw,36px); background:#ffffffed; box-shadow:0 8px 24px #27202a06; display:flex; flex-direction:column; justify-content:space-between; gap:18px; }
+.local-detail-heading { display:flex; align-items:center; gap:16px; margin-bottom:10px; }
+.locations-page .local-detail-heading h2 { margin:0; color:#111; font-size:clamp(18px,1.35vw,25px); letter-spacing:-.025em; }
+.locations-page .local-visit-detail p { color:#72798c; font-size:clamp(14px,1.05vw,20px); line-height:1.5; margin:0; overflow-wrap:anywhere; }
+.local-maps-button { display:inline-flex; align-items:center; justify-content:center; gap:12px; padding:13px 20px; border:1px solid var(--local-red); border-radius:13px; background:#fff5f5; color:var(--local-red); text-decoration:none; font-size:clamp(14px,1vw,18px); font-weight:600; margin-top:14px; min-height:46px; }
+.local-hours { border-top:1px solid #e6e8ed; padding-top:16px; }
+.local-hours-copy { padding-left:calc(clamp(44px,4vw,68px) + 16px); }
+.locations-page .local-hours-copy p + p { display:flex; align-items:center; gap:10px; margin-top:10px; color:#41414c; }
+.local-hours-copy svg { color:var(--local-red); }
+.local-welcome { display:flex; align-items:center; gap:16px; padding:18px; background:#fff0f2; border-radius:18px; }
+.locations-page .local-welcome > svg { width:52px; height:64px; color:var(--local-red); fill:currentColor; }
+.locations-page .local-welcome h2 { font-family:Caveat,cursive; font-size:clamp(28px,2.6vw,46px); font-weight:700; margin:0 0 6px; color:var(--local-red); }
+.locations-page .local-welcome p { font-size:clamp(14px,1.05vw,19px); line-height:1.35; margin:0; color:#72798c; }
+.local-phone { display:flex; align-items:center; justify-content:center; gap:8px; color:#72798c; text-decoration:none; font-size:13px; }
+.locations-page button:focus-visible,.locations-page a:focus-visible { outline:3px solid #252525; outline-offset:3px; }
+.local-decoration { position:absolute; z-index:-1; pointer-events:none; color:#e5c8bc; opacity:.4; }
+.locations-page .local-decoration svg { width:100%; height:100%; }
+.local-decoration-chicken { left:0; top:30%; width:100px; height:170px; transform:rotate(-20deg); }
+.local-decoration-leaf { left:20%; bottom:10px; width:160px; height:160px; transform:rotate(20deg); }
+.local-decoration-cutlery { right:0; top:5%; width:120px; height:150px; transform:rotate(30deg); }
+@media (min-width:1200px) {
+ .locations-page { height:calc(100dvh - 64px); padding-block:clamp(20px,5vh,60px) 24px; }
+ .locations-page ~ .home-footer { display:none; }
+ .locations-page .info-container,.local-visit-layout { height:100%; min-height:0; }
+ .local-gallery-frame { flex:1; aspect-ratio:auto; }
+ .local-gallery-dots { flex:0 0 clamp(70px,17vh,150px); min-height:0; }
+ .local-gallery-dots button { min-height:0; }
+ .local-gallery-dots img { height:100%; aspect-ratio:auto; }
+ .locations-page .local-visit-heading h1 { font-size:clamp(58px,min(6.1vw,14vh),126px); }
+ .local-visit-panel { min-height:0; }
 }
-@media (min-width: 1024px) and (max-width: 1250px) and (min-device-width: 1280px) and (hover: hover) and (pointer: fine) {
-  .locations-page { height: calc(100dvh - 104px); }
+@media (min-width:1200px) and (max-width:1250px) and (min-device-width:1280px) and (hover:hover) and (pointer:fine) { .locations-page { height:calc(100dvh - 104px); } }
+@media (min-width:1200px) and (max-height:720px) {
+ .locations-page { padding-block:18px; }
+ .locations-page .local-visit-heading h1 { margin-bottom:16px; font-size:min(6vw,12vh); }
+ .locations-page .local-visit-heading p { font-size:17px; margin-bottom:16px; }
+ .local-benefits { gap:8px; }
+ .local-visit-icon { width:44px; height:44px; flex-basis:44px; }
+ .local-visit-panel { padding:18px; gap:10px; }
+ .local-detail-heading { gap:10px; margin-bottom:6px; }
+ .locations-page .local-detail-heading h2 { font-size:18px; }
+ .locations-page .local-visit-detail p { font-size:14px; }
+ .local-hours-copy { padding-left:54px; }
+ .local-maps-button { padding:8px 12px; margin-top:10px; }
+ .local-welcome { padding:12px; gap:10px; }
+ .locations-page .local-welcome h2 { font-size:30px; }
+ .locations-page .local-welcome > svg { width:38px; height:44px; }
 }
-@media (max-width: 1100px) {
-  .locations-page .local-visit-layout { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 18px; }
-  .locations-page .local-gallery-frame { aspect-ratio: 1.45; }
-  .locations-page .local-visit-icon { width: 48px; height: 48px; flex-basis: 48px; }
-  .locations-page .local-visit-icon svg { width: 28px; height: 28px; }
-  .locations-page .local-visit-detail { gap: 12px; }
+@media (max-width:1199px) {
+ .locations-page .local-visit-layout { grid-template-columns:minmax(0,1.6fr) minmax(0,1fr); gap:20px; }
+ .local-introduction { grid-column:1 / -1; display:grid; grid-template-columns:1fr 1fr; align-items:center; gap:32px; }
+ .locations-page .local-visit-heading h1 { font-size:64px; margin-bottom:20px; }
+ .local-visit-heading h1 span { display:inline-block; }
+ .locations-page .local-visit-heading p { text-align:center; max-width:400px; margin-bottom:0; }
+ .local-gallery-frame { flex:1; aspect-ratio:auto; min-height:300px; }
+ .local-visit-panel { padding:20px; }
 }
-@media (max-width: 800px) {
-  .locations-page { padding: 24px 0 38px; }
-  .locations-page .local-visit-layout { grid-template-columns: minmax(0, 1fr); }
-  .locations-page .local-gallery-frame { aspect-ratio: 1.6; }
-  .locations-page .local-visit-heading { margin-bottom: 24px; }
-  .locations-page .local-visit-panel { padding: 18px 22px; }
+@media (max-width:700px) {
+ .locations-page { padding:24px 0 32px; }
+ .locations-page .info-container { width:calc(100% - 32px); }
+ .locations-page .local-visit-layout { grid-template-columns:minmax(0,1fr); gap:24px; }
+ .local-introduction { display:flex; padding:0; gap:20px; }
+ .locations-page .local-visit-heading h1 { font-size:clamp(42px,12vw,64px); }
+ .locations-page .local-visit-heading p { font-size:17px; }
+ .local-benefits { grid-template-columns:repeat(3,minmax(0,1fr)); max-width:none; gap:8px; }
+ .local-benefits > div { flex-direction:column; text-align:center; gap:8px; }
+ .locations-page .local-benefits h2 { font-size:13px; }
+ .locations-page .local-benefits p { font-size:12px; }
+ .local-gallery-frame { aspect-ratio:1.3; min-height:0; flex:none; border-radius:18px; }
+ .local-gallery-dots { gap:6px; }
+ .local-gallery-dots button { padding:3px; border-radius:12px; }
+ .local-gallery-dots img { border-radius:8px; }
+ .local-gallery-arrow { width:44px; height:44px; }
+ .local-gallery-previous { left:10px; }
+ .local-gallery-next { right:10px; }
+ .local-visit-panel { padding:20px; gap:20px; }
+ .local-detail-heading h2 { font-size:20px; }
+ .locations-page .local-visit-detail p { font-size:15px; }
+ .local-welcome h2 { font-size:36px; }
 }
-@media (max-width: 360px) {
-  .locations-page .local-visit-heading h1 { font-size: 36px; }
-  .locations-page .local-visit-panel { padding: 14px; }
-  .locations-page .local-visit-detail { align-items: start; gap: 10px; }
-  .locations-page .local-visit-detail h2 { font-size: 16px; }
-  .locations-page .local-visit-icon { width: 38px; height: 38px; flex-basis: 38px; }
-  .locations-page .local-maps-button { gap: 8px; font-size: 14px; }
-  .locations-page .local-maps-button svg { width: 18px; }
+@media (max-width:320px) {
+ .local-benefits { grid-template-columns:1fr; }
+ .local-benefits > div { flex-direction:row; text-align:left; gap:12px; }
+ .local-visit-panel { padding:14px; }
+ .local-detail-heading { gap:8px; }
+ .locations-page .local-detail-heading h2 { font-size:18px; }
+ .local-hours-copy { padding-left:0; }
+ .local-welcome { padding:12px; gap:10px; }
 }
+.local-parking::before { content: ""; position: absolute; width: 28px; height: 32px; border: 2px solid currentColor; border-radius: 6px; } .local-parking { position: relative; } @media (min-width: 701px) and (max-width: 1199px) { .local-gallery-frame { flex: none; aspect-ratio: 1.2; min-height: 0; } }
