@@ -50,9 +50,8 @@ export function CashViews({
     { value: 0.5, image: "coin-50-centimos", label: "Monedas 50 céntimos" },
     { value: 0.2, image: "coin-20-centimos", label: "Monedas 20 céntimos" },
     { value: 0.1, image: "coin-10-centimos", label: "Monedas 10 céntimos" },
-    { value: 0.05, image: "coin-5-centimos", label: "Monedas 5 céntimos" },
   ];
-  const [bills, setBills] = useState<number[]>(Array(12).fill(0));
+  const [bills, setBills] = useState<number[]>(Array(denominations.length).fill(0));
   // Sum integer céntimos so decimal coin values do not accumulate rounding errors.
   const billTotal = bills.reduce(
     (sum, count, i) => sum + count * Math.round(denominations[i].value * 100),
@@ -260,7 +259,7 @@ export function CashViews({
             </label>
             <div>
               <h3>Desglose de efectivo (opcional)</h3>
-              {[{ title: "Billetes", from: 0, to: 5 }, { title: "Monedas", from: 5, to: 12 }].map(group => (
+              {[{ title: "Billetes", from: 0, to: 5 }, { title: "Monedas", from: 5, to: denominations.length }].map(group => (
                 <section className="ops-currency-group" key={group.title} aria-label={group.title}>
                   <h4>{group.title}</h4>
                   <div className="ops-bills">
