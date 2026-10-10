@@ -75,3 +75,12 @@ Rama: `feature/paneles-roles`, creada sobre `feature/paginas-cuenta` para conser
 ## Resultado de validación
 
 Lint y build correctos. La suite completa ejecutó 193 pruebas: 190 pasaron inicialmente y tres comprobaciones del flujo anterior se actualizaron. El mapa/checkout y las 24 pantallas se verificaron de nuevo en una ejecución de 61 pruebas; las dos pruebas pendientes de navegación se repitieron y pasaron. Se inspeccionaron capturas de escritorio y móvil para cocina, administración, salón y caja. Las exportaciones son locales; no se probó integración bancaria ni backend porque esta etapa usa localStorage.
+
+
+## Pulido de controles y referencias (octubre de 2026)
+
+- Alertas de inventario: nombre y existencias ocupan una fila completa; estado y acción se sitúan debajo para evitar palabras partidas entre imagen, badge y flecha.
+- Cargas JPG/PNG/WebP: botón nativo de selección estilizado, foco visible y nombre del archivo, sin alterar la validación existente.
+- Formularios y métodos de pago: botones sin estiramiento vertical, interruptores de 26 px con área de interacción extendida y tarjetas de altura natural. Textos secundarios con mayor contraste.
+- Caja: etapas numeradas, resumen con iconos, total con indicador de coincidencia e imágenes de 200, 100, 50, 20 y 10 soles y monedas. Las miniaturas WebP decorativas se extraen de la referencia proporcionada; no son reproducciones de alta resolución. El desglose conserva cantidades de billetes e importe total de monedas, y excluye pagos digitales del efectivo físico.
+- La suite recorre 25 rutas incluyendo delivery a 240, 390, 768, 1024, 1280, 1366, 1440, 1920 y 2560 px. Se comprueban además las cinco pestañas de configuración, ancho legible de alertas, interruptores, cargas e imágenes de caja. Móvil utiliza scroll natural y acciones de al menos 44 px donde corresponde.
