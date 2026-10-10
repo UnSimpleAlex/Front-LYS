@@ -182,9 +182,11 @@ export function CashViews({
           }
         >
           <div className="ops-steps">
-            <span>Apertura</span>
-            <span>Operación</span>
-            <span>Cierre</span>
+            {["Apertura", "Operación", "Cierre"].map((step, index) => (
+              <span key={step} className={index === (section === "apertura" ? 0 : 2) ? "current" : section === "cierre" ? "complete" : ""} aria-current={index === (section === "apertura" ? 0 : 2) ? "step" : undefined}>
+                <b>{section === "cierre" && index < 2 ? <Icon name="check" /> : index + 1}</b>{step}
+              </span>
+            ))}
           </div>
           {section === "cierre" && (
             <Stats
@@ -248,7 +250,7 @@ export function CashViews({
                 {denomination.map((value, i) => (
                   <label key={value}>
                     {i === 5 ? "Monedas (soles)" : "Billetes S/ " + value}
-                    <span className="ops-banknote">S/ {value}</span>
+                    <img className="ops-banknote" src={`/images/operations/currency/${i === 5 ? "coins" : value}.webp`} alt="" />
                     <input
                       aria-label={"Cantidad de denominación " + value}
                       type="number"
@@ -266,9 +268,12 @@ export function CashViews({
                   </label>
                 ))}
               </div>
-              <p>
-                Total calculado: <strong>{money(billTotal)}</strong>
-              </p>
+              <div className="ops-total ops-cash-total">
+                <span><Icon name="cash" /> Total calculado</span>
+                <strong>{money(billTotal)}</strong>
+                {billTotal > 0 && <Badge value={Math.abs(billTotal - Number(amount)) < 0.001 ? "Coincide" : "Revisar monto"} />}
+              </div>
+              <small>Ingresa la cantidad de billetes y el importe total de las monedas.</small>
             </div>
             <label>
               Observaciones
@@ -297,14 +302,17 @@ export function CashViews({
               className="ops-primary"
               disabled={section === "apertura" ? !!shift : !shift}
             >
+              <Icon name={section === "apertura" ? "cash" : "power"} />
               {section === "apertura" ? "Abrir caja" : "Cerrar caja"}
             </button>
           </form>
         </Panel>
         <Panel title="Resumen del turno">
-          <p>Cajera: {shift?.user || "Tu cuenta"}</p>
-          <p>Local: {data.settings.name}</p>
-          <p>Horario: {data.settings.hours}</p>
+          <dl className="ops-shift-summary">
+            <div><dt><Icon name="user" /> Cajera</dt><dd>{shift?.user || "Tu cuenta"}</dd></div>
+            <div><dt><Icon name="store" /> Local</dt><dd>{data.settings.name}</dd></div>
+            <div><dt><Icon name="clock" /> Horario</dt><dd>{data.settings.hours}</dd></div>
+          </dl>
           <Badge value={shift ? "Caja abierta" : "Caja cerrada"} />
           <p>
             Los pagos digitales se registran por separado del efectivo físico.
