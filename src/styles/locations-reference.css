@@ -135,6 +135,11 @@
 @media (min-width: 1200px) and (max-height: 720px) { .local-title-image { max-height: 30vh; } }
 .locations-page::before { opacity: .12; }
 .locations-page .local-visit-heading p { text-align: center; }
+.local-visit-panel .local-detail-heading { justify-content: center; }
+.local-address, .local-hours-copy { text-align: center; }
+.local-hours-copy { padding-left: 0; }
+.locations-page .local-hours-copy p + p { justify-content: center; }
+.local-maps-button { margin-inline: auto; }
 @media (min-width: 701px) {
  .local-benefits { width: fit-content; max-width: 100%; margin-inline: auto; }
  .local-benefits > div { gap: 16px; }
