@@ -98,3 +98,5 @@ El resumen usa cuatro tarjetas independientes y un tablero con Nuevos, En prepar
 El tablero usa cuatro columnas desde 1280 px, dos entre 700 y 1279 px y una por debajo de 700 px. Los botones alcanzan 44 px en móvil. Se reutilizan las fotos del catálogo y los iconos del proyecto. Los permisos se mantienen: cocina confirma y marca listo; administración puede marcar entregado desde este panel, mientras cocina consulta el detalle de entrega.
 
 Validación específica: búsqueda, filtros, limpieza e historial; recorrido de ocho anchos (240, 390, 768, 1024, 1280, 1672, 1920 y 2560 px) sin desborde horizontal; flujo de pedido entre salón, cocina, entrega y caja. Capturas comparadas en PC, tablet y móvil.
+
+El título «Panel de cocina» comparte la tipografía Caveat, peso 700 y cursiva del texto «recompensa» de inicio. Verificado a 390, 768 y 1672 px.

@@ -12,9 +12,10 @@
   margin-bottom: 18px;
 }
 .ops-root[data-page="cocina/"] .ops-page-heading h1 {
-  font-family: inherit;
+  font-family: Caveat, cursive;
   font-size: clamp(32px, 4.2vw, 68px);
-  font-weight: 800;
+  font-weight: 700;
+  font-style: italic;
   padding: 0;
   line-height: 1.12;
   letter-spacing: -1.8px;
