@@ -13,3 +13,5 @@ Validación: composición revisada en PC y tablet, capturas móviles; sin desbor
 En PC (desde 1200 px), Contacto ocupa el alto disponible bajo el navbar, sin scroll de página ni footer. El banner contiene únicamente el título; se retiraron el texto auxiliar y su separador. La altura del banner, los controles y el mapa se adaptan al alto de la ventana. Móvil y tablet conservan el desplazamiento natural.
 
 Al preparar una consulta en PC, las opciones para abrir correo o WhatsApp sustituyen visualmente el formulario para mantenerlas visibles. «Editar mensaje» recupera los campos con sus valores. Validación adicional en 1366×591, 1250×650, 1440×900, 1920×1080 y 2560×1440, antes y después de preparar el mensaje.
+
+Los símbolos de WhatsApp e Instagram y los iconos principales de teléfono, correo, ubicación y horario utilizan SVG de Bootstrap Icons (MIT). Se incluyen solo los seis iconos usados, sin añadir dependencias ni peticiones externas; licencia en `docs/licenses/bootstrap-icons.txt`.
