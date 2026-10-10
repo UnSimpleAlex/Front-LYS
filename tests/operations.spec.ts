@@ -183,9 +183,10 @@ const routes = [
   "/administrador/configuracion",
   "/administrador/pedidos",
   "/administrador/reportes",
+  "/delivery",
 ];
-for (const width of [240, 390, 768, 1024, 1280, 1366, 1440, 1920])
-  test(`24 pantallas operativas responsive a ${width}px`, async ({ page }) => {
+for (const width of [240, 390, 768, 1024, 1280, 1366, 1440, 1920, 2560])
+  test(`25 pantallas operativas responsive a ${width}px`, async ({ page }) => {
     test.setTimeout(120000);
     await page.setViewportSize({ width, height: 1080 });
     await setup(page);
@@ -428,5 +429,35 @@ test("navbar compacto y menú completo en móvil, tablet y PC", async ({
     await expect(page).toHaveURL(/administrador\/inventario$/);
     if (await page.locator(".ops-menu").isVisible())
       await expect(page.locator(".ops-header nav")).toBeHidden();
+  }
+});
+
+
+test("controles legibles, archivos y efectivo en móvil, tablet y PC", async ({ page }) => {
+  await setup(page);
+  await login(page, "administrador");
+  for (const width of [240, 390, 768, 1366, 1920]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/administrador/inventario");
+    const alerts = page.locator(".ops-stock-alert .ops-supply-summary strong");
+    expect(await alerts.evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().width).every(width => width >= 85))).toBeTruthy();
+    await page.goto("/administrador/configuracion");
+    for (const name of ["Datos del negocio", "Métodos de pago", "Impuestos", "Usuarios", "Seguridad"]) {
+      await page.locator(".ops-settings > .ops-tabs").getByRole("button", { name, exact: true }).click();
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy();
+      if (name === "Métodos de pago") {
+        const upload = page.locator('input[type="file"]').first();
+        expect(await upload.evaluate(node => getComputedStyle(node, "::file-selector-button").backgroundColor)).toBe("rgb(237, 0, 23)");
+        expect(await page.locator(".ops-method-grid .ops-switch").evaluateAll(nodes => nodes.every(node => node.getBoundingClientRect().height === 26))).toBeTruthy();
+        await page.screenshot({path: `test-results/settings-methods-${width}.png`, fullPage: true});
+      }
+    }
+    for (const route of ["apertura", "cierre"]) {
+      await page.goto(`/caja/${route}`);
+      await expect(page.locator(".ops-banknote")).toHaveCount(6);
+      expect(await page.locator(".ops-banknote").evaluateAll(nodes => nodes.every(node => node instanceof HTMLImageElement && node.complete && node.naturalWidth > 0))).toBeTruthy();
+      await expect(page.locator('.ops-steps [aria-current="step"]')).toHaveText(route === "apertura" ? "1Apertura" : "3Cierre");
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy();
+    }
   }
 });
