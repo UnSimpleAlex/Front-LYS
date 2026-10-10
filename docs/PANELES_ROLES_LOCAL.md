@@ -75,3 +75,28 @@ Rama: `feature/paneles-roles`, creada sobre `feature/paginas-cuenta` para conser
 ## Resultado de validación
 
 Lint y build correctos. La suite completa ejecutó 193 pruebas: 190 pasaron inicialmente y tres comprobaciones del flujo anterior se actualizaron. El mapa/checkout y las 24 pantallas se verificaron de nuevo en una ejecución de 61 pruebas; las dos pruebas pendientes de navegación se repitieron y pasaron. Se inspeccionaron capturas de escritorio y móvil para cocina, administración, salón y caja. Las exportaciones son locales; no se probó integración bancaria ni backend porque esta etapa usa localStorage.
+
+
+## Pulido de controles y referencias (octubre de 2026)
+
+- Alertas de inventario: nombre y existencias ocupan una fila completa; estado y acción se sitúan debajo para evitar palabras partidas entre imagen, badge y flecha.
+- Cargas JPG/PNG/WebP: botón nativo de selección estilizado, foco visible y nombre del archivo, sin alterar la validación existente.
+- Formularios y métodos de pago: botones sin estiramiento vertical, interruptores de 26 px con área de interacción extendida y tarjetas de altura natural. Textos secundarios con mayor contraste.
+- Caja: etapas numeradas, resumen con iconos, total con indicador de coincidencia e imágenes de 200, 100, 50, 20 y 10 soles y monedas. Las miniaturas WebP decorativas se extraen de la referencia proporcionada; no son reproducciones de alta resolución. El desglose conserva cantidades de billetes e importe total de monedas, y excluye pagos digitales del efectivo físico.
+- La suite recorre 25 rutas incluyendo delivery a 240, 390, 768, 1024, 1280, 1366, 1440, 1920 y 2560 px. Se comprueban además las cinco pestañas de configuración, ancho legible de alertas, interruptores, cargas e imágenes de caja. Móvil utiliza scroll natural y acciones de al menos 44 px donde corresponde.
+
+
+### Imágenes y conteo por pieza de moneda
+
+Los cinco billetes usan las imágenes individuales proporcionadas por el usuario, recortadas sin márgenes negros y optimizadas a WebP. Se muestran seis monedas: 10, 20 y 50 céntimos, y 1, 2 y 5 soles. Las tres monedas de céntimos usan las imágenes individuales proporcionadas por el usuario; la opción de 5 céntimos se ha retirado del desglose. En apertura y cierre se ingresa la cantidad entera de cada denominación; el total se suma en céntimos enteros para evitar errores de coma flotante. Esta sección sustituye el campo anterior de importe global de monedas y las miniaturas extraídas de la maqueta.
+
+
+## Panel de cocina: referencia de octubre de 2026
+
+El resumen usa cuatro tarjetas independientes y un tablero con Nuevos, En preparación, Listos para entregar y Completados. Cada pedido conserva sus productos, cantidades, cliente, notas y tiempos reales; los indicadores no copian cifras estáticas de la maqueta. Los filtros permiten buscar por número, cliente, mesa o producto, elegir origen, revisar pedidos urgentes (superan la meta configurada), filtrar estado y cambiar el orden. Los tres últimos entregados aparecen en el panel y el historial permite consultar el resto. Los pedidos en reparto permanecen visibles en la columna de entrega con su estado.
+
+El tablero usa cuatro columnas desde 1280 px, dos entre 700 y 1279 px y una por debajo de 700 px. Los botones alcanzan 44 px en móvil. Se reutilizan las fotos del catálogo y los iconos del proyecto. Los permisos se mantienen: cocina confirma y marca listo; administración puede marcar entregado desde este panel, mientras cocina consulta el detalle de entrega.
+
+Validación específica: búsqueda, filtros, limpieza e historial; recorrido de ocho anchos (240, 390, 768, 1024, 1280, 1672, 1920 y 2560 px) sin desborde horizontal; flujo de pedido entre salón, cocina, entrega y caja. Capturas comparadas en PC, tablet y móvil.
+
+El título «Panel de cocina» comparte la tipografía Caveat, peso 700 y cursiva del texto «recompensa» de inicio. Verificado a 390, 768 y 1672 px.

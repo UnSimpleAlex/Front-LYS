@@ -14,7 +14,6 @@ export function ContactPage({ onAction }: { onAction: (action: string) => void }
     <main id="contenido" className="information-page contact-page contact-reference">
       <div className="contact-scene" aria-hidden="true"/>
       <header className="contact-heading">
-        <p className="contact-eyebrow">Estamos para ti</p>
         <h1>Hablemos</h1>
         <p>¿Tienes una consulta, sugerencia o quieres hacer una reserva?<br/> Escríbenos y te responderemos lo antes posible.</p>
       </header>
