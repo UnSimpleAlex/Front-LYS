@@ -454,10 +454,26 @@ test("controles legibles, archivos y efectivo en móvil, tablet y PC", async ({ 
     }
     for (const route of ["apertura", "cierre"]) {
       await page.goto(`/caja/${route}`);
-      await expect(page.locator(".ops-banknote")).toHaveCount(6);
+      await expect(page.locator(".ops-banknote")).toHaveCount(12);
       expect(await page.locator(".ops-banknote").evaluateAll(nodes => nodes.every(node => node instanceof HTMLImageElement && node.complete && node.naturalWidth > 0))).toBeTruthy();
       await expect(page.locator('.ops-steps [aria-current="step"]')).toHaveText(route === "apertura" ? "1Apertura" : "3Cierre");
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy();
     }
   }
+});
+
+
+test("caja suma piezas de billetes y monedas en céntimos", async ({ page }) => {
+  await setup(page);
+  await login(page, "caja");
+  await page.goto("/caja/apertura");
+  for (const value of [200, 100, 50, 20, 10, 5, 2, 1, 0.5, 0.2, 0.1, 0.05]) {
+    await page.getByLabel(`Cantidad de denominación ${value}`, { exact: true }).fill("1");
+  }
+  await expect(page.locator(".ops-cash-total > strong")).toHaveText("S/ 388.85");
+  await page.getByLabel("Fondo inicial (S/)").fill("388.85");
+  await expect(page.locator(".ops-cash-total .ops-badge")).toHaveText("Coincide");
+  await page.getByLabel("Cantidad de denominación 0.05", { exact: true }).fill("2");
+  await expect(page.locator(".ops-cash-total > strong")).toHaveText("S/ 388.90");
+  await expect(page.locator(".ops-cash-total .ops-badge")).toHaveText("Revisar monto");
 });

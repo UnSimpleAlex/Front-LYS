@@ -84,3 +84,8 @@ Lint y build correctos. La suite completa ejecutó 193 pruebas: 190 pasaron inic
 - Formularios y métodos de pago: botones sin estiramiento vertical, interruptores de 26 px con área de interacción extendida y tarjetas de altura natural. Textos secundarios con mayor contraste.
 - Caja: etapas numeradas, resumen con iconos, total con indicador de coincidencia e imágenes de 200, 100, 50, 20 y 10 soles y monedas. Las miniaturas WebP decorativas se extraen de la referencia proporcionada; no son reproducciones de alta resolución. El desglose conserva cantidades de billetes e importe total de monedas, y excluye pagos digitales del efectivo físico.
 - La suite recorre 25 rutas incluyendo delivery a 240, 390, 768, 1024, 1280, 1366, 1440, 1920 y 2560 px. Se comprueban además las cinco pestañas de configuración, ancho legible de alertas, interruptores, cargas e imágenes de caja. Móvil utiliza scroll natural y acciones de al menos 44 px donde corresponde.
+
+
+### Imágenes y conteo por pieza de moneda
+
+Los cinco billetes usan las imágenes individuales proporcionadas por el usuario, recortadas sin márgenes negros y optimizadas a WebP. Se separan las siete monedas del montaje: 5, 10, 20 y 50 céntimos, y 1, 2 y 5 soles. En apertura y cierre se ingresa la cantidad entera de cada denominación; el total se suma en céntimos enteros para evitar errores de coma flotante. Esta sección sustituye el campo anterior de importe global de monedas y las miniaturas extraídas de la maqueta.

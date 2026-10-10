@@ -38,12 +38,26 @@ export function CashViews({
   notify: (task: () => void) => void;
   navigate: (path: string) => void;
 }) {
-  const [bills, setBills] = useState([0, 0, 0, 0, 0, 0]);
-  const denomination = [200, 100, 50, 20, 10, 1];
+  const denominations = [
+    { value: 200, image: "200", label: "Billetes S/ 200" },
+    { value: 100, image: "100", label: "Billetes S/ 100" },
+    { value: 50, image: "50", label: "Billetes S/ 50" },
+    { value: 20, image: "20", label: "Billetes S/ 20" },
+    { value: 10, image: "10", label: "Billetes S/ 10" },
+    { value: 5, image: "coin-5-soles", label: "Monedas S/ 5" },
+    { value: 2, image: "coin-2-soles", label: "Monedas S/ 2" },
+    { value: 1, image: "coin-1-sol", label: "Monedas S/ 1" },
+    { value: 0.5, image: "coin-50-centimos", label: "Monedas 50 céntimos" },
+    { value: 0.2, image: "coin-20-centimos", label: "Monedas 20 céntimos" },
+    { value: 0.1, image: "coin-10-centimos", label: "Monedas 10 céntimos" },
+    { value: 0.05, image: "coin-5-centimos", label: "Monedas 5 céntimos" },
+  ];
+  const [bills, setBills] = useState<number[]>(Array(12).fill(0));
+  // Sum integer céntimos so decimal coin values do not accumulate rounding errors.
   const billTotal = bills.reduce(
-    (sum, count, i) => sum + count * denomination[i],
+    (sum, count, i) => sum + count * Math.round(denominations[i].value * 100),
     0,
-  );
+  ) / 100;
   const data = useOperations();
   const [selected, setSelected] = useState("");
   const [pendingLimit, setPendingLimit] = useState(8);
@@ -246,34 +260,34 @@ export function CashViews({
             </label>
             <div>
               <h3>Desglose de efectivo (opcional)</h3>
-              <div className="ops-bills">
-                {denomination.map((value, i) => (
-                  <label key={value}>
-                    {i === 5 ? "Monedas (soles)" : "Billetes S/ " + value}
-                    <img className="ops-banknote" src={`/images/operations/currency/${i === 5 ? "coins" : value}.webp`} alt="" />
-                    <input
-                      aria-label={"Cantidad de denominación " + value}
-                      type="number"
-                      min="0"
-                      step={i === 5 ? "0.01" : "1"}
-                      value={bills[i]}
-                      onChange={(e) =>
-                        setBills(
-                          bills.map((count, index) =>
-                            index === i ? Number(e.target.value) : count,
-                          ),
-                        )
-                      }
-                    />
-                  </label>
-                ))}
-              </div>
+              {[{ title: "Billetes", from: 0, to: 5 }, { title: "Monedas", from: 5, to: 12 }].map(group => (
+                <section className="ops-currency-group" key={group.title} aria-label={group.title}>
+                  <h4>{group.title}</h4>
+                  <div className="ops-bills">
+                    {denominations.slice(group.from, group.to).map((item, offset) => {
+                      const index = group.from + offset;
+                      return <label key={item.image}>
+                        {item.label}
+                        <img className="ops-banknote" src={`/images/operations/currency/${item.image}.webp`} alt="" />
+                        <input
+                          aria-label={"Cantidad de denominación " + item.value}
+                          type="number"
+                          min="0"
+                          step="1"
+                          value={bills[index]}
+                          onChange={(e) => setBills(bills.map((count, i) => i === index ? Number(e.target.value) : count))}
+                        />
+                      </label>;
+                    })}
+                  </div>
+                </section>
+              ))}
               <div className="ops-total ops-cash-total">
                 <span><Icon name="cash" /> Total calculado</span>
                 <strong>{money(billTotal)}</strong>
                 {billTotal > 0 && <Badge value={Math.abs(billTotal - Number(amount)) < 0.001 ? "Coincide" : "Revisar monto"} />}
               </div>
-              <small>Ingresa la cantidad de billetes y el importe total de las monedas.</small>
+              <small>Ingresa la cantidad de piezas de cada billete y moneda.</small>
             </div>
             <label>
               Observaciones

@@ -629,3 +629,8 @@
 .ops-root .ops-stat > div { min-width: 0; }
 @media (max-width: 700px) { .ops-root .ops-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 359px) { .ops-root .ops-stats { grid-template-columns: 1fr; } }
+
+.ops-currency-group { margin: 20px 0; }
+.ops-currency-group h4 { margin: 0 0 12px; font-size: 15px; color: #101216; }
+.ops-root .ops-currency-group .ops-bills { grid-template-columns: repeat(auto-fit, minmax(min(100%, 110px), 1fr)); }
+.ops-currency-group .ops-banknote { height: 60px; }
