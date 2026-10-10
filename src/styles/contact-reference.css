@@ -169,3 +169,6 @@
  .contact-reference .business-map-caption { font-size:10px; gap:2px; padding:4px 8px; }
  .contact-reference .business-map-caption strong { display:none; }
 }
+
+.contact-reference .contact-quick-links svg { width:56%; height:56%; }
+.contact-reference .contact-red-icon svg { width:58%; height:58%; }
