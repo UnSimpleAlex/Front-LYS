@@ -1,17 +1,11 @@
-# Contacto: referencia y adaptación responsive
+# Contacto: nueva propuesta centrada
 
-Se conserva el navbar existente y se reproduce la composición enviada: banner fotográfico con título blanco y rojo, canales a la izquierda, formulario en el centro, mapa y contacto rápido a la derecha. Fondo blanco y adornos grises discretos; iconos blancos sobre rojo sólido.
+Se adapta la referencia más reciente: título «Hablemos» centrado sobre fondo blanco, fotografía interior recortada con borde curvo en el lateral izquierdo, formulario amplio y panel de cinco canales a la derecha. Se mantiene el navbar del sitio y los datos reales configurados del negocio.
 
-Desde 1200 px se usan tres columnas; entre 701 y 1199 px, canales y formulario comparten una fila y los paneles laterales pasan debajo. En móvil todo se apila, con campos en una columna por debajo de 401 px. Contenedores fluidos limitados a 1540 px evitan estirar los controles en pantallas grandes.
+El formulario muestra etiquetas visibles y campos en dos columnas en PC y tablet amplia; debajo de 501 px los campos se apilan. Teléfono es opcional, como en la referencia. Los campos obligatorios mantienen validación y el mensaje conserva el límite de 500 caracteres. Se preparan enlaces de correo y WhatsApp para que el usuario confirme el envío en su aplicación; «Editar mensaje» recupera los campos y sus valores.
 
-El formulario valida los campos y prepara enlaces con la consulta completa para correo o WhatsApp. El usuario confirma el envío en su aplicación. Se conserva la función de las redes del sitio. Los datos de contacto se leen de la configuración existente; no se sustituye el correo configurado por el de la maqueta.
+Desde 1200 px la composición ocupa el alto disponible bajo el navbar, sin footer ni scroll de página. En PC de poca altura se reducen título, espacios y controles sin ocultarlos. Debajo de 851 px el panel de canales pasa bajo el formulario y se retira la foto decorativa; móvil conserva desplazamiento natural. Los contenedores fluidos no generan scroll horizontal.
 
-Se reutilizan la fotografía interior existente, Caveat para los títulos manuscritos, los iconos y el mapa interactivo de Carabayllo. El punto exacto del restaurante sigue pendiente de confirmar; Google Maps abre una búsqueda con la dirección completa. El mapa no es una imagen estática del pin de la referencia.
+WhatsApp, teléfono, correo, Instagram y horario utilizan los SVG locales de Bootstrap Icons (MIT), con licencia en `docs/licenses/bootstrap-icons.txt`. Instagram conserva la acción existente mientras no haya un enlace oficial configurado. La fotografía interior, Knewave para «Hablemos» y Caveat para «mensaje» aproximan los recursos de la maqueta; no se utiliza una captura de pantalla como interfaz.
 
-Validación: composición revisada en PC y tablet, capturas móviles; sin desbordamiento horizontal en 240, 390, 768, 1024, 1366, 1672, 1920 y 2560 px. Prueba funcional existente del formulario y enlaces adaptada al botón «Enviar mensaje», y pruebas responsive de las secciones.
-
-En PC (desde 1200 px), Contacto ocupa el alto disponible bajo el navbar, sin scroll de página ni footer. El banner contiene únicamente el título; se retiraron el texto auxiliar y su separador. La altura del banner, los controles y el mapa se adaptan al alto de la ventana. Móvil y tablet conservan el desplazamiento natural.
-
-Al preparar una consulta en PC, las opciones para abrir correo o WhatsApp sustituyen visualmente el formulario para mantenerlas visibles. «Editar mensaje» recupera los campos con sus valores. Validación adicional en 1366×591, 1250×650, 1440×900, 1920×1080 y 2560×1440, antes y después de preparar el mensaje.
-
-Los símbolos de WhatsApp e Instagram y los iconos principales de teléfono, correo, ubicación y horario utilizan SVG de Bootstrap Icons (MIT). Se incluyen solo los seis iconos usados, sin añadir dependencias ni peticiones externas; licencia en `docs/licenses/bootstrap-icons.txt`.
+Verificación visual en 1774×887, 1366×591, 1024×768, 768×1024, 390×844 y 240×800. Pruebas de formulario, enlaces, pantalla completa en cinco tamaños de PC y ausencia de desbordamiento en móvil/tablet.
