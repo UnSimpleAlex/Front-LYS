@@ -23,3 +23,9 @@ Los recursos originales generados se conservan en la carpeta de Imagegen y se co
 - `local-ornaments-v3.png`, editado con Imagegen: eliminar fondo y textura de papel, dejando los dibujos periféricos sobre alfa transparente.
 - La página y el panel usan blanco `#fff`; los adornos se superponen al 12% de opacidad. Ruta y reloj decorativos también se suavizan.
 - Verificación de geometría en 390, 768, 1280, 1904 y 2560 px: miniaturas con anchos iguales (diferencia menor de 0,02 px), galería y panel con bordes superior e inferior alineados en PC/tablet, sin desbordamiento horizontal. PC conserva ausencia de scroll vertical. Capturas revisadas en PC y móvil.
+
+### Nueva referencia con rojo sólido
+
+Las tres fotografías del carrusel se sustituyen por los archivos entregados por el usuario el 9 de octubre, optimizados a WebP sin cambiar su composición. Iconos blancos sobre rojo sólido, botón de Maps blanco, bienvenida gris neutro y adornos en escala de grises al 9% reemplazan los tonos pastel. En PC, descripción, ubicación y horario siguen la alineación de la nueva referencia; móvil centra esos bloques y conserva la bienvenida centrada.
+
+Verificación: capturas en 390×844, 768×1024, 1366×591, 1672×941 y 1920×1080, sin desbordamiento horizontal; las tres resoluciones de PC no tienen scroll vertical. Carrusel circular y enlace de Maps verificados con la prueba existente; compilación y lint correctos.
