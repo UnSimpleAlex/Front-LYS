@@ -5,9 +5,9 @@ import { business } from '../features/information/business';
 import '../styles/locations-reference.css';
 
 const photos = [
-  { src: '/images/information/local-concept.webp', alt: 'Vista exterior referencial de Leñas y Sabores' },
-  { src: '/images/information/local-interior-dining.webp', alt: 'Vista interior referencial del salón y las parrillas' },
-  { src: '/images/information/local-interior-window.webp', alt: 'Vista interior referencial de las mesas junto a las ventanas' },
+  { src: '/images/information/local-selected-exterior.png', alt: 'Vista exterior referencial de Leñas y Sabores' },
+  { src: '/images/information/local-selected-dining.png', alt: 'Vista interior referencial del salón y las parrillas' },
+  { src: '/images/information/local-selected-window.png', alt: 'Vista interior referencial de las mesas junto a las ventanas' },
 ];
 const googleMaps = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(`${business.name}, ${business.address}, ${business.reference}, ${business.district}`);
 
@@ -30,7 +30,7 @@ export function LocationsPage({ onAction }: { onAction: (action: string) => void
             }
           }}>
             <div className="local-gallery-frame">
-              <img src={photos[selected].src} alt={photos[selected].alt} width="1536" height="1024" />
+              <img src={photos[selected].src} alt={photos[selected].alt} width="1672" height="941" />
               <button className="local-gallery-arrow local-gallery-previous" aria-label="Imagen anterior" onClick={() => move(-1)}><Icon name="chevron" /></button>
               <button className="local-gallery-arrow local-gallery-next" aria-label="Imagen siguiente" onClick={() => move(1)}><Icon name="chevron" /></button>
             </div>
