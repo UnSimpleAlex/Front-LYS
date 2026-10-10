@@ -32,7 +32,7 @@ test('contacto prepara enlaces reales sin enviar mensajes automáticamente', asy
   await expect(page.locator('.info-prepared')).toHaveCount(0);
   await page.getByLabel('Nombre completo').fill('Cliente de prueba');
   await page.getByLabel('Correo electrónico').fill('prueba@example.com');
-  await page.getByLabel('Teléfono *').fill('987654321');
+  await page.getByLabel('Teléfono', { exact: true }).fill('987654321');
   await page.getByLabel('Asunto *').selectOption('Eventos y reservas');
   await page.getByLabel('Mensaje *').fill('Quisiera consultar una reserva familiar.');
   await page.getByRole('button', { name: 'Enviar mensaje' }).click();
@@ -160,7 +160,7 @@ for (const [width, height] of [[1366, 591], [1250, 650], [1440, 900], [1920, 108
     await expect(page.getByText('¿Tienes alguna consulta,')).toHaveCount(0);
     await page.getByLabel('Nombre completo').fill('Cliente de prueba');
     await page.getByLabel('Correo electrónico').fill('prueba@example.com');
-    await page.getByLabel('Teléfono *').fill('987654321');
+    await page.getByLabel('Teléfono', { exact: true }).fill('987654321');
     await page.getByLabel('Asunto *').selectOption('Eventos y reservas');
     await page.getByLabel('Mensaje *').fill('Quisiera consultar una reserva familiar.');
     await page.getByRole('button', { name: 'Enviar mensaje' }).click();
