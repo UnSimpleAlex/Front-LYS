@@ -89,3 +89,12 @@ Lint y build correctos. La suite completa ejecutó 193 pruebas: 190 pasaron inic
 ### Imágenes y conteo por pieza de moneda
 
 Los cinco billetes usan las imágenes individuales proporcionadas por el usuario, recortadas sin márgenes negros y optimizadas a WebP. Se muestran seis monedas: 10, 20 y 50 céntimos, y 1, 2 y 5 soles. Las tres monedas de céntimos usan las imágenes individuales proporcionadas por el usuario; la opción de 5 céntimos se ha retirado del desglose. En apertura y cierre se ingresa la cantidad entera de cada denominación; el total se suma en céntimos enteros para evitar errores de coma flotante. Esta sección sustituye el campo anterior de importe global de monedas y las miniaturas extraídas de la maqueta.
+
+
+## Panel de cocina: referencia de octubre de 2026
+
+El resumen usa cuatro tarjetas independientes y un tablero con Nuevos, En preparación, Listos para entregar y Completados. Cada pedido conserva sus productos, cantidades, cliente, notas y tiempos reales; los indicadores no copian cifras estáticas de la maqueta. Los filtros permiten buscar por número, cliente, mesa o producto, elegir origen, revisar pedidos urgentes (superan la meta configurada), filtrar estado y cambiar el orden. Los tres últimos entregados aparecen en el panel y el historial permite consultar el resto. Los pedidos en reparto permanecen visibles en la columna de entrega con su estado.
+
+El tablero usa cuatro columnas desde 1280 px, dos entre 700 y 1279 px y una por debajo de 700 px. Los botones alcanzan 44 px en móvil. Se reutilizan las fotos del catálogo y los iconos del proyecto. Los permisos se mantienen: cocina confirma y marca listo; administración puede marcar entregado desde este panel, mientras cocina consulta el detalle de entrega.
+
+Validación específica: búsqueda, filtros, limpieza e historial; recorrido de ocho anchos (240, 390, 768, 1024, 1280, 1672, 1920 y 2560 px) sin desborde horizontal; flujo de pedido entre salón, cocina, entrega y caja. Capturas comparadas en PC, tablet y móvil.

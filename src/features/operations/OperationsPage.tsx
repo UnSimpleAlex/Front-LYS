@@ -17,6 +17,7 @@ import "../../styles/operations-fidelity.css";
 import "../../styles/operations-fidelity-layout.css";
 import "../../styles/operations-fidelity-responsive.css";
 import "../../styles/operations-adaptive.css";
+import "../../styles/kitchen-board.css";
 const menus: Record<string, [string, string, IconName][]> = {
   cocina: [
     ["", "Panel cocina", "chef"],
@@ -80,7 +81,7 @@ const titles: Record<string, string> = {
   "delivery/": "Entregas de delivery",
 };
 const descriptions: Record<string, string> = {
-  "cocina/": "Pedidos en tiempo real.",
+  "cocina/": "Gestiona los pedidos en tiempo real",
   "cocina/pedidos": "Revisa y acepta los nuevos pedidos.",
   "cocina/historial": "Consulta los pedidos preparados y entregados.",
   "cocina/tiempos": "Supervisa el rendimiento y los tiempos de preparación.",

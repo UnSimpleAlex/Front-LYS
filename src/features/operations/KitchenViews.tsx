@@ -1,3 +1,4 @@
+import { KitchenBoard } from "./KitchenBoard";
 import { OperationsTable } from "./OperationsTable";
 import { Icon, ProductSummary } from "./OperationsVisuals";
 import { dateText, downloadCsv } from "./operationsFiles";
@@ -215,7 +216,7 @@ export function KitchenViews({
                       label: "Tiempo promedio",
                       value: `${average} min`,
                       icon: "clock",
-                      tone: "gold",
+                      tone: "gray",
                       hint: "Desde aceptación a listo",
                     },
                     {
@@ -229,45 +230,7 @@ export function KitchenViews({
         }
       />
       {section === "" ? (
-        <div className="ops-kanban">
-          {["Recibido", "En preparación", "Listo", "Entregado"].map(
-            (status) => (
-              <Panel
-                key={status}
-                title={`${status === "Recibido" ? "Nuevos" : status === "Listo" ? "Listos para entregar" : status === "Entregado" ? "Completados" : status} (${orders.filter((o) => o.status === status).length})`}
-              >
-                {orders.filter((o) => o.status === status).length ? (
-                  orders
-                    .filter((o) => o.status === status)
-                    .map((order) => (
-                      <OrderCard
-                        compact
-                        target={state.settings.target}
-                        key={order.id}
-                        order={order}
-                        onDetail={setDetail}
-                        onStatus={
-                          status === "Recibido" || status === "En preparación"
-                            ? advance
-                            : undefined
-                        }
-                      />
-                    ))
-                ) : (
-                  <Empty />
-                )}
-                {status === "Entregado" && (
-                  <button
-                    className="ops-outline"
-                    onClick={() => navigate("/cocina/historial")}
-                  >
-                    <Icon name="clock" /> Ver historial completo
-                  </button>
-                )}
-              </Panel>
-            ),
-          )}
-        </div>
+        <KitchenBoard orders={orders} target={state.settings.target} onDetail={setDetail} onStatus={advance} navigate={navigate} />
       ) : section === "pedidos" ? (
         <>
           <div className="ops-toolbar">
