@@ -134,3 +134,8 @@
 }
 @media (min-width: 1200px) and (max-height: 720px) { .local-title-image { max-height: 30vh; } }
 .locations-page::before { opacity: .12; }
+.locations-page .local-visit-heading p { text-align: center; }
+@media (min-width: 701px) {
+ .local-benefits { width: fit-content; max-width: 100%; margin-inline: auto; }
+ .local-benefits > div { gap: 16px; }
+}
