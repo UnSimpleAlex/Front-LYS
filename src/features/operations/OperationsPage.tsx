@@ -12,7 +12,7 @@ import { KitchenViews } from "./KitchenViews";
 import { WaiterViews } from "./WaiterViews";
 import { CashViews } from "./CashViews";
 import { AdminViews } from "./AdminViews";
-import { useOperations, seedWorkspacePreview } from "./operationsStore";
+import { useOperations, seedWorkspacePreview, refreshWorkspacePreview } from "./operationsStore";
 import { Empty } from "./OperationsUI";
 import "../../styles/operations.css";
 import "../../styles/operations-fidelity.css";
@@ -233,7 +233,7 @@ export function OperationsPage({
         <div className="ops-account-summary"><Icon name="user" /><div><strong>{user.name}</strong><p>{roleNames[user.role]}</p></div></div>
         <div className="ops-account-actions">
           {user.role === "administrador" && <><h3>Cambiar de área</h3>{Object.keys(menus).map(r => <button key={r} onClick={() => {setProfile(false);navigate("/" + r);}}><Icon name={menus[r][0][2]} />{roleNames[r as Role]}<Icon name="chevron" /></button>)}</>}
-          {user.role === "administrador" && <button onClick={() => notify(() => {seedWorkspacePreview();setProfile(false);})}><Icon name="plus" />Cargar datos de demostración</button>}
+          {user.role === "administrador" && <button onClick={() => notify(() => {if (state.suppliers.some(s => s.id === "workspace-preview-supplier")) refreshWorkspacePreview(); else seedWorkspacePreview();setProfile(false);})}><Icon name="plus" />{state.suppliers.some(s => s.id === "workspace-preview-supplier") ? "Actualizar muestra de demostración" : "Cargar datos de demostración"}</button>}
           <button onClick={() => navigate("/mi-cuenta")}><Icon name="user" />Editar mi cuenta</button>
           <button onClick={() => navigate("/")}><Icon name="home" />Ver sitio público</button>
           <button onClick={() => {logoutLocal();navigate("/iniciar-sesion");}}><Icon name="power" />Cerrar sesión</button>

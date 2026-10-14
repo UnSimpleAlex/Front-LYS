@@ -886,9 +886,7 @@ export function seedKitchenPreview() {
   );
   const timestamp = (ago: number) => new Date(now - ago * 60000).toISOString();
   const orders: Order[] = stages.map((status, index) => {
-    const channel: Channel = ["Delivery", "Salón", "Recojo"][
-      index % 3
-    ] as Channel;
+    const channel: Channel = status === "En camino" ? "Delivery" : ["Delivery", "Salón", "Recojo"][index % 3] as Channel;
     const preparation = [11, 17, 22, 28][index % 4];
     const age =
       index < 5
@@ -974,7 +972,7 @@ export function seedWorkspacePreview() {
   const offset = Date.now() - newest - 5 * 60000;
   const refresh = (value: string) => new Date(Date.parse(value) + offset).toISOString();
   const base = {...state, orders:state.orders.map(o => o.customerId === "kitchen-preview" ? {
-    ...o, created:refresh(o.created), accepted:o.accepted ? refresh(o.accepted) : undefined,
+    ...o, channel:o.status === "En camino" ? "Delivery" as Channel : o.channel, table:o.status === "En camino" ? null : o.table, created:refresh(o.created), accepted:o.accepted ? refresh(o.accepted) : undefined,
     ready:o.ready ? refresh(o.ready) : undefined, delivered:o.delivered ? refresh(o.delivered) : undefined,
     history:o.history.map(h => ({...h,date:refresh(h.date)})),
   } : o)};
@@ -1007,6 +1005,23 @@ export function seedWorkspacePreview() {
     supplies: base.supplies.map((s,i) => i < 3 ? {...s,stock:s.stock+10} : s),
     offers: [...base.offers, {id:"workspace-preview-offer",name:"Promoción de demostración",type:"Descuento",productId:base.products[0].id,percent:10,code:"DEMO10",start:date.slice(0,10),end:new Date(Date.now()+30*86400000).toISOString().slice(0,10),active:true,used:0,limit:50}],
   });
+}
+
+export function refreshWorkspacePreview() {
+  requireRole(["administrador"]);
+  const preview = state.orders.filter(o => o.customerId === "kitchen-preview" && !o.paid);
+  if (!preview.length) throw new Error("Carga primero los datos de demostración.");
+  const offset = Date.now() - Math.max(...preview.map(o => Date.parse(o.created))) - 5 * 60000;
+  const refresh = (date: string) => new Date(Date.parse(date) + offset).toISOString();
+  publish({...state, orders:state.orders.map(o => o.customerId === "kitchen-preview" && !o.paid ? {
+    ...o,
+    channel:o.status === "En camino" ? "Delivery" : o.channel,
+    table:o.status === "En camino" ? null : o.table,
+    address:o.status === "En camino" ? o.address || "Dirección de demostración" : o.address,
+    created:refresh(o.created), accepted:o.accepted ? refresh(o.accepted) : undefined,
+    ready:o.ready ? refresh(o.ready) : undefined, delivered:o.delivered ? refresh(o.delivered) : undefined,
+    history:o.history.map(h => ({...h,date:refresh(h.date)})),
+  } : o)});
 }
 
 export function seedExampleOrders() {
