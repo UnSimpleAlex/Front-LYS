@@ -104,7 +104,7 @@ export function Badge({ value }: { value: string }) {
           : "check";
   return (
     <span
-      className={`ops-badge ${["Entregado", "Pagado", "Libre", "Activo", "En stock", "Emitido", "Coincide", "Cuadrado", "Caja abierta"].includes(value) ? "green" : ["En preparación", "Reservada", "Por vencer"].includes(value) || value.startsWith("Mesa") ? "gold" : ["Listo", "En camino", "Solicita cuenta"].includes(value) ? "blue" : ["Cancelado", "Inactivo", "Caja cerrada"].includes(value) ? "gray" : "red"}`}
+      className={`ops-badge ${["Entregado", "Pagado", "Libre", "Activo", "En stock", "Emitido", "Coincide", "Cuadrado", "Caja abierta", "Entrada"].includes(value) ? "green" : ["En preparación", "Reservada", "Por vencer", "Pendiente", "Salida"].includes(value) || value.startsWith("Mesa") ? "gold" : ["Listo", "En camino", "Solicita cuenta", "Recibido"].includes(value) ? "blue" : ["Stock bajo", "Retrasado", "Error", "Reembolsado"].includes(value) ? "red" : "gray"}`}
     >
       {value.startsWith("Mesa") ||
       [
@@ -121,7 +121,7 @@ export function Badge({ value }: { value: string }) {
       ) : (
         <i className="ops-status-dot" />
       )}
-      {value}
+      <span>{value}</span>
     </span>
   );
 }
@@ -413,7 +413,7 @@ export function Donut({
   values: { label: string; value: number }[];
 }) {
   const total = values.reduce((sum, v) => sum + v.value, 0);
-  const colors = ["#ed0017", "#803bc2", "#0da9db", "#d89b25", "#23528b"];
+  const colors = ["#bd1425", "#26394c", "#647584", "#8b672b", "#a5afb9"];
   return (
     <div className="ops-donut-layout">
       <div
