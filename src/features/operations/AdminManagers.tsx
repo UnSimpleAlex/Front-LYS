@@ -620,6 +620,7 @@ export function UserManager({
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("Todos");
   const [editing, setEditing] = useState<LocalUser | null>(null);
+  const [editorOpen, setEditorOpen] = useState(false);
   const [view, setView] = useState<LocalUser | null>(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -631,6 +632,7 @@ export function UserManager({
     clients ? u.role === "cliente" : u.role !== "cliente",
   );
   const select = (u: LocalUser) => {
+    setEditorOpen(true);
     setEditing(u);
     setName(u.name);
     setEmail(u.email);
@@ -638,6 +640,7 @@ export function UserManager({
     setRole(u.role);
   };
   const reset = () => {
+    setEditorOpen(false);
     setEditing(null);
     setName("");
     setEmail("");
@@ -668,7 +671,7 @@ export function UserManager({
         <Panel
           title={clients ? "Gestión de clientes" : "Usuarios del equipo"}
           action={
-            <button className="ops-primary" onClick={reset}>
+            <button className="ops-primary" onClick={() => {reset();setEditorOpen(true);}}>
               ＋ Nueva cuenta
             </button>
           }
@@ -789,7 +792,7 @@ export function UserManager({
                 ))}
             </Panel>
           )}
-          <Panel title={editing ? "Editar cuenta" : "Nueva cuenta"}>
+          {editorOpen && <OperationsDialog onClose={() => setEditorOpen(false)} title={editing ? "Editar cuenta" : "Nueva cuenta"}>
             <form
               className="ops-form"
               onSubmit={(e) => {
@@ -868,12 +871,9 @@ export function UserManager({
                 {editing ? "Guardar cambios" : "Crear cuenta"}
               </button>
             </form>
-          </Panel>
+          </OperationsDialog>}
           {view && (
-            <Panel
-              title={`Historial de ${view.name}`}
-              action={<button onClick={() => setView(null)}>Cerrar</button>}
-            >
+            <OperationsDialog title={`Historial de ${view.name}`} onClose={() => setView(null)}>
               <p>
                 {view.email} · {view.phone}
               </p>
@@ -887,7 +887,7 @@ export function UserManager({
               {!data.orders.some((o) => o.customerId === view.id) && (
                 <Empty>Sin pedidos.</Empty>
               )}
-            </Panel>
+            </OperationsDialog>
           )}
         </div>
       </div>
