@@ -352,6 +352,7 @@ export function PromotionManager({
 }) {
   const data = useOperations();
   const [offer, setOffer] = useState(blankOffer);
+  const [editorOpen, setEditorOpen] = useState(false);
   const [filter, setFilter] = useState("Todos");
   const [search, setSearch] = useState("");
   return (
@@ -374,7 +375,7 @@ export function PromotionManager({
         <Panel
           title="Promociones"
           action={
-            <button onClick={() => setOffer(blankOffer())}>
+            <button onClick={() => {setOffer(blankOffer());setEditorOpen(true);}}>
               ＋ Nueva promoción
             </button>
           }
@@ -454,7 +455,7 @@ export function PromotionManager({
                       </td>
                       <td>
                         <div className="ops-actions">
-                          <button onClick={() => setOffer({ ...o })}>
+                          <button onClick={() => {setOffer({ ...o });setEditorOpen(true);}}>
                             <Icon name="edit" /> Editar
                           </button>
                           <button
@@ -484,7 +485,7 @@ export function PromotionManager({
             )}
           </div>
         </Panel>
-        <Panel title="Crear / Editar promoción">
+        {editorOpen && <OperationsDialog onClose={() => setEditorOpen(false)} title="Crear / Editar promoción">
           <form
             className="ops-form"
             onSubmit={(e) => {
@@ -496,6 +497,7 @@ export function PromotionManager({
                   throw new Error("Selecciona un producto.");
                 saveOffer(offer);
                 setOffer(blankOffer());
+                setEditorOpen(false);
               });
             }}
           >
@@ -601,7 +603,7 @@ export function PromotionManager({
               <Icon name="save" /> Guardar promoción
             </button>
           </form>
-        </Panel>
+        </OperationsDialog>}
       </div>
     </>
   );
