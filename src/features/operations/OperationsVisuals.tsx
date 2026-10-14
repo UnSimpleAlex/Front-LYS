@@ -29,21 +29,13 @@ export type IconName =
   | "list"
   | "clipboard"
   | "bag";
-const filled: Partial<Record<IconName, string>> = {
-  chef: "M7 17V11C1 12 0 4 6 4c1-5 10-5 12 0 6 0 5 8-1 7v6ZM7 19h10v3H7Z",
-  bell: "M5 16V9c0-4 2-6 5-7h4c3 1 5 3 5 7v7l3 3H2ZM9 21h6c0 4-6 4-6 0",
-  chart: "M3 13h4v9H3ZM10 7h4v15h-4ZM17 2h4v20h-4Z",
-  home: "M1 11 12 1l11 10h-4v11h-5v-8h-4v8H5V11Z",
-  serve: "M2 18h20v3H2ZM3 16c0-6 4-10 8-10V4h2v2c5 0 8 4 8 10Z",
-  user: "M12 1a5 5 0 1 0 0 10 5 5 0 0 0 0-10ZM2 23v-4c0-9 20-9 20 0v4Z",
-  users:
-    "M9 2a4 4 0 1 0 0 8 4 4 0 0 0 0-8ZM18 4a3 3 0 1 0 0 6 3 3 0 0 0 0-6ZM1 22v-5c0-7 16-7 16 0v5ZM18 22v-5c0-2-1-4-2-5 7-2 9 3 7 10Z",
-  table: "M3 3h18l2 7H1ZM3 12h3L5 23H2ZM18 12h3l1 11h-3ZM7 12h10v2H7Z",
-  receipt: "M3 1h12v7h7v15H3ZM17 1l5 5h-5Z",
-  grid: "M2 2h8v8H2ZM14 2h8v8h-8ZM2 14h8v8H2ZM14 14h8v8h-8Z",
-  bank: "M1 8 12 1l11 7ZM2 10h3v9H2ZM8 10h3v9H8ZM14 10h3v9h-3ZM20 10h3v9h-3ZM1 21h22v3H1Z",
-};
 const linePaths: Partial<Record<IconName, string[]>> = {
+  chef: ["M7 16v-5a4 4 0 1 1 1-7 5 5 0 0 1 8 0 4 4 0 1 1 1 7v5Z", "M7 16h10v5H7Z"],
+  bell: ["M5 17h14l-2-3V9a5 5 0 0 0-10 0v5Z", "M10 21h4M12 2v2"],
+  chart: ["M4 20V12h3v8ZM11 20V8h3v12ZM18 20V3h3v17Z"],
+  serve: ["M3 17a9 9 0 0 1 18 0ZM2 21h20M12 8V4M10 4h4"],
+  bank: ["M3 9 12 3l9 6ZM3 21h18M5 12v6M10 12v6M15 12v6M20 12v6"],
+
   bag: ["M4 7h16l1 15H3Z", "M8 8V5a4 4 0 0 1 8 0v3"],
   box: [
     "m2 7 10-5 10 5-10 5Z",
@@ -98,31 +90,13 @@ export function Icon({
   name,
   ...props
 }: SVGProps<SVGSVGElement> & { name: IconName }) {
-  if (filled[name])
-    return (
-      <svg
-        viewBox="0 0 24 24"
-        fill="currentColor"
-        aria-hidden="true"
-        {...props}
-      >
-        <path d={filled[name]} />
-        {name === "receipt" && (
-          <path
-            d="M7 11h10M7 15h10M7 19h6"
-            stroke="var(--ops-icon-cutout,white)"
-            strokeWidth="1.5"
-          />
-        )}
-      </svg>
-    );
   if (linePaths[name])
     return (
       <svg
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
-        strokeWidth="2.1"
+        strokeWidth="1.8"
         strokeLinecap="round"
         strokeLinejoin="round"
         aria-hidden="true"
