@@ -915,6 +915,7 @@ export function InventoryManager({
   const [editingSupply, setEditingSupply] = useState(false);
   const [movement, setMovement] = useState("");
   const [quantity, setQuantity] = useState(1);
+  const [providerOpen, setProviderOpen] = useState(false);
   const [provider, setProvider] = useState<Supplier>({
     id: crypto.randomUUID(),
     name: "",
@@ -947,23 +948,24 @@ export function InventoryManager({
       />
       {tab === "Proveedores" ? (
         <div className="ops-split">
-          <Panel title="Proveedores">
+          <Panel title="Proveedores" action={<button className="ops-primary" onClick={() => {setProvider({id:crypto.randomUUID(),name:"",phone:"",email:""});setProviderOpen(true);}}><Icon name="plus" />Nuevo proveedor</button>}>
             {data.suppliers.map((p) => (
               <p key={p.id}>
                 {p.name} · {p.phone} · {p.email}
-                <button onClick={() => setProvider(p)}>
+                <button onClick={() => {setProvider(p);setProviderOpen(true);}}>
                   <Icon name="edit" /> Editar
                 </button>
               </p>
             ))}
           </Panel>
-          <Panel title="Nuevo proveedor">
+          {providerOpen && <OperationsDialog title="Proveedor" onClose={() => setProviderOpen(false)}>
             <form
               className="ops-form"
               onSubmit={(e) => {
                 e.preventDefault();
                 notify(() => {
                   saveSupplier(provider);
+                  setProviderOpen(false);
                   setProvider({
                     id: crypto.randomUUID(),
                     name: "",
@@ -1006,7 +1008,7 @@ export function InventoryManager({
                 <Icon name="save" /> Guardar proveedor
               </button>
             </form>
-          </Panel>
+          </OperationsDialog>}
         </div>
       ) : (
         <div className="ops-with-sidebar">
@@ -1091,6 +1093,7 @@ export function InventoryManager({
               </OperationsTable>
             </div>
             {movement && (
+              <OperationsDialog title="Registrar movimiento" onClose={() => setMovement("")}>
               <form
                 className="ops-form"
                 onSubmit={(e) => {
@@ -1113,7 +1116,7 @@ export function InventoryManager({
                 <button className="ops-primary">
                   <Icon name="save" /> Guardar movimiento
                 </button>
-              </form>
+              </form></OperationsDialog>
             )}
           </Panel>
           <div>
@@ -1142,17 +1145,7 @@ export function InventoryManager({
               )}
             </Panel>
             {editingSupply && (
-              <Panel
-                title="Nuevo / Editar insumo"
-                action={
-                  <button
-                    className="ops-outline"
-                    onClick={() => setEditingSupply(false)}
-                  >
-                    <Icon name="close" /> Cerrar formulario
-                  </button>
-                }
-              >
+              <OperationsDialog title="Editar insumo" onClose={() => setEditingSupply(false)}>
                 <form
                   className="ops-form"
                   onSubmit={(e) => {
@@ -1206,7 +1199,7 @@ export function InventoryManager({
                     <Icon name="save" /> Guardar insumo
                   </button>
                 </form>
-              </Panel>
+              </OperationsDialog>
             )}
             <Panel title="Últimos movimientos">
               {data.movements.slice(0, 6).map((m) => (
