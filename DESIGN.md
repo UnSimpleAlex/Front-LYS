@@ -234,3 +234,5 @@ Details have description, ingredients, commercial information and last-update ta
 ## Reference polish
 
 The desktop sidebar expands to 295px from 1450px, with larger navigation icons and an account avatar. Product tables use 14px text, category-specific icons, a bulk state selector, applied category/availability/branch filters and arrow pagination. The detail dialog opens on ingredients, with icon-led facts and grouped preparation/gallery cards. The editor includes an accessible availability switch, image removal, currency/time affixes and an available last-update timestamp. Deactivation keeps the same reversible behavior with a richer summary and explicit explanation.
+
+Compact density: sidebar entries use 44px minimum height and 22px icons. Desktop summary cards use 40px icons, 12px vertical padding and 26px values; product summaries switch to two columns at 1200px. The primary creation button uses a single circled-plus SVG and a 44px minimum height. Short desktop screens scroll the navigation inside the sidebar while keeping the account accessible.
