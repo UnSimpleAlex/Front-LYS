@@ -465,12 +465,12 @@ export function AdminViews({
               onChange={setFilter}
             />
             <div className="ops-toolbar">
-              <input
+              <input aria-label="Buscar número o cliente"
                 placeholder="Buscar número o cliente…"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
-              <select
+              <select aria-label="Filtrar resultados"
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
               >
@@ -612,7 +612,7 @@ export function AdminViews({
     return (
       <>
         <div className="ops-toolbar">
-          <select value={period} onChange={(e) => setPeriod(e.target.value)}>
+          <select aria-label="Filtrar resultados" value={period} onChange={(e) => setPeriod(e.target.value)}>
             {["7", "30", "90"].map((n) => (
               <option key={n} value={n}>
                 Últimos {n} días

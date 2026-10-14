@@ -90,7 +90,7 @@ export function ProductManager({
           }
         >
           <div className="ops-toolbar">
-            <input
+            <input aria-label="Buscar producto"
               placeholder="Buscar producto…"
               value={search}
               onChange={(e) => {
@@ -98,7 +98,7 @@ export function ProductManager({
                 setPage(1);
               }}
             />
-            <select
+            <select aria-label="Categoría de productos"
               value={category}
               onChange={(e) => {
                 setCategory(e.target.value);
@@ -386,7 +386,7 @@ export function PromotionManager({
               value={filter}
               onChange={setFilter}
             />
-            <input
+            <input aria-label="Buscar promociones"
               placeholder="Buscar promociones…"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -677,13 +677,13 @@ export function UserManager({
           }
         >
           <div className="ops-toolbar">
-            <input
+            <input aria-label="Buscar nombre, correo o teléfono"
               placeholder="Buscar nombre, correo o teléfono…"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
             {!clients && (
-              <select
+              <select aria-label="Filtrar resultados"
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
               >
@@ -1025,7 +1025,7 @@ export function InventoryManager({
               </button>
             }
           >
-            <input
+            <input aria-label="Buscar insumos"
               className="ops-search"
               placeholder="Buscar insumos…"
               value={search}

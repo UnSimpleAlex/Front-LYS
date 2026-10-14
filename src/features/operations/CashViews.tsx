@@ -350,7 +350,7 @@ export function CashViews({
       <>
         <div className="ops-split">
           <Panel title="Pedidos pendientes de cobro">
-            <input
+            <input aria-label="Buscar pedido, cliente o mesa"
               className="ops-search"
               placeholder="Buscar pedido, cliente o mesa…"
               value={search}
@@ -525,7 +525,7 @@ export function CashViews({
           title="Pagos recientes"
           action={
             <button onClick={() => navigate("/caja/historial")}>
-              <Icon name="arrow" /> Ver todos →
+              <Icon name="arrow" /> Ver todos
             </button>
           }
         >
@@ -579,7 +579,7 @@ export function CashViews({
               </button>
             }
           >
-            <input
+            <input aria-label="Buscar número o cliente"
               className="ops-search"
               placeholder="Buscar número o cliente…"
               value={search}
@@ -736,12 +736,12 @@ export function CashViews({
             }
           >
             <div className="ops-toolbar">
-              <input
+              <input aria-label="Buscar pedido o cliente"
                 placeholder="Buscar pedido o cliente…"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
-              <select
+              <select aria-label="Filtrar resultados"
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
               >
@@ -782,7 +782,7 @@ export function CashViews({
             title="Cobros recientes"
             action={
               <button onClick={() => navigate("/caja/cobros")}>
-                <Icon name="arrow" /> Ver todos →
+                <Icon name="arrow" /> Ver todos
               </button>
             }
           >
