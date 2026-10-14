@@ -7,17 +7,7 @@
       "primary": {
         "role": "primary",
         "displayName": "Operational Red",
-        "canonical": "#bd1425",
-        "tonalRamp": [
-          "oklch(15% 0.1971 24.48)",
-          "oklch(26.4% 0.1971 24.48)",
-          "oklch(37.9% 0.1971 24.48)",
-          "oklch(49.3% 0.1971 24.48)",
-          "oklch(60.7% 0.1971 24.48)",
-          "oklch(72.1% 0.1971 24.48)",
-          "oklch(83.6% 0.1971 24.48)",
-          "oklch(95% 0.1971 24.48)"
-        ]
+        "canonical": "#ed0017"
       },
       "workspace": {
         "role": "neutral",
@@ -36,63 +26,23 @@
       },
       "sidebar": {
         "role": "neutral",
-        "displayName": "Graphite",
-        "canonical": "#1b2028",
-        "tonalRamp": [
-          "oklch(15% 0.0170 259.76)",
-          "oklch(26.4% 0.0170 259.76)",
-          "oklch(37.9% 0.0170 259.76)",
-          "oklch(49.3% 0.0170 259.76)",
-          "oklch(60.7% 0.0170 259.76)",
-          "oklch(72.1% 0.0170 259.76)",
-          "oklch(83.6% 0.0170 259.76)",
-          "oklch(95% 0.0170 259.76)"
-        ]
+        "displayName": "White Sidebar",
+        "canonical": "#ffffff"
       },
       "sidebar-hover": {
         "role": "neutral",
-        "displayName": "Graphite Hover",
-        "canonical": "#303742",
-        "tonalRamp": [
-          "oklch(15% 0.0217 259.39)",
-          "oklch(26.4% 0.0217 259.39)",
-          "oklch(37.9% 0.0217 259.39)",
-          "oklch(49.3% 0.0217 259.39)",
-          "oklch(60.7% 0.0217 259.39)",
-          "oklch(72.1% 0.0217 259.39)",
-          "oklch(83.6% 0.0217 259.39)",
-          "oklch(95% 0.0217 259.39)"
-        ]
+        "displayName": "Neutral Hover",
+        "canonical": "#f6f8fb"
       },
       "sidebar-text": {
         "role": "neutral",
         "displayName": "Sidebar Text",
-        "canonical": "#d8dee7",
-        "tonalRamp": [
-          "oklch(15% 0.0139 258.35)",
-          "oklch(26.4% 0.0139 258.35)",
-          "oklch(37.9% 0.0139 258.35)",
-          "oklch(49.3% 0.0139 258.35)",
-          "oklch(60.7% 0.0139 258.35)",
-          "oklch(72.1% 0.0139 258.35)",
-          "oklch(83.6% 0.0139 258.35)",
-          "oklch(95% 0.0139 258.35)"
-        ]
+        "canonical": "#18243b"
       },
       "ink": {
         "role": "neutral",
         "displayName": "Ink",
-        "canonical": "#20242b",
-        "tonalRamp": [
-          "oklch(15% 0.0144 261.67)",
-          "oklch(26.4% 0.0144 261.67)",
-          "oklch(37.9% 0.0144 261.67)",
-          "oklch(49.3% 0.0144 261.67)",
-          "oklch(60.7% 0.0144 261.67)",
-          "oklch(72.1% 0.0144 261.67)",
-          "oklch(83.6% 0.0144 261.67)",
-          "oklch(95% 0.0144 261.67)"
-        ]
+        "canonical": "#10172b"
       },
       "heading-ink": {
         "role": "neutral",
@@ -112,32 +62,12 @@
       "muted": {
         "role": "neutral",
         "displayName": "Muted",
-        "canonical": "#565e69",
-        "tonalRamp": [
-          "oklch(15% 0.0204 256.35)",
-          "oklch(26.4% 0.0204 256.35)",
-          "oklch(37.9% 0.0204 256.35)",
-          "oklch(49.3% 0.0204 256.35)",
-          "oklch(60.7% 0.0204 256.35)",
-          "oklch(72.1% 0.0204 256.35)",
-          "oklch(83.6% 0.0204 256.35)",
-          "oklch(95% 0.0204 256.35)"
-        ]
+        "canonical": "#62718c"
       },
       "line": {
         "role": "neutral",
         "displayName": "Neutral Line",
-        "canonical": "#dce0e5",
-        "tonalRamp": [
-          "oklch(15% 0.0081 253.86)",
-          "oklch(26.4% 0.0081 253.86)",
-          "oklch(37.9% 0.0081 253.86)",
-          "oklch(49.3% 0.0081 253.86)",
-          "oklch(60.7% 0.0081 253.86)",
-          "oklch(72.1% 0.0081 253.86)",
-          "oklch(83.6% 0.0081 253.86)",
-          "oklch(95% 0.0081 253.86)"
-        ]
+        "canonical": "#e4e9f1"
       },
       "field-line": {
         "role": "neutral",
@@ -318,7 +248,8 @@
         "name": "single-summary",
         "value": "300px"
       }
-    ]
+    ],
+    "reference": "User product-management references, 2026-10-14; shared by all operational roles."
   },
   "components": [
     {
@@ -327,7 +258,7 @@
       "refersTo": "button-primary",
       "description": "Main action in a list or editor.",
       "html": "<button class=\"ds-button ds-primary\">Guardar cambios</button>",
-      "css": ".ds-button { font-family:\"DM Sans\",Arial,sans-serif;font-size:14px;font-weight:600;min-height:38px;line-height:1.3;padding:8px 12px;border-radius:6px;box-shadow:none;white-space:normal;cursor:pointer; }.ds-button:hover { border-color:#ed0017; }.ds-button:disabled { opacity:.5;cursor:not-allowed; }.ds-button:focus-visible,.ds-input:focus-visible,.ds-nav-item:focus-visible { outline:3px solid #2267c2; outline-offset:3px; }.ds-primary { background:#bd1425;border:1px solid #bd1425;color:#fff; }"
+      "css": ".ds-button { font-family:\"DM Sans\",Arial,sans-serif;font-size:14px;font-weight:600;min-height:38px;line-height:1.3;padding:8px 12px;border-radius:6px;box-shadow:none;white-space:normal;cursor:pointer; }.ds-button:hover { border-color:#ed0017; }.ds-button:disabled { opacity:.5;cursor:not-allowed; }.ds-button:focus-visible,.ds-input:focus-visible,.ds-nav-item:focus-visible { outline:3px solid #2267c2; outline-offset:3px; }.ds-primary { background:#ed0017;border:1px solid #ed0017;color:#fff; }"
     },
     {
       "name": "Secondary Button",
@@ -335,7 +266,7 @@
       "refersTo": "button-secondary",
       "description": "Supporting action beside the primary task.",
       "html": "<button class=\"ds-button ds-secondary\">Ver detalle</button>",
-      "css": ".ds-button { font-family:\"DM Sans\",Arial,sans-serif;font-size:14px;font-weight:600;min-height:38px;line-height:1.3;padding:8px 12px;border-radius:6px;box-shadow:none;white-space:normal;cursor:pointer; }.ds-button:hover { border-color:#ed0017; }.ds-button:disabled { opacity:.5;cursor:not-allowed; }.ds-button:focus-visible,.ds-input:focus-visible,.ds-nav-item:focus-visible { outline:3px solid #2267c2; outline-offset:3px; }.ds-secondary { background:#fff;border:1px solid #dde3ed;color:#20242b; }"
+      "css": ".ds-button { font-family:\"DM Sans\",Arial,sans-serif;font-size:14px;font-weight:600;min-height:38px;line-height:1.3;padding:8px 12px;border-radius:6px;box-shadow:none;white-space:normal;cursor:pointer; }.ds-button:hover { border-color:#ed0017; }.ds-button:disabled { opacity:.5;cursor:not-allowed; }.ds-button:focus-visible,.ds-input:focus-visible,.ds-nav-item:focus-visible { outline:3px solid #2267c2; outline-offset:3px; }.ds-secondary { background:#fff;border:1px solid #dde3ed;color:#10172b; }"
     },
     {
       "name": "Text Field",
@@ -343,7 +274,7 @@
       "refersTo": "input",
       "description": "A labeled operational edit field.",
       "html": "<label class=\"ds-field\">Nombre<input class=\"ds-input\" placeholder=\"Nombre del producto\"></label>",
-      "css": ".ds-field { display:grid;gap:7px;font-family:\"DM Sans\",Arial,sans-serif;font-size:.875rem;font-weight:600;color:#20242b; }.ds-input { min-width:0;border:1px solid #bfc6cf;border-radius:6px;color:#20242b;background:#fff;font-family:\"DM Sans\",Arial,sans-serif;font-size:.875rem;line-height:1.4;padding:10px 12px; }.ds-input::placeholder { color:#65707d; }.ds-button:focus-visible,.ds-input:focus-visible,.ds-nav-item:focus-visible { outline:3px solid #2267c2; outline-offset:3px; }"
+      "css": ".ds-field { display:grid;gap:7px;font-family:\"DM Sans\",Arial,sans-serif;font-size:.875rem;font-weight:600;color:#10172b; }.ds-input { min-width:0;border:1px solid #bfc6cf;border-radius:6px;color:#10172b;background:#fff;font-family:\"DM Sans\",Arial,sans-serif;font-size:.875rem;line-height:1.4;padding:10px 12px; }.ds-input::placeholder { color:#65707d; }.ds-button:focus-visible,.ds-input:focus-visible,.ds-nav-item:focus-visible { outline:3px solid #2267c2; outline-offset:3px; }"
     },
     {
       "name": "Area Navigation",
@@ -351,7 +282,7 @@
       "refersTo": "navigation-active",
       "description": "Graphite area navigation with red active state.",
       "html": "<nav class=\"ds-nav\" aria-label=\"Áreas\"><button class=\"ds-nav-item ds-active\" aria-current=\"page\"><svg width=\"19\" height=\"19\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"><path d=\"m2 7 10-5 10 5-10 5ZM2 7v11l10 5 10-5V7M12 12v11\"/></svg>Productos</button><button class=\"ds-nav-item\">Inventario</button></nav>",
-      "css": ".ds-nav { background:#1b2028;padding:14px;display:grid;gap:5px; }.ds-nav-item { display:flex;gap:12px;align-items:center;text-align:left;min-height:38px;border:1px solid transparent;border-radius:6px;background:transparent;color:#d8dee7;padding:12px;font-family:\"DM Sans\",Arial,sans-serif;font-size:.875rem;font-weight:500;cursor:pointer; }.ds-nav-item:hover { background:#303742;color:#fff; }.ds-nav-item.ds-active { background:#bd1425;color:#fff;font-weight:700; }.ds-button:focus-visible,.ds-input:focus-visible,.ds-nav-item:focus-visible { outline:3px solid #2267c2; outline-offset:3px; }"
+      "css": ".ds-nav { background:#ffffff;padding:14px;display:grid;gap:5px; }.ds-nav-item { display:flex;gap:12px;align-items:center;text-align:left;min-height:38px;border:1px solid transparent;border-radius:6px;background:transparent;color:#18243b;padding:12px;font-family:\"DM Sans\",Arial,sans-serif;font-size:.875rem;font-weight:500;cursor:pointer; }.ds-nav-item:hover { background:#f6f8fb;color:#fff; }.ds-nav-item.ds-active { background:#ed0017;color:#fff;font-weight:700; }.ds-button:focus-visible,.ds-input:focus-visible,.ds-nav-item:focus-visible { outline:3px solid #2267c2; outline-offset:3px; }"
     },
     {
       "name": "Status Badge",
@@ -367,7 +298,7 @@
       "refersTo": "summary",
       "description": "Compact operational label and value.",
       "html": "<div class=\"ds-summary\"><div><p>Pendientes</p><strong>12</strong></div></div>",
-      "css": ".ds-summary { display:flex;align-items:center;gap:14px;background:#fff;border:1px solid #dce0e5;border-radius:8px;padding:16px;box-shadow:none;font-family:\"DM Sans\",Arial,sans-serif; }.ds-summary p { font-size:.8125rem;color:#565e69;margin:0 0 5px; }.ds-summary strong { font-size:1.65rem;line-height:1.2;color:#101216; }"
+      "css": ".ds-summary { display:flex;align-items:center;gap:14px;background:#fff;border:1px solid #e4e9f1;border-radius:8px;padding:16px;box-shadow:none;font-family:\"DM Sans\",Arial,sans-serif; }.ds-summary p { font-size:.8125rem;color:#62718c;margin:0 0 5px; }.ds-summary strong { font-size:1.65rem;line-height:1.2;color:#101216; }"
     },
     {
       "name": "Work Panel",
@@ -375,7 +306,7 @@
       "refersTo": "panel",
       "description": "Flat list container with concise heading.",
       "html": "<section class=\"ds-panel\"><header><h2>Pedidos recientes</h2></header><p>Pedido #1042 · Mesa 3</p></section>",
-      "css": ".ds-panel { background:#fff;border:1px solid #dce0e5;border-radius:10px;box-shadow:none;padding:18px;min-width:0;font-family:\"DM Sans\",Arial,sans-serif;color:#20242b; }.ds-panel header { margin-bottom:16px; }.ds-panel h2 { margin:0;font-size:1.0625rem;line-height:1.35;color:#101216; }.ds-panel p { color:#565e69;font-size:14px; }"
+      "css": ".ds-panel { background:#fff;border:1px solid #e4e9f1;border-radius:10px;box-shadow:none;padding:18px;min-width:0;font-family:\"DM Sans\",Arial,sans-serif;color:#10172b; }.ds-panel header { margin-bottom:16px; }.ds-panel h2 { margin:0;font-size:1.0625rem;line-height:1.35;color:#101216; }.ds-panel p { color:#62718c;font-size:14px; }"
     },
     {
       "name": "Modal Editor Surface",
@@ -383,15 +314,15 @@
       "refersTo": "dialog",
       "description": "Preview of the native dialog surface; production uses showModal, focus restoration and Escape handling.",
       "html": "<section class=\"ds-dialog\" aria-label=\"Editar producto\"><header><h2>Editar producto</h2><button class=\"ds-button ds-secondary\" aria-label=\"Cerrar ventana\"><svg width=\"19\" height=\"19\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"><path d=\"m6 6 12 12M18 6 6 18\"/></svg></button></header><div class=\"ds-dialog-body\">Editor del producto</div></section>",
-      "css": ".ds-button { font-family:\"DM Sans\",Arial,sans-serif;font-size:14px;font-weight:600;min-height:38px;line-height:1.3;padding:8px 12px;border-radius:6px;box-shadow:none;white-space:normal;cursor:pointer; }.ds-button:hover { border-color:#ed0017; }.ds-button:disabled { opacity:.5;cursor:not-allowed; }.ds-button:focus-visible,.ds-input:focus-visible,.ds-nav-item:focus-visible { outline:3px solid #2267c2; outline-offset:3px; }.ds-secondary { background:#fff;border:1px solid #dde3ed;color:#20242b; }.ds-dialog { width:min(620px,calc(100vw - 32px));max-height:calc(100dvh - 32px);border:1px solid #dce0e5;border-radius:12px;background:#fff;color:#20242b;box-shadow:0 20px 80px #0004;font-family:\"DM Sans\",Arial,sans-serif; }.ds-dialog header { display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 22px;border-bottom:1px solid #dce0e5; }.ds-dialog h2 { margin:0;font-size:1.2rem; }.ds-dialog-body { padding:22px;font-size:14px; }"
+      "css": ".ds-button { font-family:\"DM Sans\",Arial,sans-serif;font-size:14px;font-weight:600;min-height:38px;line-height:1.3;padding:8px 12px;border-radius:6px;box-shadow:none;white-space:normal;cursor:pointer; }.ds-button:hover { border-color:#ed0017; }.ds-button:disabled { opacity:.5;cursor:not-allowed; }.ds-button:focus-visible,.ds-input:focus-visible,.ds-nav-item:focus-visible { outline:3px solid #2267c2; outline-offset:3px; }.ds-secondary { background:#fff;border:1px solid #dde3ed;color:#10172b; }.ds-dialog { width:min(620px,calc(100vw - 32px));max-height:calc(100dvh - 32px);border:1px solid #e4e9f1;border-radius:12px;background:#fff;color:#10172b;box-shadow:0 20px 80px #0004;font-family:\"DM Sans\",Arial,sans-serif; }.ds-dialog header { display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 22px;border-bottom:1px solid #e4e9f1; }.ds-dialog h2 { margin:0;font-size:1.2rem; }.ds-dialog-body { padding:22px;font-size:14px; }"
     }
   ],
   "narrative": {
     "northStar": "Operate workspace",
-    "overview": "Operate workspace makes pending restaurant work visible and actionable. A graphite navigation rail anchors white, compact work surfaces; concise titles, summaries and lists place task context ahead of decoration.\n\nThis system applies only to internal administration, kitchen, floor, cash and delivery screens. PRODUCT.md supplies the durable requirements: sidebar navigation, white backgrounds, no textures or decorative copy, readable controls and modal editors. Public pages retain their own system. The interaction sequence is choose an area, inspect work and status, act in a modal, receive feedback and retain context.",
+    "overview": "Operate workspace makes pending restaurant work visible and actionable. A white navigation rail anchors white, compact work surfaces; concise titles, summaries and lists place task context ahead of decoration.\n\nThis system applies only to internal administration, kitchen, floor, cash and delivery screens. PRODUCT.md supplies the durable requirements: sidebar navigation, white backgrounds, no textures or decorative copy, readable controls and modal editors. Public pages retain their own system. The interaction sequence is choose an area, inspect work and status, act in a modal, receive feedback and retain context.",
     "keyCharacteristics": [
       "White work surfaces with neutral borders.",
-      "Graphite navigation with red active and primary actions.",
+      "White navigation with a pale red active item, red indicator and red primary actions.",
       "One practical sans-serif and consistent SVG line icons.",
       "Compact summaries, semantic lists and viewport-safe modal editors."
     ],
@@ -403,7 +334,7 @@
       },
       {
         "name": "The Status With Words Rule",
-        "body": "Pair status color with a readable state label; use outlined green, amber, blue and red badges on white.",
+        "body": "Pair status color with a readable state label; use labeled green, amber, blue and red badges with subtle backgrounds.",
         "section": "colors"
       },
       {
@@ -428,14 +359,14 @@
       }
     ],
     "dos": [
-      "Do keep internal workspace backgrounds white and navigation graphite.",
-      "Do use red for active navigation and primary actions, with outlined labeled statuses.",
+      "Do keep internal workspace backgrounds white and navigation white.",
+      "Do use red for active navigation and primary actions, with labeled semantic statuses.",
       "Do keep summaries compact, controls labeled, keyboard focus visible and modal editors within the viewport.",
       "Do preserve product imagery and payment imagery when they identify real task content.",
       "Do retain semantic table headings when rows adapt into labeled cards."
     ],
     "donts": [
-      "Don't add textures, pastel panel fills, display fonts or unnecessary decoration to internal screens.",
+      "Don't add textures, decorative panel fills, display fonts or unnecessary decoration to internal screens.",
       "Don't move edit forms into a permanent side column.",
       "Don't truncate essential labels, values or currency units.",
       "Don't communicate status by color alone.",

@@ -2,15 +2,15 @@
 name: Leñas y Sabores — Internal Operations
 description: A compact white workspace for connected restaurant tasks by role.
 colors:
-  primary: "#bd1425"
+  primary: "#ed0017"
   workspace: "#ffffff"
-  sidebar: "#1b2028"
-  sidebar-hover: "#303742"
-  sidebar-text: "#d8dee7"
-  ink: "#20242b"
+  sidebar: "#ffffff"
+  sidebar-hover: "#f6f8fb"
+  sidebar-text: "#18243b"
+  ink: "#10172b"
   heading-ink: "#101216"
-  muted: "#565e69"
-  line: "#dce0e5"
+  muted: "#62718c"
+  line: "#e4e9f1"
   field-line: "#bfc6cf"
   neutral-surface: "#f5f6f7"
   focus: "#2267c2"
@@ -21,9 +21,9 @@ colors:
 typography:
   headline:
     fontFamily: "DM Sans, Arial, sans-serif"
-    fontSize: "1.8rem"
+    fontSize: "clamp(1.6rem, 2.2vw, 2.25rem)"
     lineHeight: 1.2
-    letterSpacing: "-.04em"
+    letterSpacing: "-.025em"
   title:
     fontFamily: "DM Sans, Arial, sans-serif"
     fontSize: "1.0625rem"
@@ -108,30 +108,30 @@ components:
 
 **Creative North Star: "Operate workspace"**
 
-Operate workspace makes pending restaurant work visible and actionable. A graphite navigation rail anchors white, compact work surfaces; concise titles, summaries and lists place task context ahead of decoration.
+Operate workspace makes pending restaurant work visible and actionable. A white navigation rail anchors white, compact work surfaces; concise titles, summaries and lists place task context ahead of decoration.
 
 This system applies only to internal administration, kitchen, floor, cash and delivery screens. PRODUCT.md supplies the durable requirements: sidebar navigation, white backgrounds, no textures or decorative copy, readable controls and modal editors. Public pages retain their own system. The interaction sequence is choose an area, inspect work and status, act in a modal, receive feedback and retain context.
 
 **Key Characteristics:**
 
 - White work surfaces with neutral borders.
-- Graphite navigation with red active and primary actions.
+- White navigation with a pale red active item, red indicator and red primary actions.
 - One practical sans-serif and consistent SVG line icons.
 - Compact summaries, semantic lists and viewport-safe modal editors.
 
 ## Colors
 
-The palette combines graphite navigation, white task surfaces, restrained red actions and readable state strokes. Frontmatter holds the normative values extracted from the finished source.
+The palette combines white navigation, white task surfaces, vivid red actions and readable state labels. Frontmatter holds the normative values extracted from the finished source.
 
 ### Primary
 
 - **Operational Red:** Primary action fill, active area navigation, selected table borders and urgency.
 - **Focus Blue:** Keyboard outline, distinct from primary action color.
-- **State Green / Amber / Blue / Red:** Text and outlines for completion, pending work, progress and problems; no pastel state panel fills.
+- **State Green / Amber / Blue / Red:** Readable labels and subtle tinted backgrounds for completion, pending work, progress and problems.
 
 ### Neutral
 
-- **Graphite / Graphite Hover / Sidebar Text:** Rail, navigation hover and inactive labels.
+- **White Sidebar / Neutral Hover / Navy Sidebar Text:** Rail, navigation hover and inactive labels.
 - **Workspace White:** Content, panels, inputs, summaries and modal body.
 - **Ink / Heading Ink / Muted:** Main content, inherited strong/heading text and supporting text.
 - **Neutral Line / Field Line:** Structural dividers and field borders.
@@ -139,7 +139,7 @@ The palette combines graphite navigation, white task surfaces, restrained red ac
 
 **The Action Accent Rule.** Reserve the primary red for primary actions, active navigation, selection and urgent states; keep ordinary surfaces white.
 
-**The Status With Words Rule.** Pair status color with a readable state label; use outlined green, amber, blue and red badges on white.
+**The Status With Words Rule.** Pair status color with a readable state label; use labeled green, amber, blue and red badges with subtle backgrounds.
 
 ## Typography
 
@@ -158,13 +158,13 @@ The palette combines graphite navigation, white task surfaces, restrained red ac
 
 ## Layout
 
-The fixed desktop rail is (232px), narrowing to (200px) at viewport widths up to (1100px). The white workspace begins alongside it; a toolbar of at least (64px) contains notifications and account actions. Content is capped at (1920px), with default padding (24px 28px 40px), (20px) on narrower desktops and (32px 36px 48px) from (1600px).
+The fixed desktop rail is (280px), narrowing to (200px) at viewport widths up to (1100px). The white workspace begins alongside it; desktop notifications are accessible through the account dialog, leaving the page title and main action at the top. Content is capped at (1920px), with default padding (24px 28px 40px), (20px) on narrower desktops and (24px 30px 48px) from (1600px).
 
 At (900px) and below, the rail becomes a native modal drawer (min(320px, 90vw)), full viewport height. The menu comes first in the toolbar, before notifications and account. At (540px), content uses (18px 12px 32px), panels use (14px), and summary cards use two columns with hidden icons and compact values. Only below (300px) do summaries become one column. Use the actual final cascade, rather than earlier superseded breakpoints.
 
 Desktop summaries normally use four columns; five-summary groups use five columns and reduce to three at (1200px), then two on mobile. Task lists use semantic tables with headings that become visible cell labels in card layouts. Responsive layout also considers list width and column count. The waiter recent-order table retains compact table form from (1100px). Kitchen columns become two across at intermediate desktop sizes; incoming kitchen auxiliary summaries move below the list at (1500px) and stack at (700px).
 
-Detail and editing dialogs have a maximum height of (calc(100dvh - 32px)); a sticky header keeps the close action available. Forms inside dialogs use one column, with (16px) gaps. On exceptionally narrow viewports (340px and below), dialog width leaves a (16px) total horizontal gutter.
+Detail and editing dialogs have a maximum height of (calc(100dvh - 32px)); a sticky header keeps the close action available. Generic forms use two columns from (700px) and one on smaller screens. Product dialogs use up to (1180px), with image and publication controls on the left and editable fields on the right; their layout collapses to one column at (900px). On exceptionally narrow viewports (340px and below), dialog width leaves a (16px) total horizontal gutter.
 
 **The Retained Context Rule.** Open detail and edit work in a modal over the current list; close back to the launching control and preserve the area context.
 
@@ -182,11 +182,11 @@ Modest rounded corners distinguish compact status badges, controls, summary card
 
 ### Buttons
 
-Primary buttons use red and white; secondary actions use white with a neutral border. Shared controls have minimum height (38px), padding (8px 12px) and radius (6px); content can wrap. Buttons inherit the operational font and use weight (600). Shared hover changes the border to the legacy interaction red (#ed0017); rail hover uses graphite hover. Disabled actions use opacity (.5) and a not-allowed cursor. Switches are intentionally smaller specialized controls (44px by 24px).
+Primary buttons use red and white; secondary actions use white with a neutral border. Shared controls have minimum height (38px), padding (8px 12px) and radius (6px); content can wrap. Buttons inherit the operational font and use weight (600). Shared hover changes the border to the legacy interaction red (#ed0017); rail hover uses a light neutral fill. Disabled actions use opacity (.5) and a not-allowed cursor. Switches are intentionally smaller specialized controls (44px by 24px).
 
 ### Chips
 
-Status badges use white backgrounds, a current-color outline, radius (5px) and padding (4px 7px), with explicit words. Completion and paid states are green; pending or reserved states amber; ready and travelling states blue; errors and low stock red.
+Status badges use subtle semantic backgrounds, radius (20px) and padding (5px 10px), with explicit words. Completion and paid states are green; pending or reserved states amber; ready and travelling states blue; errors and low stock red.
 
 ### Cards / Containers
 
@@ -198,7 +198,7 @@ Fields are white with neutral strokes, radius (6px), padding (10px 12px) and rea
 
 ### Navigation
 
-The graphite rail uses line icons, left-aligned labels, a (12px) item gap and red active fill with weight (700). Account access remains at the bottom of the desktop rail. Mobile navigation is a labeled native dialog, with readable ink on white and the same red active state.
+The white rail uses line icons, left-aligned labels, a (12px) item gap and a pale red active fill with a red left indicator. Account access remains at the bottom of the desktop rail. Mobile navigation is a labeled native dialog, with readable ink on white and the same red active state.
 
 ### Modal Editor and Feedback
 
@@ -210,17 +210,23 @@ Native dialogs have a labeled title, explicit close button, Escape handling, bod
 
 ### Do:
 
-- **Do** keep internal workspace backgrounds white and navigation graphite.
-- **Do** use red for active navigation and primary actions, with outlined labeled statuses.
+- **Do** keep internal workspace backgrounds white and navigation white.
+- **Do** use red for active navigation and primary actions, with labeled semantic statuses.
 - **Do** keep summaries compact, controls labeled, keyboard focus visible and modal editors within the viewport.
 - **Do** preserve product imagery and payment imagery when they identify real task content.
 - **Do** retain semantic table headings when rows adapt into labeled cards.
 
 ### Don't:
 
-- **Don't** add textures, pastel panel fills, display fonts or unnecessary decoration to internal screens.
+- **Don't** add textures, decorative panel fills, display fonts or unnecessary decoration to internal screens.
 - **Don't** move edit forms into a permanent side column.
 - **Don't** truncate essential labels, values or currency units.
 - **Don't** communicate status by color alone.
 - **Don't** extend this internal design system into public pages.
 
+
+## Product reference workflows
+
+Products show seven rows per page, real counts, search by name or SKU, category/availability/branch filters, filtered CSV export and selection actions. Desktop tables retain compact cells from 1200px; narrower lists become labeled cards. Descriptions are summaries; full copy remains available in the detail modal.
+
+Details have description, ingredients, commercial information and last-update tabs. Editing supports gallery uploads (5 MB limit), SKU, stock, branch, preparation time, ingredients, observations and channel metadata. Existing products remain compatible with optional metadata. Preview retains the unsaved form. Deactivation is reversible and requires an explicit confirmation; existing orders and payments remain intact. No monthly trends or unrecorded update dates are invented.
