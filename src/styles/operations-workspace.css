@@ -1,9 +1,9 @@
 /* Shared operational workspace. Public pages retain their own visual system. */
-.ops-root.ops-workspace[data-page] { --ops-ink:#20242b; --ops-muted:#565e69; --ops-line:#dce0e5; --ops-accent:#bd1425; background:#fff; color:var(--ops-ink); padding-left:232px; min-height:100dvh; }
+.ops-root.ops-workspace[data-page] { --ops-ink:#10172b; --ops-muted:#62718c; --ops-line:#e4e9f1; --ops-accent:#ed0017; background:#fff; color:var(--ops-ink); padding-left:280px; min-height:100dvh; }
 .ops-root.ops-workspace[data-page] .ops-content { width:100%; max-width:1920px; padding:24px 28px 40px; margin:0 auto; background:#fff; }
 .ops-root.ops-workspace[data-page] .ops-content::before,.ops-root.ops-workspace[data-page] .ops-content::after,.ops-root.ops-workspace[data-page] .ops-page-heading h1::before,.ops-root.ops-workspace[data-page] .ops-page-heading h1::after { display:none; }
 .ops-root.ops-workspace[data-page] .ops-page-heading { margin:0 0 24px; padding:0; min-height:0; }
-.ops-root.ops-workspace[data-page] .ops-page-heading h1 { font-family:"DM Sans",Arial,sans-serif; font-size:1.8rem; line-height:1.2; letter-spacing:-.04em; transform:none; padding:0; margin:0 0 8px; }
+.ops-root.ops-workspace[data-page] .ops-page-heading h1 { font-family:"DM Sans",Arial,sans-serif; font-size:clamp(1.6rem,2.2vw,2.25rem); line-height:1.2; letter-spacing:-.025em; transform:none; padding:0; margin:0 0 8px; }
 .ops-root.ops-workspace[data-page] p,.ops-root.ops-workspace[data-page] small { color:var(--ops-muted); }
 .ops-root.ops-workspace[data-page] .ops-page-heading p { font-size:.9375rem; margin:0; }
 .ops-root.ops-workspace[data-page] button { min-height:38px; height:auto; line-height:1.3; padding:8px 12px; border-radius:6px; box-shadow:none; white-space:normal; }
@@ -23,17 +23,17 @@
 .ops-root.ops-workspace[data-page] input::placeholder,.ops-root.ops-workspace[data-page] textarea::placeholder { color:#65707d; }
 .ops-root.ops-workspace[data-page] input[type=file]::file-selector-button { background:#242a33; color:white; border:0; border-radius:4px; padding:8px 10px; margin-right:10px; cursor:pointer; }
 .ops-root.ops-workspace[data-page] :focus-visible { outline:3px solid #2267c2; outline-offset:3px; }
-.ops-sidebar { position:fixed; inset:0 auto 0 0; z-index:90; width:232px; padding:20px 14px 14px; display:flex; flex-direction:column; background:#1b2028; color:#fff; overflow-y:auto; }
-.ops-brand { display:block; background:white; border-radius:7px; padding:12px; margin-bottom:28px; }
-.ops-brand img { display:block; width:100%; height:48px; object-fit:contain; }
-.ops-area-label { font-size:.75rem; font-weight:600; letter-spacing:.06em; color:#b7c0ce; margin:0 12px 10px; }
+.ops-sidebar { position:fixed; inset:0 auto 0 0; z-index:90; width:280px; padding:24px 16px 18px; display:flex; flex-direction:column; background:#fff; color:#10172b; border-right:1px solid #e4e9f1; overflow-y:auto; }
+.ops-brand { display:block; background:white; border-radius:7px; padding:8px 10px; margin-bottom:12px; }
+.ops-brand img { display:block; width:100%; height:62px; object-fit:contain; }
+.ops-area-label { font-size:.875rem; font-weight:400; letter-spacing:0; color:#62718c; margin:0 12px 32px; }
 .ops-side-navigation { display:flex; flex-direction:column; gap:5px; }
-.ops-root.ops-workspace[data-page] .ops-side-navigation button { display:flex; gap:12px; align-items:center; text-align:left; border:1px solid transparent; background:transparent; color:#d8dee7; padding:12px; font-size:.875rem; font-weight:500; }
-.ops-root.ops-workspace[data-page] .ops-side-navigation button:hover { background:#303742; color:white; }
-.ops-root.ops-workspace[data-page] .ops-side-navigation button.active { background:#bd1425; color:white; font-weight:700; }
-.ops-root.ops-workspace[data-page] .ops-side-account { display:flex; align-items:center; gap:9px; margin-top:auto; padding:16px 8px 4px; border:0; border-top:1px solid #414853; border-radius:0; background:transparent; color:white; text-align:left; }
+.ops-root.ops-workspace[data-page] .ops-side-navigation button { display:flex; gap:12px; align-items:center; text-align:left; border:1px solid transparent; background:transparent; color:#18243b; padding:15px 16px; font-size:.9375rem; font-weight:500; }
+.ops-root.ops-workspace[data-page] .ops-side-navigation button:hover { background:#f6f8fb; color:#10172b; }
+.ops-root.ops-workspace[data-page] .ops-side-navigation button.active { background:#fff0f2; color:#ed0017; font-weight:600; position:relative; }
+.ops-root.ops-workspace[data-page] .ops-side-account { display:flex; align-items:center; gap:9px; margin-top:auto; padding:16px 8px 4px; border:0; border-top:1px solid #e4e9f1; border-radius:0; background:transparent; color:#10172b; text-align:left; }
 .ops-side-account span { flex:1; min-width:0; overflow-wrap:break-word; }
-.ops-root.ops-workspace[data-page] .ops-side-account small { color:#bac3d0; }
+.ops-root.ops-workspace[data-page] .ops-side-account small { color:#62718c; }
 .ops-workspace-toolbar { min-height:64px; padding:12px 28px; display:flex; justify-content:flex-end; gap:12px; align-items:center; border-bottom:1px solid var(--ops-line); background:white; }
 .ops-workspace-toolbar button { display:flex; align-items:center; gap:8px; }
 .ops-root.ops-workspace[data-page] .ops-workspace-toolbar .ops-menu,.ops-mobile-account { display:none; }
@@ -56,14 +56,14 @@
 .ops-notification-item { display:grid; grid-template-columns:auto 1fr auto; gap:12px; padding:14px 0; border-bottom:1px solid #dce0e5; }
 .ops-root.ops-workspace[data-page] .ops-manager-layout > .ops-with-sidebar { grid-template-columns:minmax(0,1fr); }
 .ops-root.ops-workspace[data-page] .ops-switch { padding:0; min-height:24px; height:24px; width:44px; }
-.ops-root.ops-workspace[data-page] .ops-badge { background:white; border:1px solid currentColor; border-radius:5px; padding:4px 7px; font-size:.75rem; color:#535b65; }
-.ops-root.ops-workspace[data-page] .ops-badge.green { color:#08643e; background:#fff; }
-.ops-root.ops-workspace[data-page] .ops-badge.red { color:#b51225; background:#fff; }
-.ops-root.ops-workspace[data-page] .ops-badge.gold { color:#805600; background:#fff; }
-.ops-root.ops-workspace[data-page] .ops-badge.blue { color:#175d9a; background:#fff; }
-@media(min-width:1600px) { .ops-root.ops-workspace[data-page] .ops-content { padding:32px 36px 48px; } }
+.ops-root.ops-workspace[data-page] .ops-badge { background:white; border:1px solid transparent; border-radius:20px; padding:5px 10px; font-size:.75rem; color:#535b65; }
+.ops-root.ops-workspace[data-page] .ops-badge.green { color:#067132; background:#def8e6; }
+.ops-root.ops-workspace[data-page] .ops-badge.red { color:#bf1528; background:#fff0f2; }
+.ops-root.ops-workspace[data-page] .ops-badge.gold { color:#8a5800; background:#fff4dd; }
+.ops-root.ops-workspace[data-page] .ops-badge.blue { color:#1453a1; background:#eaf2ff; }
+@media(min-width:1600px) { .ops-root.ops-workspace[data-page] .ops-content { padding:24px 30px 48px; } }
 @media(max-width:1100px) { .ops-root.ops-workspace[data-page] { padding-left:200px; } .ops-sidebar { width:200px; } .ops-root.ops-workspace[data-page] .ops-content { padding:20px; } }
-@media(max-width:900px) { .ops-root.ops-workspace[data-page] { padding-left:0; } .ops-sidebar { display:none; } .ops-root.ops-workspace[data-page] .ops-workspace-toolbar .ops-menu,.ops-root.ops-workspace[data-page] .ops-mobile-account { display:flex; } .ops-workspace-toolbar .ops-menu { margin-right:auto; } .ops-workspace-toolbar { padding:10px 16px; } .ops-root .ops-navigation-dialog { inset:0 auto 0 0; margin:0; width:min(320px,90vw); height:100dvh; max-height:100dvh; border-radius:0; } .ops-root.ops-workspace[data-page] .ops-navigation-dialog .ops-side-navigation button { color:#20242b; } .ops-root.ops-workspace[data-page] .ops-navigation-dialog .ops-side-navigation button.active { color:white; } }
+@media(max-width:900px) { .ops-root.ops-workspace[data-page] { padding-left:0; } .ops-sidebar { display:none; } .ops-root.ops-workspace[data-page] .ops-workspace-toolbar .ops-menu,.ops-root.ops-workspace[data-page] .ops-mobile-account { display:flex; } .ops-workspace-toolbar .ops-menu { margin-right:auto; } .ops-workspace-toolbar { padding:10px 16px; } .ops-root .ops-navigation-dialog { inset:0 auto 0 0; margin:0; width:min(320px,90vw); height:100dvh; max-height:100dvh; border-radius:0; } .ops-root.ops-workspace[data-page] .ops-navigation-dialog .ops-side-navigation button { color:#20242b; } .ops-root.ops-workspace[data-page] .ops-navigation-dialog .ops-side-navigation button.active { color:#ed0017; } }
 @media(max-width:540px) { .ops-root.ops-workspace[data-page] .ops-content { padding:18px 12px 32px; } .ops-root.ops-workspace[data-page] .ops-page-heading h1 { font-size:1.5rem; } .ops-root.ops-workspace[data-page] .ops-panel { padding:14px; } .ops-workspace-status { display:none; } .ops-dialog-body { padding:16px; } .ops-root.ops-workspace[data-page] .ops-stats { grid-template-columns:repeat(2,minmax(0,1fr)); } .ops-root.ops-workspace[data-page] .ops-stat { padding:12px; } .ops-notification-item { grid-template-columns:1fr; gap:5px; } }
 @media(prefers-reduced-motion:reduce) { .ops-root *, .ops-root *::before,.ops-root *::after { animation:none!important; transition:none!important; } }
 

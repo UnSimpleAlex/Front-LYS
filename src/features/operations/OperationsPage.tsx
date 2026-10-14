@@ -1,5 +1,6 @@
 import { DeliveryViews } from "./DeliveryViews";
 import { OperationsDialog } from "./OperationsDialog";
+import { OperationsPageActions } from "./operationsPageContext";
 import { useEffect, useState } from "react";
 import { Icon, type IconName } from "./OperationsVisuals";
 import {
@@ -22,6 +23,7 @@ import "../../styles/operations-adaptive.css";
 import "../../styles/kitchen-board.css";
 import "../../styles/kitchen-reference.css";
 import "../../styles/operations-workspace.css";
+import "../../styles/operations-products.css";
 const menus: Record<string, [string, string, IconName][]> = {
   cocina: [
     ["", "Panel cocina", "chef"],
@@ -135,6 +137,7 @@ export function OperationsPage({
   const state = useOperations();
   const [, role, section = ""] = route.split("/");
   const [menu, setMenu] = useState(false);
+  const [actionHost, setActionHost] = useState<HTMLDivElement | null>(null);
   const [profile, setProfile] = useState(false);
   const [notifications, setNotifications] = useState(false);
   const [message, setMessage] = useState("");
@@ -232,6 +235,7 @@ export function OperationsPage({
       {profile && <OperationsDialog title="Mi cuenta" onClose={() => setProfile(false)}>
         <div className="ops-account-summary"><Icon name="user" /><div><strong>{user.name}</strong><p>{roleNames[user.role]}</p></div></div>
         <div className="ops-account-actions">
+          <button onClick={() => {setProfile(false);setNotifications(true);}}><Icon name="bell" />Pedidos activos ({pending.length})</button>
           {user.role === "administrador" && <><h3>Cambiar de área</h3>{Object.keys(menus).map(r => <button key={r} onClick={() => {setProfile(false);navigate("/" + r);}}><Icon name={menus[r][0][2]} />{roleNames[r as Role]}<Icon name="chevron" /></button>)}</>}
           {user.role === "administrador" && <button onClick={() => notify(() => {if (state.suppliers.some(s => s.id === "workspace-preview-supplier")) refreshWorkspacePreview(); else seedWorkspacePreview();setProfile(false);})}><Icon name="plus" />{state.suppliers.some(s => s.id === "workspace-preview-supplier") ? "Actualizar muestra de demostración" : "Cargar datos de demostración"}</button>}
           <button onClick={() => navigate("/mi-cuenta")}><Icon name="user" />Editar mi cuenta</button>
@@ -243,6 +247,7 @@ export function OperationsPage({
         {pending.map(o => <div className="ops-notification-item" key={o.id}><strong>#{o.id}</strong><span>{o.customer}</span><span>{o.status}</span></div>)}
         {!pending.length && <Empty>No hay pedidos pendientes.</Empty>}
       </OperationsDialog>}
+      <OperationsPageActions.Provider value={actionHost}>
       <main id="contenido" className="ops-content">
         <div
           className={`ops-page-heading ${role === "cocina" ? "script" : ""}`}
@@ -251,7 +256,7 @@ export function OperationsPage({
             <h1>{titles[key]}</h1>
             <p>{descriptions[key]}</p>
           </div>
-
+          <div id="ops-page-actions" ref={setActionHost} />
         </div>
         {message && (
           <div
@@ -296,6 +301,7 @@ export function OperationsPage({
           <DeliveryViews notify={notify} />
         )}
       </main>
+      </OperationsPageActions.Provider>
 
     </div>
   );

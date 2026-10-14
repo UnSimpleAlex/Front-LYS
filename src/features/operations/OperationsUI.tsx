@@ -76,7 +76,7 @@ export function Stats({
           </span>
           <div>
             <p>{item.label}</p>
-            <strong>{item.value}</strong>
+            <strong className={String(item.value).startsWith("S/") ? "ops-stat-money" : undefined}>{item.value}</strong>
             {item.hint && <small>{item.hint}</small>}
           </div>
         </div>
