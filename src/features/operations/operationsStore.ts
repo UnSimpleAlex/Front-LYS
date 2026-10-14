@@ -2,7 +2,19 @@ import { useSyncExternalStore } from "react";
 import seed from "../carta/catalog.json";
 import type { Product } from "../carta/catalog";
 import { currentUser, type Role } from "../../services/localAuth";
-export type MenuProduct = Product & { active?: boolean; stock?: number };
+import { productSku } from "./productHelpers";
+export type MenuProduct = Product & {
+  active?: boolean;
+  stock?: number;
+  sku?: string;
+  branch?: string;
+  preparationMinutes?: number;
+  ingredients?: string[];
+  observations?: string;
+  gallery?: string[];
+  channels?: string[];
+  updatedAt?: string;
+};
 export type Status =
   | "Recibido"
   | "En preparación"
@@ -748,14 +760,19 @@ export function saveProduct(product: MenuProduct) {
     !product.name.trim() ||
     product.price <= 0 ||
     !Number.isFinite(product.price) ||
-    (product.stock ?? 0) < 0
+    !Number.isInteger(product.stock ?? 0) ||
+    (product.stock ?? 0) < 0 ||
+    (product.preparationMinutes !== undefined && (!Number.isFinite(product.preparationMinutes) || product.preparationMinutes < 1))
   )
     throw new Error("Revisa nombre, precio y stock.");
+  if (state.products.some(p => p.id !== product.id && productSku(p).toLowerCase() === productSku(product).toLowerCase()))
+    throw new Error("El SKU ya pertenece a otro producto.");
+  const saved = { ...product, name: product.name.trim(), sku: productSku(product), updatedAt: new Date().toISOString() };
   publish({
     ...state,
     products: state.products.some((p) => p.id === product.id)
-      ? state.products.map((p) => (p.id === product.id ? product : p))
-      : [...state.products, product],
+      ? state.products.map((p) => (p.id === product.id ? saved : p))
+      : [...state.products, saved],
   });
 }
 export function deleteProduct(id: string) {
@@ -763,7 +780,7 @@ export function deleteProduct(id: string) {
   publish({
     ...state,
     products: state.products.map((p) =>
-      p.id === id ? { ...p, active: false } : p,
+      p.id === id ? { ...p, active: false, updatedAt: new Date().toISOString() } : p,
     ),
   });
 }
