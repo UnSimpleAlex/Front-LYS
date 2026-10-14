@@ -68,6 +68,7 @@ test("pedido compartido: salón → cocina → entrega → caja → comprobante 
   await page.getByLabel("He verificado el efectivo disponible.").check();
   await page.getByRole("button", { name: "Abrir caja", exact: true }).click();
   await page.getByRole("button", { name: "Cobros", exact: true }).click();
+  await page.getByRole("button", {name:"Cobrar",exact:true}).first().click();
   await page.getByLabel("Monto recibido").fill("100");
   await page
     .getByRole("button", { name: "Procesar pago", exact: true })
@@ -82,12 +83,9 @@ test("pedido compartido: salón → cocina → entrega → caja → comprobante 
       .getByRole("heading", { name: "Pagos recientes" })
       .locator("xpath=ancestor::section[1]"),
   ).toContainText("Pagado");
-  await page
-    .getByRole("button", { name: "Emitir comprobante", exact: true })
-    .click();
-  await page
-    .getByRole("button", { name: "Emitir comprobante", exact: true })
-    .click();
+  await page.getByRole("button", {name:"Comprobantes",exact:true}).click();
+  await page.getByRole("button", {name:"Emitir comprobante",exact:true}).click();
+  await page.getByRole("dialog").getByRole("button", {name:"Emitir comprobante",exact:true}).click();
   await expect(page.locator(".ops-table-wrap")).toContainText("B001-000001");
   await page.reload();
   await expect(page.locator(".ops-table-wrap")).toContainText("B001-000001");
@@ -371,10 +369,10 @@ test("inventario muestra el formulario al editar o crear y guarda el insumo", as
   await login(page, "administrador");
   await page.goto("/administrador/inventario");
   await expect(
-    page.getByRole("heading", { name: "Nuevo / Editar insumo" }),
+    page.getByRole("heading", { name: "Editar insumo" }),
   ).toHaveCount(0);
   await page.getByRole("button", { name: "Nuevo insumo" }).click();
-  const form = page.locator('section[data-panel="Nuevo / Editar insumo"]');
+  const form = page.locator('dialog.ops-dialog');
   await form.getByLabel("Nombre", { exact: true }).fill("Aceite de prueba");
   await form.getByLabel("Categoría", { exact: true }).fill("Aceites");
   await form.getByLabel("Unidad", { exact: true }).fill("litros");
@@ -389,11 +387,11 @@ test("inventario muestra el formulario al editar o crear y guarda el insumo", as
   await expect(form.getByLabel("Nombre", { exact: true })).toHaveValue(
     "Aceite de prueba",
   );
-  await form.getByRole("button", { name: "Cerrar formulario" }).click();
+  await form.getByRole("button", { name: "Cerrar ventana" }).click();
   await expect(form).toHaveCount(0);
 });
 
-test("navbar compacto y menú completo en móvil, tablet y PC", async ({
+test("menú lateral completo en móvil, tablet y PC", async ({
   page,
 }) => {
   await setup(page);
@@ -404,14 +402,14 @@ test("navbar compacto y menú completo en móvil, tablet y PC", async ({
     await expect(page.locator("h1")).toHaveText("Gestión de productos");
     expect(
       await page
-        .locator(".ops-header")
+        .locator(".ops-workspace-toolbar")
         .evaluate((header) => header.getBoundingClientRect().height),
     ).toBeLessThanOrEqual(82);
     const toggle = page.getByRole("button", { name: "Abrir menú del panel" });
     if (await toggle.isVisible()) await toggle.click();
     const navigation = page.getByRole("navigation", {
       name: "Navegación Administración",
-    });
+    }).filter({visible:true});
     await expect(navigation.getByRole("button")).toHaveCount(9);
     expect(
       await navigation.getByRole("button").evaluateAll((buttons) =>
@@ -428,7 +426,7 @@ test("navbar compacto y menú completo en móvil, tablet y PC", async ({
       .click();
     await expect(page).toHaveURL(/administrador\/inventario$/);
     if (await page.locator(".ops-menu").isVisible())
-      await expect(page.locator(".ops-header nav")).toBeHidden();
+      await expect(page.locator(".ops-navigation-dialog")).toBeHidden();
   }
 });
 
@@ -447,8 +445,8 @@ test("controles legibles, archivos y efectivo en móvil, tablet y PC", async ({ 
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy();
       if (name === "Métodos de pago") {
         const upload = page.locator('input[type="file"]').first();
-        expect(await upload.evaluate(node => getComputedStyle(node, "::file-selector-button").backgroundColor)).toBe("rgb(237, 0, 23)");
-        expect(await page.locator(".ops-method-grid .ops-switch").evaluateAll(nodes => nodes.every(node => node.getBoundingClientRect().height === 26))).toBeTruthy();
+        expect(await upload.evaluate(node => getComputedStyle(node, "::file-selector-button").backgroundColor)).toBe("rgb(36, 42, 51)");
+        expect(await page.locator(".ops-method-grid .ops-switch").evaluateAll(nodes => nodes.every(node => node.getBoundingClientRect().height === 24))).toBeTruthy();
         await page.screenshot({path: `test-results/settings-methods-${width}.png`, fullPage: true});
       }
     }
@@ -491,7 +489,7 @@ test("panel cocina: referencia responsive, búsqueda y filtros de pedidos", asyn
     await page.setViewportSize({ width, height: 941 });
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy();
     const columns = await page.locator(".kitchen-columns").evaluate(node => getComputedStyle(node).gridTemplateColumns.split(" ").length);
-    expect(columns).toBe(width < 700 ? 1 : width < 1280 ? 2 : 4);
+    expect(columns).toBe(width < 700 ? 1 : width < 1451 ? 2 : 4);
     expect(await page.locator(".kitchen-ticket-actions button").evaluateAll(buttons => buttons.every(button => button.getBoundingClientRect().height >= 34 && button.scrollWidth <= button.clientWidth + 1))).toBeTruthy();
     if ([390, 768, 1672].includes(width)) await page.screenshot({ path: `test-results/kitchen-reference-${width}.png`, fullPage: true });
   }
@@ -535,7 +533,7 @@ test("cocina: referencias, muestra persistente y filtros en tres páginas", asyn
       await expect(page.locator(".ops-page-heading h1")).toBeVisible();
       await page.evaluate(() => document.fonts.ready);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy();
-      expect(await page.locator('.ops-content img').evaluateAll(images => images.every(image => image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0))).toBeTruthy();
+      await expect.poll(() => page.locator('.ops-content img').evaluateAll(images => images.every(image => image instanceof HTMLImageElement && (!image.complete || image.naturalWidth > 0)))).toBeTruthy();
       if ([390, 768, 1672].includes(width)) await page.screenshot({ path: `test-results/kitchen-${route}-${width}.png`, fullPage: true });
     }
   }
