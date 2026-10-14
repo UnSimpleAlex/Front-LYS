@@ -2,7 +2,7 @@ import { iconFor } from "./operationsVisualNames";
 import { dateText } from "./operationsFiles";
 import type { ReactNode } from "react";
 import { Icon, PaymentMark, type IconName } from "./OperationsVisuals";
-import { AccountDialog } from "../account/AccountShared";
+import { OperationsDialog } from "./OperationsDialog";
 import {
   money,
   minutes,
@@ -297,7 +297,7 @@ export function OrderDetail({
   onClose: () => void;
 }) {
   return (
-    <AccountDialog title={`Pedido #${order.id}`} onClose={onClose}>
+    <OperationsDialog title={`Pedido #${order.id}`} onClose={onClose}>
       <Badge value={order.status} />
       <p>
         {order.customer} · {order.table ? `Mesa ${order.table}` : order.channel}
@@ -324,7 +324,7 @@ export function OrderDetail({
           </li>
         ))}
       </ol>
-    </AccountDialog>
+    </OperationsDialog>
   );
 }
 export function Bars({
