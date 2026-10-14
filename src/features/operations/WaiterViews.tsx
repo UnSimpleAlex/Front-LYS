@@ -1,3 +1,4 @@
+import { OperationsDialog } from "./OperationsDialog";
 import { OperationsTable } from "./OperationsTable";
 import { Icon, ProductSummary } from "./OperationsVisuals";
 import { dateText, printLocal } from "./operationsFiles";
@@ -292,6 +293,7 @@ export function WaiterViews({
 }) {
   const state = useOperations();
   const [selected, setSelected] = useState(1);
+  const [tableOpen, setTableOpen] = useState(false);
   const [zone, setZone] = useState("Salón principal");
   const [filter, setFilter] = useState("Todos");
   const [search, setSearch] = useState("");
@@ -355,8 +357,8 @@ export function WaiterViews({
     });
   if (section === "nuevo-pedido")
     return <NewOrder notify={notify} navigate={navigate} />;
-  const tableDetail = (
-    <Panel title={`Mesa ${selected}`}>
+  const tableDetail = tableOpen && (
+    <OperationsDialog title={`Mesa ${selected}`} onClose={() => setTableOpen(false)}>
       <Badge value={table.status} />
       <p>{table.seats} personas</p>
       <Tabs
@@ -465,11 +467,12 @@ export function WaiterViews({
           {table.status === "Reservada" ? "Cancelar reserva" : "Reservar mesa"}
         </button>
       </div>
-    </Panel>
+    </OperationsDialog>
   );
   return (
     <>
       <Stats entries={stats} />
+      {tableDetail}
       {section === "" ? (
         <div className="ops-equal-cols">
           <Panel title="Mapa del salón">
@@ -477,6 +480,7 @@ export function WaiterViews({
               selected={selected}
               onSelect={(id) => {
                 setSelected(id);
+                setTableOpen(true);
                 setNote(null);
               }}
             />
@@ -581,6 +585,7 @@ export function WaiterViews({
               selected={selected}
               onSelect={(id) => {
                 setSelected(id);
+                setTableOpen(true);
                 setNote(null);
               }}
               zone={zone}
@@ -588,7 +593,7 @@ export function WaiterViews({
               filter={filter}
               list={list}
             />
-            {tableDetail}
+
           </div>
         </>
       ) : section === "cierre-mesa" ? (
