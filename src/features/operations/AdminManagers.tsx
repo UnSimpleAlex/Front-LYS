@@ -1,3 +1,4 @@
+import { OperationsDialog } from "./OperationsDialog";
 import { OperationsTable } from "./OperationsTable";
 import { SupplySummary, Icon, UserSummary } from "./OperationsVisuals";
 import { readUpload } from "./imageUpload";
@@ -49,6 +50,7 @@ export function ProductManager({
 }) {
   const data = useOperations();
   const [product, setProduct] = useState(blankProduct);
+  const [editorOpen, setEditorOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("Todos");
   const [page, setPage] = useState(1);
@@ -81,7 +83,7 @@ export function ProductManager({
           action={
             <button
               className="ops-primary"
-              onClick={() => setProduct(blankProduct())}
+              onClick={() => {setProduct(blankProduct());setEditorOpen(true);}}
             >
               ＋ Nuevo producto
             </button>
@@ -173,7 +175,7 @@ export function ProductManager({
                       <div className="ops-actions">
                         <button
                           title={`Editar ${p.name}`}
-                          onClick={() => setProduct({ ...p })}
+                          onClick={() => {setProduct({ ...p });setEditorOpen(true);}}
                         >
                           <Icon name="edit" /> Editar
                         </button>
@@ -204,7 +206,7 @@ export function ProductManager({
             </button>
           </div>
         </Panel>
-        <Panel
+        {editorOpen && <OperationsDialog onClose={() => setEditorOpen(false)}
           title={
             data.products.some((p) => p.id === product.id)
               ? "Editar producto"
@@ -218,6 +220,7 @@ export function ProductManager({
               notify(() => {
                 saveProduct(product);
                 setProduct(blankProduct());
+                setEditorOpen(false);
               });
             }}
           >
@@ -324,7 +327,7 @@ export function ProductManager({
               <Icon name="save" /> Guardar producto
             </button>
           </form>
-        </Panel>
+        </OperationsDialog>}
       </div>
     </div>
   );
