@@ -30,14 +30,14 @@ test('muestra conectada, ventanas accesibles y navegación lateral por roles', a
   await dialog.getByLabel('Precio', {exact:false}).fill('25');
   await dialog.getByRole('button',{name:'Guardar producto'}).click();
   await expect(dialog).toHaveCount(0);
-  await page.getByPlaceholder('Buscar producto…').fill('Producto de prueba modal');
+  await page.getByLabel('Buscar producto',{exact:true}).fill('Producto de prueba modal');
   await expect(page.locator('tbody')).toContainText('Producto de prueba modal');
   await page.getByTitle('Editar Producto de prueba modal').click();
   await expect(dialog.getByLabel('Nombre del producto')).toHaveValue('Producto de prueba modal');
   await dialog.press('Escape');
   await expect(dialog).toHaveCount(0);
   await expect(page.getByTitle('Editar Producto de prueba modal')).toBeFocused();
-  await page.getByPlaceholder('Buscar producto…').fill('');
+  await page.getByLabel('Buscar producto',{exact:true}).fill('');
   await page.screenshot({path:'test-results/workspace-products-desktop.png',fullPage:true});
   for (const [route,name] of [['/mesera','salon'],['/cocina','cocina'],['/caja','caja'],['/delivery','delivery'],['/administrador/inventario','inventory']]) {
     await page.goto(route);

@@ -14,6 +14,12 @@ test('productos: edición completa, vista previa, filtros, exportación y confir
   await expect(page.locator('.ops-product-list table')).toHaveCSS('display','table');
   await page.getByRole('button',{name:'Nuevo producto',exact:true}).click();
   let dialog=page.getByRole('dialog');
+  const availability=dialog.getByRole('switch',{name:'Producto disponible'});
+  await expect(availability).toBeChecked();
+  expect(await availability.evaluate(el=>{const a=getComputedStyle(el,'::after');const shift=new DOMMatrixReadOnly(a.transform).m41;return parseFloat(a.left)+shift+parseFloat(a.width)<=el.getBoundingClientRect().width;})).toBeTruthy();
+  await availability.click();
+  await expect(availability).not.toBeChecked();
+  await availability.click();
   await dialog.getByLabel('Nombre del producto',{exact:true}).fill('Producto referencia');
   await dialog.getByLabel('Precio (S/)',{exact:true}).fill('29.90');
   await dialog.getByLabel('Stock',{exact:true}).fill('12');
@@ -33,6 +39,12 @@ test('productos: edición completa, vista previa, filtros, exportación y confir
   await expect(page.getByRole('dialog')).toHaveCount(0);
   await page.getByLabel('Buscar producto',{exact:true}).fill('REF-001');
   await expect(page.locator('tbody tr')).toHaveCount(1);
+  await page.getByLabel('Categoría de productos').selectOption('bebidas');
+  await page.getByRole('button',{name:'Filtrar',exact:true}).click();
+  await expect(page.getByText('No se encontraron productos. Prueba con otros filtros.')).toBeVisible();
+  await page.getByLabel('Categoría de productos').selectOption('Todas');
+  await page.getByRole('button',{name:'Filtrar',exact:true}).click();
+  await expect(page.locator('tbody tr')).toHaveCount(1);
   await page.getByRole('button',{name:'Ver Producto referencia',exact:true}).click();
   dialog=page.getByRole('dialog');
   await dialog.getByRole('button',{name:'Ingredientes',exact:true}).click();
@@ -48,7 +60,7 @@ test('productos: edición completa, vista previa, filtros, exportación y confir
   await page.getByRole('dialog').getByRole('button',{name:'Desactivar producto',exact:true}).click();
   await expect(page.locator('tbody')).toContainText('Inactivo');
   await page.getByLabel('Seleccionar Producto referencia',{exact:true}).check();
-  await page.getByRole('button',{name:'Activar',exact:true}).click();
+  await page.getByLabel('Cambiar estado de productos seleccionados').selectOption('activate');
   await expect(page.locator('tbody')).toContainText('Activo');
   const download=page.waitForEvent('download');
   await page.getByRole('button',{name:'Exportar',exact:true}).click();
