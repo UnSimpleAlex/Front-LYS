@@ -1,3 +1,4 @@
+import { OperationsDialog } from "./OperationsDialog";
 import { OperationsTable } from "./OperationsTable";
 import {
   Icon,
@@ -59,6 +60,8 @@ export function CashViews({
   ) / 100;
   const data = useOperations();
   const [selected, setSelected] = useState("");
+  const [paymentOpen, setPaymentOpen] = useState(false);
+  const [voucherOpen, setVoucherOpen] = useState(false);
   const [pendingLimit, setPendingLimit] = useState(8);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("Todos");
@@ -399,6 +402,7 @@ export function CashViews({
                             className="ops-primary"
                             onClick={() => {
                               setSelected(o.id);
+                              setPaymentOpen(true);
                               setReceived("");
                             }}
                           >
@@ -422,7 +426,7 @@ export function CashViews({
               )}
             </div>
           </Panel>
-          <Panel title="Procesar pago">
+          {paymentOpen && <OperationsDialog title="Procesar pago" onClose={() => setPaymentOpen(false)}>
             {order ? (
               <>
                 <h3>
@@ -466,6 +470,7 @@ export function CashViews({
                           );
                           setSelected(order.id);
                           setReceived("");
+                          setPaymentOpen(false);
                         });
                       }}
                     >
@@ -514,7 +519,7 @@ export function CashViews({
             >
               <Icon name="receipt" /> Emitir comprobante
             </button>
-          </Panel>
+          </OperationsDialog>}
         </div>
         <Panel
           title="Pagos recientes"
@@ -549,6 +554,7 @@ export function CashViews({
             },
           ]}
         />
+        <button className="ops-primary" onClick={() => setVoucherOpen(true)}><Icon name="plus" /> Emitir comprobante</button>
         <div className="ops-split">
           <Panel
             title="Listado de comprobantes"
@@ -631,7 +637,7 @@ export function CashViews({
               {!data.vouchers.length && <Empty />}
             </div>
           </Panel>
-          <Panel title="Emitir comprobante">
+          {voucherOpen && <OperationsDialog title="Emitir comprobante" onClose={() => setVoucherOpen(false)}>
             <form
               className="ops-form"
               onSubmit={(e) => {
@@ -641,6 +647,7 @@ export function CashViews({
                     throw new Error("Selecciona un pedido pagado.");
                   issueVoucher(paidOrder.id, voucherType, customer, document);
                   setSelected("");
+                  setVoucherOpen(false);
                   setCustomer("");
                   setDocument("");
                 });
@@ -698,7 +705,7 @@ export function CashViews({
                 <Icon name="receipt" /> Emitir comprobante
               </button>
             </form>
-          </Panel>
+          </OperationsDialog>}
         </div>
       </>
     );
