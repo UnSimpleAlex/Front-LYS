@@ -10,8 +10,9 @@ export function OperationsDialog({ title, children, onClose, className = "" }: {
   const [error, setError] = useState("");
   useEffect(() => {
     if (!returnFocus.current) returnFocus.current = document.activeElement as HTMLElement | null;
+    const dialog = ref.current;
     const overflow = document.body.style.overflow;
-    ref.current?.showModal();
+    dialog?.showModal();
     document.body.style.overflow = "hidden";
     const feedback = (event: Event) => setError((event as CustomEvent<string>).detail);
     window.addEventListener("operations:error", feedback);
@@ -20,7 +21,7 @@ export function OperationsDialog({ title, children, onClose, className = "" }: {
       document.body.style.overflow = overflow;
       // Restore focus after React removes the modal from the top layer.
       requestAnimationFrame(() => {
-        if (!ref.current?.isConnected && returnFocus.current?.isConnected) returnFocus.current.focus();
+        if (!dialog?.isConnected && returnFocus.current?.isConnected) returnFocus.current.focus();
       });
     };
   }, []);
