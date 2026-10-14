@@ -31,7 +31,7 @@ export function ProductManager({notify}:{notify:(task:()=>void)=>void}) {
   const currentPage=Math.min(page,maxPage);
   const visible=rows.slice((currentPage-1)*7,currentPage*7);
   const updateFilters=(task:()=>void)=>{task();setPage(1);setSelected([]);};
-  const create=<button className="ops-primary" onClick={()=>setEditor(blankProduct())}><span className="ops-plus-circle"><Icon name="plus"/></span>Nuevo producto</button>;
+  const create=<button className="ops-primary" onClick={()=>setEditor(blankProduct())}><Icon name="circle-plus"/>Nuevo producto</button>;
   const selectedProducts=data.products.filter(p=>selected.includes(p.id));
   return <div className="ops-product-manager">
     {actionHost ? createPortal(create,actionHost):create}

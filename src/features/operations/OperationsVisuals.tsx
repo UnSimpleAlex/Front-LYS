@@ -28,8 +28,10 @@ export type IconName =
   | "filter"
   | "list"
   | "clipboard"
-  | "bag";
+  | "bag"
+  | "circle-plus";
 const linePaths: Partial<Record<IconName, string[]>> = {
+  "circle-plus": ["M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z", "M12 7v10", "M7 12h10"],
   percent: ["m5 19 14-14", "M9 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z", "M21 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"],
   chef: ["M7 16v-5a4 4 0 1 1 1-7 5 5 0 0 1 8 0 4 4 0 1 1 1 7v5Z", "M7 16h10v5H7Z"],
   bell: ["M5 17h14l-2-3V9a5 5 0 0 0-10 0v5Z", "M10 21h4M12 2v2"],
