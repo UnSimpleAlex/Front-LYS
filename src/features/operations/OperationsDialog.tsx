@@ -1,8 +1,8 @@
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
-import { Icon } from "./OperationsVisuals";
+import { Icon, type IconName } from "./OperationsVisuals";
 
-export function OperationsDialog({ title, children, onClose, className = "" }: {
-  title: string; children: ReactNode; onClose: () => void; className?: string;
+export function OperationsDialog({ title, children, onClose, className = "", icon }: {
+  title: string; children: ReactNode; onClose: () => void; className?: string; icon?: IconName;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
   const returnFocus = useRef<HTMLElement | null>(null);
@@ -26,7 +26,7 @@ export function OperationsDialog({ title, children, onClose, className = "" }: {
     };
   }, []);
   return <dialog ref={ref} className={`ops-dialog ${className}`} aria-labelledby={titleId} onCancel={event => { event.preventDefault(); onClose(); }} onClose={onClose}>
-    <header><h2 id={titleId}>{title}</h2><button type="button" aria-label="Cerrar ventana" onClick={onClose}><Icon name="close" /></button></header>
+    <header><h2 id={titleId}>{icon && <Icon name={icon} />}{title}</h2><button type="button" aria-label="Cerrar ventana" onClick={onClose}><Icon name="close" /></button></header>
     <div className="ops-dialog-body" onSubmitCapture={() => setError("")}>{error && <p className="ops-message error" role="alert">{error}</p>}{children}</div>
   </dialog>;
 }
