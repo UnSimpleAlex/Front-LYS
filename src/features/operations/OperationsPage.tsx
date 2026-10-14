@@ -47,14 +47,14 @@ const menus: Record<string, [string, string, IconName][]> = {
     ["historial", "Historial", "clock"],
   ],
   administrador: [
-    ["", "Dashboard", "chart"],
+    ["", "Dashboard", "home"],
+    ["pedidos", "Pedidos", "receipt"],
     ["productos", "Productos", "box"],
+    ["inventario", "Inventario", "box"],
     ["promociones", "Promociones", "tag"],
     ["clientes", "Clientes", "users"],
     ["usuarios", "Usuarios", "user"],
-    ["pedidos", "Pedidos", "receipt"],
     ["reportes", "Reportes", "chart"],
-    ["inventario", "Inventario", "box"],
     ["configuracion", "Configuración", "settings"],
   ],
   delivery: [["", "Entregas", "truck"]],
@@ -105,7 +105,7 @@ const descriptions: Record<string, string> = {
   "caja/cierre": "Verifica los movimientos y cierra el turno.",
   "caja/historial": "Consulta todas las transacciones realizadas.",
   "administrador/": "Resumen de tu negocio en tiempo real.",
-  "administrador/productos": "Administra tu carta, precios y disponibilidad.",
+  "administrador/productos": "Administra productos, precios, categorías y disponibilidad del menú.",
   "administrador/promociones": "Crea ofertas que impulsen tus ventas.",
   "administrador/clientes": "Conoce y administra a tus clientes.",
   "administrador/usuarios": "Administra el acceso de tu equipo al sistema.",
@@ -184,7 +184,7 @@ export function OperationsPage({
     <div className="ops-root ops-workspace" data-page={key}>
       <aside className="ops-sidebar" aria-label="Menú del panel">
         <a className="ops-brand" href="/" onClick={e => {e.preventDefault();navigate("/");}}><img src="/images/logo.webp" alt="Leñas y Sabores" /></a>
-        <div className="ops-area-label">{roleNames[role as Role]}</div>
+        <div className="ops-area-label">{role === "administrador" ? "Panel de administración" : roleNames[role as Role]}</div>
         <nav
           id="ops-navigation"
           className="ops-side-navigation"
