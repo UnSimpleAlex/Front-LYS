@@ -230,3 +230,7 @@ Native dialogs have a labeled title, explicit close button, Escape handling, bod
 Products show seven rows per page, real counts, search by name or SKU, category/availability/branch filters, filtered CSV export and selection actions. Desktop tables retain compact cells from 1200px; narrower lists become labeled cards. Descriptions are summaries; full copy remains available in the detail modal.
 
 Details have description, ingredients, commercial information and last-update tabs. Editing supports gallery uploads (5 MB limit), SKU, stock, branch, preparation time, ingredients, observations and channel metadata. Existing products remain compatible with optional metadata. Preview retains the unsaved form. Deactivation is reversible and requires an explicit confirmation; existing orders and payments remain intact. No monthly trends or unrecorded update dates are invented.
+
+## Reference polish
+
+The desktop sidebar expands to 295px from 1450px, with larger navigation icons and an account avatar. Product tables use 14px text, category-specific icons, a bulk state selector, applied category/availability/branch filters and arrow pagination. The detail dialog opens on ingredients, with icon-led facts and grouped preparation/gallery cards. The editor includes an accessible availability switch, image removal, currency/time affixes and an available last-update timestamp. Deactivation keeps the same reversible behavior with a richer summary and explicit explanation.
