@@ -25,6 +25,21 @@ async function preview(page: Page) {
   await expect(page.getByRole("dialog")).toHaveCount(0);
 }
 
+test("PC mantiene siete productos visibles y acciones compactas de salón", async ({ page }) => {
+  await page.setViewportSize({ width: 1672, height: 941 });
+  await admin(page);
+  await preview(page);
+  await page.goto("/administrador/productos");
+  await expect(page.locator(".ops-product-list tbody tr")).toHaveCount(7);
+  await page.evaluate(() => document.fonts.ready);
+  expect(await page.locator(".ops-product-list tbody tr").last().evaluate(row => row.getBoundingClientRect().bottom)).toBeLessThanOrEqual(941);
+  expect(await page.locator(".ops-product-actions > button").evaluateAll(buttons => buttons.every(button => button.getBoundingClientRect().height <= 44))).toBeTruthy();
+  await page.goto("/mesera/pedidos");
+  await expect(page.locator("tbody tr").first()).toBeVisible();
+  expect(await page.locator("tbody tr").evaluateAll(rows => rows.every(row => row.getBoundingClientRect().height <= 100))).toBeTruthy();
+  expect(await page.locator(".ops-product-summary > div").evaluateAll(cells => cells.every(cell => cell.getBoundingClientRect().width >= 120))).toBeTruthy();
+});
+
 test("indicadores sin cifras inventadas, paginación y edición del pedido existente", async ({
   page,
 }) => {

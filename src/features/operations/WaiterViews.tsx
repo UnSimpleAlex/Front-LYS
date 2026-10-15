@@ -836,22 +836,22 @@ export function WaiterViews({
                             <Badge value={o.draft ? "Borrador" : o.status} />
                           </td>
                           <td>
-                            <div className="ops-stack-actions">
-                              <button
+                            <div className="ops-stack-actions ops-salon-order-actions">
+                              <button title="Ver detalle"
                                 className="ops-outline"
                                 onClick={() => setDetail(o)}
                               >
-                                <Icon name="eye" /> Ver detalle
+                                <Icon name="eye" /><span className="ops-action-caption">Ver detalle</span>
                               </button>
                               {o.draft ? (
-                                <button
+                                <button title="Enviar a cocina"
                                   className="ops-primary"
                                   onClick={() => notify(() => sendDraft(o.id))}
                                 >
-                                  <Icon name="send" /> Enviar a cocina
+                                  <Icon name="send" /><span className="ops-action-caption">Enviar a cocina</span>
                                 </button>
                               ) : o.status === "Listo" ? (
-                                <button
+                                <button title="Entregar"
                                   className="ops-green"
                                   onClick={() =>
                                     notify(() =>
@@ -859,10 +859,10 @@ export function WaiterViews({
                                     )
                                   }
                                 >
-                                  <Icon name="serve" /> Entregar
+                                  <Icon name="serve" /><span className="ops-action-caption">Entregar</span>
                                 </button>
                               ) : null}
-                              <button
+                              <button title="Agregar producto"
                                 className="ops-outline"
                                 onClick={() =>
                                   navigate(
@@ -870,9 +870,9 @@ export function WaiterViews({
                                   )
                                 }
                               >
-                                <Icon name="plus" /> Agregar producto
+                                <Icon name="plus" /><span className="ops-action-caption">Agregar producto</span>
                               </button>
-                              <button
+                              <button title="Solicitar cuenta"
                                 className="ops-outline"
                                 onClick={() =>
                                   notify(() =>
@@ -882,7 +882,7 @@ export function WaiterViews({
                                   )
                                 }
                               >
-                                <Icon name="receipt" /> Solicitar cuenta
+                                <Icon name="receipt" /><span className="ops-action-caption">Solicitar cuenta</span>
                               </button>
                             </div>
                           </td>
