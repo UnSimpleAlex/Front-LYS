@@ -17,6 +17,12 @@ Los estilos de referencia entran por `operations-anchor-layout.css` y se dividen
 
 ## Dimensiones y contenido
 
+### Dashboard general: referencia específica
+
+`operations-dashboard.css` limita los ajustes a `/administrador`: orden de navegación de la imagen, barra de 295 px en PC amplio, cuatro métricas con iconos, dos columnas para gráfica y productos y tabla de pedidos recientes. La versión móvil usa dos columnas de métricas, iconos propios de esa referencia, subtítulo corto, lista de productos con foto/categoría/cantidad/ingresos y cinco columnas resumidas para pedidos. Los controles de exportación y carga de muestra no se repiten en el dashboard; siguen disponibles en las páginas de gestión y en la cuenta del panel. No se añadió Tailwind porque esta implementación usa el CSS existente del proyecto.
+
+Se reutilizan `Stats`, `Panel`, `LineChart`, `OperationsTable`, los iconos, las ventanas de pedido y el almacenamiento local. Las fechas, importes, fotos y estados proceden de los registros existentes; no se fijan los valores ilustrativos de las imágenes. La tipografía usa la familia disponible Arial/Helvetica. En tablet las columnas principales se apilan; en portátiles se conserva la densidad compacta solicitada previamente.
+
 En PC amplio la barra lateral mide 266 px y los indicadores parten de 108 px. En portátiles se reduce la barra a 216 px, los elementos de navegación a 38 px y los indicadores a aproximadamente 88 px. En pantallas de menos de 700 px de alto, la navegación baja a 36 px y los indicadores parten de 84 px según su contenido. Esta escala reduce aproximadamente un 10 % los elementos de escritorio respecto de la versión anterior, sin reducir los objetivos táctiles de móvil.
 
 El encabezado móvil sustituye la barra lateral. Las listas cambian de composición según el contenido: productos y promociones con fotografía, clientes y usuarios en registros compactos, historial de cocina con tiempos y consumo de mesa en tabla. En anchos mínimos se redistribuyen campos para que no dependan de palabras fragmentadas ni de desplazamiento horizontal de toda la página.
