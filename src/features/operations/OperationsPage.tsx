@@ -27,6 +27,7 @@ import "../../styles/operations-workspace.css";
 import "../../styles/operations-products.css";
 import "../../styles/operations-admin-panels.css";
 import "../../styles/operations-reference.css";
+import "../../styles/operations-anchor-layout.css";
 const menus: Record<string, [string, string, IconName][]> = {
   cocina: [
     ["", "Panel de cocina", "chef"],
@@ -53,7 +54,7 @@ const menus: Record<string, [string, string, IconName][]> = {
     ["", "Dashboard", "home"],
     ["pedidos", "Pedidos", "receipt"],
     ["productos", "Productos", "box"],
-    ["inventario", "Inventario", "box"],
+    ["inventario", "Inventario", "inventory"],
     ["promociones", "Promociones", "tag"],
     ["clientes", "Clientes", "users"],
     ["usuarios", "Usuarios", "user"],
@@ -208,7 +209,7 @@ export function OperationsPage({
             </button>
           ))}
         </nav>
-        <button className="ops-side-account" onClick={() => setProfile(true)}><Icon name="user" /><span>{user.name}<small>{roleNames[user.role]}</small></span><Icon name="chevron" /></button>
+        <button className="ops-side-account" onClick={() => setProfile(true)}><Icon name="user" /><span>{user.role === "administrador" ? "Administrador" : roleNames[user.role]}<small>{state.settings.name}</small></span><Icon name="chevron" /></button>
       </aside>
       <div className="ops-workspace-toolbar">
         <button className="ops-menu" aria-label="Abrir menú del panel" aria-expanded={menu} onClick={() => setMenu(true)}><Icon name="menu" /></button>
