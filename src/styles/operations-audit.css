@@ -42,6 +42,17 @@
   @media (max-width: 600px) {
     .ops-content .ops-stats { grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); }
     .ops-stat p { overflow-wrap: anywhere; }
+    .anchor-table-close .ops-responsive-table { min-width: 480px; table-layout: auto; }
+    .anchor-table-close .ops-responsive-table th { white-space: nowrap; overflow-wrap: normal; }
+    &:is([data-page="administrador/clientes"], [data-page="administrador/usuarios"]) .ops-content .ops-responsive-table tbody tr { grid-template-columns: minmax(0, 1fr) auto; }
+    &:is([data-page="administrador/clientes"], [data-page="administrador/usuarios"]) .ops-content .ops-responsive-table td:nth-child(2) { grid-column: 1 / -1; grid-row: 1; }
+    &[data-page="administrador/usuarios"] .ops-content .ops-responsive-table td:nth-child(3) { grid-column: 1; grid-row: 2; }
+    &[data-page="administrador/usuarios"] .ops-content .ops-responsive-table td:nth-child(4) { grid-column: 2; grid-row: 2; }
+    &[data-page="administrador/usuarios"] .ops-content .ops-responsive-table td:nth-child(5) { grid-column: 1 / -1; grid-row: 3; }
+    &[data-page="administrador/clientes"] .ops-content .ops-responsive-table td:nth-child(4) { grid-column: 1; grid-row: 2; }
+    &[data-page="administrador/clientes"] .ops-content .ops-responsive-table td:nth-child(5) { grid-column: 2; grid-row: 2; }
+    &[data-page="administrador/clientes"] .ops-content .ops-responsive-table td:nth-child(6) { grid-column: 1; grid-row: 3; }
+    &[data-page="administrador/clientes"] .ops-content .ops-responsive-table td:nth-child(7) { grid-column: 2; grid-row: 3; }
   }
   @media (pointer: coarse) {
     .ops-content :is(.ops-table-actions, .ops-product-actions) > button,

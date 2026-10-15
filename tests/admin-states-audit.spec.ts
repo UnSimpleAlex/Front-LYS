@@ -94,3 +94,16 @@ test.describe("interacción táctil", () => {
     }
   });
 });
+
+
+test("nombres completos y encabezados legibles en móvil", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/administrador/usuarios");
+  const person = page.locator(".ops-responsive-table tbody tr").first().locator("td").nth(1);
+  await expect(person).toBeVisible();
+  expect((await person.boundingBox())!.width).toBeGreaterThan(280);
+  await page.goto("/mesera/cierre-mesa");
+  const quantity = page.getByRole("columnheader", { name: "Cantidad", exact: true });
+  await expect(quantity).toBeVisible();
+  expect(await quantity.evaluate(el => { const range = document.createRange(); range.selectNodeContents(el); return range.getClientRects().length; })).toBe(1);
+});

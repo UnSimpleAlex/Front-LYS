@@ -30,6 +30,7 @@ import {
 } from "./operationsStore";
 import { Panel, Stats, Badge, Empty } from "./OperationsUI";
 export { ProductManager } from "./ProductManager";
+const userCountLabel = (count: number) => `${count} ${count === 1 ? "usuario" : "usuarios"}`;
 const blankOffer = (): Offer => ({
   id: crypto.randomUUID(),
   name: "",
@@ -803,8 +804,7 @@ export function UserManager({
               <div className="ops-role-card-content">
                 <strong>Administrador</strong>
                 <span>
-                  {users.filter((u) => u.role === "administrador").length}{" "}
-                  usuarios
+                  {userCountLabel(users.filter((u) => u.role === "administrador").length)}
                 </span>
                 <small>Acceso completo y configuración general</small>
               </div>
@@ -816,7 +816,7 @@ export function UserManager({
               <div className="ops-role-card-content">
                 <strong>Cocina</strong>
                 <span>
-                  {users.filter((u) => u.role === "cocina").length} usuarios
+                  {userCountLabel(users.filter((u) => u.role === "cocina").length)}
                 </span>
                 <small>Gestión de comandas y tiempos de preparación</small>
               </div>
@@ -828,7 +828,7 @@ export function UserManager({
               <div className="ops-role-card-content">
                 <strong>Caja</strong>
                 <span>
-                  {users.filter((u) => u.role === "caja").length} usuarios
+                  {userCountLabel(users.filter((u) => u.role === "caja").length)}
                 </span>
                 <small>Apertura, cobros y comprobantes</small>
               </div>
@@ -840,7 +840,7 @@ export function UserManager({
               <div className="ops-role-card-content">
                 <strong>Mesera</strong>
                 <span>
-                  {users.filter((u) => u.role === "mesera").length} usuarios
+                  {userCountLabel(users.filter((u) => u.role === "mesera").length)}
                 </span>
                 <small>Control de salón y toma de comandas</small>
               </div>
@@ -852,8 +852,7 @@ export function UserManager({
               <div className="ops-role-card-content">
                 <strong>Delivery</strong>
                 <span>
-                  {users.filter((u) => u.role === "delivery").length}{" "}
-                  usuarios
+                  {userCountLabel(users.filter((u) => u.role === "delivery").length)}
                 </span>
                 <small>Despacho y asignación de motorizados</small>
               </div>
