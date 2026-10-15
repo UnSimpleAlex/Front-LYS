@@ -46,7 +46,7 @@ export function DeliveryViews({
             label: "Listos para recoger",
             value: deliveries.filter((o) => o.status === "Listo").length,
             icon: "bag",
-            tone: "orange",
+            tone: "green",
             hint: "Pendientes de salida",
           },
           {
@@ -65,7 +65,7 @@ export function DeliveryViews({
                 new Date(o.delivered).toLocaleDateString() === today,
             ).length,
             icon: "check",
-            tone: "green",
+            tone: "gold",
             hint: "Entregas completadas",
           },
         ]}
@@ -78,7 +78,11 @@ export function DeliveryViews({
               aria-pressed={filter === value}
               onClick={() => setFilter(value)}
             >
-              {value}{" "}
+              {value === "Pendientes"
+                ? "Por recoger"
+                : value === "Completadas"
+                  ? "Entregados"
+                  : value}{" "}
               <span>
                 (
                 {
@@ -120,7 +124,13 @@ export function DeliveryViews({
                 >
                   #{order.id}
                 </button>
-                <Badge value={order.status} />
+                <Badge
+                  value={
+                    order.status === "Listo"
+                      ? "Listo para recoger"
+                      : order.status
+                  }
+                />
                 <time dateTime={order.created}>
                   {new Date(order.created).toLocaleTimeString("es-PE", {
                     hour: "2-digit",
@@ -147,6 +157,59 @@ export function DeliveryViews({
                   </small>
                 </div>
               </div>
+              {order.status === "En camino" && order.address && (
+                <div className="anchor-delivery-inline-map">
+                  {mapOrder === order.id ? (
+                    <iframe
+                      title={`Mapa de destino del pedido ${order.id}`}
+                      src={`https://maps.google.com/maps?q=${encodeURIComponent(order.address)}&output=embed`}
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                    />
+                  ) : (
+                    <button
+                      type="button"
+                      className="ops-map-load"
+                      onClick={() => setMapOrder(order.id)}
+                    >
+                      <Icon name="pin" />
+                      <strong>Ver mapa del destino</strong>
+                      <span>{order.address}</span>
+                    </button>
+                  )}
+                </div>
+              )}
+              <dl className="anchor-delivery-estimate">
+                <div>
+                  <dt>
+                    <Icon name="pin" />
+                    Distancia estimada
+                  </dt>
+                  <dd>
+                    {order.deliveryEstimate
+                      ? `${order.deliveryEstimate.distanceKm} km`
+                      : "Por calcular"}
+                  </dd>
+                </div>
+                <div>
+                  <dt>
+                    <Icon name="clock" />
+                    Tiempo estimado
+                  </dt>
+                  <dd>
+                    {order.deliveryEstimate
+                      ? `${order.deliveryEstimate.minutes} min`
+                      : "Por calcular"}
+                  </dd>
+                </div>
+                <div>
+                  <dt>
+                    <Icon name="user" />
+                    Repartidor asignado
+                  </dt>
+                  <dd>{order.deliveryEstimate?.courier || "Sin asignar"}</dd>
+                </div>
+              </dl>
               <div className="ops-reference-line-items">
                 {order.items.map((line) => (
                   <div key={line.product.id}>
