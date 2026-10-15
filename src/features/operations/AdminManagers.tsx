@@ -28,7 +28,7 @@ import {
   type Supply,
   type Supplier,
 } from "./operationsStore";
-import { Panel, Stats, Badge, Tabs, Empty } from "./OperationsUI";
+import { Panel, Stats, Badge, Empty } from "./OperationsUI";
 export { ProductManager } from "./ProductManager";
 const blankOffer = (): Offer => ({
   id: crypto.randomUUID(),
@@ -431,6 +431,7 @@ export function UserManager({
 }) {
   const actionHost = useContext(OperationsPageActions);
   const [userPage,setUserPage] = useState(1);
+  const [monthStart] = useState(()=>{const date=new Date();return new Date(date.getFullYear(),date.getMonth(),1).getTime();});
   const [userSelection,setUserSelection] = useState<string[]>([]);
   useSession();
   const data = useOperations();
@@ -527,8 +528,6 @@ export function UserManager({
     );
 
   const visibleUserPage=Math.min(userPage,Math.max(1,Math.ceil(filteredUsers.length/10)));
-  const adminCount = users.filter((u) => u.role === "administrador").length;
-  const staffCount = users.filter((u) => u.role !== "administrador").length;
   const activeCount = users.filter((u) => u.active).length;
 
   return (
@@ -538,29 +537,29 @@ export function UserManager({
         <Stats
           entries={[
             {
-              label: "Total clientes",
+              label: "Total de clientes",
               value: users.length,
               icon: "users",
               tone: "red",
               hint: "Registrados en plataforma",
             },
             {
-              label: "Clientes frecuentes",
+              label: "Nuevos clientes",
+              value: users.filter(u=>Date.parse(u.created)>=monthStart).length,
+              icon: "user",
+              tone: "green",
+              hint: "Registrados este mes",
+            },
+            {
+              label: "Clientes recurrentes",
               value:
                 users.filter(
                   (u) =>
                     customerOrders(u).length > 3,
                 ).length,
-              icon: "star",
-              tone: "gold",
+              icon: "clock",
+              tone: "blue",
               hint: "Más de 3 pedidos",
-            },
-            {
-              label: "Clientes activos",
-              value: activeCount,
-              icon: "check",
-              tone: "green",
-              hint: "Cuentas habilitadas",
             },
           ]}
         />
@@ -568,32 +567,32 @@ export function UserManager({
         <Stats
           entries={[
             {
-              label: "Total usuarios",
+              label: "Usuarios totales",
               value: users.length,
               icon: "users",
               tone: "red",
               hint: "Cuentas en el sistema",
             },
             {
-              label: "Administradores",
-              value: adminCount,
-              icon: "shield",
-              tone: "purple",
-              hint: "Acceso total al sistema",
+              label: "Usuarios activos",
+              value: activeCount,
+              icon: "user",
+              tone: "green",
+              hint: "Cuentas habilitadas",
             },
             {
-              label: "Personal operativo",
-              value: staffCount,
-              icon: "chef",
+              label: "Roles definidos",
+              value: 5,
+              icon: "shield",
               tone: "blue",
               hint: "Cocina, Caja, Salón, Delivery",
             },
             {
-              label: "Usuarios activos",
-              value: activeCount,
-              icon: "check",
-              tone: "green",
-              hint: "Sesiones habilitadas",
+              label: "Usuarios inactivos",
+              value: users.length-activeCount,
+              icon: "user",
+              tone: "gold",
+              hint: "Cuentas deshabilitadas",
             },
           ]}
         />
@@ -709,6 +708,7 @@ export function UserManager({
                       <div>
                         <strong>{u.name}</strong>
                         <small>{u.email}</small>
+                        {clients && <small className="anchor-client-phone">{u.phone || "Sin teléfono"}</small>}
                       </div>
                     </div>
                   </td>
@@ -736,7 +736,7 @@ export function UserManager({
                       onClick={() =>
                         notify(() => editLocalUser(u.id, { active: !u.active }))
                       }
-                    />
+                    ><span className="anchor-account-state">{u.active ? "Activo":"Inactivo"}</span></button>
                   </td>
                   <td>
                     <div className="ops-table-actions">
@@ -988,6 +988,7 @@ export function InventoryManager({
   const data = useOperations();
   const [tab, setTab] = useState("Insumos");
   const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("Todas");
   const [supply, setSupply] = useState(blankSupply);
   const [editingSupply, setEditingSupply] = useState(false);
   const [movement, setMovement] = useState("");
@@ -1026,7 +1027,6 @@ export function InventoryManager({
     </div>
   );
 
-  const totalValue = data.supplies.reduce((s, i) => s + i.stock * (i.cost || 0), 0);
   const lowStockCount = data.supplies.filter((s) => s.stock < s.min).length;
 
   const exportInventory = () =>
@@ -1047,38 +1047,11 @@ export function InventoryManager({
   return (
     <>
       {actionHost && createPortal(action, actionHost)}
-      <Stats
-        entries={[
-          {
-            label: "Valor del inventario",
-            value: money(totalValue),
-            icon: "coins",
-            tone: "gold",
-            hint: "Costo total de insumos",
-          },
-          {
-            label: "Stock bajo",
-            value: lowStockCount,
-            icon: "bell",
-            tone: "red",
-            hint: "Requiere reabastecimiento",
-          },
-          {
-            label: "Insumos activos",
-            value: data.supplies.length,
-            icon: "box",
-            tone: "blue",
-            hint: "Registrados en carta",
-          },
-          {
-            label: "Proveedores",
-            value: data.suppliers.length,
-            icon: "truck",
-            tone: "green",
-            hint: "Contactos vigentes",
-          },
-        ]}
-      />
+      <Stats entries={[
+        {label:"Total de insumos", value:data.supplies.length,icon:"box",tone:"blue",hint:"Insumos registrados"},
+        {label:"Stock bajo",value:lowStockCount,icon:"bell",tone:"gold",hint:"Requieren reposición"},
+        {label:"Agotados",value:data.supplies.filter(s=>s.stock<=0).length,icon:"close",tone:"red",hint:"Sin existencias"},
+      ]}/>
 
       <div className="ops-admin-filter-bar" aria-label="Filtros de inventario">
         <div className="ops-admin-search">
@@ -1090,14 +1063,12 @@ export function InventoryManager({
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
-        <Tabs
-          options={["Insumos", "Stock", "Alertas", "Proveedores"]}
-          value={tab}
-          onChange={setTab}
-        />
+        <label>Categoría<select aria-label="Categoría de insumos" value={category} onChange={e=>setCategory(e.target.value)}><option>Todas</option>{[...new Set(data.supplies.map(s=>s.category))].map(c=><option key={c}>{c}</option>)}</select></label>
+        <label>Estado<select aria-label="Estado de insumos" value={tab} onChange={e=>setTab(e.target.value)}><option value="Insumos">Todos</option><option value="Alertas">Stock bajo</option><option value="Agotados">Agotados</option><option value="Proveedores">Proveedores</option></select></label>
         <button className="ops-btn-export" onClick={exportInventory}>
           <Icon name="download" /> Exportar
         </button>
+        <button className="ops-primary" type="button" onClick={()=>setSearch(search.trim())}><Icon name="filter"/>Filtrar</button>
       </div>
 
       {tab === "Proveedores" ? (
@@ -1130,7 +1101,7 @@ export function InventoryManager({
                     setProviderOpen(true);
                   }}
                 >
-                  <Icon name="edit" /> Editar
+                  <Icon name="edit" /><span>Editar</span>
                 </button>
               </p>
             ))}
@@ -1211,6 +1182,7 @@ export function InventoryManager({
                       "Unidad",
                       "Stock mínimo",
                       "Estado",
+                      "Actualizado",
                       "Acciones",
                     ].map((h) => (
                       <th key={h}>{h}</th>
@@ -1222,6 +1194,8 @@ export function InventoryManager({
                     .filter(
                       (s) =>
                         (tab !== "Alertas" || s.stock < s.min) &&
+                        (tab !== "Agotados" || s.stock <= 0) &&
+                        (category === "Todas" || s.category === category) &&
                         s.name.toLowerCase().includes(search.toLowerCase()),
                     )
                     .map((s) => (
@@ -1245,6 +1219,7 @@ export function InventoryManager({
                             value={s.stock < s.min ? "Stock bajo" : "En stock"}
                           />
                         </td>
+                        <td>{s.updatedAt ? <time dateTime={s.updatedAt}>{new Date(s.updatedAt).toLocaleDateString("es-PE")}<small>{new Date(s.updatedAt).toLocaleTimeString("es-PE",{hour:"2-digit",minute:"2-digit"})}</small></time>:"—"}</td>
                         <td>
                           <div className="ops-actions">
                             <button
@@ -1253,15 +1228,15 @@ export function InventoryManager({
                                 setEditingSupply(true);
                               }}
                             >
-                              <Icon name="edit" /> Editar
+                              <Icon name="edit" /><span>Editar</span>
                             </button>
                             <button onClick={() => setMovement(s.id)}>
-                              <Icon name="plus" /> Registrar movimiento
+                              <Icon name="plus" /><span>Registrar movimiento</span>
                             </button>
                             <button
                               onClick={() => notify(() => deleteSupply(s.id))}
                             >
-                              <Icon name="trash" /> Eliminar
+                              <Icon name="trash" /><span>Eliminar</span>
                             </button>
                           </div>
                         </td>

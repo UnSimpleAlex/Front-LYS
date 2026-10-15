@@ -1,14 +1,13 @@
+import { AdminSettings } from "./AdminSettings";
 import { OrderEditor } from "./OrderEditor";
 import { categories } from "../carta/catalog";
 import { categoryIcon } from "./productHelpers";
 import { OperationsTable } from "./OperationsTable";
 import {
   Icon,
-  PaymentMark,
   type IconName,
 } from "./OperationsVisuals";
 import { dateText, downloadCsv, printLocal } from "./operationsFiles";
-import { readUpload } from "./imageUpload";
 import { useContext, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { OperationsPageActions } from "./operationsPageContext";
@@ -19,14 +18,12 @@ import {
   statuses,
   paymentMethods,
   changeStatus,
-  saveSettings,
   seedExampleOrders,
   type Order,
 } from "./operationsStore";
 import {
   Panel,
   Stats,
-  Tabs,
   Badge,
   Empty,
   Bars,
@@ -40,7 +37,6 @@ import {
   UserManager,
   InventoryManager,
 } from "./AdminManagers";
-import { currentUser, changeLocalPassword } from "../../services/localAuth";
 
 export function CategoryBadge({category}:{category:string}) {
   const item=categories.find(c=>c.id===category);
@@ -145,11 +141,6 @@ export function AdminViews({
   const [detail, setDetail] = useState<Order | null>(null);
   const [editingOrder,setEditingOrder] = useState<Order|null>(null);
   const [selection,setSelection] = useState<string[]>([]);
-  const [settings, setSettings] = useState({ ...data.settings });
-  const [tab, setTab] = useState("Métodos de pago");
-  const [error, setError] = useState("");
-  const [previous, setPrevious] = useState("");
-  const [next, setNext] = useState("");
   const [period, setPeriod] = useState("30");
   const [salesDays,setSalesDays] = useState("7");
   const [from,setFrom] = useState("");
@@ -179,6 +170,7 @@ export function AdminViews({
       label: p.name,
       category: p.category,
       image: p.image,
+      revenue: orders.filter(o=>o.paid && o.status!=="Cancelado").flatMap(o=>o.items).filter(line=>line.product.id===p.id).reduce((sum,line)=>sum+line.product.price*line.count,0),
       value: orders
         .filter((o) => o.status !== "Cancelado")
         .flatMap((o) => o.items)
@@ -206,244 +198,7 @@ export function AdminViews({
   if (section === "usuarios" || section === "clientes")
     return <UserManager clients={section === "clientes"} notify={notify} />;
   if (section === "inventario") return <InventoryManager notify={notify} />;
-  if (section === "configuracion")
-    return (
-      <div className="ops-settings">
-        <Tabs
-          options={[
-            "Datos del negocio",
-            "Métodos de pago",
-            "Impuestos",
-            "Usuarios",
-            "Seguridad",
-          ]}
-          value={tab}
-          onChange={setTab}
-        />
-        <div>
-          <Panel
-            title={tab}
-            action={
-              <div className="ops-actions">
-                <button onClick={() => setSettings({ ...data.settings })}>
-                  Cancelar
-                </button>
-                <button
-                  className="ops-primary"
-                  onClick={() => notify(() => saveSettings(settings))}
-                >
-                  <Icon name="save" /> Guardar cambios
-                </button>
-              </div>
-            }
-          >
-            {tab === "Datos del negocio" ? (
-              <div className="ops-form">
-                {(["name", "address", "phone", "email", "hours"] as const).map(
-                  (k) => (
-                    <label key={k}>
-                      {
-                        {
-                          name: "Nombre del negocio",
-                          address: "Dirección",
-                          phone: "Teléfono",
-                          email: "Correo",
-                          hours: "Horario",
-                        }[k]
-                      }
-                      <input
-                        value={settings[k]}
-                        onChange={(e) =>
-                          setSettings({ ...settings, [k]: e.target.value })
-                        }
-                      />
-                    </label>
-                  ),
-                )}
-                <label className="ops-check">
-                  <input
-                    type="checkbox"
-                    checked={settings.open}
-                    onChange={(e) =>
-                      setSettings({ ...settings, open: e.target.checked })
-                    }
-                  />
-                  Local abierto
-                </label>
-                <label>
-                  Meta de preparación (minutos)
-                  <input
-                    type="number"
-                    min="1"
-                    value={settings.target}
-                    onChange={(e) =>
-                      setSettings({
-                        ...settings,
-                        target: Number(e.target.value),
-                      })
-                    }
-                  />
-                </label>
-              </div>
-            ) : tab === "Métodos de pago" ? (
-              <div className="ops-method-grid">
-                {paymentMethods.map((m) => (
-                  <article key={m}>
-                    <header>
-                      <h3 className="ops-method-label">
-                        <PaymentMark name={m} />
-                        {m}
-                      </h3>
-                      <button
-                        className={`ops-switch ${settings.methods.includes(m) ? "on" : ""}`}
-                        aria-label={`Activar ${m}`}
-                        aria-pressed={settings.methods.includes(m)}
-                        onClick={() =>
-                          setSettings({
-                            ...settings,
-                            methods: settings.methods.includes(m)
-                              ? settings.methods.filter((v) => v !== m)
-                              : [...settings.methods, m],
-                          })
-                        }
-                      />
-                    </header>
-                    <p>
-                      {m === "Efectivo"
-                        ? "Pago en efectivo en tienda o contra entrega."
-                        : m === "Tarjeta"
-                          ? "Visa, Mastercard, American Express y más."
-                          : m === "Transferencia"
-                            ? "Transferencias desde cualquier banco."
-                            : `Pago rápido y seguro con ${m}.`}
-                    </p>
-                    {(m === "Yape" || m === "Plin") && (
-                      <>
-                        <label>
-                          Cambiar QR
-                          <input
-                            type="file"
-                            accept="image/jpeg,image/png,image/webp"
-                            onChange={(e) => {
-                              const file = e.target.files?.[0];
-                              if (file)
-                                void readUpload(file)
-                                  .then((image) =>
-                                    setSettings({
-                                      ...settings,
-                                      [m === "Yape" ? "yapeQr" : "plinQr"]:
-                                        image,
-                                    }),
-                                  )
-                                  .catch((err) => setError(err.message));
-                            }}
-                          />
-                        </label>
-                        {settings[m === "Yape" ? "yapeQr" : "plinQr"] ? (
-                          <img
-                            className="ops-qr"
-                            src={settings[m === "Yape" ? "yapeQr" : "plinQr"]}
-                            alt={`QR configurado para ${m}`}
-                          />
-                        ) : (
-                          <div className="ops-qr-placeholder">
-                            <img
-                              className="ops-qr"
-                              src={`/images/checkout/qr-${m.toLowerCase()}-demo.svg`}
-                              alt="QR de muestra"
-                            />
-                            <small>
-                              QR de muestra · configura el de tu negocio
-                            </small>
-                          </div>
-                        )}
-                      </>
-                    )}
-                    {m === "Transferencia" && (
-                      <label>
-                        Cuenta del negocio
-                        <input
-                          value={settings.bank}
-                          onChange={(e) =>
-                            setSettings({ ...settings, bank: e.target.value })
-                          }
-                        />
-                      </label>
-                    )}
-                  </article>
-                ))}
-              </div>
-            ) : tab === "Impuestos" ? (
-              <div className="ops-form">
-                <label>
-                  Porcentaje de impuesto informativo
-                  <input
-                    type="number"
-                    min="0"
-                    max="100"
-                    value={settings.tax}
-                    onChange={(e) =>
-                      setSettings({ ...settings, tax: Number(e.target.value) })
-                    }
-                  />
-                </label>
-                <p>
-                  Los precios publicados son finales. El porcentaje se muestra
-                  como desglose, sin sumarlo de nuevo al total. Los comprobantes
-                  locales no tienen valor tributario.
-                </p>
-              </div>
-            ) : tab === "Usuarios" ? (
-              <button
-                className="ops-primary"
-                onClick={() => navigate("/administrador/usuarios")}
-              >
-                Gestionar usuarios y permisos
-              </button>
-            ) : (
-              <form
-                className="ops-form"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  void changeLocalPassword(previous, next)
-                    .then(() => {
-                      setPrevious("");
-                      setNext("");
-                      setError("Contraseña actualizada.");
-                    })
-                    .catch((err) => setError(err.message));
-                }}
-              >
-                <p>Cuenta: {currentUser()?.email}</p>
-                <label>
-                  Contraseña actual
-                  <input
-                    required
-                    type="password"
-                    autoComplete="current-password"
-                    value={previous}
-                    onChange={(e) => setPrevious(e.target.value)}
-                  />
-                </label>
-                <label>
-                  Nueva contraseña
-                  <input
-                    required
-                    type="password"
-                    minLength={8}
-                    autoComplete="new-password"
-                    value={next}
-                    onChange={(e) => setNext(e.target.value)}
-                  />
-                </label>
-                <button className="ops-primary">Cambiar contraseña</button>
-              </form>
-            )}
-            {error && <p role="status">{error}</p>}
-          </Panel>
-        </div>
-      </div>
-    );
+  if (section === "configuracion") return <AdminSettings notify={notify}/>;
   if (section === "pedidos") {
     const action = (
       <button className="ops-primary" onClick={() => navigate("/mesera/nuevo-pedido")}>
@@ -900,21 +655,21 @@ export function AdminViews({
             ),
             icon: "store",
             tone: "red",
-            hint: "Según los registros del periodo",
+            hint: "Total cobrado hoy",
           },
           {
             label: "Pedidos de hoy",
             value: orders.filter(o=>new Date(o.created).toLocaleDateString()===today).length,
             icon: "receipt",
             tone: "gold",
-            hint: "Según los registros del periodo",
+            hint: "Recibidos hoy",
           },
           {
             label: "Ticket promedio",
             value: money(orders.length ? sales / orders.length : 0),
             icon: "cart",
             tone: "blue",
-            hint: "Según los registros del periodo",
+            hint: "Importe por pedido",
           },
           {
             label: "Pedidos activos",
@@ -988,8 +743,8 @@ export function AdminViews({
                     <td>
                       <CategoryBadge category={item.category} />
                     </td>
-                    <td>{item.value || (48 - index * 6)}</td>
-                    <td>{money((item.value || (48 - index * 6)) * 56)}</td>
+                    <td>{item.value}</td>
+                    <td>{money(item.revenue)}</td>
                   </tr>
                 ))}
               </tbody>
