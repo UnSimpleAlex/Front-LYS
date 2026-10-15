@@ -164,3 +164,16 @@ html { scroll-padding-top: 72px; }
  .order-button:hover .order-glare::after { animation: order-glare-sweep 600ms ease-out both; }
 }
 .order-button:focus-visible .order-glare::after { animation: order-glare-sweep 600ms ease-out both; }
+
+/* Large monitors keep the photo and the form in the same bounded composition. */
+@media (min-width: 1800px) {
+ .sign-in-page .hero-layout { width: min(90%, 1720px); grid-template-columns: minmax(0, 1fr) 560px; gap: 80px; min-height: min(900px, calc(100dvh - 64px)); align-self: center; align-items: center; padding-block: 40px; }
+ .sign-in-page .welcome { align-self: start; padding-top: clamp(32px, 7vh, 100px); padding-left: 24px; }
+ .sign-in-page .welcome-copy { width: min(100%, 640px); }
+ .sign-in-page .sign-in-card { align-self: center; padding: 32px; }
+ .sign-in-page .hero-background { width: min(100%, 1920px); height: min(100%, 1080px); left: 50%; top: 50%; right: auto; bottom: auto; transform: translate(-50%, -50%); padding: 0; }
+ .sign-in-page .hero-background img { object-fit: cover; object-position: center; }
+ .sign-in-page.register-page { --photo-offset: 0px; }
+ .sign-in-page.register-page .welcome-copy { width: min(100%, 700px); }
+ .sign-in-page.register-page .registration-caption { width: min(100%, 470px); }
+}
