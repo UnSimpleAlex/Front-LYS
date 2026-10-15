@@ -5,9 +5,9 @@ import { business } from '../features/information/business';
 import '../styles/locations-reference.css';
 
 const photos = [
-  { src: '/images/information/local-selected-exterior.png', alt: 'Vista exterior referencial de Leñas y Sabores' },
-  { src: '/images/information/local-selected-dining.png', alt: 'Vista interior referencial del salón y las parrillas' },
-  { src: '/images/information/local-selected-window.png', alt: 'Vista interior referencial de las mesas junto a las ventanas' },
+  { src: '/images/information/local-selected-exterior.webp', alt: 'Vista exterior referencial de Leñas y Sabores' },
+  { src: '/images/information/local-selected-dining.webp', alt: 'Vista interior referencial del salón principal y la cocina' },
+  { src: '/images/information/local-selected-window.webp', alt: 'Vista interior referencial del salón y el segundo nivel' },
 ];
 const googleMaps = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(`${business.name}, ${business.address}, ${business.reference}, ${business.district}`);
 
