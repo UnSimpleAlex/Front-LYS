@@ -29,6 +29,7 @@ import "../../styles/operations-admin-panels.css";
 import "../../styles/operations-reference.css";
 import "../../styles/operations-anchor-layout.css";
 import "../../styles/operations-dashboard.css";
+import "../../styles/operations-audit.css";
 const menus: Record<string, [string, string, IconName][]> = {
   cocina: [
     ["", "Panel de cocina", "chef"],
@@ -166,6 +167,9 @@ export function OperationsPage({
   };
   const allowed = user && (user.role === role || user.role === "administrador");
   const key = `${role}/${section}`;
+  useEffect(() => {
+    document.title = `${titles[key] || "Panel de operaciones"} | Leñas y Sabores`;
+  }, [key]);
   const dashboardOrder = ["", "productos", "promociones", "clientes", "usuarios", "pedidos", "reportes", "inventario", "configuracion"];
   const navigation = key === "administrador/"
     ? [...menus[role]].sort((a, b) => dashboardOrder.indexOf(a[0]) - dashboardOrder.indexOf(b[0]))

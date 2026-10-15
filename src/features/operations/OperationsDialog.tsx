@@ -25,7 +25,14 @@ export function OperationsDialog({ title, children, onClose, className = "", ico
       });
     };
   }, []);
-  return <dialog ref={ref} className={`ops-dialog ${className}`} aria-labelledby={titleId} onCancel={event => { event.preventDefault(); onClose(); }} onClose={onClose}>
+  return <dialog ref={ref} className={`ops-dialog ${className}`} aria-labelledby={titleId} onCancel={event => { event.preventDefault(); onClose(); }} onClose={onClose} onKeyDown={event => {
+    if (event.key !== "Tab") return;
+    const controls = [...event.currentTarget.querySelectorAll<HTMLElement>('button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled), a[href], [tabindex="0"]')].filter(el => el.getClientRects().length > 0);
+    const first = controls[0];
+    const last = controls.at(-1);
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+  }}>
     <header><h2 id={titleId}>{icon && <Icon name={icon} />}{title}</h2><button type="button" aria-label="Cerrar ventana" onClick={onClose}><Icon name="close" /></button></header>
     <div className="ops-dialog-body" onSubmitCapture={() => setError("")}>{error && <p className="ops-message error" role="alert">{error}</p>}{children}</div>
   </dialog>;
