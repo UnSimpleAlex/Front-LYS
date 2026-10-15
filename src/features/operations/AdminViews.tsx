@@ -1,3 +1,6 @@
+import { OrderEditor } from "./OrderEditor";
+import { categories } from "../carta/catalog";
+import { categoryIcon } from "./productHelpers";
 import { OperationsTable } from "./OperationsTable";
 import {
   Icon,
@@ -39,37 +42,9 @@ import {
 } from "./AdminManagers";
 import { currentUser, changeLocalPassword } from "../../services/localAuth";
 
-export function CategoryBadge({ category }: { category: string }) {
-  const norm = category.toLowerCase();
-  const kind = norm.includes("pollo")
-    ? "pollos"
-    : norm.includes("parrilla")
-      ? "parrillas"
-      : norm.includes("bebida")
-        ? "bebidas"
-        : "complementos";
-  const label =
-    kind === "pollos"
-      ? "Pollos"
-      : kind === "parrillas"
-        ? "Parrillas"
-        : kind === "bebidas"
-          ? "Bebidas"
-          : "Complementos";
-  const icon: IconName =
-    kind === "pollos"
-      ? "chicken"
-      : kind === "parrillas"
-        ? "grill"
-        : kind === "bebidas"
-          ? "drink"
-          : "fries";
-  return (
-    <span className={`ops-category-badge ${kind}`}>
-      <Icon name={icon} />
-      {label}
-    </span>
-  );
+export function CategoryBadge({category}:{category:string}) {
+  const item=categories.find(c=>c.id===category);
+  return <span className={`ops-category-badge ${category}`}><Icon name={categoryIcon(category)}/>{item?.name || category}</span>;
 }
 
 export function ChannelBadge({ channel }: { channel: string }) {
@@ -168,18 +143,24 @@ export function AdminViews({
   const [filter, setFilter] = useState("Todos");
   const [status, setStatus] = useState("Todos");
   const [detail, setDetail] = useState<Order | null>(null);
+  const [editingOrder,setEditingOrder] = useState<Order|null>(null);
+  const [selection,setSelection] = useState<string[]>([]);
   const [settings, setSettings] = useState({ ...data.settings });
   const [tab, setTab] = useState("Métodos de pago");
   const [error, setError] = useState("");
   const [previous, setPrevious] = useState("");
   const [next, setNext] = useState("");
   const [period, setPeriod] = useState("30");
+  const [salesDays,setSalesDays] = useState("7");
+  const [from,setFrom] = useState("");
+  const [to,setTo] = useState("");
+  const [orderPage,setOrderPage] = useState(1);
   const orders = data.orders.filter((o) => !o.draft);
   const activePayments = data.payments.filter((p) => !p.refunded);
   const today = new Date().toLocaleDateString();
   const sales = activePayments.reduce((s, p) => s + p.amount, 0);
-  const daily = Array.from({ length: 7 }, (_, i) => {
-    const day = new Date(now - (6 - i) * 86400000);
+  const daily = Array.from({ length: Number(salesDays) }, (_, i) => {
+    const day = new Date(now - (Number(salesDays) - 1 - i) * 86400000);
     return {
       label: day.toLocaleDateString("es-PE", {
         day: "numeric",
@@ -196,6 +177,7 @@ export function AdminViews({
   const best = data.products
     .map((p) => ({
       label: p.name,
+      category: p.category,
       image: p.image,
       value: orders
         .filter((o) => o.status !== "Cancelado")
@@ -475,6 +457,7 @@ export function AdminViews({
     const deliveredCount = orders.filter((o) => o.status === "Entregado").length;
     const filtered = orders.filter(
       (o) =>
+        (!from || o.created.slice(0,10)>=from) && (!to || o.created.slice(0,10)<=to) &&
         (filter === "Todos" ||
           o.channel === filter ||
           (filter === "Cancelados" && o.status === "Cancelado")) &&
@@ -489,28 +472,28 @@ export function AdminViews({
           entries={[
             {
               label: "Nuevos",
-              value: newCount || 5,
+              value: newCount,
               icon: "receipt",
               tone: "red",
               hint: "Pedidos pendientes",
             },
             {
               label: "En preparación",
-              value: prepCount || 8,
+              value: prepCount,
               icon: "chef",
               tone: "gold",
               hint: "Pedidos en cocina",
             },
             {
               label: "Listos",
-              value: readyCount || 4,
+              value: readyCount,
               icon: "serve",
               tone: "blue",
               hint: "Pedidos listos para entregar",
             },
             {
               label: "Entregados",
-              value: deliveredCount || 21,
+              value: deliveredCount,
               icon: "check",
               tone: "green",
               hint: "Pedidos completados",
@@ -564,7 +547,8 @@ export function AdminViews({
               id="desde-filter"
               type="date"
               aria-label="Fecha desde"
-              defaultValue="2026-10-01"
+              value={from}
+              onChange={e=>{setFrom(e.target.value);setOrderPage(1);}}
             />
           </div>
           <div className="ops-admin-filter-group">
@@ -573,13 +557,14 @@ export function AdminViews({
               id="hasta-filter"
               type="date"
               aria-label="Fecha hasta"
-              defaultValue="2026-10-31"
+              value={to}
+              onChange={e=>{setTo(e.target.value);setOrderPage(1);}}
             />
           </div>
-          <button className="ops-btn-export" onClick={exportOrders}>
+          <button className="ops-btn-export" onClick={()=>downloadCsv("pedidos",["Pedido","Fecha","Cliente","Canal","Total","Estado"],filtered.filter(o=>!selection.length || selection.includes(o.id)).map(o=>[o.id,dateText(o.created),o.customer,o.channel,orderTotal(o),o.status]))}>
             <Icon name="download" /> Exportar
           </button>
-          <button className="ops-btn-filter" type="button" onClick={() => {}}>
+          <button className="ops-btn-filter" type="button" onClick={() => setOrderPage(1)}>
             <Icon name="filter" /> Filtrar
           </button>
         </div>
@@ -588,7 +573,7 @@ export function AdminViews({
             <thead>
               <tr>
                 <th>
-                  <input type="checkbox" aria-label="Seleccionar todos los pedidos" />
+                  <input type="checkbox" aria-label="Seleccionar todos los pedidos" checked={filtered.length>0 && filtered.every(o=>selection.includes(o.id))} onChange={e=>setSelection(e.target.checked ? filtered.map(o=>o.id):[])}/>
                 </th>
                 <th># Pedido</th>
                 <th>Cliente</th>
@@ -601,12 +586,14 @@ export function AdminViews({
               </tr>
             </thead>
             <tbody>
-              {filtered.slice(0, 10).map((o) => (
+              {filtered.slice((orderPage-1)*10,orderPage*10).map((o) => (
                 <tr key={o.id} className={o.id === detail?.id ? "selected-row" : ""}>
                   <td>
                     <input
                       type="checkbox"
                       aria-label={`Seleccionar pedido ${o.id}`}
+                      checked={selection.includes(o.id)}
+                      onChange={e=>setSelection(old=>e.target.checked ? [...old,o.id]:old.filter(id=>id!==o.id))}
                     />
                   </td>
                   <td>
@@ -616,7 +603,7 @@ export function AdminViews({
                     <div className="ops-person-cell">
                       <div>
                         <strong>{o.customer}</strong>
-                        <small>{o.phone || "987 654 321"}</small>
+                        <small>{o.phone || "Sin teléfono"}</small>
                       </div>
                     </div>
                   </td>
@@ -657,7 +644,8 @@ export function AdminViews({
                         className="btn-edit"
                         title="Editar pedido"
                         aria-label={`Editar pedido #${o.id}`}
-                        onClick={() => navigate("/mesera/nuevo-pedido")}
+                        disabled={o.paid || (o.status!=="Recibido" && !o.draft)}
+                        onClick={() => setEditingOrder(o)}
                       >
                         <Icon name="edit" />
                       </button>
@@ -683,19 +671,21 @@ export function AdminViews({
         </div>
         <div className="ops-pagination">
           <span>
-            Mostrando 1 a {Math.min(10, filtered.length)} de {filtered.length} pedidos
+            Mostrando {filtered.length ? (orderPage-1)*10+1 : 0} a {Math.min(orderPage*10, filtered.length)} de {filtered.length} pedidos
           </span>
-          <button disabled aria-label="Página anterior">
+          <button disabled={orderPage===1} onClick={()=>setOrderPage(orderPage-1)} aria-label="Página anterior">
             <Icon name="chevron" />
           </button>
-          <span aria-current="page">1</span>
+          <span aria-current="page">{orderPage}</span>
           <button
-            disabled={filtered.length <= 10}
+            disabled={orderPage*10>=filtered.length}
+            onClick={()=>setOrderPage(orderPage+1)}
             aria-label="Página siguiente"
           >
             <Icon name="chevron" />
           </button>
         </div>
+        {editingOrder && <OrderEditor order={editingOrder} onClose={()=>setEditingOrder(null)} notify={notify}/>}
         {detail && (
           <OrderDetail
             order={data.orders.find((o) => o.id === detail.id) || detail}
@@ -724,6 +714,8 @@ export function AdminViews({
     const reportBest = data.products
       .map((product) => ({
         label: product.name,
+        category: product.category,
+        revenue: reportOrders.filter(o=>o.status!=="Cancelado").flatMap(o=>o.items).filter(l=>l.product.id===product.id).reduce((sum,l)=>sum+l.count*l.product.price,0),
         value: reportOrders
           .filter((o) => o.status !== "Cancelado")
           .flatMap((o) => o.items)
@@ -754,7 +746,7 @@ export function AdminViews({
       <div className="ops-header-actions">
         <div className="ops-header-date-pill">
           <Icon name="calendar" />
-          <span>01 oct 2026 - 14 oct 2026</span>
+          <select aria-label="Periodo del reporte" value={period} onChange={e=>setPeriod(e.target.value)}>{["7","30","90"].map(n=><option key={n} value={n}>Últimos {n} días</option>)}</select>
           <Icon name="chevron" />
         </div>
         <button
@@ -811,26 +803,26 @@ export function AdminViews({
           entries={[
             {
               label: "Ventas totales",
-              value: money(reportSales || 18450),
+              value: money(reportSales),
               icon: "chart",
               tone: "green",
-              hint: "↑ 12% vs. periodo anterior",
+              hint: "Según los registros del periodo",
             },
             {
               label: "Pedidos realizados",
-              value: reportOrders.length || 286,
+              value: reportOrders.length,
               icon: "cart",
               tone: "red",
-              hint: "↑ 8% vs. periodo anterior",
+              hint: "Según los registros del periodo",
             },
             {
               label: "Ticket promedio",
               value: money(
-                reportOrders.length ? reportSales / reportOrders.length : 64.51,
+                reportOrders.length ? reportSales / reportOrders.length : 0,
               ),
               icon: "tag",
               tone: "blue",
-              hint: "↑ 4% vs. periodo anterior",
+              hint: "Según los registros del periodo",
             },
           ]}
         />
@@ -840,23 +832,13 @@ export function AdminViews({
           </Panel>
           <Panel title="Ventas por canal">
             <Donut
-              values={[
-                { label: "Salón", value: 10701 },
-                { label: "Delivery", value: 4990 },
-                { label: "Recojo en tienda", value: 2030 },
-                { label: "Pedidos en línea", value: 729 },
-              ]}
+              values={["Salón","Delivery","Recojo"].map(label=>({label,value:reportPayments.filter(p=>reportOrders.some(o=>o.id===p.orderId && o.channel===label)).reduce((sum,p)=>sum+p.amount,0)}))}
             />
           </Panel>
         </div>
         <div className="ops-split">
           <Panel title="Métodos de pago">
-            <Bars values={reportMethods.length ? reportMethods : [
-              { label: "Efectivo", value: 8120 },
-              { label: "Yape", value: 5720 },
-              { label: "Plin", value: 2940 },
-              { label: "Tarjeta", value: 1670 },
-            ]} />
+            <Bars values={reportMethods} />
           </Panel>
           <Panel title="Productos más vendidos">
             <div className="ops-table-wrap">
@@ -881,10 +863,10 @@ export function AdminViews({
                         </div>
                       </td>
                       <td>
-                        <CategoryBadge category={item.label} />
+                        <CategoryBadge category={item.category} />
                       </td>
-                      <td>{item.value || (86 - index * 10)}</td>
-                      <td>{money((item.value || (86 - index * 10)) * 56)}</td>
+                      <td>{item.value}</td>
+                      <td>{money(item.revenue)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -899,7 +881,7 @@ export function AdminViews({
   const headerAction = (
     <div className="ops-header-date-pill">
       <Icon name="calendar" />
-      <span>Hoy, 14 de abril de 2025</span>
+      <span>{new Date(now).toLocaleDateString("es-PE", {day:"numeric",month:"long",year:"numeric"})}</span>
       <Icon name="chevron" />
     </div>
   );
@@ -914,32 +896,32 @@ export function AdminViews({
             value: money(
               activePayments
                 .filter((p) => new Date(p.date).toLocaleDateString() === today)
-                .reduce((s, p) => s + p.amount, 0) || 2450,
+                .reduce((s, p) => s + p.amount, 0),
             ),
             icon: "store",
             tone: "red",
-            hint: "↑ 12% vs. ayer",
+            hint: "Según los registros del periodo",
           },
           {
             label: "Pedidos de hoy",
-            value: orders.length || 38,
+            value: orders.filter(o=>new Date(o.created).toLocaleDateString()===today).length,
             icon: "receipt",
             tone: "gold",
-            hint: "↑ 19% vs. ayer",
+            hint: "Según los registros del periodo",
           },
           {
             label: "Ticket promedio",
-            value: money(orders.length ? sales / orders.length : 64.47),
+            value: money(orders.length ? sales / orders.length : 0),
             icon: "cart",
             tone: "blue",
-            hint: "↑ 8% vs. ayer",
+            hint: "Según los registros del periodo",
           },
           {
             label: "Pedidos activos",
             value:
               orders.filter(
                 (o) => !["Entregado", "Cancelado"].includes(o.status),
-              ).length || 12,
+              ).length,
             icon: "clock",
             tone: "green",
             hint: "En preparación",
@@ -952,7 +934,8 @@ export function AdminViews({
           action={
             <select
               aria-label="Rango de ventas"
-              defaultValue="7"
+              value={salesDays}
+              onChange={e=>setSalesDays(e.target.value)}
               style={{
                 height: "36px",
                 border: "1px solid #dce3ee",
@@ -1003,7 +986,7 @@ export function AdminViews({
                       </div>
                     </td>
                     <td>
-                      <CategoryBadge category={item.label} />
+                      <CategoryBadge category={item.category} />
                     </td>
                     <td>{item.value || (48 - index * 6)}</td>
                     <td>{money((item.value || (48 - index * 6)) * 56)}</td>
@@ -1074,7 +1057,7 @@ export function AdminViews({
                     <strong>{money(orderTotal(o))}</strong>
                   </td>
                   <td>
-                    <Badge value={o.status === "Recibido" ? "En preparación" : o.status} />
+                    <Badge value={o.status} />
                   </td>
                   <td>
                     <div className="ops-table-actions">
@@ -1092,7 +1075,8 @@ export function AdminViews({
                         className="btn-edit"
                         title="Editar pedido"
                         aria-label={`Editar pedido #${o.id}`}
-                        onClick={() => navigate("/mesera/nuevo-pedido")}
+                        disabled={o.paid || (o.status!=="Recibido" && !o.draft)}
+                        onClick={() => setEditingOrder(o)}
                       >
                         <Icon name="edit" />
                       </button>
@@ -1114,6 +1098,7 @@ export function AdminViews({
           </OperationsTable>
         </div>
       </Panel>
+      {editingOrder && <OrderEditor order={editingOrder} onClose={()=>setEditingOrder(null)} notify={notify}/>}
       {detail && (
         <OrderDetail
           order={data.orders.find((o) => o.id === detail.id) || detail}
