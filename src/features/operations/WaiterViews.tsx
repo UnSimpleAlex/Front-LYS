@@ -60,12 +60,14 @@ export function TableMap({
           <button
             key={t.id}
             className={`ops-table-seat ${selected === t.id ? "selected" : ""}`}
+            data-status={t.status}
+            aria-label={`Mesa ${t.id}, ${t.status}, ${t.seats} personas`}
             aria-pressed={selected === t.id}
             onClick={() => onSelect(t.id)}
           >
             <i className="ops-chair-left" aria-hidden="true" />
             <i className="ops-chair-right" aria-hidden="true" />
-            <strong>M{t.id}</strong>
+            <Icon name="table"/><strong>M{t.id}</strong>
             <Badge value={t.status} />
             <small>{t.seats} personas</small>
           </button>
@@ -337,24 +339,6 @@ export function WaiterViews({
       tone: "blue",
     },
   ];
-  if (section === "")
-    stats.push({
-      label: "Ventas del turno",
-      value: money(
-        state.payments
-          .filter(
-            (p) =>
-              !p.refunded &&
-              state.shifts.some(
-                (shift) => shift.id === p.shiftId && !shift.closed,
-              ) &&
-              orders.some((o) => o.id === p.orderId),
-          )
-          .reduce((sum, p) => sum + p.amount, 0),
-      ),
-      icon: "cash",
-      tone: "gold",
-    });
   if (section === "nuevo-pedido")
     return <NewOrder notify={notify} navigate={navigate} />;
   const tableDetail = tableOpen && (
@@ -474,7 +458,7 @@ export function WaiterViews({
       <Stats entries={stats} />
       {tableDetail}
       {section === "" ? (
-        <div className="ops-equal-cols">
+        <div className="ops-salon-dashboard">
           <Panel title="Mapa del salón">
             <TableMap
               selected={selected}
@@ -546,6 +530,46 @@ export function WaiterViews({
               <Icon name="plus" /> Nuevo pedido
             </button>
           </Panel>
+        <Panel title="Tareas del turno">
+          <div className="ops-three">
+            <button onClick={() => navigate("/mesera/cierre-mesa")}>
+              <strong>Solicitar cuentas</strong>
+              <span>
+                {
+                  state.tables.filter((t) => t.status === "Solicita cuenta")
+                    .length
+                }{" "}
+                mesas esperan el cobro
+              </span>
+            </button>
+            <button onClick={() => navigate("/mesera/pedidos")}>
+              <strong>Entregar pedidos</strong>
+              <span>
+                {orders.filter((o) => o.status === "Listo").length} listos para
+                servir
+              </span>
+            </button>
+            <button onClick={() => navigate("/mesera/mesas")}>
+              <strong>Liberar mesas</strong>
+              <span>
+                {
+                  state.tables.filter(
+                    (t) =>
+                      t.status !== "Libre" &&
+                      orders.some((o) => o.table === t.id) &&
+                      !orders.some(
+                        (o) =>
+                          o.table === t.id &&
+                          !o.paid &&
+                          o.status !== "Cancelado",
+                      ),
+                  ).length
+                }{" "}
+                mesas con todos sus pedidos cobrados
+              </span>
+            </button>
+          </div>
+        </Panel>
         </div>
       ) : section === "mesas" ? (
         <>
@@ -580,12 +604,11 @@ export function WaiterViews({
               {list ? "Vista de plano" : "Vista de lista"}
             </button>
           </div>
-          <div className="ops-two-main">
+          <div className="ops-table-workspace">
             <TableMap
               selected={selected}
               onSelect={(id) => {
                 setSelected(id);
-                setTableOpen(true);
                 setNote(null);
               }}
               zone={zone}
@@ -593,22 +616,18 @@ export function WaiterViews({
               filter={filter}
               list={list}
             />
-
+            <div className="ops-table-selection"><Panel title={`Mesa ${selected}`} action={<Badge value={table.status}/> }>
+              <div className="ops-table-detail-meta"><Icon name="users"/><small>{table.seats} personas · {table.zone}</small></div>
+              <h3>Pedido actual</h3>
+              {active.length ? <div className="ops-reference-line-items">{active.flatMap(o=>o.items.map(line=><div key={`${o.id}-${line.product.id}`}><img src={line.product.image} alt=""/><div><strong>{line.count} × {line.product.name}</strong><small>#{o.id} · {o.status}</small></div><b>{money(line.count*line.product.price)}</b></div>))}</div> : <Empty>Esta mesa no tiene pedidos pendientes.</Empty>}
+              <p className="ops-total">Total <strong>{money(active.reduce((sum,o)=>sum+orderTotal(o),0))}</strong></p>
+              <div className="ops-stack-actions"><button className="ops-primary" onClick={()=>navigate(`/mesera/nuevo-pedido?mesa=${selected}`)}><Icon name="plus"/>Agregar pedido</button><button className="ops-outline" onClick={()=>setTableOpen(true)}><Icon name="eye"/>Ver mesa</button></div>
+            </Panel></div>
           </div>
         </>
       ) : section === "cierre-mesa" ? (
         <div className="ops-three-cols">
-          <Panel title="Mesas en atención">
-            {state.tables.map((t) => (
-              <button
-                className={`ops-priority ${selected === t.id ? "selected" : ""}`}
-                key={t.id}
-                onClick={() => setSelected(t.id)}
-              >
-                <strong>Mesa {t.id}</strong> <Badge value={t.status} />
-              </button>
-            ))}
-          </Panel>
+          <div className="ops-close-table-context"><label>Mesa<select aria-label="Mesa para cerrar" value={selected} onChange={e=>setSelected(Number(e.target.value))}>{state.tables.map(t=><option key={t.id} value={t.id}>Mesa {t.id} · {t.status}</option>)}</select></label><Badge value={table.status}/><span><Icon name="users"/>{table.seats} personas</span><button className="ops-outline" onClick={()=>navigate("/mesera/mesas")}><Icon name="table"/>Ver mesas</button></div>
           <Panel title={`Consumo de la mesa ${selected}`}>
             {active.map((o) => (
               <div key={o.id}>
@@ -622,7 +641,7 @@ export function WaiterViews({
                       src={line.product.image}
                       alt=""
                     />
-                    <span>{line.product.name}</span>
+                    <span>{line.count} × {line.product.name}</span>
                     <strong>{money(line.product.price * line.count)}</strong>
                     {o.status === "Recibido" && (
                       <div className="ops-quantity">
@@ -899,48 +918,6 @@ export function WaiterViews({
             </div>
           </div>
         </>
-      )}
-      {section === "" && (
-        <Panel title="Tareas del turno">
-          <div className="ops-three">
-            <button onClick={() => navigate("/mesera/cierre-mesa")}>
-              <strong>Solicitar cuentas</strong>
-              <span>
-                {
-                  state.tables.filter((t) => t.status === "Solicita cuenta")
-                    .length
-                }{" "}
-                mesas esperan el cobro
-              </span>
-            </button>
-            <button onClick={() => navigate("/mesera/pedidos")}>
-              <strong>Entregar pedidos</strong>
-              <span>
-                {orders.filter((o) => o.status === "Listo").length} listos para
-                servir
-              </span>
-            </button>
-            <button onClick={() => navigate("/mesera/mesas")}>
-              <strong>Liberar mesas</strong>
-              <span>
-                {
-                  state.tables.filter(
-                    (t) =>
-                      t.status !== "Libre" &&
-                      orders.some((o) => o.table === t.id) &&
-                      !orders.some(
-                        (o) =>
-                          o.table === t.id &&
-                          !o.paid &&
-                          o.status !== "Cancelado",
-                      ),
-                  ).length
-                }{" "}
-                mesas con todos sus pedidos cobrados
-              </span>
-            </button>
-          </div>
-        </Panel>
       )}
       {detail && (
         <OrderDetail
