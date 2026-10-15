@@ -183,9 +183,10 @@ const routes = [
   "/administrador/configuracion",
   "/administrador/pedidos",
   "/administrador/reportes",
+  "/delivery",
 ];
-for (const width of [240, 390, 768, 1024, 1280, 1366, 1440, 1920])
-  test(`24 pantallas operativas responsive a ${width}px`, async ({ page }) => {
+for (const width of [240, 390, 768, 1024, 1280, 1366, 1440, 1920, 2560])
+  test(`25 pantallas operativas responsive a ${width}px`, async ({ page }) => {
     test.setTimeout(120000);
     await page.setViewportSize({ width, height: 1080 });
     await setup(page);
@@ -429,4 +430,132 @@ test("navbar compacto y menú completo en móvil, tablet y PC", async ({
     if (await page.locator(".ops-menu").isVisible())
       await expect(page.locator(".ops-header nav")).toBeHidden();
   }
+});
+
+
+test("controles legibles, archivos y efectivo en móvil, tablet y PC", async ({ page }) => {
+  await setup(page);
+  await login(page, "administrador");
+  for (const width of [240, 390, 768, 1366, 1920]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/administrador/inventario");
+    const alerts = page.locator(".ops-stock-alert .ops-supply-summary strong");
+    expect(await alerts.evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().width).every(width => width >= 85))).toBeTruthy();
+    await page.goto("/administrador/configuracion");
+    for (const name of ["Datos del negocio", "Métodos de pago", "Impuestos", "Usuarios", "Seguridad"]) {
+      await page.locator(".ops-settings > .ops-tabs").getByRole("button", { name, exact: true }).click();
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy();
+      if (name === "Métodos de pago") {
+        const upload = page.locator('input[type="file"]').first();
+        expect(await upload.evaluate(node => getComputedStyle(node, "::file-selector-button").backgroundColor)).toBe("rgb(237, 0, 23)");
+        expect(await page.locator(".ops-method-grid .ops-switch").evaluateAll(nodes => nodes.every(node => node.getBoundingClientRect().height === 26))).toBeTruthy();
+        await page.screenshot({path: `test-results/settings-methods-${width}.png`, fullPage: true});
+      }
+    }
+    for (const route of ["apertura", "cierre"]) {
+      await page.goto(`/caja/${route}`);
+      await expect(page.locator(".ops-banknote")).toHaveCount(11);
+      expect(await page.locator(".ops-banknote").evaluateAll(nodes => nodes.every(node => node instanceof HTMLImageElement && node.complete && node.naturalWidth > 0))).toBeTruthy();
+      await expect(page.locator('.ops-steps [aria-current="step"]')).toHaveText(route === "apertura" ? "1Apertura" : "3Cierre");
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy();
+    }
+  }
+});
+
+
+test("caja suma piezas de billetes y monedas en céntimos", async ({ page }) => {
+  await setup(page);
+  await login(page, "caja");
+  await page.goto("/caja/apertura");
+  for (const value of [200, 100, 50, 20, 10, 5, 2, 1, 0.5, 0.2, 0.1]) {
+    await page.getByLabel(`Cantidad de denominación ${value}`, { exact: true }).fill("1");
+  }
+  await expect(page.locator(".ops-cash-total > strong")).toHaveText("S/ 388.80");
+  await page.getByLabel("Fondo inicial (S/)").fill("388.80");
+  await expect(page.locator(".ops-cash-total .ops-badge")).toHaveText("Coincide");
+  await expect(page.getByLabel("Cantidad de denominación 0.05", { exact: true })).toHaveCount(0);
+  await page.getByLabel("Cantidad de denominación 0.1", { exact: true }).fill("2");
+  await expect(page.locator(".ops-cash-total > strong")).toHaveText("S/ 388.90");
+  await expect(page.locator(".ops-cash-total .ops-badge")).toHaveText("Revisar monto");
+});
+
+test("panel cocina: referencia responsive, búsqueda y filtros de pedidos", async ({ page }) => {
+  await setup(page);
+  await login(page, "administrador");
+  await page.getByRole("button", { name: "Cargar pedidos de ejemplo" }).click();
+  await page.goto("/cocina");
+  await expect(page.locator(".kitchen-column")).toHaveCount(4);
+  const total = await page.locator(".kitchen-ticket").count();
+  expect(total).toBeGreaterThan(0);
+  for (const width of [240, 390, 768, 1024, 1280, 1672, 1920, 2560]) {
+    await page.setViewportSize({ width, height: 941 });
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy();
+    const columns = await page.locator(".kitchen-columns").evaluate(node => getComputedStyle(node).gridTemplateColumns.split(" ").length);
+    expect(columns).toBe(width < 700 ? 1 : width < 1280 ? 2 : 4);
+    expect(await page.locator(".kitchen-ticket-actions button").evaluateAll(buttons => buttons.every(button => button.getBoundingClientRect().height >= 34 && button.scrollWidth <= button.clientWidth + 1))).toBeTruthy();
+    if ([390, 768, 1672].includes(width)) await page.screenshot({ path: `test-results/kitchen-reference-${width}.png`, fullPage: true });
+  }
+  await page.getByRole("button", { name: /^Delivery \(/ }).click();
+  expect(await page.locator(".kitchen-channel").allTextContents()).toEqual(expect.arrayContaining(["Delivery"]));
+  expect((await page.locator(".kitchen-channel").allTextContents()).every(text => text === "Delivery")).toBeTruthy();
+  await page.getByLabel("Buscar pedidos de cocina").fill("EJEMPLO-1052");
+  await expect(page.locator(".kitchen-ticket")).toHaveCount(1);
+  await page.getByLabel("Buscar pedidos de cocina").fill("no-existe-este-pedido");
+  await expect(page.locator(".kitchen-ticket")).toHaveCount(0);
+  await page.getByRole("button", { name: "Filtros", exact: true }).click();
+  await page.getByRole("button", { name: "Limpiar filtros" }).click();
+  await expect(page.locator(".kitchen-ticket")).toHaveCount(total);
+  await page.locator("#kitchen-filters").getByLabel("Estado de pedidos de cocina", { exact: true }).selectOption("En preparación");
+  expect(await page.locator(".kitchen-ticket").count()).toBeGreaterThan(0);
+  expect((await page.locator(".kitchen-ticket").evaluateAll(nodes => nodes.map(node => node.getAttribute("data-status")))).every(status => status === "En preparación")).toBeTruthy();
+  await page.getByLabel("Estado de pedidos de cocina", { exact: true }).selectOption("Listo");
+  const ready = await page.locator('.kitchen-ticket[data-status="Listo"]').count();
+  await page.getByRole("button", { name: "Marcar como entregado", exact: true }).first().click();
+  await expect(page.locator('.kitchen-ticket[data-status="Listo"]')).toHaveCount(ready - 1);
+  await page.getByRole("button", { name: "Ver historial completo" }).click();
+  await expect(page).toHaveURL(/\/cocina\/historial$/);
+});
+
+
+test("cocina: referencias, muestra persistente y filtros en tres páginas", async ({ page }) => {
+  test.setTimeout(120000);
+  await setup(page);
+  await login(page, "cocina");
+  await page.goto("/cocina/pedidos");
+  await page.getByRole("button", { name: "Cargar muestra de cocina" }).click();
+  await expect(page.locator(".kr-incoming-card")).toHaveCount(10);
+  await page.reload();
+  await expect(page.getByRole("button", { name: "Cargar muestra de cocina" })).toHaveCount(0);
+  const errors: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
+  for (const width of [240, 390, 768, 1024, 1280, 1672, 1920, 2560]) {
+    await page.setViewportSize({ width, height: 941 });
+    for (const route of ["pedidos", "historial", "tiempos"]) {
+      await page.goto(`/cocina/${route}`);
+      await expect(page.locator(".ops-page-heading h1")).toBeVisible();
+      await page.evaluate(() => document.fonts.ready);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy();
+      expect(await page.locator('.ops-content img').evaluateAll(images => images.every(image => image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0))).toBeTruthy();
+      if ([390, 768, 1672].includes(width)) await page.screenshot({ path: `test-results/kitchen-${route}-${width}.png`, fullPage: true });
+    }
+  }
+  expect(errors).toEqual([]);
+  await page.goto("/cocina/pedidos");
+  await page.getByLabel("Buscar pedidos entrantes").fill("COCINA-DEMO-001");
+  await expect(page.locator(".kr-incoming-card")).toHaveCount(1);
+  await page.getByRole("button", { name: "Aceptar pedido", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Marcar listo", exact: true })).toBeVisible();
+  await page.goto("/cocina/historial");
+  await expect(page.locator("tbody tr")).toHaveCount(12);
+  await page.getByLabel("Buscar historial", { exact: true }).fill("COCINA-DEMO-012");
+  await expect(page.locator("tbody tr")).toHaveCount(1);
+  const download = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Exportar historial" }).click();
+  expect((await download).suggestedFilename()).toContain("historial-cocina");
+  await page.getByLabel("Desde fecha del historial").fill("2099-01-01");
+  await expect(page.locator("tbody tr")).toHaveCount(0);
+  await page.goto("/cocina/tiempos");
+  await page.getByLabel("Buscar pedidos en curso").fill("COCINA-DEMO-008");
+  await expect(page.locator("tbody tr")).toHaveCount(1);
+  await expect(page.locator("tbody tr")).toContainText("Retrasado");
 });

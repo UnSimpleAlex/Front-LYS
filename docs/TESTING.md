@@ -35,3 +35,11 @@ Usarla como señal, no como objetivo absoluto. Priorizar módulos de mayor riesg
 
 ## Paneles conectados
 La suite operations.spec.ts verifica el recorrido salón/cocina/caja, restricciones de rol, persistencia, stock, caja digital y 24 pantallas en cinco resoluciones. Ver [guía de verificación](PANELES_ROLES_LOCAL.md).
+
+
+## Referencias de cocina: pedidos, historial y control de tiempos
+Las tres vistas se verifican entre 240 y 2560 px, incluyendo móvil (390 px), tablet (768 px) y PC (1672 px). La prueba comprueba ausencia de desbordes y errores, imágenes cargadas, búsqueda, aceptación de pedidos, rango de fechas y exportación CSV.
+
+Con el rol cocina o administrador, «Cargar muestra de cocina» añade 23 pedidos al almacenamiento `lys-operations-v1`, sin sustituir los existentes. Incluye cinco nuevos, tres en preparación, dos listos, uno en camino, diez entregados y dos cancelados. La muestra persiste al recargar y no se puede duplicar desde el botón. Son datos de demostración locales; no representan ventas reales.
+
+Los indicadores, gráficos y alertas se calculan a partir de los pedidos guardados. Los listos y los pedidos en camino no se consideran retrasos de preparación. En móvil y tablet las tablas se convierten en tarjetas y las columnas laterales se apilan.

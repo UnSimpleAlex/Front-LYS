@@ -27,7 +27,8 @@ export type IconName =
   | "trophy"
   | "filter"
   | "list"
-  | "clipboard";
+  | "clipboard"
+  | "bag";
 const filled: Partial<Record<IconName, string>> = {
   chef: "M7 17V11C1 12 0 4 6 4c1-5 10-5 12 0 6 0 5 8-1 7v6ZM7 19h10v3H7Z",
   bell: "M5 16V9c0-4 2-6 5-7h4c3 1 5 3 5 7v7l3 3H2ZM9 21h6c0 4-6 4-6 0",
@@ -43,6 +44,7 @@ const filled: Partial<Record<IconName, string>> = {
   bank: "M1 8 12 1l11 7ZM2 10h3v9H2ZM8 10h3v9H8ZM14 10h3v9h-3ZM20 10h3v9h-3ZM1 21h22v3H1Z",
 };
 const linePaths: Partial<Record<IconName, string[]>> = {
+  bag: ["M4 7h16l1 15H3Z", "M8 8V5a4 4 0 0 1 8 0v3"],
   box: [
     "m2 7 10-5 10 5-10 5Z",
     "M2 7v11l10 5 10-5V7",
