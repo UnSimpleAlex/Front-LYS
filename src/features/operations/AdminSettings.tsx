@@ -29,6 +29,8 @@ export function AdminSettings({
         {icon && <Icon name={icon} />}
         <input
           type={type}
+          name={key}
+          autoComplete={({ name: "organization", email: "email", phone: "tel", address: "street-address", city: "address-level2", postalCode: "postal-code", website: "url" } as Record<string, string>)[key] || "off"}
           value={String(form[key] ?? "")}
           onChange={(e) => setForm({ ...form, [key]: e.target.value })}
         />
@@ -46,6 +48,7 @@ export function AdminSettings({
             <Icon name="clock" />
             <input
               type="time"
+              name="openingTime"
               value={form.openingTime || "12:00"}
               onChange={(e) =>
                 setForm({ ...form, openingTime: e.target.value })
@@ -59,6 +62,7 @@ export function AdminSettings({
             <Icon name="clock" />
             <input
               type="time"
+              name="closingTime"
               value={form.closingTime || "23:00"}
               onChange={(e) =>
                 setForm({ ...form, closingTime: e.target.value })
