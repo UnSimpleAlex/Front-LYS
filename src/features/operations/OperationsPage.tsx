@@ -24,6 +24,7 @@ import "../../styles/kitchen-board.css";
 import "../../styles/kitchen-reference.css";
 import "../../styles/operations-workspace.css";
 import "../../styles/operations-products.css";
+import "../../styles/operations-admin-panels.css";
 const menus: Record<string, [string, string, IconName][]> = {
   cocina: [
     ["", "Panel cocina", "chef"],
