@@ -18,7 +18,6 @@ import {
   statuses,
   paymentMethods,
   changeStatus,
-  seedExampleOrders,
   type Order,
 } from "./operationsStore";
 import {
@@ -179,20 +178,6 @@ export function AdminViews({
     }))
     .sort((a, b) => b.value - a.value)
     .slice(0, 5);
-  const exportOrders = () =>
-    downloadCsv(
-      "pedidos",
-      ["Pedido", "Fecha", "Cliente", "Canal", "Total", "Estado", "Pagado"],
-      orders.map((o) => [
-        o.id,
-        dateText(o.created),
-        o.customer,
-        o.channel,
-        orderTotal(o),
-        o.status,
-        o.paid,
-      ]),
-    );
   if (section === "productos") return <ProductManager notify={notify} />;
   if (section === "promociones") return <PromotionManager notify={notify} />;
   if (section === "usuarios" || section === "clientes")
@@ -644,6 +629,7 @@ export function AdminViews({
   return (
     <>
       {actionHost && createPortal(headerAction, actionHost)}
+      <div className="reference-dashboard">
       <Stats
         entries={[
           {
@@ -654,6 +640,7 @@ export function AdminViews({
                 .reduce((s, p) => s + p.amount, 0),
             ),
             icon: "store",
+            mobileIcon: "cart",
             tone: "red",
             hint: "Total cobrado hoy",
           },
@@ -668,6 +655,7 @@ export function AdminViews({
             label: "Ticket promedio",
             value: money(orders.length ? sales / orders.length : 0),
             icon: "cart",
+            mobileIcon: "chart",
             tone: "blue",
             hint: "Importe por pedido",
           },
@@ -715,7 +703,7 @@ export function AdminViews({
               className="ops-outline"
               onClick={() => navigate("/administrador/productos")}
             >
-              Ver carta →
+              <span className="dashboard-desktop-copy">Ver todos los productos</span><span className="dashboard-mobile-copy">Ver todos</span> <Icon name="chevron" />
             </button>
           }
         >
@@ -737,13 +725,13 @@ export function AdminViews({
                     <td>
                       <div className="ops-product-cell">
                         <img src={item.image} alt="" />
-                        <span>{item.label}</span>
+                        <div><strong>{item.label}</strong><small className="dashboard-product-category">{categories.find(c => c.id === item.category)?.name || item.category}</small></div>
                       </div>
                     </td>
                     <td>
                       <CategoryBadge category={item.category} />
                     </td>
-                    <td>{item.value}</td>
+                    <td><strong>{item.value}</strong><span className="dashboard-mobile-copy"> vendidos</span></td>
                     <td>{money(item.revenue)}</td>
                   </tr>
                 ))}
@@ -755,20 +743,12 @@ export function AdminViews({
       <Panel
         title="Pedidos recientes"
         action={
-          <div className="ops-actions">
-            <button onClick={exportOrders}>
-              <Icon name="download" /> Exportar
-            </button>
-            <button onClick={() => notify(seedExampleOrders)}>
-              Cargar pedidos de ejemplo
-            </button>
             <button
               className="ops-outline"
               onClick={() => navigate("/administrador/pedidos")}
             >
-              Ver todos los pedidos →
+              <span className="dashboard-desktop-copy">Ver todos los pedidos</span><span className="dashboard-mobile-copy">Ver todos</span> <Icon name="chevron" />
             </button>
-          </div>
         }
       >
         <div className="ops-table-wrap">
@@ -853,6 +833,7 @@ export function AdminViews({
           </OperationsTable>
         </div>
       </Panel>
+      </div>
       {editingOrder && <OrderEditor order={editingOrder} onClose={()=>setEditingOrder(null)} notify={notify}/>}
       {detail && (
         <OrderDetail

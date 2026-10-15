@@ -28,6 +28,7 @@ import "../../styles/operations-products.css";
 import "../../styles/operations-admin-panels.css";
 import "../../styles/operations-reference.css";
 import "../../styles/operations-anchor-layout.css";
+import "../../styles/operations-dashboard.css";
 const menus: Record<string, [string, string, IconName][]> = {
   cocina: [
     ["", "Panel de cocina", "chef"],
@@ -108,7 +109,7 @@ const descriptions: Record<string, string> = {
   "caja/apertura": "Registra el fondo inicial antes de iniciar el turno.",
   "caja/cierre": "Verifica los movimientos y cierra el turno.",
   "caja/historial": "Consulta todas las transacciones realizadas.",
-  "administrador/": "Resumen de tu negocio en tiempo real.",
+  "administrador/": "Resumen de ventas, pedidos y desempeño de tu restaurante.",
   "administrador/productos": "Administra productos, precios, categorías y disponibilidad del menú.",
   "administrador/promociones": "Crea ofertas que impulsen tus ventas.",
   "administrador/clientes": "Conoce y administra a tus clientes.",
@@ -165,6 +166,10 @@ export function OperationsPage({
   };
   const allowed = user && (user.role === role || user.role === "administrador");
   const key = `${role}/${section}`;
+  const dashboardOrder = ["", "productos", "promociones", "clientes", "usuarios", "pedidos", "reportes", "inventario", "configuracion"];
+  const navigation = key === "administrador/"
+    ? [...menus[role]].sort((a, b) => dashboardOrder.indexOf(a[0]) - dashboardOrder.indexOf(b[0]))
+    : menus[role];
   if (!allowed)
     return (
       <main id="contenido" className="ops-root">
@@ -189,13 +194,13 @@ export function OperationsPage({
     <div className="ops-root ops-workspace ops-reference" data-page={key}>
       <aside className="ops-sidebar" aria-label="Menú del panel">
         <a className="ops-brand" href="/" onClick={e => {e.preventDefault();navigate("/");}}><img src="/images/logo.webp" alt="Leñas y Sabores" /></a>
-        <div className="ops-area-label">{role === "administrador" ? "Panel de administración" : roleNames[role as Role]}</div>
+        <div className="ops-area-label">{key === "administrador/" ? "Administración" : role === "administrador" ? "Panel de administración" : roleNames[role as Role]}</div>
         <nav
           id="ops-navigation"
           className="ops-side-navigation"
           aria-label={`Navegación ${roleNames[role as Role]}`}
         >
-          {menus[role]?.map(([path, label, icon]) => (
+          {navigation?.map(([path, label, icon]) => (
             <button
               className={section === path ? "active" : ""}
               aria-current={section === path ? "page" : undefined} key={path}
@@ -223,7 +228,7 @@ export function OperationsPage({
           className="ops-side-navigation"
           aria-label={`Navegación ${roleNames[role as Role]}`}
         >
-          {menus[role]?.map(([path, label, icon]) => (
+          {navigation?.map(([path, label, icon]) => (
             <button
               className={section === path ? "active" : ""}
               aria-current={section === path ? "page" : undefined} key={path}
@@ -265,7 +270,7 @@ export function OperationsPage({
         >
           <div>
             <h1>{titles[key]}</h1>
-            <p>{descriptions[key]}</p>
+            <p>{key === "administrador/" ? <><span className="dashboard-heading-desktop">{descriptions[key]}</span><span className="dashboard-heading-mobile">Resumen de la operación de tu restaurante.</span></> : descriptions[key]}</p>
           </div>
           <div id="ops-page-actions" ref={setActionHost}>{!["administrador","caja"].includes(role) && <time className="ops-header-date-pill" dateTime={new Date().toISOString()}><Icon name="calendar"/><span>{new Date().toLocaleDateString("es-PE",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}</span><b>{new Date().toLocaleTimeString("es-PE",{hour:"2-digit",minute:"2-digit",hour12:false})}</b></time>}</div>
         </div>

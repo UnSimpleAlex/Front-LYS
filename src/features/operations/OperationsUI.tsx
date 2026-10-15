@@ -63,6 +63,7 @@ export function Stats({
     label: string;
     value: string | number;
     icon?: IconName;
+    mobileIcon?: IconName;
     tone?: string;
     hint?: string;
   }[];
@@ -72,7 +73,8 @@ export function Stats({
       {entries.map((item) => (
         <div className={`ops-stat ${item.tone || ""}`} key={item.label}>
           <span className="ops-stat-icon">
-            <Icon name={item.icon || iconFor(item.label)} />
+            <Icon name={item.icon || iconFor(item.label)} className={item.mobileIcon ? "ops-stat-desktop-icon" : undefined} />
+            {item.mobileIcon && <Icon name={item.mobileIcon} className="ops-stat-mobile-icon" />}
           </span>
           <div>
             <p>{item.label}</p>
