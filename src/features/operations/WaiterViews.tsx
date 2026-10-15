@@ -7,9 +7,9 @@ import { currentUser } from "../../services/localAuth";
 import { categories } from "../carta/catalog";
 import {
   createOrder,
-  editOrder,
   money,
   orderTotal,
+  minutes,
   updateTable,
   useOperations,
   changeStatus,
@@ -67,7 +67,8 @@ export function TableMap({
           >
             <i className="ops-chair-left" aria-hidden="true" />
             <i className="ops-chair-right" aria-hidden="true" />
-            <Icon name="table"/><strong>M{t.id}</strong>
+            <Icon name="table" />
+            <strong>M{t.id}</strong>
             <Badge value={t.status} />
             <small>{t.seats} personas</small>
           </button>
@@ -124,26 +125,47 @@ export function NewOrder({
     });
   return (
     <>
-      <div className="ops-table-strip">
-        {state.tables.map((t) => (
-          <button
-            key={t.id}
-            className={table === t.id ? "selected" : ""}
-            onClick={() => setTable(t.id)}
+      <div className="anchor-order-context">
+        <label>
+          <Icon name="table" />
+          <select
+            aria-label="Mesa del nuevo pedido"
+            value={table}
+            onChange={(e) => setTable(Number(e.target.value))}
           >
-            <strong>M{t.id}</strong>
-            <Badge value={t.status} />
-          </button>
-        ))}
+            {state.tables.map((t) => (
+              <option key={t.id} value={t.id}>
+                Mesa {String(t.id).padStart(2, "0")} · {t.status}
+              </option>
+            ))}
+          </select>
+        </label>
+        <span>
+          <Icon name="users" />
+          <strong>
+            {state.tables.find((t) => t.id === table)?.seats || 0}
+          </strong>{" "}
+          personas
+        </span>
       </div>
       <div className="ops-two-main">
         <Panel title="Elige del menú">
           <div className="ops-toolbar">
-            <Tabs
-              options={["todos", ...categories.map((c) => c.id)]}
-              value={category}
-              onChange={setCategory}
-            />
+            <nav
+              className="anchor-menu-categories"
+              aria-label="Categorías del pedido"
+            >
+              {[{ id: "todos", name: "Todos" }, ...categories].map((c) => (
+                <button
+                  key={c.id}
+                  type="button"
+                  aria-pressed={category === c.id}
+                  onClick={() => setCategory(c.id)}
+                >
+                  {c.name}
+                </button>
+              ))}
+            </nav>
             <input
               aria-label="Buscar productos del pedido"
               placeholder="Buscar productos…"
@@ -169,6 +191,7 @@ export function NewOrder({
                     <strong>{money(p.price)}</strong>
                     <button
                       className="ops-primary"
+                      aria-label={`Agregar ${p.name}`}
                       onClick={() =>
                         setLines((old) =>
                           old.some((l) => l.product.id === p.id)
@@ -181,7 +204,8 @@ export function NewOrder({
                         )
                       }
                     >
-                      + Agregar
+                      <Icon name="plus" />
+                      <span>Agregar</span>
                     </button>
                   </div>
                 </article>
@@ -230,7 +254,10 @@ export function NewOrder({
                       +
                     </button>
                   </div>
-                  <span>{l.product.name}</span>
+                  <span className="anchor-cart-product">
+                    <img src={l.product.image} alt="" />
+                    {l.product.name}
+                  </span>
                   <strong>{money(l.count * l.product.price)}</strong>
                   <button
                     aria-label={`Eliminar ${l.product.name}`}
@@ -294,9 +321,16 @@ export function WaiterViews({
   navigate: (path: string) => void;
 }) {
   const state = useOperations();
-  const [selected, setSelected] = useState(1);
+  const [selected, setSelected] = useState(
+    () =>
+      Number(new URLSearchParams(location.search).get("mesa")) ||
+      state.orders.find(
+        (o) => o.channel === "Salón" && !o.paid && o.status !== "Cancelado",
+      )?.table ||
+      1,
+  );
   const [tableOpen, setTableOpen] = useState(false);
-  const [zone, setZone] = useState("Salón principal");
+  const [zone, setZone] = useState("Todas");
   const [filter, setFilter] = useState("Todos");
   const [search, setSearch] = useState("");
   const [list, setList] = useState(false);
@@ -308,41 +342,86 @@ export function WaiterViews({
   const active = orders.filter(
     (o) => o.table === selected && !o.paid && o.status !== "Cancelado",
   );
-  const stats: Parameters<typeof Stats>[0]["entries"] = [
-    {
-      label: "Mesas disponibles",
-      value: state.tables.filter((t) => t.status === "Libre").length,
-      icon: "table" as const,
-      tone: "green",
-    },
-    {
-      label: "Mesas ocupadas",
-      value: state.tables.filter((t) => t.status === "Ocupada").length,
-      icon: "users" as const,
-    },
-    {
-      label: section === "mesas" ? "Mesas reservadas" : "Pedidos pendientes",
-      value:
-        section === "mesas"
-          ? state.tables.filter((t) => t.status === "Reservada").length
-          : orders.filter((o) => o.status === "Recibido").length,
-      icon: "receipt" as const,
-      tone: "gold",
-    },
-    {
-      label: section === "mesas" ? "Solicita cuenta" : "Listos para entregar",
-      value:
-        section === "mesas"
-          ? state.tables.filter((t) => t.status === "Solicita cuenta").length
-          : orders.filter((o) => o.status === "Listo").length,
-      icon: "check" as const,
-      tone: "blue",
-    },
-  ];
+  const stats: Parameters<typeof Stats>[0]["entries"] =
+    section === "pedidos"
+      ? [
+          {
+            label: "Total de pedidos",
+            value: orders.length,
+            icon: "receipt",
+            tone: "red",
+          },
+          {
+            label: "Nuevos",
+            value: orders.filter((o) => o.status === "Recibido").length,
+            icon: "clock",
+            tone: "gold",
+            hint: "En espera de atención",
+          },
+          {
+            label: "En preparación",
+            value: orders.filter((o) => o.status === "En preparación").length,
+            icon: "chef",
+            tone: "blue",
+            hint: "Pedidos en cocina",
+          },
+          {
+            label: "Listos",
+            value: orders.filter((o) => o.status === "Listo").length,
+            icon: "check",
+            tone: "green",
+            hint: "Listos para entregar",
+          },
+        ]
+      : [
+          {
+            label: "Mesas libres",
+            value: state.tables.filter((t) => t.status === "Libre").length,
+            icon: "table",
+            tone: "green",
+            hint: `de ${state.tables.length} mesas`,
+          },
+          {
+            label: "Mesas ocupadas",
+            value: state.tables.filter((t) => t.status === "Ocupada").length,
+            icon: "table",
+            tone: section === "mesas" ? "gold" : "red",
+            hint: `de ${state.tables.length} mesas`,
+          },
+          {
+            label: "Solicitan cuenta",
+            value: state.tables.filter((t) => t.status === "Solicita cuenta")
+              .length,
+            icon: "receipt",
+            tone: section === "mesas" ? "blue" : "gold",
+            hint: "Listas para el cobro",
+          },
+          section === "mesas"
+            ? {
+                label: "Mesas reservadas",
+                value: state.tables.filter((t) => t.status === "Reservada")
+                  .length,
+                icon: "lock",
+                tone: "gray",
+                hint: `de ${state.tables.length} mesas`,
+              }
+            : {
+                label: "Pedidos activos",
+                value: orders.filter(
+                  (o) => !["Entregado", "Cancelado"].includes(o.status),
+                ).length,
+                icon: "clipboard",
+                tone: "blue",
+                hint: "Pedidos en proceso",
+              },
+        ];
   if (section === "nuevo-pedido")
     return <NewOrder notify={notify} navigate={navigate} />;
   const tableDetail = tableOpen && (
-    <OperationsDialog title={`Mesa ${selected}`} onClose={() => setTableOpen(false)}>
+    <OperationsDialog
+      title={`Mesa ${selected}`}
+      onClose={() => setTableOpen(false)}
+    >
       <Badge value={table.status} />
       <p>{table.seats} personas</p>
       <Tabs
@@ -455,11 +534,11 @@ export function WaiterViews({
   );
   return (
     <>
-      <Stats entries={stats} />
+      {section !== "cierre-mesa" && <Stats entries={stats} />}
       {tableDetail}
       {section === "" ? (
         <div className="ops-salon-dashboard">
-          <Panel title="Mapa del salón">
+          <Panel title="Plano de mesas del salón">
             <TableMap
               selected={selected}
               onSelect={(id) => {
@@ -470,7 +549,7 @@ export function WaiterViews({
             />
           </Panel>
           <Panel
-            title="Pedidos recientes"
+            title="Pedidos recientes del salón"
             action={
               <button
                 className="ops-outline"
@@ -530,52 +609,52 @@ export function WaiterViews({
               <Icon name="plus" /> Nuevo pedido
             </button>
           </Panel>
-        <Panel title="Tareas del turno">
-          <div className="ops-three">
-            <button onClick={() => navigate("/mesera/cierre-mesa")}>
-              <strong>Solicitar cuentas</strong>
-              <span>
-                {
-                  state.tables.filter((t) => t.status === "Solicita cuenta")
-                    .length
-                }{" "}
-                mesas esperan el cobro
-              </span>
-            </button>
-            <button onClick={() => navigate("/mesera/pedidos")}>
-              <strong>Entregar pedidos</strong>
-              <span>
-                {orders.filter((o) => o.status === "Listo").length} listos para
-                servir
-              </span>
-            </button>
-            <button onClick={() => navigate("/mesera/mesas")}>
-              <strong>Liberar mesas</strong>
-              <span>
-                {
-                  state.tables.filter(
-                    (t) =>
-                      t.status !== "Libre" &&
-                      orders.some((o) => o.table === t.id) &&
-                      !orders.some(
-                        (o) =>
-                          o.table === t.id &&
-                          !o.paid &&
-                          o.status !== "Cancelado",
-                      ),
-                  ).length
-                }{" "}
-                mesas con todos sus pedidos cobrados
-              </span>
-            </button>
-          </div>
-        </Panel>
+          <Panel title="Tareas del turno">
+            <div className="ops-three">
+              <button onClick={() => navigate("/mesera/cierre-mesa")}>
+                <strong>Solicitar cuentas</strong>
+                <span>
+                  {
+                    state.tables.filter((t) => t.status === "Solicita cuenta")
+                      .length
+                  }{" "}
+                  mesas esperan el cobro
+                </span>
+              </button>
+              <button onClick={() => navigate("/mesera/pedidos")}>
+                <strong>Entregar pedidos</strong>
+                <span>
+                  {orders.filter((o) => o.status === "Listo").length} listos
+                  para servir
+                </span>
+              </button>
+              <button onClick={() => navigate("/mesera/mesas")}>
+                <strong>Liberar mesas</strong>
+                <span>
+                  {
+                    state.tables.filter(
+                      (t) =>
+                        t.status !== "Libre" &&
+                        orders.some((o) => o.table === t.id) &&
+                        !orders.some(
+                          (o) =>
+                            o.table === t.id &&
+                            !o.paid &&
+                            o.status !== "Cancelado",
+                        ),
+                    ).length
+                  }{" "}
+                  mesas con todos sus pedidos cobrados
+                </span>
+              </button>
+            </div>
+          </Panel>
         </div>
       ) : section === "mesas" ? (
         <>
           <div className="ops-toolbar">
             <Tabs
-              options={["Salón principal", "Terraza", "Zona parrilla"]}
+              options={["Todas", "Salón principal", "Terraza", "Zona parrilla"]}
               value={zone}
               onChange={setZone}
             />
@@ -616,81 +695,198 @@ export function WaiterViews({
               filter={filter}
               list={list}
             />
-            <div className="ops-table-selection"><Panel title={`Mesa ${selected}`} action={<Badge value={table.status}/> }>
-              <div className="ops-table-detail-meta"><Icon name="users"/><small>{table.seats} personas · {table.zone}</small></div>
-              <h3>Pedido actual</h3>
-              {active.length ? <div className="ops-reference-line-items">{active.flatMap(o=>o.items.map(line=><div key={`${o.id}-${line.product.id}`}><img src={line.product.image} alt=""/><div><strong>{line.count} × {line.product.name}</strong><small>#{o.id} · {o.status}</small></div><b>{money(line.count*line.product.price)}</b></div>))}</div> : <Empty>Esta mesa no tiene pedidos pendientes.</Empty>}
-              <p className="ops-total">Total <strong>{money(active.reduce((sum,o)=>sum+orderTotal(o),0))}</strong></p>
-              <div className="ops-stack-actions"><button className="ops-primary" onClick={()=>navigate(`/mesera/nuevo-pedido?mesa=${selected}`)}><Icon name="plus"/>Agregar pedido</button><button className="ops-outline" onClick={()=>setTableOpen(true)}><Icon name="eye"/>Ver mesa</button></div>
-            </Panel></div>
+            <div className="ops-table-selection">
+              <Panel
+                title={`Mesa ${selected}`}
+                action={<Badge value={table.status} />}
+              >
+                <div className="ops-table-detail-meta">
+                  <Icon name="users" />
+                  <small>
+                    {table.seats} personas · {table.zone}
+                  </small>
+                </div>
+                <h3>Pedido actual</h3>
+                {active.length ? (
+                  <div className="ops-reference-line-items">
+                    {active.flatMap((o) =>
+                      o.items.map((line) => (
+                        <div key={`${o.id}-${line.product.id}`}>
+                          <img src={line.product.image} alt="" />
+                          <div>
+                            <strong>
+                              {line.count} × {line.product.name}
+                            </strong>
+                            <small>
+                              #{o.id} · {o.status}
+                            </small>
+                          </div>
+                          <b>{money(line.count * line.product.price)}</b>
+                        </div>
+                      )),
+                    )}
+                  </div>
+                ) : (
+                  <Empty>Esta mesa no tiene pedidos pendientes.</Empty>
+                )}
+                <p className="ops-total">
+                  Total{" "}
+                  <strong>
+                    {money(active.reduce((sum, o) => sum + orderTotal(o), 0))}
+                  </strong>
+                </p>
+                <div className="ops-stack-actions">
+                  <button
+                    className="ops-primary"
+                    onClick={() =>
+                      navigate(`/mesera/nuevo-pedido?mesa=${selected}`)
+                    }
+                  >
+                    <Icon name="plus" />
+                    Agregar pedido
+                  </button>
+                  <button
+                    className="ops-outline"
+                    onClick={() => setTableOpen(true)}
+                  >
+                    <Icon name="eye" />
+                    Ver mesa
+                  </button>
+                </div>
+              </Panel>
+            </div>
           </div>
         </>
       ) : section === "cierre-mesa" ? (
-        <div className="ops-three-cols">
-          <div className="ops-close-table-context"><label>Mesa<select aria-label="Mesa para cerrar" value={selected} onChange={e=>setSelected(Number(e.target.value))}>{state.tables.map(t=><option key={t.id} value={t.id}>Mesa {t.id} · {t.status}</option>)}</select></label><Badge value={table.status}/><span><Icon name="users"/>{table.seats} personas</span><button className="ops-outline" onClick={()=>navigate("/mesera/mesas")}><Icon name="table"/>Ver mesas</button></div>
-          <Panel title={`Consumo de la mesa ${selected}`}>
-            {active.map((o) => (
-              <div key={o.id}>
-                <h3>
-                  #{o.id} <Badge value={o.status} />
-                </h3>
-                {o.items.map((line) => (
-                  <div className="ops-cart-line" key={line.product.id}>
-                    <img
-                      className="ops-consumption-photo"
-                      src={line.product.image}
-                      alt=""
-                    />
-                    <span>{line.count} × {line.product.name}</span>
-                    <strong>{money(line.product.price * line.count)}</strong>
-                    {o.status === "Recibido" && (
-                      <div className="ops-quantity">
-                        <button
-                          onClick={() =>
-                            notify(() =>
-                              editOrder(
-                                o.id,
-                                o.items
-                                  .map((l) =>
-                                    l.product.id === line.product.id
-                                      ? { ...l, count: l.count - 1 }
-                                      : l,
-                                  )
-                                  .filter((l) => l.count > 0),
-                                o.discount,
-                                o.notes,
-                              ),
-                            )
-                          }
-                        >
-                          −
-                        </button>
-                        <span>{line.count}</span>
-                        <button
-                          onClick={() =>
-                            notify(() =>
-                              editOrder(
-                                o.id,
-                                o.items.map((l) =>
-                                  l.product.id === line.product.id
-                                    ? { ...l, count: l.count + 1 }
-                                    : l,
-                                ),
-                                o.discount,
-                                o.notes,
-                              ),
-                            )
-                          }
-                        >
-                          +
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            ))}
-            {!active.length && <Empty />}
+        <div className="anchor-table-close">
+          <div className="anchor-table-close-meta">
+            <label>
+              <Icon name="table" />
+              <span>
+                Mesa
+                <select
+                  aria-label="Mesa para cerrar"
+                  value={selected}
+                  onChange={(e) => setSelected(Number(e.target.value))}
+                >
+                  {state.tables.map((t) => (
+                    <option key={t.id} value={t.id}>
+                      Mesa {String(t.id).padStart(2, "0")}
+                    </option>
+                  ))}
+                </select>
+                <small>{table.zone}</small>
+              </span>
+            </label>
+            <div>
+              <Icon name="receipt" />
+              <span>
+                Pedido
+                <strong>
+                  {active.map((o) => `#${o.id}`).join(", ") || "Sin pedidos"}
+                </strong>
+                <small>{active[0] ? dateText(active[0].created) : "—"}</small>
+              </span>
+            </div>
+            <div>
+              <Icon name="users" />
+              <span>
+                Personas<strong>{table.seats}</strong>
+                <small>comensales</small>
+              </span>
+            </div>
+            <div>
+              <span>
+                Estado del pedido
+                <Badge value={active[0]?.status || table.status} />
+              </span>
+              <span>
+                Estado de pago
+                <Badge
+                  value={
+                    active.length ? "Pago pendiente" : "Sin saldo pendiente"
+                  }
+                />
+              </span>
+            </div>
+          </div>
+          <Panel title="Consumo de la mesa">
+            <div className="ops-table-wrap">
+              <OperationsTable>
+                <thead>
+                  <tr>
+                    {[
+                      "Producto",
+                      "Cantidad",
+                      "Precio unitario",
+                      "Subtotal",
+                    ].map((h) => (
+                      <th key={h}>{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {active.flatMap((o) =>
+                    o.items.map((line) => (
+                      <tr key={`${o.id}-${line.product.id}`}>
+                        <td>
+                          <div className="ops-product-cell">
+                            <img src={line.product.image} alt="" />
+                            <div>
+                              <strong>{line.product.name}</strong>
+                              <small>{line.product.description}</small>
+                            </div>
+                          </div>
+                        </td>
+                        <td>{line.count}</td>
+                        <td>{money(line.product.price)}</td>
+                        <td>{money(line.product.price * line.count)}</td>
+                      </tr>
+                    )),
+                  )}
+                </tbody>
+              </OperationsTable>
+            </div>
+            {!active.length && (
+              <Empty>La mesa no tiene consumos pendientes.</Empty>
+            )}
+            <div className="ops-total anchor-table-close-total">
+              <strong>Total a pagar</strong>
+              <strong>
+                {money(active.reduce((sum, o) => sum + orderTotal(o), 0))}
+              </strong>
+            </div>
+          </Panel>
+          <p className="anchor-table-close-note">
+            <Icon name="info" />
+            La mesa se liberará cuando se confirme el pago.
+          </p>
+          <div className="anchor-table-close-actions">
+            <button
+              className="ops-outline"
+              onClick={() => navigate("/mesera/mesas")}
+            >
+              <Icon name="arrow" />
+              Volver a mesas
+            </button>
+            <button
+              className="ops-primary"
+              disabled={!active.length}
+              onClick={() =>
+                notify(() =>
+                  updateTable(selected, {
+                    status: "Solicita cuenta",
+                    notes: note ?? table.notes,
+                  }),
+                )
+              }
+            >
+              <Icon name="receipt" />
+              Solicitar cuenta
+            </button>
+          </div>
+          <details className="anchor-table-close-extra">
+            <summary>Otras acciones</summary>
             <label>
               Nota de cierre
               <textarea
@@ -698,29 +894,7 @@ export function WaiterViews({
                 onChange={(e) => setNote(e.target.value)}
               />
             </label>
-          </Panel>
-          <Panel title="Resumen de cuenta">
-            <h3 className="ops-total">
-              Total a pagar{" "}
-              <strong>
-                {money(active.reduce((sum, o) => sum + orderTotal(o), 0))}
-              </strong>
-            </h3>
-            <div className="ops-stack-actions">
-              <button
-                className="ops-primary"
-                disabled={!active.length}
-                onClick={() =>
-                  notify(() =>
-                    updateTable(selected, {
-                      status: "Solicita cuenta",
-                      notes: note ?? table.notes,
-                    }),
-                  )
-                }
-              >
-                <Icon name="receipt" /> Solicitar cuenta
-              </button>
+            <div>
               <button
                 className="ops-outline"
                 onClick={() =>
@@ -737,7 +911,8 @@ export function WaiterViews({
                   )
                 }
               >
-                <Icon name="print" /> Imprimir cuenta
+                <Icon name="print" />
+                Imprimir cuenta
               </button>
               <button
                 className="ops-outline"
@@ -745,18 +920,20 @@ export function WaiterViews({
                   navigate(`/mesera/nuevo-pedido?mesa=${selected}`)
                 }
               >
-                <Icon name="plus" /> Agregar producto
+                <Icon name="plus" />
+                Agregar producto
               </button>
               <button
-                className="ops-green"
+                className="ops-outline"
                 onClick={() =>
                   notify(() => updateTable(selected, { status: "Libre" }))
                 }
               >
-                <Icon name="table" /> Liberar mesa
+                <Icon name="table" />
+                Liberar mesa
               </button>
             </div>
-          </Panel>
+          </details>
         </div>
       ) : (
         <>
@@ -792,12 +969,13 @@ export function WaiterViews({
                 <OperationsTable>
                   <thead>
                     <tr>
-                      <th>Mesa</th>
                       <th>N° pedido</th>
+                      <th>Mesa</th>
                       <th>Productos</th>
-                      <th>Hora</th>
                       <th>Total</th>
                       <th>Estado</th>
+                      <th>Tiempo</th>
+                      <th>Hora</th>
                       <th>Acciones</th>
                     </tr>
                   </thead>
@@ -815,43 +993,56 @@ export function WaiterViews({
                       )
                       .map((o) => (
                         <tr key={o.id}>
-                          <td>{o.table}</td>
-                          <td>#{o.id}</td>
+                          <td>
+                            <strong>#{o.id}</strong>
+                          </td>
+                          <td>Mesa {o.table}</td>
                           <td>
                             <ProductSummary order={o} />
-                          </td>
-                          <td>
-                            <time
-                              dateTime={o.created}
-                              title={dateText(o.created)}
-                            >
-                              {new Date(o.created).toLocaleTimeString("es-PE", {
-                                hour: "2-digit",
-                                minute: "2-digit",
-                              })}
-                            </time>
                           </td>
                           <td>{money(orderTotal(o))}</td>
                           <td>
                             <Badge value={o.draft ? "Borrador" : o.status} />
                           </td>
                           <td>
+                            {o.status === "En preparación"
+                              ? `${minutes(o.accepted || o.created)} min`
+                              : "—"}
+                          </td>
+                          <td>
+                            <time dateTime={o.created}>
+                              {new Date(o.created).toLocaleTimeString("es-PE", {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })}
+                            </time>
+                          </td>
+                          <td>
                             <div className="ops-stack-actions ops-salon-order-actions">
-                              <button title="Ver detalle"
+                              <button
+                                title="Ver detalle"
                                 className="ops-outline"
                                 onClick={() => setDetail(o)}
                               >
-                                <Icon name="eye" /><span className="ops-action-caption">Ver detalle</span>
+                                <Icon name="eye" />
+                                <span className="ops-action-caption">
+                                  Ver detalle
+                                </span>
                               </button>
                               {o.draft ? (
-                                <button title="Enviar a cocina"
+                                <button
+                                  title="Enviar a cocina"
                                   className="ops-primary"
                                   onClick={() => notify(() => sendDraft(o.id))}
                                 >
-                                  <Icon name="send" /><span className="ops-action-caption">Enviar a cocina</span>
+                                  <Icon name="send" />
+                                  <span className="ops-action-caption">
+                                    Enviar a cocina
+                                  </span>
                                 </button>
                               ) : o.status === "Listo" ? (
-                                <button title="Entregar"
+                                <button
+                                  title="Entregar"
                                   className="ops-green"
                                   onClick={() =>
                                     notify(() =>
@@ -859,10 +1050,14 @@ export function WaiterViews({
                                     )
                                   }
                                 >
-                                  <Icon name="serve" /><span className="ops-action-caption">Entregar</span>
+                                  <Icon name="serve" />
+                                  <span className="ops-action-caption">
+                                    Entregar
+                                  </span>
                                 </button>
                               ) : null}
-                              <button title="Agregar producto"
+                              <button
+                                title="Agregar producto"
                                 className="ops-outline"
                                 onClick={() =>
                                   navigate(
@@ -870,9 +1065,13 @@ export function WaiterViews({
                                   )
                                 }
                               >
-                                <Icon name="plus" /><span className="ops-action-caption">Agregar producto</span>
+                                <Icon name="plus" />
+                                <span className="ops-action-caption">
+                                  Agregar producto
+                                </span>
                               </button>
-                              <button title="Solicitar cuenta"
+                              <button
+                                title="Solicitar cuenta"
                                 className="ops-outline"
                                 onClick={() =>
                                   notify(() =>
@@ -882,7 +1081,10 @@ export function WaiterViews({
                                   )
                                 }
                               >
-                                <Icon name="receipt" /><span className="ops-action-caption">Solicitar cuenta</span>
+                                <Icon name="receipt" />
+                                <span className="ops-action-caption">
+                                  Solicitar cuenta
+                                </span>
                               </button>
                             </div>
                           </td>
