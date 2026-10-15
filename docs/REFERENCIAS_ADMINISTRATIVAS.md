@@ -17,7 +17,7 @@ Los estilos de referencia entran por `operations-anchor-layout.css` y se dividen
 
 ## Dimensiones y contenido
 
-En PC amplio la barra lateral mide 295 px y los indicadores parten de 120 px. En portátiles se reduce la barra a 240 px, los elementos de navegación a 43 px y los indicadores a aproximadamente 98 px. En pantallas de menos de 700 px de alto, la navegación baja a 40 px y los indicadores a aproximadamente 93 px según su contenido.
+En PC amplio la barra lateral mide 266 px y los indicadores parten de 108 px. En portátiles se reduce la barra a 216 px, los elementos de navegación a 38 px y los indicadores a aproximadamente 88 px. En pantallas de menos de 700 px de alto, la navegación baja a 36 px y los indicadores parten de 84 px según su contenido. Esta escala reduce aproximadamente un 10 % los elementos de escritorio respecto de la versión anterior, sin reducir los objetivos táctiles de móvil.
 
 El encabezado móvil sustituye la barra lateral. Las listas cambian de composición según el contenido: productos y promociones con fotografía, clientes y usuarios en registros compactos, historial de cocina con tiempos y consumo de mesa en tabla. En anchos mínimos se redistribuyen campos para que no dependan de palabras fragmentadas ni de desplazamiento horizontal de toda la página.
 

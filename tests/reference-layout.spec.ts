@@ -93,7 +93,7 @@ test("referencias: geometría y capturas de las 25 páginas internas", async ({
           await page
             .locator(".ops-sidebar")
             .evaluate((sidebar) => sidebar.getBoundingClientRect().width),
-        ).toBe(295);
+        ).toBe(266);
         expect(
           await page
             .locator(".ops-product-list tbody tr")
