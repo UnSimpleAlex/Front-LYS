@@ -25,6 +25,8 @@ Las referencias usan cifras, fechas, fotos y nombres ilustrativos. La interfaz c
 
 ## Verificación reproducible
 
+El pulido de detalles usa directamente las imágenes suministradas como fuente visual: icono de documento para pedidos, mesa con sillas en el plano, bandera de entregas e iconos de gráfica y trofeo en los encabezados del dashboard. La gráfica incluye escala de importes y puntos delineados. Cobros agrupa método y comprobante en dos columnas de escritorio, muestra el estado en una etiqueta compacta y delimita las superficies de pendientes y detalle. En tablet y móvil estos grupos se apilan sin cambiar los datos ni los flujos de pago. La escala compacta solicitada prevalece sobre los tamaños absolutos de las imágenes.
+
 `tests/reference-layout.spec.ts` recorre las 25 rutas en 1672 × 941, 1366 × 591, 768 × 1024, 390 × 844 y 240 × 900. Genera capturas ignoradas por Git en `.impeccable/review/anchor-correction/`. Comprueba además las dimensiones compactas del portátil, las siete filas de productos en PC, las cuatro pestañas de configuración, los tres indicadores de inventario y la modificación segura de la cantidad de mesas.
 
 `tests/operations.spec.ts` conserva las pruebas de roles, pedidos, cobros, comprobantes, stock y once denominaciones entre 240 y 2560 px. La verificación de tamaños se complementa con inspección visual de las capturas; por sí sola no demuestra igualdad de píxeles con una imagen.
