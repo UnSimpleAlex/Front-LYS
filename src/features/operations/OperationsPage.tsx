@@ -1,3 +1,6 @@
+import { DeliveryViews } from "./DeliveryViews";
+import { OperationsDialog } from "./OperationsDialog";
+import { OperationsPageActions } from "./operationsPageContext";
 import { useEffect, useState } from "react";
 import { Icon, type IconName } from "./OperationsVisuals";
 import {
@@ -10,8 +13,9 @@ import { KitchenViews } from "./KitchenViews";
 import { WaiterViews } from "./WaiterViews";
 import { CashViews } from "./CashViews";
 import { AdminViews } from "./AdminViews";
-import { useOperations, changeStatus } from "./operationsStore";
-import { OrderCard, Empty } from "./OperationsUI";
+import { useOperations } from "./operationsStore";
+import { loadWorkspacePreview } from "./workspacePreview";
+import { Empty } from "./OperationsUI";
 import "../../styles/operations.css";
 import "../../styles/operations-fidelity.css";
 import "../../styles/operations-fidelity-layout.css";
@@ -19,10 +23,17 @@ import "../../styles/operations-fidelity-responsive.css";
 import "../../styles/operations-adaptive.css";
 import "../../styles/kitchen-board.css";
 import "../../styles/kitchen-reference.css";
+import "../../styles/operations-workspace.css";
+import "../../styles/operations-products.css";
+import "../../styles/operations-admin-panels.css";
+import "../../styles/operations-reference.css";
+import "../../styles/operations-anchor-layout.css";
+import "../../styles/operations-dashboard.css";
+import "../../styles/operations-audit.css";
 const menus: Record<string, [string, string, IconName][]> = {
   cocina: [
-    ["", "Panel cocina", "chef"],
-    ["pedidos", "Pedidos", "receipt"],
+    ["", "Panel de cocina", "chef"],
+    ["pedidos", "Pedidos entrantes", "receipt"],
     ["historial", "Historial", "clock"],
     ["tiempos", "Control de tiempos", "chart"],
   ],
@@ -42,14 +53,14 @@ const menus: Record<string, [string, string, IconName][]> = {
     ["historial", "Historial", "clock"],
   ],
   administrador: [
-    ["", "Dashboard", "chart"],
+    ["", "Dashboard", "home"],
+    ["pedidos", "Pedidos", "receipt"],
     ["productos", "Productos", "box"],
+    ["inventario", "Inventario", "inventory"],
     ["promociones", "Promociones", "tag"],
     ["clientes", "Clientes", "users"],
     ["usuarios", "Usuarios", "user"],
-    ["pedidos", "Pedidos", "receipt"],
     ["reportes", "Reportes", "chart"],
-    ["inventario", "Inventario", "box"],
     ["configuracion", "Configuración", "settings"],
   ],
   delivery: [["", "Entregas", "truck"]],
@@ -99,8 +110,8 @@ const descriptions: Record<string, string> = {
   "caja/apertura": "Registra el fondo inicial antes de iniciar el turno.",
   "caja/cierre": "Verifica los movimientos y cierra el turno.",
   "caja/historial": "Consulta todas las transacciones realizadas.",
-  "administrador/": "Resumen de tu negocio en tiempo real.",
-  "administrador/productos": "Administra tu carta, precios y disponibilidad.",
+  "administrador/": "Resumen de ventas, pedidos y desempeño de tu restaurante.",
+  "administrador/productos": "Administra productos, precios, categorías y disponibilidad del menú.",
   "administrador/promociones": "Crea ofertas que impulsen tus ventas.",
   "administrador/clientes": "Conoce y administra a tus clientes.",
   "administrador/usuarios": "Administra el acceso de tu equipo al sistema.",
@@ -115,7 +126,7 @@ const descriptions: Record<string, string> = {
 };
 export function OperationsPage({
   route,
-  navigate,
+  navigate: onNavigate,
 }: {
   route: string;
   navigate: (path: string) => void;
@@ -132,11 +143,13 @@ export function OperationsPage({
   const state = useOperations();
   const [, role, section = ""] = route.split("/");
   const [menu, setMenu] = useState(false);
+  const [actionHost, setActionHost] = useState<HTMLDivElement | null>(null);
   const [profile, setProfile] = useState(false);
+  const [preparingPreview,setPreparingPreview] = useState(false);
   const [notifications, setNotifications] = useState(false);
   const [message, setMessage] = useState("");
   const [failed, setFailed] = useState(false);
-  const [detail, setDetail] = useState("");
+  const navigate = (path:string) => {setMenu(false);setProfile(false);setNotifications(false);setMessage("");onNavigate(path);};
   const notify = (task: () => void) => {
     try {
       task();
@@ -144,6 +157,7 @@ export function OperationsPage({
       setMessage("Cambios guardados.");
     } catch (error) {
       setFailed(true);
+      window.dispatchEvent(new CustomEvent("operations:error", {detail:error instanceof Error ? error.message : "No se pudo guardar el cambio."}));
       setMessage(
         error instanceof Error
           ? error.message
@@ -153,6 +167,13 @@ export function OperationsPage({
   };
   const allowed = user && (user.role === role || user.role === "administrador");
   const key = `${role}/${section}`;
+  useEffect(() => {
+    document.title = `${titles[key] || "Panel de operaciones"} | Leñas y Sabores`;
+  }, [key]);
+  const dashboardOrder = ["", "productos", "promociones", "clientes", "usuarios", "pedidos", "reportes", "inventario", "configuracion"];
+  const navigation = key === "administrador/"
+    ? [...menus[role]].sort((a, b) => dashboardOrder.indexOf(a[0]) - dashboardOrder.indexOf(b[0]))
+    : menus[role];
   if (!allowed)
     return (
       <main id="contenido" className="ops-root">
@@ -174,40 +195,19 @@ export function OperationsPage({
     (o) => !o.draft && !["Entregado", "Cancelado"].includes(o.status),
   );
   return (
-    <div className="ops-root" data-page={key}>
-      <header className="ops-header">
-        <a
-          href="/"
-          onClick={(e) => {
-            e.preventDefault();
-            navigate("/");
-          }}
-          aria-label="Ir al inicio"
-        >
-          <img
-            className="ops-logo"
-            src="/images/logo.webp"
-            alt="Leñas y Sabores · Pollos & Parrillas"
-          />
-        </a>
-        <button
-          className="ops-menu"
-          aria-label={menu ? "Cerrar menú del panel" : "Abrir menú del panel"}
-          aria-expanded={menu}
-          aria-controls="ops-navigation"
-          onClick={() => setMenu(!menu)}
-        >
-          <Icon name="menu" />
-        </button>
+    <div className="ops-root ops-workspace ops-reference" data-page={key}>
+      <aside className="ops-sidebar" aria-label="Menú del panel">
+        <a className="ops-brand" href="/" onClick={e => {e.preventDefault();navigate("/");}}><img src="/images/logo.webp" alt="Leñas y Sabores" /></a>
+        <div className="ops-area-label">{key === "administrador/" ? "Administración" : role === "administrador" ? "Panel de administración" : roleNames[role as Role]}</div>
         <nav
           id="ops-navigation"
-          className={menu ? "open" : ""}
+          className="ops-side-navigation"
           aria-label={`Navegación ${roleNames[role as Role]}`}
         >
-          {menus[role]?.map(([path, label, icon]) => (
+          {navigation?.map(([path, label, icon]) => (
             <button
               className={section === path ? "active" : ""}
-              key={path}
+              aria-current={section === path ? "page" : undefined} key={path}
               onClick={() => {
                 setMenu(false);
                 navigate(`/${role}${path ? "/" + path : ""}`);
@@ -218,113 +218,65 @@ export function OperationsPage({
             </button>
           ))}
         </nav>
-        <div className="ops-header-right">
-          <span className="ops-date">
-            <Icon name="calendar" />
-            {new Date().toLocaleDateString("es-PE", {
-              weekday: "short",
-              day: "numeric",
-              month: "short",
-              year: "numeric",
-            })}
-          </span>
-          <span className="ops-open">
-            ●{" "}
-            {role === "caja"
-              ? state.shifts.some((s) => !s.closed)
-                ? "Caja abierta"
-                : "Caja cerrada"
-              : state.settings.open
-                ? role === "cocina"
-                  ? "Cocina activa"
-                  : role === "mesera"
-                    ? "Turno activo"
-                    : "Local abierto"
-                : "Local cerrado"}
-            {role !== "administrador" && <small>{state.settings.hours}</small>}
-          </span>
-          <button
-            className="ops-notification-toggle"
-            aria-label="Notificaciones de pedidos"
-            aria-expanded={notifications}
-            onClick={() => setNotifications(!notifications)}
-          >
-            <Icon name="bell" />
-            <sup>{pending.length}</sup>
-          </button>
-          <button
-            className="ops-user"
-            aria-label={`Cuenta de ${user.name}`}
-            title={`${user.name} · ${roleNames[user.role]}`}
-            aria-expanded={profile}
-            onClick={() => setProfile(!profile)}
-          >
-            <span className="ops-avatar">
-              <Icon name="user" />
-            </span>
-            <span>
-              {user.name}
-              <small>{roleNames[user.role]}</small>
-            </span>
-            <Icon name="chevron" />
-          </button>
-        </div>
-        {profile && (
-          <div className="ops-profile-menu">
-            <button onClick={() => navigate("/mi-cuenta")}>Mi cuenta</button>
-            <button onClick={() => navigate("/")}>Ver sitio público</button>
-            {user.role === "administrador" &&
-              Object.keys(menus).map((r) => (
-                <button
-                  key={r}
-                  onClick={() => {
-                    setProfile(false);
-                    navigate("/" + r);
-                  }}
-                >
-                  Panel {roleNames[r as Role]}
-                </button>
-              ))}
+        <button className="ops-side-account" onClick={() => setProfile(true)}><Icon name="user" /><span>{user.role === "administrador" ? "Administrador" : roleNames[user.role]}<small>{state.settings.name}</small></span><Icon name="chevron" /></button>
+      </aside>
+      <div className="ops-workspace-toolbar">
+        <button className="ops-menu" aria-label="Abrir menú del panel" aria-expanded={menu} onClick={() => setMenu(true)}><Icon name="menu" /></button>
+        <a className="ops-mobile-brand" href="/" onClick={e=>{e.preventDefault();navigate("/");}}><img src="/images/logo.webp" alt="Leñas y Sabores"/></a>
+        <span className="ops-workspace-status"><span aria-hidden="true" className={state.settings.open ? "is-open" : ""} />{state.settings.open ? "Local abierto" : "Local cerrado"}</span>
+        <button aria-label="Notificaciones de pedidos" onClick={() => setNotifications(true)}><Icon name="bell" />{pending.length}</button>
+        <button className="ops-mobile-account" aria-label={`Cuenta de ${user.name}`} onClick={() => setProfile(true)}><Icon name="user" /></button>
+      </div>
+      {menu && <OperationsDialog title={roleNames[role as Role]} onClose={() => setMenu(false)} className="ops-navigation-dialog">        <nav
+          id="ops-mobile-navigation"
+          className="ops-side-navigation"
+          aria-label={`Navegación ${roleNames[role as Role]}`}
+        >
+          {navigation?.map(([path, label, icon]) => (
             <button
+              className={section === path ? "active" : ""}
+              aria-current={section === path ? "page" : undefined} key={path}
               onClick={() => {
-                logoutLocal();
-                navigate("/iniciar-sesion");
+                setMenu(false);
+                navigate(`/${role}${path ? "/" + path : ""}`);
               }}
             >
-              Cerrar sesión
+              <Icon name={icon} />
+              {label}
             </button>
-          </div>
-        )}
-        {notifications && (
-          <div className="ops-notification-menu">
-            <strong>Pedidos activos: {pending.length}</strong>
-            {pending.slice(0, 5).map((o) => (
-              <p key={o.id}>
-                #{o.id} · {o.status}
-              </p>
-            ))}
-            {!pending.length && <p>No hay pedidos pendientes.</p>}
-          </div>
-        )}
-      </header>
+          ))}
+        </nav>
+</OperationsDialog>}
+      {profile && <OperationsDialog title="Mi cuenta" onClose={() => setProfile(false)}>
+        <div className="ops-account-summary"><Icon name="user" /><div><strong>{user.name}</strong><p>{roleNames[user.role]}</p></div></div>
+        <div className="ops-account-actions">
+          <button onClick={() => {setProfile(false);setNotifications(true);}}><Icon name="bell" />Pedidos activos ({pending.length})</button>
+          {user.role === "administrador" && <><h3>Cambiar de área</h3>{Object.keys(menus).map(r => <button key={r} onClick={() => {setProfile(false);navigate("/" + r);}}><Icon name={menus[r][0][2]} />{roleNames[r as Role]}<Icon name="chevron" /></button>)}</>}
+          {user.role === "administrador" && <button disabled={preparingPreview} onClick={async()=>{
+            setPreparingPreview(true);
+            try { await loadWorkspacePreview(); notify(()=>setProfile(false)); }
+            catch(error) { notify(()=>{throw error;}); }
+            finally {setPreparingPreview(false);}
+          }}><Icon name="plus"/>{preparingPreview ? "Preparando datos…" : state.suppliers.some(s=>s.id==="workspace-preview-supplier") ? "Actualizar muestra de demostración":"Cargar datos de demostración"}</button>}
+          <button onClick={() => navigate("/mi-cuenta")}><Icon name="user" />Editar mi cuenta</button>
+          <button onClick={() => navigate("/")}><Icon name="home" />Ver sitio público</button>
+          <button onClick={() => {logoutLocal();navigate("/iniciar-sesion");}}><Icon name="power" />Cerrar sesión</button>
+        </div>
+      </OperationsDialog>}
+      {notifications && <OperationsDialog title="Pedidos activos" onClose={() => setNotifications(false)}>
+        {pending.map(o => <div className="ops-notification-item" key={o.id}><strong>#{o.id}</strong><span>{o.customer}</span><span>{o.status}</span></div>)}
+        {!pending.length && <Empty>No hay pedidos pendientes.</Empty>}
+      </OperationsDialog>}
+      <OperationsPageActions.Provider value={actionHost}>
       <main id="contenido" className="ops-content">
         <div
           className={`ops-page-heading ${role === "cocina" ? "script" : ""}`}
         >
           <div>
-            <span>
-              {role === "administrador"
-                ? "Administración"
-                : roleNames[role as Role]}
-            </span>
             <h1>{titles[key]}</h1>
-            <p>{descriptions[key]}</p>
+            <p>{key === "administrador/" ? <><span className="dashboard-heading-desktop">{descriptions[key]}</span><span className="dashboard-heading-mobile">Resumen de la operación de tu restaurante.</span></> : descriptions[key]}</p>
           </div>
-          <div className="ops-slogan">
-            El auténtico
-            <br />
-            sabor de la leña
-          </div>
+          <div id="ops-page-actions" ref={setActionHost}>{!["administrador","caja"].includes(role) && <time className="ops-header-date-pill" dateTime={new Date().toISOString()}><Icon name="calendar"/><span>{new Date().toLocaleDateString("es-PE",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}</span><b>{new Date().toLocaleTimeString("es-PE",{hour:"2-digit",minute:"2-digit",hour12:false})}</b></time>}</div>
         </div>
         {message && (
           <div
@@ -366,48 +318,11 @@ export function OperationsPage({
             navigate={navigate}
           />
         ) : (
-          <div className="ops-incoming-grid">
-            {state.orders
-              .filter(
-                (o) =>
-                  o.channel === "Delivery" &&
-                  ["Listo", "En camino"].includes(o.status),
-              )
-              .map((o) => (
-                <OrderCard
-                  key={o.id}
-                  order={o}
-                  onDetail={() => setDetail(detail === o.id ? "" : o.id)}
-                  onStatus={(id, status) =>
-                    notify(() => changeStatus(id, status))
-                  }
-                />
-              ))}
-            {!state.orders.some(
-              (o) =>
-                o.channel === "Delivery" &&
-                ["Listo", "En camino"].includes(o.status),
-            ) && <Empty>No hay entregas pendientes.</Empty>}
-            {detail && <PanelDelivery id={detail} />}
-          </div>
+          <DeliveryViews notify={notify} />
         )}
       </main>
-      <div className="ops-local-note">
-        Simulación local · Datos guardados en este navegador
-      </div>
+      </OperationsPageActions.Provider>
+
     </div>
   );
-}
-function PanelDelivery({ id }: { id: string }) {
-  const o = useOperations().orders.find((o) => o.id === id);
-  return o ? (
-    <section className="ops-panel">
-      <h2>Entrega #{o.id}</h2>
-      <p>
-        {o.customer} · {o.phone}
-      </p>
-      <p>{o.address}</p>
-      <p>{o.notes}</p>
-    </section>
-  ) : null;
 }

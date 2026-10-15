@@ -1,0 +1,589 @@
+/* Styles aligned directly with LYS_Pantallas_Administrativas_PC_y_Movil/Administracion */
+
+/* Top header date pill and action group */
+.ops-header-date-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #475569;
+  cursor: pointer;
+}
+.ops-header-date-pill svg {
+  width: 17px;
+  height: 17px;
+  color: #64748b;
+}
+.ops-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Stat card trend hints */
+.ops-stat small.ops-trend-up,
+.ops-stat small:has(> .ops-trend-up) {
+  color: #16a34a;
+  font-weight: 600;
+}
+.ops-stat small.ops-trend-down,
+.ops-stat small:has(> .ops-trend-down) {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+/* Admin filter toolbars */
+.ops-admin-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  border: 1px solid #eaecf0;
+  border-radius: 10px;
+  background: #ffffff;
+  padding: 12px 16px;
+  margin: 16px 0;
+}
+.ops-admin-search {
+  position: relative;
+  flex: 1 1 240px;
+  min-width: 200px;
+}
+.ops-admin-search input {
+  width: 100%;
+  padding-left: 38px;
+  height: 40px;
+  min-height: 40px;
+  border: 1px solid #dce3ee;
+  border-radius: 8px;
+  font-size: 14px;
+}
+.ops-admin-search svg {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  color: #64748b;
+  pointer-events: none;
+}
+.ops-admin-filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #64748b;
+}
+.ops-admin-filter-group select,
+.ops-admin-filter-group input {
+  height: 40px;
+  min-height: 40px;
+  border: 1px solid #dce3ee;
+  border-radius: 8px;
+  font-size: 13.5px;
+  padding: 6px 12px;
+  background: #ffffff;
+}
+.ops-btn-export {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid #dce3ee;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #334155;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.ops-btn-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  min-height: 40px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 8px;
+  background: #dc2626;
+  color: #ffffff;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Bulk actions bar */
+.ops-admin-bulk {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 16px;
+  border: 1px solid #eaecf0;
+  border-bottom: 0;
+  border-radius: 10px 10px 0 0;
+  background: #f8fafc;
+  font-size: 13.5px;
+  color: #475569;
+}
+.ops-admin-bulk select {
+  height: 34px;
+  padding: 4px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #ffffff;
+}
+
+/* User & Customer initials avatar */
+.ops-initials-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+  flex-shrink: 0;
+  background: #fee2e2;
+  color: #991b1b;
+}
+.ops-initials-avatar.blue { background: #e0f2fe; color: #0369a1; }
+.ops-initials-avatar.purple { background: #f3e8ff; color: #7e22ce; }
+.ops-initials-avatar.amber { background: #fef3c7; color: #b45309; }
+.ops-initials-avatar.green { background: #dcfce7; color: #15803d; }
+
+.ops-person-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.ops-person-cell strong {
+  display: block;
+  font-size: 14px;
+  color: #0f172a;
+}
+.ops-person-cell small {
+  display: block;
+  font-size: 12px;
+  color: #64748b;
+}
+
+/* Role badges */
+.ops-role-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+.ops-role-badge.admin { background: #fee2e2; color: #991b1b; }
+.ops-role-badge.cocina { background: #fef3c7; color: #92400e; }
+.ops-role-badge.caja { background: #e0f2fe; color: #075985; }
+.ops-role-badge.mesera { background: #f3e8ff; color: #6b21a8; }
+.ops-role-badge.delivery { background: #dcfce7; color: #166534; }
+
+/* Category badges */
+.ops-category-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.ops-category-badge.pollos { background: #fee2e2; color: #991b1b; }
+.ops-category-badge.parrillas { background: #f3e8ff; color: #6b21a8; }
+.ops-category-badge.combos,
+.ops-category-badge.complementos { background: #fef3c7; color: #92400e; }
+.ops-category-badge.bebidas { background: #e0f2fe; color: #075985; }
+
+/* Channel badges */
+.ops-channel-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.ops-channel-badge.salon { background: #fee2e2; color: #991b1b; }
+.ops-channel-badge.delivery { background: #e0f2fe; color: #075985; }
+.ops-channel-badge.recojo,
+.ops-channel-badge.llevar { background: #dcfce7; color: #166534; }
+
+/* Table action icons */
+.ops-table-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.ops-table-actions button {
+  width: 32px;
+  height: 32px;
+  min-height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: transparent;
+}
+.ops-table-actions button.btn-view { color: #2563eb; background: #eff6ff; }
+.ops-table-actions button.btn-edit { color: #ea580c; background: #fff7ed; }
+.ops-table-actions button.btn-delete { color: #dc2626; background: #fef2f2; }
+.ops-table-actions button.btn-more { color: #64748b; }
+.ops-table-actions button svg { width: 17px; height: 17px; }
+
+/* Roles and permissions card grid */
+.ops-roles-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+  margin-top: 14px;
+}
+.ops-role-card {
+  border: 1px solid #eaecf0;
+  border-radius: 12px;
+  background: #ffffff;
+  padding: 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+.ops-role-card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.ops-role-card-icon.admin { background: #fee2e2; color: #dc2626; }
+.ops-role-card-icon.cocina { background: #fef3c7; color: #d97706; }
+.ops-role-card-icon.caja { background: #e0f2fe; color: #0284c7; }
+.ops-role-card-icon.mesera { background: #f3e8ff; color: #9333ea; }
+.ops-role-card-icon.delivery { background: #dcfce7; color: #16a34a; }
+.ops-role-card-content strong {
+  display: block;
+  font-size: 14px;
+  color: #0f172a;
+}
+.ops-role-card-content span {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 2px 0;
+}
+.ops-role-card-content small {
+  display: block;
+  font-size: 12px;
+  color: #64748b;
+}
+
+/* System Settings Card Layout */
+.ops-settings-card {
+  background: #ffffff;
+  border: 1px solid #eaecf0;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+.ops-settings-card-header {
+  margin-bottom: 20px;
+}
+.ops-settings-card-header h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 4px;
+}
+.ops-settings-card-header p {
+  font-size: 13.5px;
+  color: #64748b;
+  margin: 0;
+}
+.ops-settings-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 20px;
+}
+@media (max-width: 768px) {
+  .ops-settings-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+.ops-input-with-icon {
+  position: relative;
+}
+.ops-input-with-icon input {
+  padding-left: 38px;
+  width: 100%;
+}
+.ops-input-with-icon svg {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+/* Settings bottom action buttons */
+.ops-settings-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+.ops-btn-cancel {
+  padding: 10px 20px;
+  border: 1px solid #dce3ee;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #334155;
+  font-weight: 500;
+  cursor: pointer;
+}
+.ops-btn-save {
+  padding: 10px 24px;
+  border: 0;
+  border-radius: 8px;
+  background: #dc2626;
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Donut chart center and legend */
+.ops-donut-container {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.ops-donut-center-metric {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f172a;
+}
+.ops-donut-center-metric small {
+  display: block;
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 400;
+}
+
+/* POS Cash Split Layout */
+.ops-pos-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .ops-pos-split {
+    grid-template-columns: 1fr;
+  }
+}
+.ops-pending-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.ops-pending-order-item {
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #ffffff;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.ops-pending-order-item:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+.ops-pending-order-item.selected {
+  border-color: #dc2626;
+  background: #fff5f5;
+  box-shadow: 0 0 0 1px #dc2626;
+}
+.ops-pending-order-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ops-pending-order-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.ops-pending-order-top strong {
+  font-size: 14.5px;
+  color: #0f172a;
+}
+.ops-pending-order-amount {
+  text-align: right;
+}
+.ops-pending-order-amount strong {
+  display: block;
+  font-size: 16px;
+  font-weight: 700;
+  color: #dc2626;
+}
+.ops-pending-order-amount small {
+  display: block;
+  font-size: 11.5px;
+  color: #64748b;
+}
+
+/* Checkout Panel on Right */
+.ops-pos-checkout {
+  border: 1px solid #eaecf0;
+  border-radius: 12px;
+  background: #ffffff;
+  padding: 20px;
+  position: sticky;
+  top: 80px;
+}
+.ops-pos-checkout-header {
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 14px;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.ops-pos-checkout-header h3 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: #0f172a;
+}
+.ops-pos-order-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 16px;
+  padding-right: 4px;
+}
+.ops-pos-line-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13.5px;
+  color: #334155;
+}
+.ops-pos-line-item strong {
+  color: #0f172a;
+}
+.ops-pos-total-row {
+  border-top: 2px dashed #e2e8f0;
+  padding-top: 14px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.ops-pos-total-row span {
+  font-size: 15px;
+  font-weight: 600;
+  color: #334155;
+}
+.ops-pos-total-row strong {
+  font-size: 22px;
+  font-weight: 800;
+  color: #dc2626;
+}
+
+/* Payment Method Selection Buttons */
+.ops-method-selector-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.ops-method-button {
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  background: #ffffff;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #334155;
+  transition: all 0.15s ease-in-out;
+}
+.ops-method-button:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+.ops-method-button.active {
+  border-color: #dc2626;
+  background: #fff5f5;
+  color: #991b1b;
+}
+
+/* Cash Presets */
+.ops-cash-presets {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+.ops-cash-preset-btn {
+  padding: 6px 12px;
+  border: 1px solid #dce3ee;
+  border-radius: 6px;
+  background: #f8fafc;
+  color: #334155;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.ops-cash-preset-btn:hover {
+  border-color: #dc2626;
+  background: #fff5f5;
+  color: #dc2626;
+}
+
+/* Voucher type badges */
+.ops-voucher-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.ops-voucher-badge.boleta { background: #dcfce7; color: #166534; }
+.ops-voucher-badge.factura { background: #e0f2fe; color: #075985; }
+.ops-voucher-badge.nota { background: #f1f5f9; color: #475569; }

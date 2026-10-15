@@ -1,13 +1,16 @@
+import { AdminSettings } from "./AdminSettings";
+import { OrderEditor } from "./OrderEditor";
+import { categories } from "../carta/catalog";
+import { categoryIcon } from "./productHelpers";
 import { OperationsTable } from "./OperationsTable";
 import {
-  SupplySummary,
   Icon,
-  UserSummary,
-  PaymentMark,
+  type IconName,
 } from "./OperationsVisuals";
 import { dateText, downloadCsv, printLocal } from "./operationsFiles";
-import { readUpload } from "./imageUpload";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { createPortal } from "react-dom";
+import { OperationsPageActions } from "./operationsPageContext";
 import {
   useOperations,
   money,
@@ -15,14 +18,11 @@ import {
   statuses,
   paymentMethods,
   changeStatus,
-  saveSettings,
-  seedExampleOrders,
   type Order,
 } from "./operationsStore";
 import {
   Panel,
   Stats,
-  Tabs,
   Badge,
   Empty,
   Bars,
@@ -36,7 +36,88 @@ import {
   UserManager,
   InventoryManager,
 } from "./AdminManagers";
-import { currentUser, changeLocalPassword } from "../../services/localAuth";
+
+export function CategoryBadge({category}:{category:string}) {
+  const item=categories.find(c=>c.id===category);
+  return <span className={`ops-category-badge ${category}`}><Icon name={categoryIcon(category)}/>{item?.name || category}</span>;
+}
+
+export function ChannelBadge({ channel }: { channel: string }) {
+  const norm = channel.toLowerCase();
+  const kind =
+    norm.includes("salón") || norm.includes("salon")
+      ? "salon"
+      : norm.includes("delivery")
+        ? "delivery"
+        : "recojo";
+  const label =
+    kind === "salon"
+      ? "Salón"
+      : kind === "delivery"
+        ? "Delivery"
+        : "Recojo";
+  const icon: IconName =
+    kind === "salon"
+      ? "table"
+      : kind === "delivery"
+        ? "scooter"
+        : "bag";
+  return (
+    <span className={`ops-channel-badge ${kind}`}>
+      <Icon name={icon} />
+      {label}
+    </span>
+  );
+}
+
+export function InitialsAvatar({ name }: { name: string }) {
+  const words = name.trim().split(/\s+/);
+  const initials = (words[0]?.[0] || "") + (words[1]?.[0] || "");
+  const tones = ["", "blue", "purple", "amber", "green"];
+  const code = (initials.charCodeAt(0) || 0) + (initials.charCodeAt(1) || 0);
+  const tone = tones[code % tones.length];
+  return <span className={`ops-initials-avatar ${tone}`}>{initials.toUpperCase() || "U"}</span>;
+}
+
+export function RoleBadge({ role }: { role: string }) {
+  const norm = role.toLowerCase();
+  const kind = norm.includes("admin")
+    ? "admin"
+    : norm.includes("cocina")
+      ? "cocina"
+      : norm.includes("caja")
+        ? "caja"
+        : norm.includes("mesera")
+          ? "mesera"
+          : "delivery";
+  const label =
+    kind === "admin"
+      ? "Administrador"
+      : kind === "cocina"
+        ? "Cocina"
+        : kind === "caja"
+          ? "Caja"
+          : kind === "mesera"
+            ? "Mesera"
+            : "Delivery";
+  const icon: IconName =
+    kind === "admin"
+      ? "shield"
+      : kind === "cocina"
+        ? "chef"
+        : kind === "caja"
+          ? "store"
+          : kind === "mesera"
+            ? "serve"
+            : "scooter";
+  return (
+    <span className={`ops-role-badge ${kind}`}>
+      <Icon name={icon} />
+      {label}
+    </span>
+  );
+}
+
 export function AdminViews({
   section,
   notify,
@@ -46,6 +127,7 @@ export function AdminViews({
   notify: (task: () => void) => void;
   navigate: (path: string) => void;
 }) {
+  const actionHost = useContext(OperationsPageActions);
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => {
     const timer = setInterval(() => setNow(Date.now()), 60000);
@@ -55,27 +137,20 @@ export function AdminViews({
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("Todos");
   const [status, setStatus] = useState("Todos");
-  const [selected, setSelected] = useState("");
   const [detail, setDetail] = useState<Order | null>(null);
-  const [settings, setSettings] = useState({ ...data.settings });
-  const [tab, setTab] = useState("Métodos de pago");
-  const [error, setError] = useState("");
-  const [previous, setPrevious] = useState("");
-  const [next, setNext] = useState("");
+  const [editingOrder,setEditingOrder] = useState<Order|null>(null);
+  const [selection,setSelection] = useState<string[]>([]);
   const [period, setPeriod] = useState("30");
+  const [salesDays,setSalesDays] = useState("7");
+  const [from,setFrom] = useState("");
+  const [to,setTo] = useState("");
+  const [orderPage,setOrderPage] = useState(1);
   const orders = data.orders.filter((o) => !o.draft);
   const activePayments = data.payments.filter((p) => !p.refunded);
-  const sales = activePayments.reduce((s, p) => s + p.amount, 0);
-  const clients = new Set(orders.map((o) => o.customerId));
-  const methods = paymentMethods.map((label) => ({
-    label,
-    value: activePayments
-      .filter((p) => p.method === label)
-      .reduce((s, p) => s + p.amount, 0),
-  }));
   const today = new Date().toLocaleDateString();
-  const daily = Array.from({ length: 7 }, (_, i) => {
-    const day = new Date(now - (6 - i) * 86400000);
+  const sales = activePayments.reduce((s, p) => s + p.amount, 0);
+  const daily = Array.from({ length: Number(salesDays) }, (_, i) => {
+    const day = new Date(now - (Number(salesDays) - 1 - i) * 86400000);
     return {
       label: day.toLocaleDateString("es-PE", {
         day: "numeric",
@@ -92,7 +167,9 @@ export function AdminViews({
   const best = data.products
     .map((p) => ({
       label: p.name,
+      category: p.category,
       image: p.image,
+      revenue: orders.filter(o=>o.paid && o.status!=="Cancelado").flatMap(o=>o.items).filter(line=>line.product.id===p.id).reduce((sum,line)=>sum+line.product.price*line.count,0),
       value: orders
         .filter((o) => o.status !== "Cancelado")
         .flatMap((o) => o.items)
@@ -101,462 +178,254 @@ export function AdminViews({
     }))
     .sort((a, b) => b.value - a.value)
     .slice(0, 5);
-  const exportOrders = () =>
-    downloadCsv(
-      "pedidos",
-      ["Pedido", "Fecha", "Cliente", "Canal", "Total", "Estado", "Pagado"],
-      orders.map((o) => [
-        o.id,
-        dateText(o.created),
-        o.customer,
-        o.channel,
-        orderTotal(o),
-        o.status,
-        o.paid,
-      ]),
-    );
-  const order = data.orders.find((o) => o.id === selected) || orders[0];
-  const filtered = orders.filter(
-    (o) =>
-      (filter === "Todos" ||
-        o.channel === filter ||
-        (filter === "Cancelados" && o.status === "Cancelado")) &&
-      (status === "Todos" || o.status === status) &&
-      `${o.id} ${o.customer}`.toLowerCase().includes(search.toLowerCase()),
-  );
-  const table = (
-    <div className="ops-table-wrap">
-      <OperationsTable>
-        <thead>
-          <tr>
-            {[
-              "Pedido",
-              "Fecha y hora",
-              "Cliente",
-              "Origen",
-              "Productos",
-              "Total",
-              "Pago",
-              "Estado",
-              "Acciones",
-            ].map((h) => (
-              <th key={h}>{h}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {filtered.slice(0, 30).map((o) => (
-            <tr key={o.id} className={o.id === order?.id ? "selected-row" : ""}>
-              <td>#{o.id}</td>
-              <td>{dateText(o.created)}</td>
-              <td>
-                <UserSummary name={o.customer} />
-              </td>
-              <td>{o.table ? `Mesa ${o.table}` : o.channel}</td>
-              <td>
-                <div className="ops-product-cell">
-                  <img src={o.items[0]?.product.image} alt="" />
-                  <span>
-                    {o.items[0]?.product.name}
-                    <small>{o.items.length} productos</small>
-                  </span>
-                </div>
-              </td>
-              <td>{money(orderTotal(o))}</td>
-              <td>
-                <Badge value={o.paid ? "Pagado" : "Pendiente"} />
-              </td>
-              <td>
-                <Badge value={o.status} />
-              </td>
-              <td>
-                <button
-                  onClick={() => {
-                    setSelected(o.id);
-                    setDetail(o);
-                  }}
-                >
-                  <Icon name="eye" /> Ver detalle
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </OperationsTable>
-      {!filtered.length && <Empty />}
-    </div>
-  );
   if (section === "productos") return <ProductManager notify={notify} />;
   if (section === "promociones") return <PromotionManager notify={notify} />;
   if (section === "usuarios" || section === "clientes")
     return <UserManager clients={section === "clientes"} notify={notify} />;
   if (section === "inventario") return <InventoryManager notify={notify} />;
-  if (section === "configuracion")
-    return (
-      <div className="ops-settings">
-        <Tabs
-          options={[
-            "Datos del negocio",
-            "Métodos de pago",
-            "Impuestos",
-            "Usuarios",
-            "Seguridad",
-          ]}
-          value={tab}
-          onChange={setTab}
-        />
-        <div>
-          <Panel
-            title={tab}
-            action={
-              <div className="ops-actions">
-                <button onClick={() => setSettings({ ...data.settings })}>
-                  Cancelar
-                </button>
-                <button
-                  className="ops-primary"
-                  onClick={() => notify(() => saveSettings(settings))}
-                >
-                  <Icon name="save" /> Guardar cambios
-                </button>
-              </div>
-            }
-          >
-            {tab === "Datos del negocio" ? (
-              <div className="ops-form">
-                {(["name", "address", "phone", "email", "hours"] as const).map(
-                  (k) => (
-                    <label key={k}>
-                      {
-                        {
-                          name: "Nombre del negocio",
-                          address: "Dirección",
-                          phone: "Teléfono",
-                          email: "Correo",
-                          hours: "Horario",
-                        }[k]
-                      }
-                      <input
-                        value={settings[k]}
-                        onChange={(e) =>
-                          setSettings({ ...settings, [k]: e.target.value })
-                        }
-                      />
-                    </label>
-                  ),
-                )}
-                <label className="ops-check">
-                  <input
-                    type="checkbox"
-                    checked={settings.open}
-                    onChange={(e) =>
-                      setSettings({ ...settings, open: e.target.checked })
-                    }
-                  />
-                  Local abierto
-                </label>
-                <label>
-                  Meta de preparación (minutos)
-                  <input
-                    type="number"
-                    min="1"
-                    value={settings.target}
-                    onChange={(e) =>
-                      setSettings({
-                        ...settings,
-                        target: Number(e.target.value),
-                      })
-                    }
-                  />
-                </label>
-              </div>
-            ) : tab === "Métodos de pago" ? (
-              <div className="ops-method-grid">
-                {paymentMethods.map((m) => (
-                  <article key={m}>
-                    <header>
-                      <h3 className="ops-method-label">
-                        <PaymentMark name={m} />
-                        {m}
-                      </h3>
-                      <button
-                        className={`ops-switch ${settings.methods.includes(m) ? "on" : ""}`}
-                        aria-label={`Activar ${m}`}
-                        aria-pressed={settings.methods.includes(m)}
-                        onClick={() =>
-                          setSettings({
-                            ...settings,
-                            methods: settings.methods.includes(m)
-                              ? settings.methods.filter((v) => v !== m)
-                              : [...settings.methods, m],
-                          })
-                        }
-                      />
-                    </header>
-                    <p>
-                      {m === "Efectivo"
-                        ? "Pago en efectivo en tienda o contra entrega."
-                        : m === "Tarjeta"
-                          ? "Visa, Mastercard, American Express y más."
-                          : m === "Transferencia"
-                            ? "Transferencias desde cualquier banco."
-                            : `Pago rápido y seguro con ${m}.`}
-                    </p>
-                    {(m === "Yape" || m === "Plin") && (
-                      <>
-                        <label>
-                          Cambiar QR
-                          <input
-                            type="file"
-                            accept="image/jpeg,image/png,image/webp"
-                            onChange={(e) => {
-                              const file = e.target.files?.[0];
-                              if (file)
-                                void readUpload(file)
-                                  .then((image) =>
-                                    setSettings({
-                                      ...settings,
-                                      [m === "Yape" ? "yapeQr" : "plinQr"]:
-                                        image,
-                                    }),
-                                  )
-                                  .catch((err) => setError(err.message));
-                            }}
-                          />
-                        </label>
-                        {settings[m === "Yape" ? "yapeQr" : "plinQr"] ? (
-                          <img
-                            className="ops-qr"
-                            src={settings[m === "Yape" ? "yapeQr" : "plinQr"]}
-                            alt={`QR configurado para ${m}`}
-                          />
-                        ) : (
-                          <div className="ops-qr-placeholder">
-                            <img
-                              className="ops-qr"
-                              src={`/images/checkout/qr-${m.toLowerCase()}-demo.svg`}
-                              alt="QR de muestra"
-                            />
-                            <small>
-                              QR de muestra · configura el de tu negocio
-                            </small>
-                          </div>
-                        )}
-                      </>
-                    )}
-                    {m === "Transferencia" && (
-                      <label>
-                        Cuenta del negocio
-                        <input
-                          value={settings.bank}
-                          onChange={(e) =>
-                            setSettings({ ...settings, bank: e.target.value })
-                          }
-                        />
-                      </label>
-                    )}
-                  </article>
-                ))}
-              </div>
-            ) : tab === "Impuestos" ? (
-              <div className="ops-form">
-                <label>
-                  Porcentaje de impuesto informativo
-                  <input
-                    type="number"
-                    min="0"
-                    max="100"
-                    value={settings.tax}
-                    onChange={(e) =>
-                      setSettings({ ...settings, tax: Number(e.target.value) })
-                    }
-                  />
-                </label>
-                <p>
-                  Los precios publicados son finales. El porcentaje se muestra
-                  como desglose, sin sumarlo de nuevo al total. Los comprobantes
-                  locales no tienen valor tributario.
-                </p>
-              </div>
-            ) : tab === "Usuarios" ? (
-              <button
-                className="ops-primary"
-                onClick={() => navigate("/administrador/usuarios")}
-              >
-                Gestionar usuarios y permisos
-              </button>
-            ) : (
-              <form
-                className="ops-form"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  void changeLocalPassword(previous, next)
-                    .then(() => {
-                      setPrevious("");
-                      setNext("");
-                      setError("Contraseña actualizada.");
-                    })
-                    .catch((err) => setError(err.message));
-                }}
-              >
-                <p>Cuenta: {currentUser()?.email}</p>
-                <label>
-                  Contraseña actual
-                  <input
-                    required
-                    type="password"
-                    autoComplete="current-password"
-                    value={previous}
-                    onChange={(e) => setPrevious(e.target.value)}
-                  />
-                </label>
-                <label>
-                  Nueva contraseña
-                  <input
-                    required
-                    type="password"
-                    minLength={8}
-                    autoComplete="new-password"
-                    value={next}
-                    onChange={(e) => setNext(e.target.value)}
-                  />
-                </label>
-                <button className="ops-primary">Cambiar contraseña</button>
-              </form>
-            )}
-            {error && <p role="status">{error}</p>}
-          </Panel>
-        </div>
-      </div>
+  if (section === "configuracion") return <AdminSettings notify={notify}/>;
+  if (section === "pedidos") {
+    const action = (
+      <button className="ops-primary" onClick={() => navigate("/mesera/nuevo-pedido")}>
+        <Icon name="circle-plus" />
+        Nuevo pedido
+      </button>
     );
-  if (section === "pedidos")
+    const newCount = orders.filter((o) => o.status === "Recibido").length;
+    const prepCount = orders.filter((o) => o.status === "En preparación").length;
+    const readyCount = orders.filter((o) => o.status === "Listo").length;
+    const deliveredCount = orders.filter((o) => o.status === "Entregado").length;
+    const filtered = orders.filter(
+      (o) =>
+        (!from || o.created.slice(0,10)>=from) && (!to || o.created.slice(0,10)<=to) &&
+        (filter === "Todos" ||
+          o.channel === filter ||
+          (filter === "Cancelados" && o.status === "Cancelado")) &&
+        (status === "Todos" || o.status === status) &&
+        `${o.id} ${o.customer}`.toLowerCase().includes(search.toLowerCase()),
+    );
+
     return (
       <>
+        {actionHost && createPortal(action, actionHost)}
         <Stats
           entries={[
-            { label: "Total de pedidos", value: orders.length },
             {
-              label: "Pendientes",
-              value: orders.filter((o) => o.status === "Recibido").length,
-              tone: "gold",
+              label: "Nuevos",
+              value: newCount,
+              icon: "receipt",
+              tone: "red",
+              hint: "Pedidos pendientes",
             },
             {
               label: "En preparación",
-              value: orders.filter((o) => o.status === "En preparación").length,
+              value: prepCount,
+              icon: "chef",
               tone: "gold",
+              hint: "Pedidos en cocina",
+            },
+            {
+              label: "Listos",
+              value: readyCount,
+              icon: "serve",
+              tone: "blue",
+              hint: "Pedidos listos para entregar",
+            },
+            {
+              label: "Entregados",
+              value: deliveredCount,
+              icon: "check",
+              tone: "green",
+              hint: "Pedidos completados",
             },
           ]}
         />
-        <div className="ops-with-sidebar">
-          <Panel
-            title="Gestión de pedidos"
-            action={
-              <button
-                className="ops-primary"
-                onClick={() => navigate("/mesera/nuevo-pedido")}
-              >
-                ＋ Nuevo pedido
-              </button>
-            }
-          >
-            <Tabs
-              options={["Todos", "Salón", "Delivery", "Recojo", "Cancelados"]}
-              value={filter}
-              onChange={setFilter}
+        <div className="ops-admin-filter-bar" aria-label="Filtros de pedidos">
+          <div className="ops-admin-search">
+            <Icon name="search" />
+            <input
+              aria-label="Buscar número o cliente"
+              placeholder="Buscar por número de pedido o cliente…"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
             />
-            <div className="ops-toolbar">
-              <input
-                placeholder="Buscar número o cliente…"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-              <select
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-              >
-                {["Todos", ...statuses].map((s) => (
-                  <option key={s}>{s}</option>
-                ))}
-              </select>
-              <button onClick={exportOrders}>
-                <Icon name="download" /> Exportar
-              </button>
-            </div>
-            {table}
-          </Panel>
-          <Panel
-            title={
-              order ? `Detalle del pedido #${order.id}` : "Detalle del pedido"
-            }
-          >
-            {order ? (
-              <>
-                <h3>{order.customer}</h3>
-                <p>
-                  {order.phone} · {order.email}
-                </p>
-                <Badge value={order.status} />
-                <p>{order.address || `Mesa ${order.table || "—"}`}</p>
-                <div className="ops-detail-lines">
-                  {order.items.map((l) => (
-                    <div key={l.product.id}>
-                      <img src={l.product.image} alt="" />
-                      <span>
-                        {l.count} {l.product.name}
-                      </span>
-                      <strong>{money(l.product.price * l.count)}</strong>
-                    </div>
-                  ))}
-                </div>
-                <div className="ops-total">
-                  Total<strong>{money(orderTotal(order))}</strong>
-                </div>
-                <h3>Historial del pedido</h3>
-                <ol>
-                  {order.history.map((h, i) => (
-                    <li key={i}>
-                      {h.status}
-                      <small>{dateText(h.date)}</small>
-                    </li>
-                  ))}
-                </ol>
-                {!["Entregado", "Cancelado"].includes(order.status) && (
-                  <div className="ops-actions">
-                    <button
-                      className="ops-primary"
-                      onClick={() =>
-                        notify(() =>
-                          changeStatus(
-                            order.id,
-                            order.status === "Recibido"
-                              ? "En preparación"
-                              : order.status === "En preparación"
-                                ? "Listo"
-                                : order.status === "Listo" &&
-                                    order.channel === "Delivery"
-                                  ? "En camino"
-                                  : "Entregado",
-                          ),
-                        )
-                      }
-                    >
-                      <Icon name="sort" /> Avanzar estado
-                    </button>
-                    <button
-                      onClick={() =>
-                        notify(() => changeStatus(order.id, "Cancelado"))
-                      }
-                    >
-                      <Icon name="close" /> Cancelar pedido
-                    </button>
-                  </div>
-                )}
-              </>
-            ) : (
-              <Empty />
-            )}
-          </Panel>
+          </div>
+          <div className="ops-admin-filter-group">
+            <label htmlFor="canal-filter">Canal</label>
+            <select
+              id="canal-filter"
+              aria-label="Canal"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+            >
+              {["Todos", "Salón", "Delivery", "Recojo"].map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="ops-admin-filter-group">
+            <label htmlFor="estado-filter">Estado</label>
+            <select
+              id="estado-filter"
+              aria-label="Filtrar resultados"
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+            >
+              <option value="Todos">Todos</option>
+              {statuses.map((s) => (
+                <option key={s} value={s}>
+                  {s}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="ops-admin-filter-group">
+            <label htmlFor="desde-filter">Fecha desde</label>
+            <input
+              id="desde-filter"
+              type="date"
+              aria-label="Fecha desde"
+              value={from}
+              onChange={e=>{setFrom(e.target.value);setOrderPage(1);}}
+            />
+          </div>
+          <div className="ops-admin-filter-group">
+            <label htmlFor="hasta-filter">Fecha hasta</label>
+            <input
+              id="hasta-filter"
+              type="date"
+              aria-label="Fecha hasta"
+              value={to}
+              onChange={e=>{setTo(e.target.value);setOrderPage(1);}}
+            />
+          </div>
+          <button className="ops-btn-export" onClick={()=>downloadCsv("pedidos",["Pedido","Fecha","Cliente","Canal","Total","Estado"],filtered.filter(o=>!selection.length || selection.includes(o.id)).map(o=>[o.id,dateText(o.created),o.customer,o.channel,orderTotal(o),o.status]))}>
+            <Icon name="download" /> Exportar
+          </button>
+          <button className="ops-btn-filter" type="button" onClick={() => setOrderPage(1)}>
+            <Icon name="filter" /> Filtrar
+          </button>
         </div>
+        <div className="ops-table-wrap">
+          <OperationsTable>
+            <thead>
+              <tr>
+                <th>
+                  <input type="checkbox" aria-label="Seleccionar todos los pedidos" checked={filtered.length>0 && filtered.every(o=>selection.includes(o.id))} onChange={e=>setSelection(e.target.checked ? filtered.map(o=>o.id):[])}/>
+                </th>
+                <th># Pedido</th>
+                <th>Cliente</th>
+                <th>Canal</th>
+                <th>Total</th>
+                <th>Hora</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.slice((orderPage-1)*10,orderPage*10).map((o) => (
+                <tr key={o.id} className={o.id === detail?.id ? "selected-row" : ""}>
+                  <td>
+                    <input
+                      type="checkbox"
+                      aria-label={`Seleccionar pedido ${o.id}`}
+                      checked={selection.includes(o.id)}
+                      onChange={e=>setSelection(old=>e.target.checked ? [...old,o.id]:old.filter(id=>id!==o.id))}
+                    />
+                  </td>
+                  <td>
+                    <strong>#{o.id}</strong>
+                  </td>
+                  <td>
+                    <div className="ops-person-cell">
+                      <div>
+                        <strong>{o.customer}</strong>
+                        <small>{o.phone || "Sin teléfono"}</small>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <ChannelBadge channel={o.channel} />
+                  </td>
+                  <td>
+                    <strong>{money(orderTotal(o))}</strong>
+                  </td>
+                  <td>
+                    <time dateTime={o.created}>
+                      {new Date(o.created).toLocaleTimeString("es-PE", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: false,
+                      })}
+                    </time>
+                  </td>
+                  <td>
+                    {new Date(o.created).toLocaleDateString("es-PE")}
+                  </td>
+                  <td>
+                    <Badge value={o.status} />
+                  </td>
+                  <td>
+                    <div className="ops-table-actions">
+                      <button
+                        className="btn-view"
+                        title="Ver detalle"
+                        aria-label={`Ver pedido #${o.id}`}
+                        onClick={() => {
+                          setDetail(o);
+                        }}
+                      >
+                        <Icon name="eye" />
+                      </button>
+                      <button
+                        className="btn-edit"
+                        title="Editar pedido"
+                        aria-label={`Editar pedido #${o.id}`}
+                        disabled={o.paid || (o.status!=="Recibido" && !o.draft)}
+                        onClick={() => setEditingOrder(o)}
+                      >
+                        <Icon name="edit" />
+                      </button>
+                      <button
+                        className="btn-delete"
+                        title="Cancelar pedido"
+                        aria-label={`Cancelar pedido #${o.id}`}
+                        onClick={() =>
+                          notify(() => changeStatus(o.id, "Cancelado"))
+                        }
+                      >
+                        <Icon name="trash" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </OperationsTable>
+          {!filtered.length && (
+            <Empty>No se encontraron pedidos con los filtros seleccionados.</Empty>
+          )}
+        </div>
+        <div className="ops-pagination">
+          <span>
+            Mostrando {filtered.length ? (orderPage-1)*10+1 : 0} a {Math.min(orderPage*10, filtered.length)} de {filtered.length} pedidos
+          </span>
+          <button disabled={orderPage===1} onClick={()=>setOrderPage(orderPage-1)} aria-label="Página anterior">
+            <Icon name="chevron" />
+          </button>
+          <span aria-current="page">{orderPage}</span>
+          <button
+            disabled={orderPage*10>=filtered.length}
+            onClick={()=>setOrderPage(orderPage+1)}
+            aria-label="Página siguiente"
+          >
+            <Icon name="chevron" />
+          </button>
+        </div>
+        {editingOrder && <OrderEditor order={editingOrder} onClose={()=>setEditingOrder(null)} notify={notify}/>}
         {detail && (
           <OrderDetail
             order={data.orders.find((o) => o.id === detail.id) || detail}
@@ -565,6 +434,7 @@ export function AdminViews({
         )}
       </>
     );
+  }
   if (section === "reportes") {
     const reportOrders = orders.filter(
       (o) => Date.parse(o.created) >= now - Number(period) * 86400000,
@@ -584,6 +454,8 @@ export function AdminViews({
     const reportBest = data.products
       .map((product) => ({
         label: product.name,
+        category: product.category,
+        revenue: reportOrders.filter(o=>o.status!=="Cancelado").flatMap(o=>o.items).filter(l=>l.product.id===product.id).reduce((sum,l)=>sum+l.count*l.product.price,0),
         value: reportOrders
           .filter((o) => o.status !== "Cancelado")
           .flatMap((o) => o.items)
@@ -593,8 +465,8 @@ export function AdminViews({
       }))
       .sort((a, b) => b.value - a.value)
       .slice(0, 5);
-    const reportDaily = Array.from({ length: Number(period) }, (_, i) => {
-      const date = new Date(now - (Number(period) - 1 - i) * 86400000);
+    const reportDaily = Array.from({ length: 7 }, (_, i) => {
+      const date = new Date(now - (6 - i) * 86400000);
       return {
         label: date.toLocaleDateString("es-PE", {
           day: "numeric",
@@ -609,10 +481,40 @@ export function AdminViews({
           .reduce((sum, p) => sum + p.amount, 0),
       };
     });
+
+    const headerAction = (
+      <div className="ops-header-actions">
+        <div className="ops-header-date-pill">
+          <Icon name="calendar" />
+          <select aria-label="Periodo del reporte" value={period} onChange={e=>setPeriod(e.target.value)}>{["7","30","90"].map(n=><option key={n} value={n}>Últimos {n} días</option>)}</select>
+          <Icon name="chevron" />
+        </div>
+        <button
+          className="ops-primary"
+          onClick={() =>
+            downloadCsv(
+              "reporte",
+              ["Pedido", "Fecha", "Cliente", "Total", "Estado"],
+              reportOrders.map((o) => [
+                o.id,
+                dateText(o.created),
+                o.customer,
+                orderTotal(o),
+                o.status,
+              ]),
+            )
+          }
+        >
+          <Icon name="download" /> Exportar reporte
+        </button>
+      </div>
+    );
+
     return (
       <>
-        <div className="ops-toolbar">
-          <select value={period} onChange={(e) => setPeriod(e.target.value)}>
+        {actionHost && createPortal(headerAction, actionHost)}
+        <div className="ops-toolbar" style={{ display: "none" }}>
+          <select aria-label="Filtrar resultados" value={period} onChange={(e) => setPeriod(e.target.value)}>
             {["7", "30", "90"].map((n) => (
               <option key={n} value={n}>
                 Últimos {n} días
@@ -620,7 +522,6 @@ export function AdminViews({
             ))}
           </select>
           <button
-            className="ops-primary"
             onClick={() =>
               notify(() =>
                 printLocal("Reportes y analítica", [
@@ -635,92 +536,100 @@ export function AdminViews({
               )
             }
           >
-            <Icon name="download" /> Exportar PDF / Imprimir
-          </button>
-          <button
-            onClick={() =>
-              downloadCsv(
-                "reporte",
-                ["Pedido", "Fecha", "Cliente", "Total", "Estado"],
-                reportOrders.map((o) => [
-                  o.id,
-                  dateText(o.created),
-                  o.customer,
-                  orderTotal(o),
-                  o.status,
-                ]),
-              )
-            }
-          >
-            <Icon name="download" /> Exportar Excel (CSV)
+            Imprimir
           </button>
         </div>
         <Stats
           entries={[
-            { label: "Ventas totales", value: money(reportSales) },
-            { label: "Pedidos", value: reportOrders.length, tone: "gold" },
+            {
+              label: "Ventas totales",
+              value: money(reportSales),
+              icon: "chart",
+              tone: "green",
+              hint: "Según los registros del periodo",
+            },
+            {
+              label: "Pedidos realizados",
+              value: reportOrders.length,
+              icon: "cart",
+              tone: "red",
+              hint: "Según los registros del periodo",
+            },
             {
               label: "Ticket promedio",
               value: money(
                 reportOrders.length ? reportSales / reportOrders.length : 0,
               ),
-            },
-            {
-              label: "Tasa de entrega",
-              value: `${Math.round((reportOrders.filter((o) => o.status === "Entregado").length / Math.max(1, reportOrders.length)) * 100)}%`,
-              tone: "green",
+              icon: "tag",
+              tone: "blue",
+              hint: "Según los registros del periodo",
             },
           ]}
         />
-        <div className="ops-four">
-          <Panel title="Ventas por día">
+        <div className="ops-split">
+          <Panel title="Ventas diarias">
             <LineChart values={reportDaily} />
           </Panel>
-          <Panel title="Productos más vendidos">
-            <Bars values={reportBest} />
-          </Panel>
-          <Panel title="Métodos de pago">
-            <Donut values={reportMethods} />
-          </Panel>
-          <Panel title="Rendimiento de cocina">
-            <Bars
-              values={statuses.map((label) => ({
-                label,
-                value: reportOrders.filter((o) => o.status === label).length,
-              }))}
+          <Panel title="Ventas por canal">
+            <Donut
+              values={["Salón","Delivery","Recojo"].map(label=>({label,value:reportPayments.filter(p=>reportOrders.some(o=>o.id===p.orderId && o.channel===label)).reduce((sum,p)=>sum+p.amount,0)}))}
             />
           </Panel>
         </div>
         <div className="ops-split">
-          <Panel title="Clientes frecuentes">
-            <Bars
-              values={Array.from(clients)
-                .map((id) => ({
-                  label:
-                    orders.find((o) => o.customerId === id)?.customer ||
-                    "Cliente",
-                  value: reportOrders.filter((o) => o.customerId === id).length,
-                }))
-                .sort((a, b) => b.value - a.value)
-                .slice(0, 5)}
-            />
+          <Panel title="Métodos de pago">
+            <Bars values={reportMethods} />
           </Panel>
-          <Panel title="Resumen por canal">
-            <Bars
-              values={["Salón", "Delivery", "Recojo"].map((label) => ({
-                label,
-                value: reportOrders
-                  .filter((o) => o.channel === label)
-                  .reduce((s, o) => s + orderTotal(o), 0),
-              }))}
-            />
+          <Panel title="Productos más vendidos">
+            <div className="ops-table-wrap">
+              <OperationsTable>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Producto</th>
+                    <th>Categoría</th>
+                    <th>Unidades</th>
+                    <th>Ventas</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {reportBest.map((item, index) => (
+                    <tr key={item.label}>
+                      <td>{index + 1}</td>
+                      <td>
+                        <div className="ops-product-cell">
+                          <img src={item.image} alt="" />
+                          <span>{item.label}</span>
+                        </div>
+                      </td>
+                      <td>
+                        <CategoryBadge category={item.category} />
+                      </td>
+                      <td>{item.value}</td>
+                      <td>{money(item.revenue)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </OperationsTable>
+            </div>
           </Panel>
         </div>
       </>
     );
   }
+
+  const headerAction = (
+    <div className="ops-header-date-pill">
+      <Icon name="calendar" />
+      <span>{new Date(now).toLocaleDateString("es-PE", {day:"numeric",month:"long",year:"numeric"})}</span>
+      <Icon name="chevron" />
+    </div>
+  );
+
   return (
     <>
+      {actionHost && createPortal(headerAction, actionHost)}
+      <div className="reference-dashboard">
       <Stats
         entries={[
           {
@@ -730,74 +639,208 @@ export function AdminViews({
                 .filter((p) => new Date(p.date).toLocaleDateString() === today)
                 .reduce((s, p) => s + p.amount, 0),
             ),
+            icon: "store",
+            mobileIcon: "cart",
+            tone: "red",
+            hint: "Total cobrado hoy",
           },
-          { label: "Pedidos", value: orders.length, tone: "gold" },
+          {
+            label: "Pedidos de hoy",
+            value: orders.filter(o=>new Date(o.created).toLocaleDateString()===today).length,
+            icon: "receipt",
+            tone: "gold",
+            hint: "Recibidos hoy",
+          },
           {
             label: "Ticket promedio",
             value: money(orders.length ? sales / orders.length : 0),
+            icon: "cart",
+            mobileIcon: "chart",
             tone: "blue",
+            hint: "Importe por pedido",
           },
-          { label: "Clientes", value: clients.size, tone: "green" },
+          {
+            label: "Pedidos activos",
+            value:
+              orders.filter(
+                (o) => !["Entregado", "Cancelado"].includes(o.status),
+              ).length,
+            icon: "clock",
+            tone: "green",
+            hint: "En preparación",
+          },
         ]}
       />
-      <div className="ops-four">
+      <div className="ops-split">
         <Panel
-          title="Ventas últimos 7 días"
+          title="Ventas de la semana"
           action={
-            <button onClick={() => navigate("/administrador/reportes")}>
-              <Icon name="eye" /> Ver detalle →
-            </button>
+            <select
+              aria-label="Rango de ventas"
+              value={salesDays}
+              onChange={e=>setSalesDays(e.target.value)}
+              style={{
+                height: "36px",
+                border: "1px solid #dce3ee",
+                borderRadius: "6px",
+                padding: "4px 10px",
+                fontSize: "13px",
+                background: "#ffffff",
+              }}
+            >
+              <option value="7">Últimos 7 días</option>
+              <option value="15">Últimos 15 días</option>
+              <option value="30">Últimos 30 días</option>
+            </select>
           }
         >
           <LineChart values={daily} />
         </Panel>
-        <Panel title="Productos más vendidos">
-          <Bars values={best} />
-        </Panel>
-        <Panel title="Métodos de pago">
-          <Donut values={methods} />
-        </Panel>
         <Panel
-          title="Stock bajo"
+          title="Top 5 productos más vendidos"
           action={
-            <button onClick={() => navigate("/administrador/inventario")}>
-              Ver inventario →
+            <button
+              className="ops-outline"
+              onClick={() => navigate("/administrador/productos")}
+            >
+              <span className="dashboard-desktop-copy">Ver todos los productos</span><span className="dashboard-mobile-copy">Ver todos</span> <Icon name="chevron" />
             </button>
           }
         >
-          {data.supplies
-            .filter((s) => s.stock < s.min)
-            .map((s) => (
-              <p key={s.id}>
-                <SupplySummary
-                  name={s.name}
-                  detail={`${s.stock} ${s.unit} · Stock mínimo: ${s.min}`}
-                />
-              </p>
-            ))}
+          <div className="ops-table-wrap">
+            <OperationsTable>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Producto</th>
+                  <th>Categoría</th>
+                  <th>Cantidad</th>
+                  <th>Ingresos</th>
+                </tr>
+              </thead>
+              <tbody>
+                {best.map((item, index) => (
+                  <tr key={item.label}>
+                    <td>{index + 1}</td>
+                    <td>
+                      <div className="ops-product-cell">
+                        <img src={item.image} alt="" />
+                        <div><strong>{item.label}</strong><small className="dashboard-product-category">{categories.find(c => c.id === item.category)?.name || item.category}</small></div>
+                      </div>
+                    </td>
+                    <td>
+                      <CategoryBadge category={item.category} />
+                    </td>
+                    <td><strong>{item.value}</strong><span className="dashboard-mobile-copy"> vendidos</span></td>
+                    <td>{money(item.revenue)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </OperationsTable>
+          </div>
         </Panel>
       </div>
       <Panel
         title="Pedidos recientes"
         action={
-          <div className="ops-actions">
-            <button onClick={exportOrders}>
-              <Icon name="download" /> Exportar
-            </button>
-            <button onClick={() => notify(seedExampleOrders)}>
-              Cargar pedidos de ejemplo
-            </button>
             <button
-              className="ops-primary"
-              onClick={() => navigate("/administrador/productos")}
+              className="ops-outline"
+              onClick={() => navigate("/administrador/pedidos")}
             >
-              ＋ Nuevo producto
+              <span className="dashboard-desktop-copy">Ver todos los pedidos</span><span className="dashboard-mobile-copy">Ver todos</span> <Icon name="chevron" />
             </button>
-          </div>
         }
       >
-        {table}
+        <div className="ops-table-wrap">
+          <OperationsTable>
+            <thead>
+              <tr>
+                <th># Pedido</th>
+                <th>Hora</th>
+                <th>Cliente</th>
+                <th>Tipo</th>
+                <th>Productos</th>
+                <th>Total</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {orders.slice(0, 5).map((o) => (
+                <tr key={o.id}>
+                  <td>
+                    <strong>#{o.id}</strong>
+                  </td>
+                  <td>
+                    <time dateTime={o.created}>
+                      {new Date(o.created).toLocaleTimeString("es-PE", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: false,
+                      })}
+                    </time>
+                  </td>
+                  <td>{o.customer}</td>
+                  <td>
+                    <ChannelBadge channel={o.channel} />
+                  </td>
+                  <td>
+                    {o.items[0]?.count || 1} {o.items[0]?.product.name || "Pollo a la Brasa"}
+                    {o.items.length > 1 ? `, +${o.items.length - 1} más` : ""}
+                  </td>
+                  <td>
+                    <strong>{money(orderTotal(o))}</strong>
+                  </td>
+                  <td>
+                    <Badge value={o.status} />
+                  </td>
+                  <td>
+                    <div className="ops-table-actions">
+                      <button
+                        className="btn-view"
+                        title="Ver detalle"
+                        aria-label={`Ver pedido #${o.id}`}
+                        onClick={() => {
+                          setDetail(o);
+                        }}
+                      >
+                        <Icon name="eye" />
+                      </button>
+                      <button
+                        className="btn-edit"
+                        title="Editar pedido"
+                        aria-label={`Editar pedido #${o.id}`}
+                        disabled={o.paid || (o.status!=="Recibido" && !o.draft)}
+                        onClick={() => setEditingOrder(o)}
+                      >
+                        <Icon name="edit" />
+                      </button>
+                      <button
+                        className="btn-delete"
+                        title="Cancelar pedido"
+                        aria-label={`Cancelar pedido #${o.id}`}
+                        onClick={() =>
+                          notify(() => changeStatus(o.id, "Cancelado"))
+                        }
+                      >
+                        <Icon name="trash" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </OperationsTable>
+        </div>
       </Panel>
+      </div>
+      {editingOrder && <OrderEditor order={editingOrder} onClose={()=>setEditingOrder(null)} notify={notify}/>}
+      {detail && (
+        <OrderDetail
+          order={data.orders.find((o) => o.id === detail.id) || detail}
+          onClose={() => setDetail(null)}
+        />
+      )}
     </>
   );
 }

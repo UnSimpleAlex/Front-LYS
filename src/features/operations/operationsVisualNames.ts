@@ -2,6 +2,8 @@ import type { IconName } from "./OperationsVisuals";
 export function iconFor(label: string): IconName {
   const value = label.toLowerCase();
   const rules: [RegExp, IconName][] = [
+    [/^top /, "trophy"],
+    [/ventas de la semana/, "chart"],
     [/alerta|notificacion/, "bell"],
     [/^nuevo |^nueva |^crear/, "plus"],
     [/lista de|^todos$/, "list"],

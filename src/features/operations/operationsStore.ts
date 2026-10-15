@@ -2,7 +2,19 @@ import { useSyncExternalStore } from "react";
 import seed from "../carta/catalog.json";
 import type { Product } from "../carta/catalog";
 import { currentUser, type Role } from "../../services/localAuth";
-export type MenuProduct = Product & { active?: boolean; stock?: number };
+import { productSku } from "./productHelpers";
+export type MenuProduct = Product & {
+  active?: boolean;
+  stock?: number;
+  sku?: string;
+  branch?: string;
+  preparationMinutes?: number;
+  ingredients?: string[];
+  observations?: string;
+  gallery?: string[];
+  channels?: string[];
+  updatedAt?: string;
+};
 export type Status =
   | "Recibido"
   | "En preparación"
@@ -19,6 +31,7 @@ export type Order = {
   phone: string;
   email: string;
   address: string;
+  deliveryEstimate?: { distanceKm:number; minutes:number; courier:string };
   channel: Channel;
   table: number | null;
   items: Line[];
@@ -82,6 +95,7 @@ export type Supply = {
   min: number;
   unit: string;
   cost: number;
+  updatedAt?: string;
 };
 export type Offer = {
   id: string;
@@ -111,6 +125,15 @@ export type Supplier = {
   email: string;
 };
 export type Settings = {
+  description?: string;
+  city?: string;
+  postalCode?: string;
+  ruc?: string;
+  website?: string;
+  openingTime?: string;
+  closingTime?: string;
+  ownDelivery?: boolean;
+  tableCount?: number;
   name: string;
   address: string;
   phone: string;
@@ -748,14 +771,19 @@ export function saveProduct(product: MenuProduct) {
     !product.name.trim() ||
     product.price <= 0 ||
     !Number.isFinite(product.price) ||
-    (product.stock ?? 0) < 0
+    !Number.isInteger(product.stock ?? 0) ||
+    (product.stock ?? 0) < 0 ||
+    (product.preparationMinutes !== undefined && (!Number.isFinite(product.preparationMinutes) || product.preparationMinutes < 1))
   )
     throw new Error("Revisa nombre, precio y stock.");
+  if (state.products.some(p => p.id !== product.id && productSku(p).toLowerCase() === productSku(product).toLowerCase()))
+    throw new Error("El SKU ya pertenece a otro producto.");
+  const saved = { ...product, name: product.name.trim(), sku: productSku(product), updatedAt: new Date().toISOString() };
   publish({
     ...state,
     products: state.products.some((p) => p.id === product.id)
-      ? state.products.map((p) => (p.id === product.id ? product : p))
-      : [...state.products, product],
+      ? state.products.map((p) => (p.id === product.id ? saved : p))
+      : [...state.products, saved],
   });
 }
 export function deleteProduct(id: string) {
@@ -763,7 +791,7 @@ export function deleteProduct(id: string) {
   publish({
     ...state,
     products: state.products.map((p) =>
-      p.id === id ? { ...p, active: false } : p,
+      p.id === id ? { ...p, active: false, updatedAt: new Date().toISOString() } : p,
     ),
   });
 }
@@ -778,7 +806,7 @@ export function saveSupply(supply: Supply) {
     throw new Error("Revisa los datos del insumo.");
   publish({
     ...state,
-    supplies: [...state.supplies.filter((s) => s.id !== supply.id), supply],
+    supplies: [...state.supplies.filter((s) => s.id !== supply.id), {...supply,updatedAt:new Date().toISOString()}],
   });
 }
 export function deleteSupply(id: string) {
@@ -798,7 +826,7 @@ export function moveSupply(id: string, amount: number, note: string) {
   publish({
     ...state,
     supplies: state.supplies.map((s) =>
-      s.id === id ? { ...s, stock: s.stock + amount } : s,
+      s.id === id ? { ...s, stock: s.stock + amount,updatedAt:new Date().toISOString() } : s,
     ),
     movements: [
       {
@@ -848,7 +876,13 @@ export function saveSettings(settings: Settings) {
     !settings.name.trim()
   )
     throw new Error("Revisa la configuración.");
-  publish({ ...state, settings });
+  const count=settings.tableCount ?? state.tables.length;
+  if(!Number.isInteger(count) || count<1 || count>200)throw new Error("El número de mesas debe estar entre 1 y 200.");
+  const removed=state.tables.filter(table=>table.id>count);
+  if(removed.some(table=>table.status!=="Libre" || state.orders.some(order=>order.table===table.id && !order.paid && order.status!=="Cancelado")))throw new Error("Libera y cobra las mesas antes de reducir su cantidad.");
+  const tables=state.tables.filter(table=>table.id<=count);
+  for(let id=1;id<=count;id++)if(!tables.some(table=>table.id===id))tables.push({id,zone:"Salón principal",seats:4,status:"Libre",notes:""});
+  publish({ ...state, settings, tables });
 }
 export function seedKitchenPreview() {
   requireRole(["administrador", "cocina"]);
@@ -886,9 +920,7 @@ export function seedKitchenPreview() {
   );
   const timestamp = (ago: number) => new Date(now - ago * 60000).toISOString();
   const orders: Order[] = stages.map((status, index) => {
-    const channel: Channel = ["Delivery", "Salón", "Recojo"][
-      index % 3
-    ] as Channel;
+    const channel: Channel = status === "En camino" ? "Delivery" : ["Delivery", "Salón", "Recojo"][index % 3] as Channel;
     const preparation = [11, 17, 22, 28][index % 4];
     const age =
       index < 5
@@ -961,6 +993,70 @@ export function seedKitchenPreview() {
     };
   });
   publish({ ...state, orders: [...orders, ...state.orders] });
+}
+
+/** Adds a connected, repeat-safe preview without replacing existing records. */
+export function seedWorkspacePreview() {
+  requireRole(["administrador"]);
+  if (state.suppliers.some(s => s.id === "workspace-preview-supplier"))
+    throw new Error("Los datos de demostración ya están cargados.");
+  if (!state.orders.some(o => o.customerId === "kitchen-preview")) seedKitchenPreview();
+  const preview = state.orders.filter(o => o.customerId === "kitchen-preview");
+  const newest = Math.max(...preview.map(o => Date.parse(o.created)));
+  const offset = Date.now() - newest - 5 * 60000;
+  const refresh = (value: string) => new Date(Date.parse(value) + offset).toISOString();
+  const base = {...state, orders:state.orders.map(o => o.customerId === "kitchen-preview" ? {
+    ...o, deliveryEstimate:o.channel==="Delivery" || o.status==="En camino" ? {distanceKm:2.3,minutes:12,courier:"Repartidor de demostración"}:undefined, channel:o.status === "En camino" ? "Delivery" as Channel : o.channel, table:o.status === "En camino" ? null : o.table, created:refresh(o.created), accepted:o.accepted ? refresh(o.accepted) : undefined,
+    ready:o.ready ? refresh(o.ready) : undefined, delivered:o.delivered ? refresh(o.delivered) : undefined,
+    history:o.history.map(h => ({...h,date:refresh(h.date)})),
+  } : o)};
+  const date = new Date().toISOString();
+  const shiftId = "workspace-preview-shift";
+  const closedOrders = base.orders.filter(o => o.customerId === "kitchen-preview" && o.status === "Entregado" && !o.paid).slice(0, 7);
+  const payments: Payment[] = closedOrders.map((o, i) => ({
+    id: `workspace-preview-payment-${i}`, orderId: o.id, amount: orderTotal(o),
+    method: ["Efectivo", "Yape", "Plin", "Tarjeta"][i % 4], received: orderTotal(o), change: 0,
+    date: o.delivered || date, refunded: false, shiftId,
+  }));
+  const cash = payments.filter(p => p.method === "Efectivo").reduce((sum, p) => sum + p.amount, 0);
+  const vouchers: Voucher[] = closedOrders.slice(0, 5).map((o, i) => ({
+    id: `DEMO-B001-${i + 1}`, orderId: o.id, type: "Boleta", customer: o.customer,
+    document: "", date: o.delivered || date, total: orderTotal(o),
+  }));
+  const paidIds = new Set(closedOrders.map(o => o.id));
+  publish({
+    ...base,
+    orders: base.orders.map(o => paidIds.has(o.id) ? {...o, paid:true, method:payments.find(p => p.orderId === o.id)!.method} : o),
+    payments: [...payments, ...base.payments], vouchers: [...vouchers, ...base.vouchers],
+    shifts: [...base.shifts, {id:shiftId,user:"Turno de demostración",opened:new Date(Date.now()-12*3600000).toISOString(),closed:date,initial:300,counted:300+cash,withdrawals:0,difference:0,notes:"Datos de demostración"}],
+    tables: base.tables.map(t => {
+      if (t.status !== "Libre") return t;
+      const order = base.orders.find(o => o.customerId === "kitchen-preview" && o.table === t.id && !paidIds.has(o.id) && !o.paid && o.status !== "Cancelado");
+      return order ? {...t,status:order.status === "Entregado" ? "Solicita cuenta" : "Ocupada"} : t;
+    }),
+    suppliers: [...base.suppliers, {id:"workspace-preview-supplier",name:"Avícola de demostración",phone:"",email:"pedidos@example.com"}, {id:"workspace-preview-vegetables",name:"Verduras de demostración",phone:"",email:"verduras@example.com"}],
+    movements: [...base.movements, ...base.supplies.slice(0,3).map((s,i) => ({id:`workspace-preview-movement-${i}`,supplyId:s.id,name:s.name,amount:10,date,note:"Ingreso de demostración"}))],
+    supplies: base.supplies.map((s,i) => i < 3 ? {...s,stock:s.stock+10} : s),
+    offers: [...base.offers, {id:"workspace-preview-offer",name:"Promoción de demostración",type:"Descuento",productId:base.products[0].id,percent:10,code:"DEMO10",start:date.slice(0,10),end:new Date(Date.now()+30*86400000).toISOString().slice(0,10),active:true,used:0,limit:50}],
+  });
+}
+
+export function refreshWorkspacePreview() {
+  requireRole(["administrador"]);
+  const preview = state.orders.filter(o => o.customerId === "kitchen-preview");
+  if (!preview.length) throw new Error("Carga primero los datos de demostración.");
+  const offset = Date.now() - Math.max(...preview.map(o => Date.parse(o.created))) - 5 * 60000;
+  const refresh = (date: string) => new Date(Date.parse(date) + offset).toISOString();
+  publish({...state, orders:state.orders.map(o => o.customerId === "kitchen-preview" ? {
+    ...o,
+    deliveryEstimate:o.deliveryEstimate || (o.channel==="Delivery" || o.status==="En camino" ? {distanceKm:2.3,minutes:12,courier:"Repartidor de demostración"}:undefined),
+    channel:o.status === "En camino" ? "Delivery" : o.channel,
+    table:o.status === "En camino" ? null : o.table,
+    address:o.status === "En camino" ? o.address || "Dirección de demostración" : o.address,
+    created:refresh(o.created), accepted:o.accepted ? refresh(o.accepted) : undefined,
+    ready:o.ready ? refresh(o.ready) : undefined, delivered:o.delivered ? refresh(o.delivered) : undefined,
+    history:o.history.map(h => ({...h,date:refresh(h.date)})),
+  } : o),payments:state.payments.map(payment=>payment.id.startsWith("workspace-preview-payment-") ? {...payment,date:refresh(payment.date)}:payment),vouchers:state.vouchers.map(voucher=>voucher.id.startsWith("DEMO-") ? {...voucher,date:refresh(voucher.date)}:voucher),shifts:state.shifts.map(shift=>shift.id==="workspace-preview-shift" ? {...shift,opened:refresh(shift.opened),closed:shift.closed ? refresh(shift.closed):undefined}:shift)});
 }
 
 export function seedExampleOrders() {
