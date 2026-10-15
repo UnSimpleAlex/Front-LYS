@@ -1,3 +1,4 @@
+import { OperationsPagination } from "./OperationsPagination";
 import { OperationsDialog } from "./OperationsDialog";
 import { OperationsTable } from "./OperationsTable";
 import { SupplySummary, Icon } from "./OperationsVisuals";
@@ -50,12 +51,14 @@ export function PromotionManager({
   const actionHost = useContext(OperationsPageActions);
   const data = useOperations();
   const [offer, setOffer] = useState(blankOffer);
+  const [offerPage,setOfferPage] = useState(1);
+  const [offerSelection,setOfferSelection] = useState<string[]>([]);
   const [editorOpen, setEditorOpen] = useState(false);
   const [filter, setFilter] = useState("Todos");
   const [statusFilter, setStatusFilter] = useState("Todos");
   const [search, setSearch] = useState("");
 
-  const activeCount = data.offers.filter((o) => o.active).length;
+  const activeCount = data.offers.filter((o) => o.active && o.start<=new Date().toISOString().slice(0,10) && o.end>=new Date().toISOString().slice(0,10)).length;
   const totalUsed = data.offers.reduce((s, o) => s + o.used, 0);
 
   const action = (
@@ -81,11 +84,12 @@ export function PromotionManager({
         o.code.toLowerCase().includes(search.toLowerCase())),
   );
 
+  const visibleOfferPage=Math.min(offerPage,Math.max(1,Math.ceil(filteredOffers.length/10)));
   const exportPromotions = () =>
     downloadCsv(
       "promociones",
       ["Promoción", "Tipo", "Beneficio", "Vigencia", "Canjes", "Estado"],
-      data.offers.map((o) => [
+      filteredOffers.filter(o=>!offerSelection.length || offerSelection.includes(o.id)).map((o) => [
         o.name,
         o.type,
         `-${o.percent}%`,
@@ -102,31 +106,31 @@ export function PromotionManager({
         entries={[
           {
             label: "Promociones activas",
-            value: activeCount || 4,
+            value: activeCount,
             icon: "flame",
             tone: "red",
             hint: "Vigentes hoy",
           },
           {
             label: "Programadas",
-            value: 2,
+            value: data.offers.filter(o=>o.active && o.start>new Date().toISOString().slice(0,10)).length,
             icon: "clock",
             tone: "blue",
             hint: "Próximas a iniciar",
           },
           {
             label: "Finalizadas",
-            value: 5,
+            value: data.offers.filter(o=>o.end<new Date().toISOString().slice(0,10)).length,
             icon: "tag",
             tone: "gold",
             hint: "Histórico",
           },
           {
             label: "Total canjes",
-            value: totalUsed || 248,
+            value: totalUsed,
             icon: "gift",
             tone: "green",
-            hint: "↑ 18% este mes",
+            hint: "Canjes registrados",
           },
         ]}
       />
@@ -181,6 +185,8 @@ export function PromotionManager({
                 <input
                   type="checkbox"
                   aria-label="Seleccionar todas las promociones"
+                  checked={filteredOffers.length>0 && filteredOffers.every(o=>offerSelection.includes(o.id))}
+                  onChange={e=>setOfferSelection(e.target.checked ? filteredOffers.map(o=>o.id):[])}
                 />
               </th>
               <th>Promoción</th>
@@ -193,12 +199,14 @@ export function PromotionManager({
             </tr>
           </thead>
           <tbody>
-            {filteredOffers.map((o) => (
+            {filteredOffers.slice((visibleOfferPage-1)*10,visibleOfferPage*10).map((o) => (
               <tr key={o.id}>
                 <td>
                   <input
                     type="checkbox"
                     aria-label={`Seleccionar promoción ${o.name}`}
+                    checked={offerSelection.includes(o.id)}
+                    onChange={e=>setOfferSelection(old=>e.target.checked ? [...old,o.id]:old.filter(id=>id!==o.id))}
                   />
                 </td>
                 <td>
@@ -291,22 +299,7 @@ export function PromotionManager({
         )}
       </div>
 
-      <div className="ops-pagination">
-        <span>
-          Mostrando 1 a {Math.min(10, filteredOffers.length)} de{" "}
-          {filteredOffers.length} promociones
-        </span>
-        <button disabled aria-label="Página anterior">
-          <Icon name="chevron" />
-        </button>
-        <span aria-current="page">1</span>
-        <button
-          disabled={filteredOffers.length <= 10}
-          aria-label="Página siguiente"
-        >
-          <Icon name="chevron" />
-        </button>
-      </div>
+      <OperationsPagination count={filteredOffers.length} page={visibleOfferPage} onChange={setOfferPage} label="promociones"/>
         {editorOpen && <OperationsDialog onClose={() => setEditorOpen(false)} title="Crear / Editar promoción">
           <form
             className="ops-form"
@@ -437,6 +430,8 @@ export function UserManager({
   notify: (task: () => void) => void;
 }) {
   const actionHost = useContext(OperationsPageActions);
+  const [userPage,setUserPage] = useState(1);
+  const [userSelection,setUserSelection] = useState<string[]>([]);
   useSession();
   const data = useOperations();
   const [search, setSearch] = useState("");
@@ -455,6 +450,8 @@ export function UserManager({
   const users = readUsers().filter((u) =>
     clients ? u.role === "cliente" : u.role !== "cliente",
   );
+
+  const customerOrders = (u:LocalUser) => data.orders.filter(o=>o.customerId===u.id || (u.email.endsWith("@preview.example") && o.customerId==="kitchen-preview" && o.customer===u.name));
 
   const select = (u: LocalUser) => {
     setEditorOpen(true);
@@ -506,8 +503,8 @@ export function UserManager({
       clients
         ? ["Nombre", "Email", "Teléfono", "Pedidos", "Gasto Total", "Estado"]
         : ["Nombre", "Email", "Teléfono", "Rol", "Estado"],
-      filteredUsers.map((u) => {
-        const userOrders = data.orders.filter((o) => o.customerId === u.id);
+      filteredUsers.filter(u=>!userSelection.length || userSelection.includes(u.id)).map((u) => {
+        const userOrders = customerOrders(u);
         const totalSpend = userOrders
           .filter((o) => o.paid)
           .reduce(
@@ -529,6 +526,7 @@ export function UserManager({
       }),
     );
 
+  const visibleUserPage=Math.min(userPage,Math.max(1,Math.ceil(filteredUsers.length/10)));
   const adminCount = users.filter((u) => u.role === "administrador").length;
   const staffCount = users.filter((u) => u.role !== "administrador").length;
   const activeCount = users.filter((u) => u.active).length;
@@ -541,7 +539,7 @@ export function UserManager({
           entries={[
             {
               label: "Total clientes",
-              value: users.length || 128,
+              value: users.length,
               icon: "users",
               tone: "red",
               hint: "Registrados en plataforma",
@@ -551,15 +549,15 @@ export function UserManager({
               value:
                 users.filter(
                   (u) =>
-                    data.orders.filter((o) => o.customerId === u.id).length > 3,
-                ).length || 34,
+                    customerOrders(u).length > 3,
+                ).length,
               icon: "star",
               tone: "gold",
               hint: "Más de 3 pedidos",
             },
             {
               label: "Clientes activos",
-              value: activeCount || 116,
+              value: activeCount,
               icon: "check",
               tone: "green",
               hint: "Cuentas habilitadas",
@@ -571,28 +569,28 @@ export function UserManager({
           entries={[
             {
               label: "Total usuarios",
-              value: users.length || 18,
+              value: users.length,
               icon: "users",
               tone: "red",
               hint: "Cuentas en el sistema",
             },
             {
               label: "Administradores",
-              value: adminCount || 3,
+              value: adminCount,
               icon: "shield",
               tone: "purple",
               hint: "Acceso total al sistema",
             },
             {
               label: "Personal operativo",
-              value: staffCount || 15,
+              value: staffCount,
               icon: "chef",
               tone: "blue",
               hint: "Cocina, Caja, Salón, Delivery",
             },
             {
               label: "Usuarios activos",
-              value: activeCount || 16,
+              value: activeCount,
               icon: "check",
               tone: "green",
               hint: "Sesiones habilitadas",
@@ -668,6 +666,8 @@ export function UserManager({
                       ? "Seleccionar todos los clientes"
                       : "Seleccionar todos los usuarios"
                   }
+                  checked={filteredUsers.length>0 && filteredUsers.every(u=>userSelection.includes(u.id))}
+                  onChange={e=>setUserSelection(e.target.checked ? filteredUsers.map(u=>u.id):[])}
                 />
               </th>
               <th>{clients ? "Cliente" : "Usuario"}</th>
@@ -680,10 +680,8 @@ export function UserManager({
             </tr>
           </thead>
           <tbody>
-            {filteredUsers.map((u) => {
-              const userOrders = data.orders.filter(
-                (o) => o.customerId === u.id,
-              );
+            {filteredUsers.slice((visibleUserPage-1)*10,visibleUserPage*10).map((u) => {
+              const userOrders = customerOrders(u);
               const totalSpend = userOrders
                 .filter((o) => o.paid)
                 .reduce(
@@ -701,6 +699,8 @@ export function UserManager({
                     <input
                       type="checkbox"
                       aria-label={`Seleccionar ${u.name}`}
+                      checked={userSelection.includes(u.id)}
+                      onChange={e=>setUserSelection(old=>e.target.checked ? [...old,u.id]:old.filter(id=>id!==u.id))}
                     />
                   </td>
                   <td>
@@ -712,7 +712,7 @@ export function UserManager({
                       </div>
                     </div>
                   </td>
-                  {clients && <td>{u.phone || "987 654 321"}</td>}
+                  {clients && <td>{u.phone || "Sin teléfono"}</td>}
                   {clients && (
                     <td>
                       <strong>{userOrders.length} pedidos</strong>
@@ -784,22 +784,7 @@ export function UserManager({
         )}
       </div>
 
-      <div className="ops-pagination">
-        <span>
-          Mostrando 1 a {Math.min(10, filteredUsers.length)} de{" "}
-          {filteredUsers.length} {clients ? "clientes" : "usuarios"}
-        </span>
-        <button disabled aria-label="Página anterior">
-          <Icon name="chevron" />
-        </button>
-        <span aria-current="page">1</span>
-        <button
-          disabled={filteredUsers.length <= 10}
-          aria-label="Página siguiente"
-        >
-          <Icon name="chevron" />
-        </button>
-      </div>
+      <OperationsPagination count={filteredUsers.length} page={visibleUserPage} onChange={setUserPage} label={clients ? "clientes":"usuarios"}/>
 
       {!clients && (
         <div className="ops-settings-card" style={{ marginTop: "24px" }}>
@@ -818,7 +803,7 @@ export function UserManager({
               <div className="ops-role-card-content">
                 <strong>Administrador</strong>
                 <span>
-                  {users.filter((u) => u.role === "administrador").length || 3}{" "}
+                  {users.filter((u) => u.role === "administrador").length}{" "}
                   usuarios
                 </span>
                 <small>Acceso completo y configuración general</small>
@@ -831,7 +816,7 @@ export function UserManager({
               <div className="ops-role-card-content">
                 <strong>Cocina</strong>
                 <span>
-                  {users.filter((u) => u.role === "cocina").length || 4} usuarios
+                  {users.filter((u) => u.role === "cocina").length} usuarios
                 </span>
                 <small>Gestión de comandas y tiempos de preparación</small>
               </div>
@@ -843,7 +828,7 @@ export function UserManager({
               <div className="ops-role-card-content">
                 <strong>Caja</strong>
                 <span>
-                  {users.filter((u) => u.role === "caja").length || 2} usuarios
+                  {users.filter((u) => u.role === "caja").length} usuarios
                 </span>
                 <small>Apertura, cobros y comprobantes</small>
               </div>
@@ -855,7 +840,7 @@ export function UserManager({
               <div className="ops-role-card-content">
                 <strong>Mesera</strong>
                 <span>
-                  {users.filter((u) => u.role === "mesera").length || 5} usuarios
+                  {users.filter((u) => u.role === "mesera").length} usuarios
                 </span>
                 <small>Control de salón y toma de comandas</small>
               </div>
@@ -867,7 +852,7 @@ export function UserManager({
               <div className="ops-role-card-content">
                 <strong>Delivery</strong>
                 <span>
-                  {users.filter((u) => u.role === "delivery").length || 4}{" "}
+                  {users.filter((u) => u.role === "delivery").length}{" "}
                   usuarios
                 </span>
                 <small>Despacho y asignación de motorizados</small>
@@ -971,14 +956,13 @@ export function UserManager({
           <p>
             {view.email} · {view.phone}
           </p>
-          {data.orders
-            .filter((o) => o.customerId === view.id)
+          {customerOrders(view)
             .map((o) => (
               <p key={o.id}>
                 #{o.id} · <Badge value={o.status} />
               </p>
             ))}
-          {!data.orders.some((o) => o.customerId === view.id) && (
+          {!customerOrders(view).length && (
             <Empty>Sin pedidos registrados.</Empty>
           )}
         </OperationsDialog>
@@ -1042,7 +1026,7 @@ export function InventoryManager({
     </div>
   );
 
-  const totalValue = data.supplies.reduce((s, i) => s + i.stock * (i.cost || 10), 0);
+  const totalValue = data.supplies.reduce((s, i) => s + i.stock * (i.cost || 0), 0);
   const lowStockCount = data.supplies.filter((s) => s.stock < s.min).length;
 
   const exportInventory = () =>
@@ -1055,7 +1039,7 @@ export function InventoryManager({
         s.stock,
         s.unit,
         s.min,
-        money(s.cost || 10),
+        money(s.cost || 0),
         s.stock < s.min ? "Stock bajo" : "En stock",
       ]),
     );
@@ -1067,28 +1051,28 @@ export function InventoryManager({
         entries={[
           {
             label: "Valor del inventario",
-            value: money(totalValue || 8450),
+            value: money(totalValue),
             icon: "coins",
             tone: "gold",
             hint: "Costo total de insumos",
           },
           {
             label: "Stock bajo",
-            value: lowStockCount || 5,
+            value: lowStockCount,
             icon: "bell",
             tone: "red",
             hint: "Requiere reabastecimiento",
           },
           {
             label: "Insumos activos",
-            value: data.supplies.length || 64,
+            value: data.supplies.length,
             icon: "box",
             tone: "blue",
             hint: "Registrados en carta",
           },
           {
             label: "Proveedores",
-            value: data.suppliers.length || 8,
+            value: data.suppliers.length,
             icon: "truck",
             tone: "green",
             hint: "Contactos vigentes",
