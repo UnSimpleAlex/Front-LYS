@@ -1,4 +1,4 @@
-import { currentUser } from "../../services/localAuth";
+import { CashShiftPanel } from "./CashShiftPanel";
 import { OperationsDialog } from "./OperationsDialog";
 import { OperationsTable } from "./OperationsTable";
 import {
@@ -16,9 +16,6 @@ import {
   orderTotal,
   paymentMethods,
   processPayment,
-  openShift,
-  closeShift,
-  expectedCash,
   issueVoucher,
   refundPayment,
   type Order,
@@ -41,28 +38,8 @@ export function CashViews({
   notify: (task: () => void) => void;
   navigate: (path: string) => void;
 }) {
-  const denominations = [
-    { value: 200, image: "200", label: "Billetes S/ 200" },
-    { value: 100, image: "100", label: "Billetes S/ 100" },
-    { value: 50, image: "50", label: "Billetes S/ 50" },
-    { value: 20, image: "20", label: "Billetes S/ 20" },
-    { value: 10, image: "10", label: "Billetes S/ 10" },
-    { value: 5, image: "coin-5-soles", label: "Monedas S/ 5" },
-    { value: 2, image: "coin-2-soles", label: "Monedas S/ 2" },
-    { value: 1, image: "coin-1-sol", label: "Monedas S/ 1" },
-    { value: 0.5, image: "coin-50-centimos", label: "Monedas 50 céntimos" },
-    { value: 0.2, image: "coin-20-centimos", label: "Monedas 20 céntimos" },
-    { value: 0.1, image: "coin-10-centimos", label: "Monedas 10 céntimos" },
-  ];
-  const [bills, setBills] = useState<number[]>(Array(denominations.length).fill(0));
-  // Sum integer céntimos so decimal coin values do not accumulate rounding errors.
-  const billTotal = bills.reduce(
-    (sum, count, i) => sum + count * Math.round(denominations[i].value * 100),
-    0,
-  ) / 100;
   const today = new Date();
   const dateLabel = today.toLocaleDateString("es-PE", {day:"numeric",month:"long",year:"numeric"});
-  const cashier = currentUser()?.name || "Sin identificar";
   const data = useOperations();
   const actionHost = useContext(OperationsPageActions);
   const [selected, setSelected] = useState(() => new URLSearchParams(location.search).get("pedido") || "");
@@ -70,11 +47,12 @@ export function CashViews({
   const [pendingLimit, setPendingLimit] = useState(8);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("Todos");
+  const [from,setFrom] = useState("");
+  const [to,setTo] = useState("");
+  const [paymentState,setPaymentState] = useState("Todos");
+  const [cashierFilter,setCashierFilter] = useState("Todos");
   const [method, setMethod] = useState("Efectivo");
   const [received, setReceived] = useState("");
-  const [amount, setAmount] = useState("300");
-  const [notes, setNotes] = useState("");
-  const [verified, setVerified] = useState(false);
   const [voucherType, setVoucherType] = useState("Boleta");
   const [document, setDocument] = useState("");
   const [customer, setCustomer] = useState("");
@@ -126,12 +104,13 @@ export function CashViews({
         <thead>
           <tr>
             {[
-              "Fecha y hora",
-              "Pedido",
-              "Cliente",
-              "Método",
+              "N° de pago",
+              "N° de pedido",
+              "Mesa",
+              "Cajera",
+              "Método de pago",
               "Monto",
-              "Vuelto",
+              "Fecha y hora",
               "Estado",
               "Acciones",
             ].map((h) => (
@@ -143,6 +122,9 @@ export function CashViews({
           {data.payments
             .filter(
               (p) =>
+                (!from || p.date.slice(0,10)>=from) && (!to || p.date.slice(0,10)<=to) &&
+                (paymentState==="Todos" || (paymentState==="Pagado" ? !p.refunded:p.refunded)) &&
+                (cashierFilter==="Todos" || data.shifts.find(s=>s.id===p.shiftId)?.user===cashierFilter) &&
                 (filter === "Todos" || p.method === filter) &&
                 `${p.orderId} ${data.orders.find((o) => o.id === p.orderId)?.customer}`
                   .toLowerCase()
@@ -152,9 +134,10 @@ export function CashViews({
               const o = data.orders.find((o) => o.id === p.orderId);
               return (
                 <tr key={p.id}>
-                  <td>{dateText(p.date)}</td>
+                  <td><strong title={p.id}>{p.id.slice(-10)}</strong></td>
                   <td>#{p.orderId}</td>
-                  <td>{o?.customer}</td>
+                  <td>{o?.table ? String(o.table).padStart(2,"0"):"—"}</td>
+                  <td>{data.shifts.find(s=>s.id===p.shiftId)?.user || "—"}</td>
                   <td>
                     <span className="ops-method-label">
                       <PaymentMark name={p.method} />
@@ -162,7 +145,7 @@ export function CashViews({
                     </span>
                   </td>
                   <td>{money(p.amount)}</td>
-                  <td>{money(p.change)}</td>
+                  <td>{dateText(p.date)}</td>
                   <td>
                     <Badge value={p.refunded ? "Reembolsado" : "Pagado"} />
                   </td>
@@ -193,279 +176,7 @@ export function CashViews({
   );
   let content;
   if (section === "apertura" || section === "cierre")
-    content = (
-      <>
-        {actionHost &&
-          createPortal(
-            <div className="ops-header-actions">
-              <div className="ops-header-date-pill">
-                <Icon name="calendar" />
-                <span>{dateLabel}</span>
-              </div>
-            </div>,
-            actionHost,
-          )}
-        <Stats
-          entries={[
-            {
-              label: "Estado de caja",
-              value: shift ? "Abierta" : "Cerrada",
-              tone: shift ? "green" : "red",
-              hint: shift ? "En curso" : "Listo para operar",
-            },
-            {
-              label: "Fecha",
-              value: today.toLocaleDateString("es-PE"),
-              tone: "blue",
-              hint: "Hoy",
-            },
-            {
-              label: "Cajera",
-              value: shift?.user || cashier,
-              tone: "gray",
-              hint: "Usuario en sesión",
-            },
-            {
-              label: "Turno",
-              value: data.settings.hours || "Tarde",
-              tone: "gold",
-              hint: "Horario activo",
-            },
-          ]}
-        />
-        <div className="ops-split">
-          <Panel
-            title={
-              section === "apertura"
-                ? "Registrar fondo inicial"
-                : "Resumen de movimientos"
-            }
-          >
-            <div className="ops-steps">
-              {["Apertura", "Operación", "Cierre"].map((step, index) => (
-                <span
-                  key={step}
-                  className={
-                    index === (section === "apertura" ? 0 : 2)
-                      ? "current"
-                      : section === "cierre"
-                        ? "complete"
-                        : ""
-                  }
-                  aria-current={
-                    index === (section === "apertura" ? 0 : 2)
-                      ? "step"
-                      : undefined
-                  }
-                >
-                  <b>
-                    {section === "cierre" && index < 2 ? (
-                      <Icon name="check" />
-                    ) : (
-                      index + 1
-                    )}
-                  </b>
-                  {step}
-                </span>
-              ))}
-            </div>
-            {section === "cierre" && (
-              <Stats
-                entries={[
-                  { label: "Fondo inicial", value: money(shift?.initial || 0) },
-                  {
-                    label: "Ventas en efectivo",
-                    value: money(
-                      payments
-                        .filter(
-                          (p) =>
-                            p.shiftId === shift?.id && p.method === "Efectivo",
-                        )
-                        .reduce((s, p) => s + p.amount, 0),
-                    ),
-                  },
-                  {label:"Ventas digitales",value:money(payments.filter(p=>p.shiftId===shift?.id && p.method!=="Efectivo").reduce((sum,p)=>sum+p.amount,0))},
-                  {
-                    label: "Saldo esperado",
-                    value: money(shift ? expectedCash(shift) : 0),
-                  },
-                ]}
-              />
-            )}
-            <form
-              className="ops-form"
-              onSubmit={(e) => {
-                e.preventDefault();
-                notify(() => {
-                  if (
-                    billTotal > 0 &&
-                    Math.abs(billTotal - Number(amount)) > 0.001
-                  )
-                    throw new Error(
-                      "El desglose debe coincidir con el monto ingresado.",
-                    );
-                  if (section === "apertura") {
-                    if (!verified)
-                      throw new Error("Verifica el efectivo disponible.");
-                    openShift(Number(amount), notes);
-                  } else closeShift(Number(amount), notes);
-                  navigate("/caja");
-                });
-              }}
-            >
-              <label>
-                {section === "apertura"
-                  ? "Fondo inicial (S/)"
-                  : "Efectivo contado (S/)"}
-                <input
-                  type="number"
-                  min="0"
-                  step="0.01"
-                  required
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                />
-              </label>
-              <div>
-                <h3>Desglose de efectivo (opcional)</h3>
-                {[
-                  { title: "Billetes", from: 0, to: 5 },
-                  { title: "Monedas", from: 5, to: denominations.length },
-                ].map((group) => (
-                  <section
-                    className="ops-currency-group"
-                    key={group.title}
-                    aria-label={group.title}
-                  >
-                    <h4>{group.title}</h4>
-                    <div className="ops-denomination-head" aria-hidden="true"><span>Denominación</span><span>Cantidad</span><span>Subtotal</span></div>
-                    <div className="ops-bills">
-                      {denominations
-                        .slice(group.from, group.to)
-                        .map((item, offset) => {
-                          const index = group.from + offset;
-                          return (
-                            <label key={item.image}>
-                              <span className="ops-denomination-name">{item.label}</span>
-                              <img
-                                className="ops-banknote"
-                                src={`/images/operations/currency/${item.image}.webp`}
-                                alt=""
-                              />
-                              <input
-                                aria-label={
-                                  "Cantidad de denominación " + item.value
-                                }
-                                type="number"
-                                min="0"
-                                step="1"
-                                value={bills[index]}
-                                onChange={(e) =>
-                                  setBills(
-                                    bills.map((count, i) =>
-                                      i === index
-                                        ? Number(e.target.value)
-                                        : count,
-                                    ),
-                                  )
-                                }
-                              />
-                              <strong className="ops-denomination-subtotal">{money(bills[index]*item.value)}</strong>
-                            </label>
-                          );
-                        })}
-                    </div>
-                  </section>
-                ))}
-                <div className="ops-total ops-cash-total">
-                  <span>
-                    <Icon name="cash" /> Total calculado
-                  </span>
-                  <strong>{money(billTotal)}</strong>
-                  {billTotal > 0 && (
-                    <Badge
-                      value={
-                        Math.abs(billTotal - Number(amount)) < 0.001
-                          ? "Coincide"
-                          : "Revisar monto"
-                      }
-                    />
-                  )}
-                </div>
-                <small>
-                  Ingresa la cantidad de piezas de cada billete y moneda.
-                </small>
-              </div>
-              <label>
-                Observaciones
-                <textarea
-                  value={notes}
-                  onChange={(e) => setNotes(e.target.value)}
-                  maxLength={300}
-                />
-              </label>
-              {section === "apertura" ? (
-                <label className="ops-check">
-                  <input
-                    type="checkbox"
-                    checked={verified}
-                    onChange={(e) => setVerified(e.target.checked)}
-                  />
-                  He verificado el efectivo disponible.
-                </label>
-              ) : (
-                <strong>
-                  Diferencia:{" "}
-                  {money(Number(amount) - (shift ? expectedCash(shift) : 0))}
-                </strong>
-              )}
-              <button
-                className="ops-primary"
-                disabled={section === "apertura" ? !!shift : !shift}
-              >
-                <Icon name={section === "apertura" ? "cash" : "power"} />
-                {section === "apertura" ? "Abrir caja" : "Cerrar caja"}
-              </button>
-            </form>
-          </Panel>
-          <Panel title="Resumen del turno">
-            <dl className="ops-shift-summary">
-              <div>
-                <dt>
-                  <Icon name="user" /> Cajera
-                </dt>
-                <dd>{shift?.user || cashier}</dd>
-              </div>
-              <div>
-                <dt>
-                  <Icon name="store" /> Local
-                </dt>
-                <dd>{data.settings.name}</dd>
-              </div>
-              <div>
-                <dt>
-                  <Icon name="clock" /> Horario
-                </dt>
-                <dd>{data.settings.hours}</dd>
-              </div>
-            </dl>
-            <Badge value={shift ? "Caja abierta" : "Caja cerrada"} />
-            <p>
-              Los pagos digitales se registran por separado del efectivo físico.
-            </p>
-            <h3>Turnos anteriores</h3>
-            {data.shifts
-              .filter((s) => s.closed)
-              .map((s) => (
-                <p key={s.id}>
-                  {dateText(s.opened)} · Fondo {money(s.initial)} · Diferencia{" "}
-                  {money(s.difference || 0)}
-                </p>
-              ))}
-          </Panel>
-        </div>
-      </>
-    );
+    content = <CashShiftPanel closing={section === "cierre"} notify={notify} navigate={navigate}/>;
   else if (section === "cobros")
     content = (
       <>
@@ -542,6 +253,7 @@ export function CashViews({
                         <strong>{money(orderTotal(o))}</strong>
                         <button
                           className="ops-primary"
+                          aria-label="Cobrar"
                           style={{
                             padding: "6px 14px",
                             fontSize: "12.5px",
@@ -600,11 +312,14 @@ export function CashViews({
                     Detalle del pedido
                   </h4>
                   <div className="ops-pos-order-lines">
+                    <div className="anchor-pos-line-head" aria-hidden="true"><span>Producto</span><span>Cantidad</span><span>Precio unitario</span><span>Subtotal</span></div>
                     {order.items.map((item) => (
                       <div key={item.product.id} className="ops-pos-line-item">
-                        <span>
-                          {item.count} × {item.product.name}
+                        <span className="anchor-pos-product">
+                          <img src={item.product.image} alt=""/>{item.product.name}
                         </span>
+                        <span>{item.count}</span>
+                        <span>{money(item.product.price)}</span>
                         <strong>
                           {money(item.product.price * item.count)}
                         </strong>
@@ -763,7 +478,7 @@ export function CashViews({
                       marginTop: "16px",
                     }}
                   >
-                    <Icon name="check" /> Procesar pago
+                    <Icon name="cash" /> Confirmar cobro
                   </button>
                 </form>
               </>
@@ -808,7 +523,7 @@ export function CashViews({
           entries={[
             {
               label: "Emitidos hoy",
-              value: data.vouchers.length,
+              value: data.vouchers.filter(v=>new Date(v.date).toLocaleDateString()===today.toLocaleDateString()).length,
               tone: "red",
               hint: "Total del día",
             },
@@ -823,13 +538,6 @@ export function CashViews({
               value: data.vouchers.filter((v) => v.type === "Factura").length,
               tone: "gold",
               hint: "Empresas con RUC",
-            },
-            {
-              label: "Notas de venta",
-              value: data.vouchers.filter((v) => v.type === "Nota de venta")
-                .length,
-              tone: "gray",
-              hint: "Control interno",
             },
           ]}
         />
@@ -873,11 +581,9 @@ export function CashViews({
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
-            <Tabs
-              options={["Todos", "Boleta", "Factura", "Nota de venta"]}
-              value={filter}
-              onChange={setFilter}
-            />
+            <label>Fecha<input type="date" aria-label="Fecha de comprobantes" value={from} onChange={e=>{setFrom(e.target.value);setTo(e.target.value);}}/></label>
+            <label>Tipo de comprobante<select aria-label="Filtrar tipo de comprobante" value={filter} onChange={e=>setFilter(e.target.value)}>{["Todos","Boleta","Factura","Nota de venta"].map(type=><option key={type}>{type}</option>)}</select></label>
+            <button type="button" className="ops-primary" onClick={()=>setSearch(search.trim())}><Icon name="funnel"/>Filtrar</button>
           </div>
           <div className="ops-table-wrap">
             <OperationsTable>
@@ -897,6 +603,7 @@ export function CashViews({
                 {data.vouchers
                   .filter(
                     (v) =>
+                      (!from || v.date.slice(0,10)>=from) && (!to || v.date.slice(0,10)<=to) &&
                       (filter === "Todos" || v.type === filter) &&
                       `${v.id} ${v.customer}`
                         .toLowerCase()
@@ -1079,12 +786,6 @@ export function CashViews({
               tone: "red",
               hint: "Reembolsos aprobados",
             },
-            {
-              label: "Turnos cerrados",
-              value: data.shifts.filter((s) => s.closed).length,
-              tone: "gray",
-              hint: "Histórico de turnos",
-            },
           ]}
         />
         <div className="ops-with-sidebar">
@@ -1096,35 +797,14 @@ export function CashViews({
               </button>
             }
           >
-            <div
-              className="ops-admin-filter-bar"
-              style={{ margin: "0 0 16px" }}
-            >
-              <div className="ops-admin-search">
-                <Icon name="search" />
-                <input
-                  aria-label="Buscar pedido o cliente"
-                  placeholder="Buscar pedido, cliente o comprobante…"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                />
-              </div>
-              <select
-                aria-label="Filtrar resultados"
-                value={filter}
-                onChange={(e) => setFilter(e.target.value)}
-                style={{
-                  padding: "8px 12px",
-                  borderRadius: "8px",
-                  border: "1px solid #dce3ee",
-                  fontSize: "13px",
-                  background: "#fff",
-                }}
-              >
-                {["Todos", ...paymentMethods].map((m) => (
-                  <option key={m}>{m}</option>
-                ))}
-              </select>
+            <div className="ops-admin-filter-bar anchor-cash-filters">
+              <label>Fecha desde<input type="date" aria-label="Pagos desde" value={from} max={to || undefined} onChange={e=>setFrom(e.target.value)}/></label>
+              <label>Fecha hasta<input type="date" aria-label="Pagos hasta" value={to} min={from || undefined} onChange={e=>setTo(e.target.value)}/></label>
+              <label>Método de pago<select aria-label="Filtrar resultados" value={filter} onChange={e=>setFilter(e.target.value)}>{["Todos",...paymentMethods].map(m=><option key={m}>{m}</option>)}</select></label>
+              <label>Cajera<select aria-label="Cajera de los pagos" value={cashierFilter} onChange={e=>setCashierFilter(e.target.value)}>{["Todos",...new Set(data.shifts.map(shift=>shift.user))].map(name=><option key={name}>{name}</option>)}</select></label>
+              <label>Estado<select aria-label="Estado del pago" value={paymentState} onChange={e=>setPaymentState(e.target.value)}>{["Todos","Pagado","Anulado"].map(v=><option key={v}>{v}</option>)}</select></label>
+              <button type="button" className="ops-outline" onClick={exportPayments}><Icon name="download"/>Exportar</button>
+              <button type="button" className="ops-primary" onClick={()=>setSearch(search.trim())}><Icon name="funnel"/>Filtrar</button>
             </div>
             {transactions}
           </Panel>
