@@ -43,3 +43,12 @@ Las tres vistas se verifican entre 240 y 2560 px, incluyendo móvil (390 px), ta
 Con el rol cocina o administrador, «Cargar muestra de cocina» añade 23 pedidos al almacenamiento `lys-operations-v1`, sin sustituir los existentes. Incluye cinco nuevos, tres en preparación, dos listos, uno en camino, diez entregados y dos cancelados. La muestra persiste al recargar y no se puede duplicar desde el botón. Son datos de demostración locales; no representan ventas reales.
 
 Los indicadores, gráficos y alertas se calculan a partir de los pedidos guardados. Los listos y los pedidos en camino no se consideran retrasos de preparación. En móvil y tablet las tablas se convierten en tarjetas y las columnas laterales se apilan.
+
+
+## Pulido de las 25 referencias administrativas
+
+La comprobación de paneles recorre las 25 rutas entre 240 y 2560 px (incluye 390, 768, 1024, 1280, 1366, 1440 y 1920). Valida desbordamientos de página y tablas, imágenes y límites de los botones. Las comprobaciones de cocina incluyen el ancla de PC de 1672 px, las tres etapas y sus filtros. Estos son tamaños de navegador emulados; no sustituyen una prueba física en cada dispositivo.
+
+administrative-reference.spec.ts verifica cifras cero sin rellenos ficticios, cambio real de página, filtro por fecha, edición persistente del pedido existente, estados de delivery, mapa sin carga automática de direcciones e importe exacto con céntimos en caja. Las otras suites conservan flujo por roles, once denominaciones, modales, foco y formularios de producto.
+
+La muestra general también añade hasta ocho clientes ficticios con correo @preview.example y acceso local Demo2026!, sin sustituir cuentas existentes. Su historial se vincula únicamente a pedidos sintéticos de cocina por nombre, conservando los identificadores de los pedidos para poder actualizar la muestra.

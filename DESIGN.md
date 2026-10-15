@@ -236,3 +236,14 @@ Details have description, ingredients, commercial information and last-update ta
 The desktop sidebar expands to 295px from 1450px, with larger navigation icons and an account avatar. Product tables use 14px text, category-specific icons, a bulk state selector, applied category/availability/branch filters and arrow pagination. The detail dialog opens on ingredients, with icon-led facts and grouped preparation/gallery cards. The editor includes an accessible availability switch, image removal, currency/time affixes and an available last-update timestamp. Deactivation keeps the same reversible behavior with a richer summary and explicit explanation.
 
 Compact density: sidebar entries use 44px minimum height and 22px icons. Desktop summary cards use 40px icons, 12px vertical padding and 26px values; product summaries switch to two columns at 1200px. The primary creation button uses a single circled-plus SVG and a 44px minimum height. Short desktop screens scroll the navigation inside the sidebar while keeping the account accessible.
+
+
+## Referencias PC y móvil — octubre de 2026
+
+La carpeta LYS_Pantallas_Administrativas_PC_y_Movil define 25 pares de pantallas. La clase ops-reference mantiene estos ajustes dentro de los paneles internos. Los originales de PC se comparan a 1672 × 941; las referencias móviles de alta densidad se interpretan a un ancho lógico de 390 px. Entre ambos se apilan paneles sin ocultar información esencial.
+
+La cocina usa tres etapas (nuevos, preparación y listos), seleccionables en móvil. Pedidos entrantes son filas con productos, notas y acciones; el historial ocupa todo el ancho; tiempos combina pedidos por hora con barras horizontales por producto y alertas. Salón muestra el plano con estados y el pedido de la mesa seleccionada, conservando las notas y acciones adicionales en un diálogo. Delivery usa tarjetas de entrega y consulta voluntaria del destino en Google Maps; no simula ubicación, distancia ni tiempo de llegada.
+
+En móvil, productos presenta foto, SKU, categoría, estado, importe y stock en tarjetas con acciones. Los filtros avanzados son desplegables. La cabecera usa logo, cuenta y menú; la navegación permanece accesible con teclado. En PC amplio los resúmenes recuperan las proporciones de la referencia, mientras que en móvil usan dos columnas compactas. Las denominaciones de apertura de caja son filas con foto, cantidad y subtotal; se mantienen las once piezas suministradas, sin moneda de cinco céntimos.
+
+Las fechas y métricas proceden de los datos disponibles. Los filtros, páginas, selección para exportar y edición de pedidos deben producir resultados reales. No usar cifras, teléfonos ni crecimientos ficticios como relleno.
