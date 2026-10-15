@@ -29,11 +29,45 @@ export type IconName =
   | "list"
   | "clipboard"
   | "bag"
-  | "circle-plus";
+  | "circle-plus"
+  | "inventory"
+  | "link"
+  | "info"
+  | "funnel";
 const linePaths: Partial<Record<IconName, string[]>> = {
-  "circle-plus": ["M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z", "M12 7v10", "M7 12h10"],
-  percent: ["m5 19 14-14", "M9 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z", "M21 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"],
-  chef: ["M7 16v-5a4 4 0 1 1 1-7 5 5 0 0 1 8 0 4 4 0 1 1 1 7v5Z", "M7 16h10v5H7Z"],
+  info: ["M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z", "M12 11v6M12 7v1"],
+  funnel: ["M3 3h18l-7 9v7l-4 2V12Z"],
+  link: [
+    "m10 13 4-4",
+    "M8 15l-2 2a4 4 0 0 1-5-5l5-5a4 4 0 0 1 6 0",
+    "M16 9l2-2a4 4 0 0 1 5 5l-5 5a4 4 0 0 1-6 0",
+  ],
+  inventory: [
+    "m3 4 4-2 4 2-4 2Z",
+    "M3 4v5l4 2 4-2V4M7 6v5",
+    "m13 13 4-2 4 2-4 2Z",
+    "M13 13v6l4 2 4-2v-6M17 15v6",
+    "m2 14 4-2 4 2-4 2Z",
+    "M2 14v6l4 2 4-2v-6M6 16v6",
+  ],
+  table: ["M5 7h14v10H5Z", "M8 3h8v4M8 17v4h8v-4", "M2 9v6h3M19 9h3v6h-3"],
+  home: ["m3 10 9-8 9 8v12h-6v-8H9v8H3Z"],
+  filter: ["M4 6h16M4 12h16M4 18h16", "M8 3v6M16 9v6M10 15v6"],
+
+  "circle-plus": [
+    "M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z",
+    "M12 7v10",
+    "M7 12h10",
+  ],
+  percent: [
+    "m5 19 14-14",
+    "M9 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z",
+    "M21 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z",
+  ],
+  chef: [
+    "M7 16v-5a4 4 0 1 1 1-7 5 5 0 0 1 8 0 4 4 0 1 1 1 7v5Z",
+    "M7 16h10v5H7Z",
+  ],
   bell: ["M5 17h14l-2-3V9a5 5 0 0 0-10 0v5Z", "M10 21h4M12 2v2"],
   chart: ["M4 20V12h3v8ZM11 20V8h3v12ZM18 20V3h3v17Z"],
   serve: ["M3 17a9 9 0 0 1 18 0ZM2 21h20M12 8V4M10 4h4"],
@@ -85,7 +119,7 @@ const linePaths: Partial<Record<IconName, string[]>> = {
     "M12 16v6",
     "M7 23h10",
   ],
-  filter: ["M2 3h20l-8 9v9l-4-2v-7Z"],
+
   list: ["M8 5h14M8 12h14M8 19h14", "M2 5h2M2 12h2M2 19h2"],
   clipboard: ["M8 3H4v19h16V3h-4", "M8 1h8v5H8Z", "M8 10h8M8 15h8"],
 };
@@ -93,6 +127,23 @@ export function Icon({
   name,
   ...props
 }: SVGProps<SVGSVGElement> & { name: IconName }) {
+  const filled: Partial<Record<IconName, string>> = {
+    user: "M12 2a5 5 0 1 1 0 10 5 5 0 0 1 0-10ZM3 22v-3a9 7 0 0 1 18 0v3Z",
+    eye: "M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12Zm6 0a5 5 0 1 0 10 0 5 5 0 0 0-10 0Zm3 0a2 2 0 1 1 4 0 2 2 0 0 1-4 0Z",
+    chicken:
+      "M16 2c-1-2-3-1-3 1-2-1-3 1-1 3l1 1c-1 2-2 4-5 4-3 0-4-2-5-5-3 4-2 9 2 11 2 1 4 2 7 1l-1 3H8v2h5l2-6c3-2 4-5 3-8l3-1-2-2c0-3-1-4-3-4Z",
+  };
+  if (filled[name])
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        aria-hidden="true"
+        {...props}
+      >
+        <path d={filled[name]} fillRule="evenodd" />
+      </svg>
+    );
   if (linePaths[name])
     return (
       <svg
