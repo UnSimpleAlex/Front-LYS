@@ -393,3 +393,197 @@
   color: #64748b;
   font-weight: 400;
 }
+
+/* POS Cash Split Layout */
+.ops-pos-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .ops-pos-split {
+    grid-template-columns: 1fr;
+  }
+}
+.ops-pending-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.ops-pending-order-item {
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #ffffff;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.ops-pending-order-item:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+.ops-pending-order-item.selected {
+  border-color: #dc2626;
+  background: #fff5f5;
+  box-shadow: 0 0 0 1px #dc2626;
+}
+.ops-pending-order-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ops-pending-order-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.ops-pending-order-top strong {
+  font-size: 14.5px;
+  color: #0f172a;
+}
+.ops-pending-order-amount {
+  text-align: right;
+}
+.ops-pending-order-amount strong {
+  display: block;
+  font-size: 16px;
+  font-weight: 700;
+  color: #dc2626;
+}
+.ops-pending-order-amount small {
+  display: block;
+  font-size: 11.5px;
+  color: #64748b;
+}
+
+/* Checkout Panel on Right */
+.ops-pos-checkout {
+  border: 1px solid #eaecf0;
+  border-radius: 12px;
+  background: #ffffff;
+  padding: 20px;
+  position: sticky;
+  top: 80px;
+}
+.ops-pos-checkout-header {
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 14px;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.ops-pos-checkout-header h3 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: #0f172a;
+}
+.ops-pos-order-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 16px;
+  padding-right: 4px;
+}
+.ops-pos-line-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13.5px;
+  color: #334155;
+}
+.ops-pos-line-item strong {
+  color: #0f172a;
+}
+.ops-pos-total-row {
+  border-top: 2px dashed #e2e8f0;
+  padding-top: 14px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.ops-pos-total-row span {
+  font-size: 15px;
+  font-weight: 600;
+  color: #334155;
+}
+.ops-pos-total-row strong {
+  font-size: 22px;
+  font-weight: 800;
+  color: #dc2626;
+}
+
+/* Payment Method Selection Buttons */
+.ops-method-selector-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.ops-method-button {
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  background: #ffffff;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #334155;
+  transition: all 0.15s ease-in-out;
+}
+.ops-method-button:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+.ops-method-button.active {
+  border-color: #dc2626;
+  background: #fff5f5;
+  color: #991b1b;
+}
+
+/* Cash Presets */
+.ops-cash-presets {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+.ops-cash-preset-btn {
+  padding: 6px 12px;
+  border: 1px solid #dce3ee;
+  border-radius: 6px;
+  background: #f8fafc;
+  color: #334155;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.ops-cash-preset-btn:hover {
+  border-color: #dc2626;
+  background: #fff5f5;
+  color: #dc2626;
+}
+
+/* Voucher type badges */
+.ops-voucher-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.ops-voucher-badge.boleta { background: #dcfce7; color: #166534; }
+.ops-voucher-badge.factura { background: #e0f2fe; color: #075985; }
+.ops-voucher-badge.nota { background: #f1f5f9; color: #475569; }

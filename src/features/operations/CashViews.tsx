@@ -1,13 +1,15 @@
+import { currentUser } from "../../services/localAuth";
 import { OperationsDialog } from "./OperationsDialog";
 import { OperationsTable } from "./OperationsTable";
 import {
   Icon,
-  ProductSummary,
-  UserSummary,
   PaymentMark,
 } from "./OperationsVisuals";
 import { dateText, downloadCsv, printLocal } from "./operationsFiles";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { createPortal } from "react-dom";
+import { OperationsPageActions } from "./operationsPageContext";
+import { ChannelBadge, InitialsAvatar } from "./AdminViews";
 import {
   useOperations,
   money,
@@ -58,9 +60,12 @@ export function CashViews({
     (sum, count, i) => sum + count * Math.round(denominations[i].value * 100),
     0,
   ) / 100;
+  const today = new Date();
+  const dateLabel = today.toLocaleDateString("es-PE", {day:"numeric",month:"long",year:"numeric"});
+  const cashier = currentUser()?.name || "Sin identificar";
   const data = useOperations();
-  const [selected, setSelected] = useState("");
-  const [paymentOpen, setPaymentOpen] = useState(false);
+  const actionHost = useContext(OperationsPageActions);
+  const [selected, setSelected] = useState(() => new URLSearchParams(location.search).get("pedido") || "");
   const [voucherOpen, setVoucherOpen] = useState(false);
   const [pendingLimit, setPendingLimit] = useState(8);
   const [search, setSearch] = useState("");
@@ -189,338 +194,585 @@ export function CashViews({
   let content;
   if (section === "apertura" || section === "cierre")
     content = (
-      <div className="ops-split">
-        <Panel
-          title={
-            section === "apertura"
-              ? "Registrar fondo inicial"
-              : "Resumen de movimientos"
-          }
-        >
-          <div className="ops-steps">
-            {["Apertura", "Operación", "Cierre"].map((step, index) => (
-              <span key={step} className={index === (section === "apertura" ? 0 : 2) ? "current" : section === "cierre" ? "complete" : ""} aria-current={index === (section === "apertura" ? 0 : 2) ? "step" : undefined}>
-                <b>{section === "cierre" && index < 2 ? <Icon name="check" /> : index + 1}</b>{step}
-              </span>
-            ))}
-          </div>
-          {section === "cierre" && (
-            <Stats
-              entries={[
-                { label: "Fondo inicial", value: money(shift?.initial || 0) },
-                {
-                  label: "Ventas en efectivo",
-                  value: money(
-                    payments
-                      .filter(
-                        (p) =>
-                          p.shiftId === shift?.id && p.method === "Efectivo",
-                      )
-                      .reduce((s, p) => s + p.amount, 0),
-                  ),
-                },
-                {
-                  label: "Saldo esperado",
-                  value: money(shift ? expectedCash(shift) : 0),
-                },
-              ]}
-            />
-          )}
-          <form
-            className="ops-form"
-            onSubmit={(e) => {
-              e.preventDefault();
-              notify(() => {
-                if (
-                  billTotal > 0 &&
-                  Math.abs(billTotal - Number(amount)) > 0.001
-                )
-                  throw new Error(
-                    "El desglose debe coincidir con el monto ingresado.",
-                  );
-                if (section === "apertura") {
-                  if (!verified)
-                    throw new Error("Verifica el efectivo disponible.");
-                  openShift(Number(amount), notes);
-                } else closeShift(Number(amount), notes);
-                navigate("/caja");
-              });
-            }}
-          >
-            <label>
-              {section === "apertura"
-                ? "Fondo inicial (S/)"
-                : "Efectivo contado (S/)"}
-              <input
-                type="number"
-                min="0"
-                step="0.01"
-                required
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-              />
-            </label>
-            <div>
-              <h3>Desglose de efectivo (opcional)</h3>
-              {[{ title: "Billetes", from: 0, to: 5 }, { title: "Monedas", from: 5, to: denominations.length }].map(group => (
-                <section className="ops-currency-group" key={group.title} aria-label={group.title}>
-                  <h4>{group.title}</h4>
-                  <div className="ops-bills">
-                    {denominations.slice(group.from, group.to).map((item, offset) => {
-                      const index = group.from + offset;
-                      return <label key={item.image}>
-                        {item.label}
-                        <img className="ops-banknote" src={`/images/operations/currency/${item.image}.webp`} alt="" />
-                        <input
-                          aria-label={"Cantidad de denominación " + item.value}
-                          type="number"
-                          min="0"
-                          step="1"
-                          value={bills[index]}
-                          onChange={(e) => setBills(bills.map((count, i) => i === index ? Number(e.target.value) : count))}
-                        />
-                      </label>;
-                    })}
-                  </div>
-                </section>
-              ))}
-              <div className="ops-total ops-cash-total">
-                <span><Icon name="cash" /> Total calculado</span>
-                <strong>{money(billTotal)}</strong>
-                {billTotal > 0 && <Badge value={Math.abs(billTotal - Number(amount)) < 0.001 ? "Coincide" : "Revisar monto"} />}
+      <>
+        {actionHost &&
+          createPortal(
+            <div className="ops-header-actions">
+              <div className="ops-header-date-pill">
+                <Icon name="calendar" />
+                <span>{dateLabel}</span>
               </div>
-              <small>Ingresa la cantidad de piezas de cada billete y moneda.</small>
+            </div>,
+            actionHost,
+          )}
+        <Stats
+          entries={[
+            {
+              label: "Estado de caja",
+              value: shift ? "Abierta" : "Cerrada",
+              tone: shift ? "green" : "red",
+              hint: shift ? "En curso" : "Listo para operar",
+            },
+            {
+              label: "Fecha",
+              value: today.toLocaleDateString("es-PE"),
+              tone: "blue",
+              hint: "Hoy",
+            },
+            {
+              label: "Cajera",
+              value: shift?.user || cashier,
+              tone: "gray",
+              hint: "Usuario en sesión",
+            },
+            {
+              label: "Turno",
+              value: data.settings.hours || "Tarde",
+              tone: "gold",
+              hint: "Horario activo",
+            },
+          ]}
+        />
+        <div className="ops-split">
+          <Panel
+            title={
+              section === "apertura"
+                ? "Registrar fondo inicial"
+                : "Resumen de movimientos"
+            }
+          >
+            <div className="ops-steps">
+              {["Apertura", "Operación", "Cierre"].map((step, index) => (
+                <span
+                  key={step}
+                  className={
+                    index === (section === "apertura" ? 0 : 2)
+                      ? "current"
+                      : section === "cierre"
+                        ? "complete"
+                        : ""
+                  }
+                  aria-current={
+                    index === (section === "apertura" ? 0 : 2)
+                      ? "step"
+                      : undefined
+                  }
+                >
+                  <b>
+                    {section === "cierre" && index < 2 ? (
+                      <Icon name="check" />
+                    ) : (
+                      index + 1
+                    )}
+                  </b>
+                  {step}
+                </span>
+              ))}
             </div>
-            <label>
-              Observaciones
-              <textarea
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                maxLength={300}
+            {section === "cierre" && (
+              <Stats
+                entries={[
+                  { label: "Fondo inicial", value: money(shift?.initial || 0) },
+                  {
+                    label: "Ventas en efectivo",
+                    value: money(
+                      payments
+                        .filter(
+                          (p) =>
+                            p.shiftId === shift?.id && p.method === "Efectivo",
+                        )
+                        .reduce((s, p) => s + p.amount, 0),
+                    ),
+                  },
+                  {label:"Ventas digitales",value:money(payments.filter(p=>p.shiftId===shift?.id && p.method!=="Efectivo").reduce((sum,p)=>sum+p.amount,0))},
+                  {
+                    label: "Saldo esperado",
+                    value: money(shift ? expectedCash(shift) : 0),
+                  },
+                ]}
               />
-            </label>
-            {section === "apertura" ? (
-              <label className="ops-check">
-                <input
-                  type="checkbox"
-                  checked={verified}
-                  onChange={(e) => setVerified(e.target.checked)}
-                />
-                He verificado el efectivo disponible.
-              </label>
-            ) : (
-              <strong>
-                Diferencia:{" "}
-                {money(Number(amount) - (shift ? expectedCash(shift) : 0))}
-              </strong>
             )}
-            <button
-              className="ops-primary"
-              disabled={section === "apertura" ? !!shift : !shift}
+            <form
+              className="ops-form"
+              onSubmit={(e) => {
+                e.preventDefault();
+                notify(() => {
+                  if (
+                    billTotal > 0 &&
+                    Math.abs(billTotal - Number(amount)) > 0.001
+                  )
+                    throw new Error(
+                      "El desglose debe coincidir con el monto ingresado.",
+                    );
+                  if (section === "apertura") {
+                    if (!verified)
+                      throw new Error("Verifica el efectivo disponible.");
+                    openShift(Number(amount), notes);
+                  } else closeShift(Number(amount), notes);
+                  navigate("/caja");
+                });
+              }}
             >
-              <Icon name={section === "apertura" ? "cash" : "power"} />
-              {section === "apertura" ? "Abrir caja" : "Cerrar caja"}
-            </button>
-          </form>
-        </Panel>
-        <Panel title="Resumen del turno">
-          <dl className="ops-shift-summary">
-            <div><dt><Icon name="user" /> Cajera</dt><dd>{shift?.user || "Tu cuenta"}</dd></div>
-            <div><dt><Icon name="store" /> Local</dt><dd>{data.settings.name}</dd></div>
-            <div><dt><Icon name="clock" /> Horario</dt><dd>{data.settings.hours}</dd></div>
-          </dl>
-          <Badge value={shift ? "Caja abierta" : "Caja cerrada"} />
-          <p>
-            Los pagos digitales se registran por separado del efectivo físico.
-          </p>
-          <h3>Turnos anteriores</h3>
-          {data.shifts
-            .filter((s) => s.closed)
-            .map((s) => (
-              <p key={s.id}>
-                {dateText(s.opened)} · Fondo {money(s.initial)} · Diferencia{" "}
-                {money(s.difference || 0)}
-              </p>
-            ))}
-        </Panel>
-      </div>
+              <label>
+                {section === "apertura"
+                  ? "Fondo inicial (S/)"
+                  : "Efectivo contado (S/)"}
+                <input
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  required
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                />
+              </label>
+              <div>
+                <h3>Desglose de efectivo (opcional)</h3>
+                {[
+                  { title: "Billetes", from: 0, to: 5 },
+                  { title: "Monedas", from: 5, to: denominations.length },
+                ].map((group) => (
+                  <section
+                    className="ops-currency-group"
+                    key={group.title}
+                    aria-label={group.title}
+                  >
+                    <h4>{group.title}</h4>
+                    <div className="ops-denomination-head" aria-hidden="true"><span>Denominación</span><span>Cantidad</span><span>Subtotal</span></div>
+                    <div className="ops-bills">
+                      {denominations
+                        .slice(group.from, group.to)
+                        .map((item, offset) => {
+                          const index = group.from + offset;
+                          return (
+                            <label key={item.image}>
+                              <span className="ops-denomination-name">{item.label}</span>
+                              <img
+                                className="ops-banknote"
+                                src={`/images/operations/currency/${item.image}.webp`}
+                                alt=""
+                              />
+                              <input
+                                aria-label={
+                                  "Cantidad de denominación " + item.value
+                                }
+                                type="number"
+                                min="0"
+                                step="1"
+                                value={bills[index]}
+                                onChange={(e) =>
+                                  setBills(
+                                    bills.map((count, i) =>
+                                      i === index
+                                        ? Number(e.target.value)
+                                        : count,
+                                    ),
+                                  )
+                                }
+                              />
+                              <strong className="ops-denomination-subtotal">{money(bills[index]*item.value)}</strong>
+                            </label>
+                          );
+                        })}
+                    </div>
+                  </section>
+                ))}
+                <div className="ops-total ops-cash-total">
+                  <span>
+                    <Icon name="cash" /> Total calculado
+                  </span>
+                  <strong>{money(billTotal)}</strong>
+                  {billTotal > 0 && (
+                    <Badge
+                      value={
+                        Math.abs(billTotal - Number(amount)) < 0.001
+                          ? "Coincide"
+                          : "Revisar monto"
+                      }
+                    />
+                  )}
+                </div>
+                <small>
+                  Ingresa la cantidad de piezas de cada billete y moneda.
+                </small>
+              </div>
+              <label>
+                Observaciones
+                <textarea
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                  maxLength={300}
+                />
+              </label>
+              {section === "apertura" ? (
+                <label className="ops-check">
+                  <input
+                    type="checkbox"
+                    checked={verified}
+                    onChange={(e) => setVerified(e.target.checked)}
+                  />
+                  He verificado el efectivo disponible.
+                </label>
+              ) : (
+                <strong>
+                  Diferencia:{" "}
+                  {money(Number(amount) - (shift ? expectedCash(shift) : 0))}
+                </strong>
+              )}
+              <button
+                className="ops-primary"
+                disabled={section === "apertura" ? !!shift : !shift}
+              >
+                <Icon name={section === "apertura" ? "cash" : "power"} />
+                {section === "apertura" ? "Abrir caja" : "Cerrar caja"}
+              </button>
+            </form>
+          </Panel>
+          <Panel title="Resumen del turno">
+            <dl className="ops-shift-summary">
+              <div>
+                <dt>
+                  <Icon name="user" /> Cajera
+                </dt>
+                <dd>{shift?.user || cashier}</dd>
+              </div>
+              <div>
+                <dt>
+                  <Icon name="store" /> Local
+                </dt>
+                <dd>{data.settings.name}</dd>
+              </div>
+              <div>
+                <dt>
+                  <Icon name="clock" /> Horario
+                </dt>
+                <dd>{data.settings.hours}</dd>
+              </div>
+            </dl>
+            <Badge value={shift ? "Caja abierta" : "Caja cerrada"} />
+            <p>
+              Los pagos digitales se registran por separado del efectivo físico.
+            </p>
+            <h3>Turnos anteriores</h3>
+            {data.shifts
+              .filter((s) => s.closed)
+              .map((s) => (
+                <p key={s.id}>
+                  {dateText(s.opened)} · Fondo {money(s.initial)} · Diferencia{" "}
+                  {money(s.difference || 0)}
+                </p>
+              ))}
+          </Panel>
+        </div>
+      </>
     );
   else if (section === "cobros")
     content = (
       <>
-        <div className="ops-split">
+        {actionHost &&
+          createPortal(
+            <div className="ops-header-actions">
+              <div className="ops-header-date-pill">
+                <Icon name="calendar" />
+                <span>{dateLabel}</span>
+              </div>
+              <button
+                className="ops-outline"
+                onClick={() => navigate("/caja/comprobantes")}
+              >
+                <Icon name="receipt" /> Emitir comprobante
+              </button>
+            </div>,
+            actionHost,
+          )}
+        <div className="ops-pos-split">
           <Panel title="Pedidos pendientes de cobro">
-            <input aria-label="Buscar pedido, cliente o mesa"
-              className="ops-search"
-              placeholder="Buscar pedido, cliente o mesa…"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-            <Tabs
-              options={["Todos", "Salón", "Delivery", "Recojo"]}
-              value={filter}
-              onChange={setFilter}
-            />
-            <div className="ops-table-wrap">
-              <OperationsTable>
-                <thead>
-                  <tr>
-                    <th>Pedido</th>
-                    <th>Mesa / Origen</th>
-                    <th>Cliente</th>
-                    <th>Productos</th>
-                    <th>Total</th>
-                    <th>Acción</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {pending
-                    .filter(
-                      (o) =>
-                        (filter === "Todos" || o.channel === filter) &&
-                        `${o.id} ${o.customer} ${o.table || ""}`
-                          .toLowerCase()
-                          .includes(search.toLowerCase()),
-                    )
-                    .slice(0, pendingLimit)
-                    .map((o) => (
-                      <tr
-                        key={o.id}
-                        className={o.id === order?.id ? "selected-row" : ""}
-                      >
-                        <td>#{o.id}</td>
-                        <td>{o.table ? `Mesa ${o.table}` : o.channel}</td>
-                        <td>
-                          <UserSummary name={o.customer} />
-                        </td>
-                        <td>
-                          <ProductSummary order={o} />
-                        </td>
-                        <td>{money(orderTotal(o))}</td>
-                        <td>
-                          <button
-                            className="ops-primary"
-                            onClick={() => {
-                              setSelected(o.id);
-                              setPaymentOpen(true);
-                              setReceived("");
-                            }}
-                          >
-                            <Icon name="card" /> Cobrar
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </OperationsTable>
-              {pending.length > pendingLimit && (
-                <button
-                  className="ops-outline"
-                  onClick={() => setPendingLimit(pendingLimit + 8)}
-                >
-                  <Icon name="plus" /> Ver más pedidos
-                </button>
-              )}
-              {!pending.length && (
-                <Empty>No hay pedidos pendientes de cobro.</Empty>
-              )}
+            <div
+              className="ops-admin-filter-bar"
+              style={{ margin: "0 0 16px" }}
+            >
+              <div className="ops-admin-search">
+                <Icon name="search" />
+                <input
+                  aria-label="Buscar pedido, cliente o mesa"
+                  placeholder="Buscar por mesa o número de pedido…"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </div>
+              <Tabs
+                options={["Todos", "Salón", "Delivery", "Recojo"]}
+                value={filter}
+                onChange={setFilter}
+              />
             </div>
-          </Panel>
-          {paymentOpen && <OperationsDialog title="Procesar pago" onClose={() => setPaymentOpen(false)}>
-            {order ? (
-              <>
-                <h3>
-                  Pedido #{order.id} · {order.customer}
-                </h3>
-                <div className="ops-payment-process">
-                  <div className="ops-payment-summary">
-                    <h3>Resumen del pedido</h3>
-                    <div className="ops-detail-lines">
-                      {order.items.map((l) => (
-                        <div key={l.product.id}>
-                          <span>
-                            {l.count} {l.product.name}
-                          </span>
-                          <strong>{money(l.product.price * l.count)}</strong>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="ops-total">
-                      Total a cobrar <strong>{money(orderTotal(order))}</strong>
-                    </div>
-                  </div>
-                  <div className="ops-payment-controls">
-                    <h3>Método de pago</h3>
-                    <Tabs
-                      options={data.settings.methods}
-                      value={method}
-                      onChange={setMethod}
-                    />
-                    <form
-                      className="ops-form"
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        notify(() => {
-                          processPayment(
-                            order.id,
-                            method,
-                            method === "Efectivo"
-                              ? Number(received)
-                              : orderTotal(order),
-                          );
-                          setSelected(order.id);
-                          setReceived("");
-                          setPaymentOpen(false);
-                        });
+            {pending.length === 0 ? (
+              <Empty>No hay pedidos pendientes de cobro.</Empty>
+            ) : (
+              <div className="ops-pending-card-list">
+                {pending
+                  .filter(
+                    (o) =>
+                      (filter === "Todos" || o.channel === filter) &&
+                      `${o.id} ${o.customer} ${o.table || ""}`
+                        .toLowerCase()
+                        .includes(search.toLowerCase()),
+                  )
+                  .slice(0, pendingLimit)
+                  .map((o) => (
+                    <div
+                      key={o.id}
+                      className={`ops-pending-order-item ${o.id === order?.id ? "selected" : ""}`}
+                      onClick={() => {
+                        setSelected(o.id);
+                        setReceived("");
                       }}
                     >
-                      {method === "Efectivo" && (
-                        <>
-                          <label>
-                            Monto recibido
-                            <input
-                              required
-                              min={orderTotal(order)}
-                              type="number"
-                              step="0.01"
-                              value={received}
-                              onChange={(e) => setReceived(e.target.value)}
-                            />
-                          </label>
-                          <strong>
-                            Vuelto:{" "}
+                      <div className="ops-pending-order-info">
+                        <div className="ops-pending-order-top">
+                          <ChannelBadge channel={o.table ? "Salón" : o.channel} />
+                          {o.table && <strong>Mesa {o.table}</strong>}
+                          <small style={{ color: "#64748b" }}>#{o.id}</small>
+                        </div>
+                        <div style={{ fontSize: "12.5px", color: "#64748b" }}>
+                          {o.customer} · {o.items.length} productos
+                        </div>
+                      </div>
+                      <div className="ops-pending-order-amount">
+                        <strong>{money(orderTotal(o))}</strong>
+                        <button
+                          className="ops-primary"
+                          style={{
+                            padding: "6px 14px",
+                            fontSize: "12.5px",
+                            marginTop: "4px",
+                          }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelected(o.id);
+                            setReceived("");
+                          }}
+                        >
+                          Cobrar
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                {pending.length > pendingLimit && (
+                  <button
+                    className="ops-outline"
+                    onClick={() => setPendingLimit(pendingLimit + 8)}
+                    style={{ marginTop: "8px" }}
+                  >
+                    <Icon name="plus" /> Ver más pedidos
+                  </button>
+                )}
+              </div>
+            )}
+          </Panel>
+
+          <div className="ops-pos-checkout">
+            {order && !order.paid ? (
+              <>
+                <div className="ops-pos-checkout-header">
+                  <div>
+                    <h3>{order.table ? `Mesa ${order.table}` : order.channel}</h3>
+                    <small style={{ color: "#64748b" }}>
+                      Pedido #{order.id} · {order.customer}
+                    </small>
+                  </div>
+                  <span
+                    className="ops-pill-badge active"
+                    style={{ background: "#fef3c7", color: "#92400e" }}
+                  >
+                    <Icon name="clock" /> Pendiente de cobro
+                  </span>
+                </div>
+
+                <div style={{ marginBottom: "16px" }}>
+                  <h4
+                    style={{
+                      margin: "0 0 10px",
+                      fontSize: "14px",
+                      color: "#475569",
+                    }}
+                  >
+                    Detalle del pedido
+                  </h4>
+                  <div className="ops-pos-order-lines">
+                    {order.items.map((item) => (
+                      <div key={item.product.id} className="ops-pos-line-item">
+                        <span>
+                          {item.count} × {item.product.name}
+                        </span>
+                        <strong>
+                          {money(item.product.price * item.count)}
+                        </strong>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="ops-pos-total-row">
+                    <span>Total del pedido</span>
+                    <strong>{money(orderTotal(order))}</strong>
+                  </div>
+                </div>
+
+                <div style={{ marginBottom: "16px" }}>
+                  <h4
+                    style={{
+                      margin: "0 0 10px",
+                      fontSize: "14px",
+                      color: "#475569",
+                    }}
+                  >
+                    Método de pago
+                  </h4>
+                  <div className="ops-method-selector-grid">
+                    {data.settings.methods.map((m) => (
+                      <button
+                        key={m}
+                        type="button"
+                        className={`ops-method-button ${method === m ? "active" : ""}`}
+                        onClick={() => setMethod(m)}
+                      >
+                        <PaymentMark name={m} />
+                        <span>{m}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <form
+                  className="ops-form"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    notify(() => {
+                      processPayment(
+                        order.id,
+                        method,
+                        method === "Efectivo"
+                          ? Number(received)
+                          : orderTotal(order),
+                      );
+                      setSelected("");
+                      setReceived("");
+                    });
+                  }}
+                >
+                  {method === "Efectivo" && (
+                    <>
+                      <div className="ops-cash-presets">
+                        <button
+                          type="button"
+                          className="ops-cash-preset-btn"
+                          onClick={() =>
+                            setReceived(String(orderTotal(order)))
+                          }
+                        >
+                          Exacto ({money(orderTotal(order))})
+                        </button>
+                        <button
+                          type="button"
+                          className="ops-cash-preset-btn"
+                          onClick={() => setReceived("50")}
+                        >
+                          S/ 50
+                        </button>
+                        <button
+                          type="button"
+                          className="ops-cash-preset-btn"
+                          onClick={() => setReceived("100")}
+                        >
+                          S/ 100
+                        </button>
+                        <button
+                          type="button"
+                          className="ops-cash-preset-btn"
+                          onClick={() => setReceived("200")}
+                        >
+                          S/ 200
+                        </button>
+                      </div>
+                      <div
+                        style={{
+                          display: "grid",
+                          gridTemplateColumns: "1fr 1fr",
+                          gap: "12px",
+                          alignItems: "end",
+                        }}
+                      >
+                        <label style={{ margin: 0 }}>
+                          Monto recibido
+                          <input
+                            required
+                            min={orderTotal(order)}
+                            type="number"
+                            step="0.01"
+                            value={received}
+                            onChange={(e) => setReceived(e.target.value)}
+                          />
+                        </label>
+                        <div
+                          style={{
+                            padding: "10px 14px",
+                            borderRadius: "8px",
+                            background: "#ecfdf5",
+                            border: "1px solid #a7f3d0",
+                            color: "#065f46",
+                            fontSize: "14px",
+                            fontWeight: "600",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                          }}
+                        >
+                          <span>Vuelto:</span>
+                          <strong style={{ fontSize: "16px" }}>
                             {money(
                               Math.max(0, Number(received) - orderTotal(order)),
                             )}
                           </strong>
-                        </>
-                      )}
-                      <button className="ops-primary">
-                        <Icon name="check" /> Procesar pago
-                      </button>
-                    </form>
+                        </div>
+                      </div>
+                    </>
+                  )}
+
+                  <div style={{ marginTop: "16px" }}>
+                    <label>
+                      Tipo de comprobante
+                      <select
+                        value={voucherType}
+                        onChange={(e) => setVoucherType(e.target.value)}
+                      >
+                        <option value="Boleta">Boleta</option>
+                        <option value="Factura">Factura</option>
+                        <option value="Nota de venta">Nota de venta</option>
+                      </select>
+                    </label>
                   </div>
-                </div>
-                {!shift && (
+
                   <button
-                    className="ops-outline"
-                    onClick={() => navigate("/caja/apertura")}
+                    className="ops-primary"
+                    aria-label="Procesar pago"
+                    style={{
+                      width: "100%",
+                      justifyContent: "center",
+                      padding: "14px",
+                      fontSize: "15px",
+                      fontWeight: 700,
+                      marginTop: "16px",
+                    }}
                   >
-                    Abrir caja para cobrar
+                    <Icon name="check" /> Procesar pago
                   </button>
-                )}
+                </form>
               </>
             ) : (
-              <Empty>Selecciona un pedido pendiente.</Empty>
+              <Empty>Selecciona un pedido pendiente para cobrar.</Empty>
             )}
-            <button
-              className="ops-outline"
-              onClick={() => navigate("/caja/comprobantes")}
-            >
-              <Icon name="receipt" /> Emitir comprobante
-            </button>
-          </OperationsDialog>}
+          </div>
         </div>
+
         <Panel
           title="Pagos recientes"
           action={
@@ -536,30 +788,57 @@ export function CashViews({
   else if (section === "comprobantes")
     content = (
       <>
+        {actionHost &&
+          createPortal(
+            <div className="ops-header-actions">
+              <div className="ops-header-date-pill">
+                <Icon name="calendar" />
+                <span>{dateLabel}</span>
+              </div>
+              <button
+                className="ops-primary"
+                onClick={() => setVoucherOpen(true)}
+              >
+                <Icon name="plus" /> Emitir comprobante
+              </button>
+            </div>,
+            actionHost,
+          )}
         <Stats
           entries={[
-            { label: "Emitidos", value: data.vouchers.length },
+            {
+              label: "Emitidos hoy",
+              value: data.vouchers.length,
+              tone: "red",
+              hint: "Total del día",
+            },
             {
               label: "Boletas",
               value: data.vouchers.filter((v) => v.type === "Boleta").length,
+              tone: "blue",
+              hint: "Consumidor final",
             },
             {
               label: "Facturas",
               value: data.vouchers.filter((v) => v.type === "Factura").length,
+              tone: "gold",
+              hint: "Empresas con RUC",
             },
             {
               label: "Notas de venta",
               value: data.vouchers.filter((v) => v.type === "Nota de venta")
                 .length,
+              tone: "gray",
+              hint: "Control interno",
             },
           ]}
         />
-        <button className="ops-primary" onClick={() => setVoucherOpen(true)}><Icon name="plus" /> Emitir comprobante</button>
-        <div className="ops-split">
-          <Panel
-            title="Listado de comprobantes"
-            action={
+        <Panel
+          title="Listado de comprobantes"
+          action={
+            <div style={{ display: "flex", gap: "10px" }}>
               <button
+                className="ops-outline"
                 onClick={() =>
                   downloadCsv(
                     "comprobantes",
@@ -575,45 +854,92 @@ export function CashViews({
                   )
                 }
               >
-                <Icon name="download" /> Exportar Excel (CSV)
+                <Icon name="download" /> Exportar
               </button>
-            }
+
+            </div>
+          }
+        >
+          <div
+            className="ops-admin-filter-bar"
+            style={{ margin: "0 0 16px" }}
           >
-            <input aria-label="Buscar número o cliente"
-              className="ops-search"
-              placeholder="Buscar número o cliente…"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
+            <div className="ops-admin-search">
+              <Icon name="search" />
+              <input
+                aria-label="Buscar número o cliente"
+                placeholder="Buscar por número o cliente…"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+            <Tabs
+              options={["Todos", "Boleta", "Factura", "Nota de venta"]}
+              value={filter}
+              onChange={setFilter}
             />
-            <div className="ops-table-wrap">
-              <OperationsTable>
-                <thead>
-                  <tr>
-                    <th>Serie y número</th>
-                    <th>Cliente</th>
-                    <th>Tipo</th>
-                    <th>Fecha</th>
-                    <th>Monto</th>
-                    <th>Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.vouchers
-                    .filter((v) =>
+          </div>
+          <div className="ops-table-wrap">
+            <OperationsTable>
+              <thead>
+                <tr>
+                  <th>N° Comprobante</th>
+                  <th>Fecha y hora</th>
+                  <th>Tipo</th>
+                  <th>Cliente</th>
+                  <th>N° de pedido</th>
+                  <th>Total</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.vouchers
+                  .filter(
+                    (v) =>
+                      (filter === "Todos" || v.type === filter) &&
                       `${v.id} ${v.customer}`
                         .toLowerCase()
                         .includes(search.toLowerCase()),
-                    )
-                    .map((v) => (
-                      <tr key={v.id}>
-                        <td>{v.id}</td>
-                        <td>{v.customer}</td>
-                        <td>
-                          <Badge value={v.type} />
-                        </td>
-                        <td>{dateText(v.date)}</td>
-                        <td>{money(v.total)}</td>
-                        <td>
+                  )
+                  .map((v) => (
+                    <tr key={v.id}>
+                      <td>
+                        <strong>{v.id}</strong>
+                      </td>
+                      <td>{dateText(v.date)}</td>
+                      <td>
+                        <span
+                          className={`ops-voucher-badge ${
+                            v.type === "Boleta"
+                              ? "boleta"
+                              : v.type === "Factura"
+                                ? "factura"
+                                : "nota"
+                          }`}
+                        >
+                          <Icon name="receipt" /> {v.type}
+                        </span>
+                      </td>
+                      <td>
+                        <div className="ops-person-cell">
+                          <InitialsAvatar name={v.customer} />
+                          <strong>{v.customer}</strong>
+                        </div>
+                      </td>
+                      <td>#{v.orderId}</td>
+                      <td>
+                        <strong style={{ color: "#0f172a" }}>
+                          {money(v.total)}
+                        </strong>
+                      </td>
+                      <td>
+                        <span className="ops-pill-badge active">
+                          <span className="ops-status-dot green" /> Emitido
+                        </span>
+                      </td>
+                      <td>
+                        <div className="ops-actions">
                           <button
                             onClick={() =>
                               notify(() =>
@@ -626,18 +952,26 @@ export function CashViews({
                                 ]),
                               )
                             }
+                            title="Ver / Imprimir comprobante"
                           >
-                            <Icon name="print" /> Ver / Imprimir PDF
+                            <Icon name="print" /> Imprimir
                           </button>
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </OperationsTable>
-              {!data.vouchers.length && <Empty />}
-            </div>
-          </Panel>
-          {voucherOpen && <OperationsDialog title="Emitir comprobante" onClose={() => setVoucherOpen(false)}>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </OperationsTable>
+            {!data.vouchers.length && (
+              <Empty>No hay comprobantes emitidos.</Empty>
+            )}
+          </div>
+        </Panel>
+        {voucherOpen && (
+          <OperationsDialog
+            title="Emitir comprobante"
+            onClose={() => setVoucherOpen(false)}
+          >
             <form
               className="ops-form"
               onSubmit={(e) => {
@@ -668,7 +1002,7 @@ export function CashViews({
                     )
                     .map((o) => (
                       <option key={o.id} value={o.id}>
-                        {o.id} · {o.customer}
+                        {o.id} · {o.customer} ({money(orderTotal(o))})
                       </option>
                     ))}
                 </select>
@@ -705,24 +1039,51 @@ export function CashViews({
                 <Icon name="receipt" /> Emitir comprobante
               </button>
             </form>
-          </OperationsDialog>}
-        </div>
+          </OperationsDialog>
+        )}
       </>
     );
   else if (section === "historial")
     content = (
       <>
+        {actionHost &&
+          createPortal(
+            <div className="ops-header-actions">
+              <div className="ops-header-date-pill">
+                <Icon name="calendar" />
+                <span>{dateLabel}</span>
+              </div>
+              <button className="ops-outline" onClick={exportPayments}>
+                <Icon name="download" /> Exportar Excel (CSV)
+              </button>
+            </div>,
+            actionHost,
+          )}
         <Stats
           entries={[
-            { label: "Pagos registrados", value: data.payments.length },
-            { label: "Total cobrado", value: money(total) },
             {
-              label: "Reembolsos",
+              label: "Total cobrado",
+              value: money(total),
+              tone: "green",
+              hint: "Cobrado en el turno",
+            },
+            {
+              label: "Operaciones",
+              value: data.payments.length,
+              tone: "blue",
+              hint: "Pagos registrados",
+            },
+            {
+              label: "Anulaciones",
               value: data.payments.filter((p) => p.refunded).length,
+              tone: "red",
+              hint: "Reembolsos aprobados",
             },
             {
               label: "Turnos cerrados",
               value: data.shifts.filter((s) => s.closed).length,
+              tone: "gray",
+              hint: "Histórico de turnos",
             },
           ]}
         />
@@ -730,20 +1091,35 @@ export function CashViews({
           <Panel
             title="Historial de pagos"
             action={
-              <button onClick={exportPayments}>
-                <Icon name="download" /> Exportar Excel (CSV)
+              <button className="ops-outline" onClick={exportPayments}>
+                <Icon name="download" /> Exportar
               </button>
             }
           >
-            <div className="ops-toolbar">
-              <input aria-label="Buscar pedido o cliente"
-                placeholder="Buscar pedido o cliente…"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-              <select aria-label="Filtrar resultados"
+            <div
+              className="ops-admin-filter-bar"
+              style={{ margin: "0 0 16px" }}
+            >
+              <div className="ops-admin-search">
+                <Icon name="search" />
+                <input
+                  aria-label="Buscar pedido o cliente"
+                  placeholder="Buscar pedido, cliente o comprobante…"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </div>
+              <select
+                aria-label="Filtrar resultados"
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
+                style={{
+                  padding: "8px 12px",
+                  borderRadius: "8px",
+                  border: "1px solid #dce3ee",
+                  fontSize: "13px",
+                  background: "#fff",
+                }}
               >
                 {["Todos", ...paymentMethods].map((m) => (
                   <option key={m}>{m}</option>
@@ -761,71 +1137,172 @@ export function CashViews({
   else
     content = (
       <>
+        {actionHost &&
+          createPortal(
+            <div className="ops-header-actions">
+              <div className="ops-header-date-pill">
+                <Icon name="calendar" />
+                <span>{dateLabel}</span>
+              </div>
+              <button
+                className="ops-primary"
+                onClick={() => navigate("/caja/cobros")}
+              >
+                <Icon name="card" /> Ir a cobros
+              </button>
+            </div>,
+            actionHost,
+          )}
         <Stats
           entries={[
-            { label: "Cobrado", value: money(total), tone: "green" },
             {
-              label: "Pendientes de cobro",
+              label: "Caja abierta",
+              value: shift ? "En curso" : "Cerrada",
+              tone: shift ? "green" : "red",
+              hint: `Turno: ${data.settings.hours}`,
+            },
+            {
+              label: "Recaudado",
+              value: money(total),
+              tone: "green",
+              hint: "Total de cobros",
+            },
+            {
+              label: "Cobros",
+              value: data.vouchers.length || data.payments.length,
+              tone: "blue",
+              hint: "Comprobantes emitidos",
+            },
+            {
+              label: "Pendientes",
               value: pending.length,
               tone: "gold",
+              hint: "Pagos por cobrar",
             },
-            { label: "Efectivo", value: money(methods[0].value), tone: "red" },
             {
-              label: "Pagos digitales",
-              value: money(total - methods[0].value),
-              tone: "blue",
+              label: "Fondo inicial",
+              value: money(shift?.initial || 0),
+              tone: "gray",
+              hint: "Monto de apertura",
             },
           ]}
         />
-        <div className="ops-three">
+        <div className="ops-split">
           <Panel
-            title="Cobros recientes"
+            title="Pagos pendientes"
             action={
               <button onClick={() => navigate("/caja/cobros")}>
-                <Icon name="arrow" /> Ver todos
+                <Icon name="arrow" /> Ver todos ({pending.length})
               </button>
             }
           >
-            {transactions}
-          </Panel>
-          <Panel title="Ventas por método de pago">
-            <Donut values={methods} />
-          </Panel>
-          <Panel title="Resumen de caja">
-            <p>
-              Saldo de apertura <strong>{money(shift?.initial || 0)}</strong>
-            </p>
-            <p>
-              Ventas en efectivo{" "}
-              <strong>
-                {money(
-                  payments
-                    .filter(
-                      (p) => p.shiftId === shift?.id && p.method === "Efectivo",
-                    )
-                    .reduce((s, p) => s + p.amount, 0),
-                )}
-              </strong>
-            </p>
-            <div className="ops-total">
-              Saldo físico esperado
-              <strong>{money(shift ? expectedCash(shift) : 0)}</strong>
+            <div className="ops-table-wrap">
+              <OperationsTable>
+                <thead>
+                  <tr>
+                    <th>Origen</th>
+                    <th>Referencia</th>
+                    <th>Cliente</th>
+                    <th>Monto</th>
+                    <th>Acción</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {pending.slice(0, 5).map((o) => (
+                    <tr key={o.id}>
+                      <td>
+                        <ChannelBadge channel={o.table ? "Salón" : o.channel} />
+                      </td>
+                      <td>
+                        <strong>{o.table ? `Mesa ${o.table}` : `#${o.id}`}</strong>
+                      </td>
+                      <td>{o.customer}</td>
+                      <td>
+                        <strong style={{ color: "#dc2626" }}>
+                          {money(orderTotal(o))}
+                        </strong>
+                      </td>
+                      <td>
+                        <button
+                          className="ops-primary"
+                          style={{ padding: "4px 10px", fontSize: "12px" }}
+                          onClick={() => {
+                            setSelected(o.id);
+                            navigate(`/caja/cobros?pedido=${encodeURIComponent(o.id)}`);
+                          }}
+                        >
+                          Cobrar
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </OperationsTable>
+              {!pending.length && (
+                <Empty>No hay pedidos pendientes de cobro.</Empty>
+              )}
             </div>
-            <button
-              className="ops-primary"
-              onClick={() =>
-                navigate(shift ? "/caja/cierre" : "/caja/apertura")
-              }
-            >
-              {shift ? "Ver detalle / Cerrar caja" : "Abrir caja"}
-            </button>
+          </Panel>
+
+          <Panel title="Desglose de recaudación">
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              {methods.map((m) => {
+                const pct =
+                  total > 0 ? ((m.value / total) * 100).toFixed(1) : "0.0";
+                return (
+                  <div
+                    key={m.label}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      padding: "8px 0",
+                      borderBottom: "1px solid #f1f5f9",
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                      <PaymentMark name={m.label} />
+                      <strong>{m.label}</strong>
+                    </div>
+                    <div style={{ textAlign: "right" }}>
+                      <strong style={{ fontSize: "14px", color: "#0f172a" }}>
+                        {money(m.value)}
+                      </strong>
+                      <small
+                        style={{
+                          display: "block",
+                          color: "#64748b",
+                          fontSize: "11px",
+                        }}
+                      >
+                        {pct}%
+                      </small>
+                    </div>
+                  </div>
+                );
+              })}
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  paddingTop: "8px",
+                  borderTop: "2px solid #e2e8f0",
+                }}
+              >
+                <strong>Total recaudado</strong>
+                <strong style={{ color: "#dc2626", fontSize: "16px" }}>
+                  {money(total)}
+                </strong>
+              </div>
+            </div>
           </Panel>
         </div>
+
         <Panel
-          title="Últimas transacciones"
+          title="Últimos movimientos"
           action={
-            <button onClick={exportPayments}>
-              <Icon name="download" /> Exportar
+            <button onClick={() => navigate("/caja/historial")}>
+              <Icon name="arrow" /> Ver historial completo
             </button>
           }
         >
