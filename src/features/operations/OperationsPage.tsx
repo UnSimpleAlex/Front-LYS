@@ -13,7 +13,8 @@ import { KitchenViews } from "./KitchenViews";
 import { WaiterViews } from "./WaiterViews";
 import { CashViews } from "./CashViews";
 import { AdminViews } from "./AdminViews";
-import { useOperations, seedWorkspacePreview, refreshWorkspacePreview } from "./operationsStore";
+import { useOperations } from "./operationsStore";
+import { loadWorkspacePreview } from "./workspacePreview";
 import { Empty } from "./OperationsUI";
 import "../../styles/operations.css";
 import "../../styles/operations-fidelity.css";
@@ -25,10 +26,11 @@ import "../../styles/kitchen-reference.css";
 import "../../styles/operations-workspace.css";
 import "../../styles/operations-products.css";
 import "../../styles/operations-admin-panels.css";
+import "../../styles/operations-reference.css";
 const menus: Record<string, [string, string, IconName][]> = {
   cocina: [
-    ["", "Panel cocina", "chef"],
-    ["pedidos", "Pedidos", "receipt"],
+    ["", "Panel de cocina", "chef"],
+    ["pedidos", "Pedidos entrantes", "receipt"],
     ["historial", "Historial", "clock"],
     ["tiempos", "Control de tiempos", "chart"],
   ],
@@ -140,6 +142,7 @@ export function OperationsPage({
   const [menu, setMenu] = useState(false);
   const [actionHost, setActionHost] = useState<HTMLDivElement | null>(null);
   const [profile, setProfile] = useState(false);
+  const [preparingPreview,setPreparingPreview] = useState(false);
   const [notifications, setNotifications] = useState(false);
   const [message, setMessage] = useState("");
   const [failed, setFailed] = useState(false);
@@ -182,7 +185,7 @@ export function OperationsPage({
     (o) => !o.draft && !["Entregado", "Cancelado"].includes(o.status),
   );
   return (
-    <div className="ops-root ops-workspace" data-page={key}>
+    <div className="ops-root ops-workspace ops-reference" data-page={key}>
       <aside className="ops-sidebar" aria-label="Menú del panel">
         <a className="ops-brand" href="/" onClick={e => {e.preventDefault();navigate("/");}}><img src="/images/logo.webp" alt="Leñas y Sabores" /></a>
         <div className="ops-area-label">{role === "administrador" ? "Panel de administración" : roleNames[role as Role]}</div>
@@ -208,7 +211,8 @@ export function OperationsPage({
         <button className="ops-side-account" onClick={() => setProfile(true)}><Icon name="user" /><span>{user.name}<small>{roleNames[user.role]}</small></span><Icon name="chevron" /></button>
       </aside>
       <div className="ops-workspace-toolbar">
-        <button className="ops-menu" aria-label="Abrir menú del panel" aria-expanded={menu} onClick={() => setMenu(true)}><Icon name="menu" /> Menú</button>
+        <button className="ops-menu" aria-label="Abrir menú del panel" aria-expanded={menu} onClick={() => setMenu(true)}><Icon name="menu" /></button>
+        <a className="ops-mobile-brand" href="/" onClick={e=>{e.preventDefault();navigate("/");}}><img src="/images/logo.webp" alt="Leñas y Sabores"/></a>
         <span className="ops-workspace-status"><span aria-hidden="true" className={state.settings.open ? "is-open" : ""} />{state.settings.open ? "Local abierto" : "Local cerrado"}</span>
         <button aria-label="Notificaciones de pedidos" onClick={() => setNotifications(true)}><Icon name="bell" />{pending.length}</button>
         <button className="ops-mobile-account" aria-label={`Cuenta de ${user.name}`} onClick={() => setProfile(true)}><Icon name="user" /></button>
@@ -238,7 +242,12 @@ export function OperationsPage({
         <div className="ops-account-actions">
           <button onClick={() => {setProfile(false);setNotifications(true);}}><Icon name="bell" />Pedidos activos ({pending.length})</button>
           {user.role === "administrador" && <><h3>Cambiar de área</h3>{Object.keys(menus).map(r => <button key={r} onClick={() => {setProfile(false);navigate("/" + r);}}><Icon name={menus[r][0][2]} />{roleNames[r as Role]}<Icon name="chevron" /></button>)}</>}
-          {user.role === "administrador" && <button onClick={() => notify(() => {if (state.suppliers.some(s => s.id === "workspace-preview-supplier")) refreshWorkspacePreview(); else seedWorkspacePreview();setProfile(false);})}><Icon name="plus" />{state.suppliers.some(s => s.id === "workspace-preview-supplier") ? "Actualizar muestra de demostración" : "Cargar datos de demostración"}</button>}
+          {user.role === "administrador" && <button disabled={preparingPreview} onClick={async()=>{
+            setPreparingPreview(true);
+            try { await loadWorkspacePreview(); notify(()=>setProfile(false)); }
+            catch(error) { notify(()=>{throw error;}); }
+            finally {setPreparingPreview(false);}
+          }}><Icon name="plus"/>{preparingPreview ? "Preparando datos…" : state.suppliers.some(s=>s.id==="workspace-preview-supplier") ? "Actualizar muestra de demostración":"Cargar datos de demostración"}</button>}
           <button onClick={() => navigate("/mi-cuenta")}><Icon name="user" />Editar mi cuenta</button>
           <button onClick={() => navigate("/")}><Icon name="home" />Ver sitio público</button>
           <button onClick={() => {logoutLocal();navigate("/iniciar-sesion");}}><Icon name="power" />Cerrar sesión</button>
@@ -257,7 +266,7 @@ export function OperationsPage({
             <h1>{titles[key]}</h1>
             <p>{descriptions[key]}</p>
           </div>
-          <div id="ops-page-actions" ref={setActionHost} />
+          <div id="ops-page-actions" ref={setActionHost}>{!["administrador","caja"].includes(role) && <time className="ops-header-date-pill" dateTime={new Date().toISOString()}><Icon name="calendar"/><span>{new Date().toLocaleDateString("es-PE",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}</span><b>{new Date().toLocaleTimeString("es-PE",{hour:"2-digit",minute:"2-digit",hour12:false})}</b></time>}</div>
         </div>
         {message && (
           <div
