@@ -46,41 +46,18 @@ export function KitchenTimes({
       (channel === "Todos" || order.channel === channel) &&
       kitchenSearch(order, search),
   );
-  const hourly = Array.from({ length: 15 }, (_, index) => {
-    const group = complete.filter(
-      (order) => new Date(order.created).getHours() === index + 8,
-    );
-    return {
-      label: `${index + 8}h`,
-      value:
-        group.reduce((sum, order) => sum + kitchenDuration(order), 0) /
-        Math.max(1, group.length),
-    };
-  }).filter((point) => point.value > 0);
-  const categories = ["Pollos", "Combos", "Parrillas", "Delivery"].map(
-    (label) => {
-      const group = complete.filter((order) =>
-        label === "Delivery"
-          ? order.channel === "Delivery"
-          : order.items.some(
-              (item) =>
-                item.product.category ===
-                (label === "Pollos" ? "pollo" : label.toLowerCase()),
-            ),
-      );
-      return {
-        label,
-        value:
-          group.reduce((sum, order) => sum + kitchenDuration(order), 0) /
-          Math.max(1, group.length),
-      };
-    },
-  );
+  const periodOrders=orders.filter(o=>o.status!=="Cancelado" && (period==="Todos" || kitchenDay(o.created)===kitchenDay(new Date().toISOString())));
+  const lastHour=periodOrders.length ? Math.max(...periodOrders.map(o=>new Date(o.created).getHours())):21;
+  const firstHour=Math.max(0,lastHour-11);
+  const hourly=Array.from({length:12},(_,index)=>({label:`${firstHour+index}h`,value:periodOrders.filter(o=>new Date(o.created).getHours()===firstHour+index).length}));
+  const productTimes = new Map<string,{label:string;total:number;count:number}>();
+  complete.forEach(order=>order.items.forEach(line=>{const entry=productTimes.get(line.product.id) || {label:line.product.name,total:0,count:0};entry.total+=kitchenDuration(order);entry.count++;productTimes.set(line.product.id,entry);}));
+  const categories=[...productTimes.values()].map(p=>({label:p.label,value:Math.round(p.total/p.count)})).sort((a,b)=>b.value-a.value).slice(0,6);
   return (
     <div className="kr-times-layout">
       <div className="kr-time-panels">
         <Panel
-          title="Tiempo promedio por hora"
+          title="Pedidos por hora"
           action={
             <select
               aria-label="Periodo de los gráficos"
@@ -94,20 +71,14 @@ export function KitchenTimes({
         >
           <KitchenChart
             values={hourly}
-            line
-            unit="min"
-            label="Tiempo promedio de preparación por hora"
+            label="Pedidos procesados por hora"
           />
         </Panel>
-        <Panel title="Preparación por categoría">
-          <KitchenChart
-            values={categories}
-            unit="min"
-            label="Minutos promedio por categoría"
-          />
+        <Panel title="Tiempo por producto">
+          <div className="ops-product-time-bars" aria-label="Tiempo promedio de preparación por producto">{categories.map(p=><div key={p.label}><span>{p.label}</span><progress max={Math.max(target,...categories.map(c=>c.value))} value={p.value} aria-label={p.label} data-tone={p.value>target ? "red":p.value>target*.7 ? "orange":"green"}/><strong>{p.value} min</strong></div>)}{!categories.length && <Empty>Los tiempos aparecerán al completar la preparación de pedidos.</Empty>}</div>
         </Panel>
         <Panel
-          title="Alertas de cocina"
+          title="Pedidos con demora"
           action={
             <button
               className="ops-outline"
@@ -118,7 +89,7 @@ export function KitchenTimes({
             </button>
           }
         >
-          {(allAlerts ? alerts : alerts.slice(0, 3)).map((order) => (
+          <div className="ops-delay-cards">{(allAlerts ? alerts : alerts.slice(0, 2)).map((order) => (
             <button
               className={`kr-alert ${order.status === "Listo" ? "blue" : minutes(order.accepted || order.created) > target * 1.5 ? "red" : "orange"}`}
               key={order.id}
@@ -146,9 +117,7 @@ export function KitchenTimes({
               </b>
             </button>
           ))}
-          {!alerts.length && (
-            <Empty>Todos los pedidos están dentro de la meta.</Empty>
-          )}
+          {!alerts.length && <Empty>Todos los pedidos están dentro de la meta.</Empty>}</div>
         </Panel>
       </div>
       <Panel
