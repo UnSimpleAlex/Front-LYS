@@ -12,6 +12,7 @@ test('muestra conectada, ventanas accesibles y navegación lateral por roles', a
   await page.setViewportSize({width:1440,height:1000});
   await page.locator('.ops-side-account').click();
   await page.getByRole('button',{name:'Cargar datos de demostración',exact:true}).click();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
   const snapshot = await page.evaluate(() => JSON.parse(localStorage.getItem('lys-operations-v1')!));
   expect(snapshot.orders).toHaveLength(23);
   expect(snapshot.orders.every((o:{status:string;channel:string;table:number|null}) => o.status !== 'En camino' || (o.channel === 'Delivery' && o.table === null))).toBeTruthy();
@@ -19,6 +20,13 @@ test('muestra conectada, ventanas accesibles y navegación lateral por roles', a
   expect(snapshot.vouchers).toHaveLength(5);
   expect(snapshot.suppliers).toHaveLength(2);
   expect(snapshot.tables.some((t:{status:string}) => t.status === 'Ocupada')).toBeTruthy();
+  await page.goto('/administrador/clientes');
+  await expect(page.locator('tbody tr')).toHaveCount(8);
+  const firstClient=page.locator('tbody tr').first();
+  await firstClient.getByRole('button',{name:/^Ver /}).click();
+  await expect(page.getByRole('dialog')).toContainText('COCINA-DEMO-');
+  await page.getByRole('dialog').press('Escape');
+  await page.goto('/administrador');
   await page.reload();
   await expect(page.locator('.ops-stats')).not.toContainText('Ventas de hoyS/ 0.00');
   await page.goto('/administrador/productos');
@@ -51,6 +59,7 @@ test('muestra conectada, ventanas accesibles y navegación lateral por roles', a
   }
   await page.goto('/mesera/mesas');
   await page.locator('.ops-table-seat').first().click();
+  await page.getByRole('button',{name:'Ver mesa',exact:true}).click();
   await expect(dialog).toBeVisible();
   await dialog.press('Escape');
   await page.goto('/administrador/productos');

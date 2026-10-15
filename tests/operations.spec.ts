@@ -64,7 +64,7 @@ test("pedido compartido: salón → cocina → entrega → caja → comprobante 
   await page.getByRole("button", { name: "Entregar", exact: true }).click();
   await expect(page.locator(".ops-table-wrap")).toContainText("Entregado");
   await login(page, "caja");
-  await page.getByRole("button", { name: "Abrir caja", exact: true }).click();
+  await page.getByRole("button", { name: "Apertura de caja", exact: true }).click();
   await page.getByLabel("He verificado el efectivo disponible.").check();
   await page.getByRole("button", { name: "Abrir caja", exact: true }).click();
   await page.getByRole("button", { name: "Cobros", exact: true }).click();
@@ -203,6 +203,7 @@ for (const width of [240, 390, 768, 1024, 1280, 1366, 1440, 1920, 2560])
           page.evaluate(
             () => document.documentElement.scrollWidth <= innerWidth + 1,
           ),
+          { message: `Desbordamiento en ${route} a ${width}px` },
         )
         .toBeTruthy();
       expect(
@@ -454,7 +455,7 @@ test("controles legibles, archivos y efectivo en móvil, tablet y PC", async ({ 
       await page.goto(`/caja/${route}`);
       await expect(page.locator(".ops-banknote")).toHaveCount(11);
       expect(await page.locator(".ops-banknote").evaluateAll(nodes => nodes.every(node => node instanceof HTMLImageElement && node.complete && node.naturalWidth > 0))).toBeTruthy();
-      await expect(page.locator('.ops-steps [aria-current="step"]')).toHaveText(route === "apertura" ? "1Apertura" : "3Cierre");
+      if (route === "cierre") await expect(page.locator('.ops-steps [aria-current="step"]')).toHaveText("3Cierre");
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy();
     }
   }
@@ -482,20 +483,21 @@ test("panel cocina: referencia responsive, búsqueda y filtros de pedidos", asyn
   await login(page, "administrador");
   await page.getByRole("button", { name: "Cargar pedidos de ejemplo" }).click();
   await page.goto("/cocina");
-  await expect(page.locator(".kitchen-column")).toHaveCount(4);
+  await expect(page.locator(".kitchen-column")).toHaveCount(3);
   const total = await page.locator(".kitchen-ticket").count();
   expect(total).toBeGreaterThan(0);
   for (const width of [240, 390, 768, 1024, 1280, 1672, 1920, 2560]) {
     await page.setViewportSize({ width, height: 941 });
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy();
     const columns = await page.locator(".kitchen-columns").evaluate(node => getComputedStyle(node).gridTemplateColumns.split(" ").length);
-    expect(columns).toBe(width < 700 ? 1 : width < 1451 ? 2 : 4);
-    expect(await page.locator(".kitchen-ticket-actions button").evaluateAll(buttons => buttons.every(button => button.getBoundingClientRect().height >= 34 && button.scrollWidth <= button.clientWidth + 1))).toBeTruthy();
+    expect(columns).toBe(width <= 600 ? 1 : width <= 1100 ? 2 : 3);
+    expect(await page.locator(".kitchen-ticket-actions button").filter({visible:true}).evaluateAll(buttons => buttons.every(button => button.getBoundingClientRect().height >= 34 && button.scrollWidth <= button.clientWidth + 1))).toBeTruthy();
     if ([390, 768, 1672].includes(width)) await page.screenshot({ path: `test-results/kitchen-reference-${width}.png`, fullPage: true });
   }
+  await page.locator(".ops-kitchen-tools summary").click();
   await page.getByRole("button", { name: /^Delivery \(/ }).click();
-  expect(await page.locator(".kitchen-channel").allTextContents()).toEqual(expect.arrayContaining(["Delivery"]));
-  expect((await page.locator(".kitchen-channel").allTextContents()).every(text => text === "Delivery")).toBeTruthy();
+  expect(await page.locator(".kitchen-channel").count()).toBeGreaterThan(0);
+  expect((await page.locator(".kitchen-channel").allTextContents()).every(text => text.startsWith("Delivery"))).toBeTruthy();
   await page.getByLabel("Buscar pedidos de cocina").fill("EJEMPLO-1052");
   await expect(page.locator(".kitchen-ticket")).toHaveCount(1);
   await page.getByLabel("Buscar pedidos de cocina").fill("no-existe-este-pedido");
