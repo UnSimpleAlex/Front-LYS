@@ -26,6 +26,17 @@
 - Datos personales: `docs/DATOS_PRIVACIDAD.md`
 - Deploy: `docs/DESPLIEGUE.md` + `docs/GITHUB_WORKFLOW.md`
 - UI/accesibilidad: `docs/ACCESIBILIDAD_UI.md`
+- Cualquier desarrollo o modificación de interfaz: `docs/INSTRUCCIONES_UI_PERMANENTES.md` (instrucción permanente del usuario).
+
+## Instrucción permanente de interfaz
+- Conservar React + TypeScript + Vite. Auditar dependencias, configuración y estilos antes de decidir cambios.
+- Tailwind es condicional: incorporarlo o migrar estilos solo con una ventaja técnica clara; conservar CSS existente cuando sea adecuado.
+- Usar `image-to-ui-reference` ante referencias visuales. Respetar PC y móvil, y adaptar tablet sin reinterpretar el diseño ni ampliar el alcance.
+- Validar iconos, textos, botones, ventanas y tablas; conservar accesibilidad, lógica y persistencia. No ocultar funcionalidades para resolver desbordamientos.
+- Ejecutar barridos responsive de 280 a 3840 px, con incrementos de 10–20 px cuando sea viable, alturas representativas, bordes de breakpoints y zoom/texto ampliado cuando sea posible. Guardar capturas representativas y detallar la cobertura realmente ejecutada.
+- Corregir problemas detectados y verificar resoluciones cercanas antes de finalizar. Informar resultados reales, límites y diferencias visuales.
+- Conservar trabajo ajeno y commits atómicos en español. No hacer push ni merges automáticamente; requieren una nueva instrucción explícita del usuario.
+- El texto completo está en `docs/INSTRUCCIONES_UI_PERMANENTES.md`. Esta instrucción actualiza las preferencias anteriores sobre publicación automática.
 
 ## Reglas permanentes
 - `main` estable; `dev` integración.
