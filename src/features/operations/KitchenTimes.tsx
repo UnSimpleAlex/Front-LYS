@@ -2,23 +2,20 @@ import { useState } from "react";
 import { OperationsTable } from "./OperationsTable";
 import { Icon, ProductSummary } from "./OperationsVisuals";
 import { Empty, Panel } from "./OperationsUI";
-import { minutes, type Order } from "./operationsStore";
+import { minutes, type Order, type Status } from "./operationsStore";
 import { KitchenChannel, KitchenChart } from "./KitchenReferenceUI";
-import {
-  kitchenDay,
-  kitchenDuration,
-  kitchenSearch,
-  kitchenTime,
-} from "./kitchenHelpers";
+import { kitchenDay, kitchenDuration, kitchenSearch } from "./kitchenHelpers";
 
 export function KitchenTimes({
   orders,
   target,
   onDetail,
+  onStatus,
 }: {
   orders: Order[];
   target: number;
   onDetail: (order: Order) => void;
+  onStatus: (id: string, status: Status) => void;
 }) {
   const [channel, setChannel] = useState("Todos");
   const [search, setSearch] = useState("");
@@ -46,13 +43,47 @@ export function KitchenTimes({
       (channel === "Todos" || order.channel === channel) &&
       kitchenSearch(order, search),
   );
-  const periodOrders=orders.filter(o=>o.status!=="Cancelado" && (period==="Todos" || kitchenDay(o.created)===kitchenDay(new Date().toISOString())));
-  const lastHour=periodOrders.length ? Math.max(...periodOrders.map(o=>new Date(o.created).getHours())):21;
-  const firstHour=Math.max(0,lastHour-11);
-  const hourly=Array.from({length:12},(_,index)=>({label:`${firstHour+index}h`,value:periodOrders.filter(o=>new Date(o.created).getHours()===firstHour+index).length}));
-  const productTimes = new Map<string,{label:string;total:number;count:number}>();
-  complete.forEach(order=>order.items.forEach(line=>{const entry=productTimes.get(line.product.id) || {label:line.product.name,total:0,count:0};entry.total+=kitchenDuration(order);entry.count++;productTimes.set(line.product.id,entry);}));
-  const categories=[...productTimes.values()].map(p=>({label:p.label,value:Math.round(p.total/p.count)})).sort((a,b)=>b.value-a.value).slice(0,6);
+  const periodOrders = orders.filter(
+    (o) =>
+      o.status !== "Cancelado" &&
+      Boolean(o.accepted) &&
+      (period === "Todos" ||
+        kitchenDay(o.created) === kitchenDay(new Date().toISOString())),
+  );
+  const lastHour = periodOrders.length
+    ? Math.max(...periodOrders.map((o) => new Date(o.created).getHours()))
+    : 21;
+  const firstHour = Math.max(0, lastHour - 11);
+  const hourly = Array.from({ length: 12 }, (_, index) => ({
+    label: `${firstHour + index}h`,
+    value: periodOrders.filter(
+      (o) => new Date(o.created).getHours() === firstHour + index,
+    ).length,
+    preparing: periodOrders.filter(
+      (o) => new Date(o.created).getHours() === firstHour + index && !o.ready,
+    ).length,
+  }));
+  const productTimes = new Map<
+    string,
+    { label: string; image:string; total: number; count: number }
+  >();
+  complete.forEach((order) =>
+    order.items.forEach((line) => {
+      const entry = productTimes.get(line.product.id) || {
+        label: line.product.name,
+        image: line.product.image,
+        total: 0,
+        count: 0,
+      };
+      entry.total += kitchenDuration(order);
+      entry.count++;
+      productTimes.set(line.product.id, entry);
+    }),
+  );
+  const categories = [...productTimes.values()]
+    .map((p) => ({ label: p.label, image:p.image, value: Math.round(p.total / p.count) }))
+    .sort((a, b) => b.value - a.value)
+    .slice(0, 6);
   return (
     <div className="kr-times-layout">
       <div className="kr-time-panels">
@@ -69,13 +100,41 @@ export function KitchenTimes({
             </select>
           }
         >
-          <KitchenChart
-            values={hourly}
-            label="Pedidos procesados por hora"
-          />
+          <div className="anchor-chart-key">
+            <span>Completados</span>
+            <span>En preparación</span>
+          </div>
+          <KitchenChart values={hourly} label="Pedidos procesados por hora" />
         </Panel>
         <Panel title="Tiempo por producto">
-          <div className="ops-product-time-bars" aria-label="Tiempo promedio de preparación por producto">{categories.map(p=><div key={p.label}><span>{p.label}</span><progress max={Math.max(target,...categories.map(c=>c.value))} value={p.value} aria-label={p.label} data-tone={p.value>target ? "red":p.value>target*.7 ? "orange":"green"}/><strong>{p.value} min</strong></div>)}{!categories.length && <Empty>Los tiempos aparecerán al completar la preparación de pedidos.</Empty>}</div>
+          <div
+            className="ops-product-time-bars"
+            aria-label="Tiempo promedio de preparación por producto"
+          >
+            {categories.map((p) => (
+              <div key={p.label}>
+                <span><img src={p.image} alt=""/>{p.label}</span>
+                <progress
+                  max={Math.max(target, ...categories.map((c) => c.value))}
+                  value={p.value}
+                  aria-label={p.label}
+                  data-tone={
+                    p.value > target
+                      ? "red"
+                      : p.value > target * 0.7
+                        ? "orange"
+                        : "green"
+                  }
+                />
+                <strong>{p.value} min</strong>
+              </div>
+            ))}
+            {!categories.length && (
+              <Empty>
+                Los tiempos aparecerán al completar la preparación de pedidos.
+              </Empty>
+            )}
+          </div>
         </Panel>
         <Panel
           title="Pedidos con demora"
@@ -89,35 +148,39 @@ export function KitchenTimes({
             </button>
           }
         >
-          <div className="ops-delay-cards">{(allAlerts ? alerts : alerts.slice(0, 2)).map((order) => (
-            <button
-              className={`kr-alert ${order.status === "Listo" ? "blue" : minutes(order.accepted || order.created) > target * 1.5 ? "red" : "orange"}`}
-              key={order.id}
-              onClick={() => onDetail(order)}
-            >
-              <Icon name={order.status === "Listo" ? "serve" : "bell"} />
-              <span>
-                <strong>
+          <div className="ops-delay-cards">
+            {(allAlerts ? alerts : alerts.slice(0, 2)).map((order) => (
+              <button
+                className={`kr-alert ${order.status === "Listo" ? "blue" : minutes(order.accepted || order.created) > target * 1.5 ? "red" : "orange"}`}
+                key={order.id}
+                onClick={() => onDetail(order)}
+              >
+                <Icon name={order.status === "Listo" ? "serve" : "bell"} />
+                <span>
+                  <strong>
+                    {order.status === "Listo"
+                      ? `Pedido #${order.id} listo para entrega`
+                      : order.table
+                        ? `Mesa ${order.table} supera tiempo estimado`
+                        : `Pedido #${order.id} retrasado`}
+                  </strong>
+                  <small>
+                    {order.status === "Listo"
+                      ? "Tiempo de preparación completado"
+                      : `${minutes(order.accepted || order.created)} min transcurridos (est. ${target} min)`}
+                  </small>
+                </span>
+                <b>
                   {order.status === "Listo"
-                    ? `Pedido #${order.id} listo para entrega`
-                    : order.table
-                      ? `Mesa ${order.table} supera tiempo estimado`
-                      : `Pedido #${order.id} retrasado`}
-                </strong>
-                <small>
-                  {order.status === "Listo"
-                    ? "Tiempo de preparación completado"
-                    : `${minutes(order.accepted || order.created)} min transcurridos (est. ${target} min)`}
-                </small>
-              </span>
-              <b>
-                {order.status === "Listo"
-                  ? `${minutes(order.ready || order.created)} min`
-                  : `+${minutes(order.accepted || order.created) - target} min`}
-              </b>
-            </button>
-          ))}
-          {!alerts.length && <Empty>Todos los pedidos están dentro de la meta.</Empty>}</div>
+                    ? `${minutes(order.ready || order.created)} min`
+                    : `+${minutes(order.accepted || order.created) - target} min`}
+                </b>
+              </button>
+            ))}
+            {!alerts.length && (
+              <Empty>Todos los pedidos están dentro de la meta.</Empty>
+            )}
+          </div>
         </Panel>
       </div>
       <Panel
@@ -168,12 +231,11 @@ export function KitchenTimes({
             <thead>
               <tr>
                 {[
-                  "Pedido",
+                  "N° pedido",
+                  "Tipo",
+                  "Mesa / Cliente",
                   "Producto",
-                  "Hora inicio",
                   "Tiempo transcurrido",
-                  "Tiempo estimado",
-                  "Progreso",
                   "Estado",
                   "Acciones",
                 ].map((label) => (
@@ -194,25 +256,20 @@ export function KitchenTimes({
                   <tr key={order.id}>
                     <td>
                       <strong>#{order.id}</strong>
+                    </td>
+                    <td>
                       <KitchenChannel order={order} />
+                    </td>
+                    <td>
+                      {order.table
+                        ? `Mesa ${String(order.table).padStart(2, "0")}`
+                        : order.customer}
                     </td>
                     <td>
                       <ProductSummary order={order} />
                     </td>
-                    <td>{kitchenTime(order.accepted || order.created)}</td>
                     <td className={tone === "red" ? "kr-late" : ""}>
                       {elapsed} min
-                    </td>
-                    <td>{target} min</td>
-                    <td>
-                      <div className={`kr-progress ${tone}`}>
-                        <progress
-                          aria-label={`Progreso de ${order.id}`}
-                          max="100"
-                          value={order.status === "Listo" ? 100 : ratio}
-                        />
-                        <span>{order.status === "Listo" ? 100 : ratio}%</span>
-                      </div>
                     </td>
                     <td>
                       <span
@@ -228,13 +285,41 @@ export function KitchenTimes({
                       </span>
                     </td>
                     <td>
-                      <button
-                        className="ops-outline"
-                        aria-label={`Ver pedido ${order.id}`}
-                        onClick={() => onDetail(order)}
-                      >
-                        <Icon name="eye" />
-                      </button>
+                      <div className="anchor-kitchen-time-actions">
+                        <button
+                          className={
+                            order.status === "Listo"
+                              ? "ops-outline"
+                              : "ops-green"
+                          }
+                          onClick={() =>
+                            onStatus(
+                              order.id,
+                              order.status === "Listo"
+                                ? "Entregado"
+                                : order.status === "Recibido"
+                                  ? "En preparación"
+                                  : "Listo",
+                            )
+                          }
+                        >
+                          <Icon
+                            name={order.status === "Listo" ? "serve" : "check"}
+                          />
+                          {order.status === "Listo"
+                            ? "Entregar"
+                            : order.status === "Recibido"
+                              ? "Aceptar pedido"
+                              : "Marcar listo"}
+                        </button>
+                        <button
+                          className="ops-outline"
+                          aria-label={`Ver pedido ${order.id}`}
+                          onClick={() => onDetail(order)}
+                        >
+                          <Icon name="eye" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 );

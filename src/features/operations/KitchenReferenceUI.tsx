@@ -49,7 +49,7 @@ export function KitchenChart({
   unit = "",
   label,
 }: {
-  values: { label: string; value: number }[];
+  values: { label: string; value: number; preparing?: number }[];
   line?: boolean;
   unit?: string;
   label: string;
@@ -99,10 +99,22 @@ export function KitchenChart({
                 height={220 - y(value.value)}
                 rx="3"
                 fill={
-                  unit
-                    ? ["#ef3040", "#ff9f23", "#b4bfce", "#d3d9e3"][index % 4]
-                    : "#ef3040"
+                  value.preparing !== undefined
+                    ? "#d5dae3"
+                    : unit
+                      ? ["#ef3040", "#ff9f23", "#b4bfce", "#d3d9e3"][index % 4]
+                      : "#ef3040"
                 }
+              />
+            )}
+            {!line && value.preparing !== undefined && (
+              <rect
+                x={x(index) + 5}
+                y={y(value.value)}
+                width={Math.min(70, (510 / Math.max(1, values.length)) * 0.65)}
+                height={(Math.max(0, value.preparing) / max) * 180}
+                rx="2"
+                fill="#ed0017"
               />
             )}
             <text

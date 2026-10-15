@@ -1,21 +1,16 @@
 import { useState } from "react";
 import { OperationsTable } from "./OperationsTable";
-import { Icon } from "./OperationsVisuals";
-import { Empty, Panel } from "./OperationsUI";
+import { Icon, ProductSummary } from "./OperationsVisuals";
+import { Empty, Badge } from "./OperationsUI";
 import { downloadCsv } from "./operationsFiles";
 import type { Order } from "./operationsStore";
-import {
-  KitchenChannel,
-  KitchenChart,
-  KitchenSummary,
-} from "./KitchenReferenceUI";
+import { KitchenChannel } from "./KitchenReferenceUI";
 import {
   kitchenDay,
   kitchenDuration,
   kitchenSearch,
   kitchenTime,
 } from "./kitchenHelpers";
-
 export function KitchenHistory({
   orders,
   onDetail,
@@ -26,241 +21,235 @@ export function KitchenHistory({
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [channel, setChannel] = useState("Todos");
+  const [status, setStatus] = useState("Todos");
   const [search, setSearch] = useState("");
-  const history = orders.filter((order) =>
-    ["Entregado", "Cancelado"].includes(order.status),
+  const history = orders.filter((o) =>
+    ["Entregado", "Cancelado"].includes(o.status),
   );
   const filtered = history
     .filter(
-      (order) =>
-        (!from || kitchenDay(order.created) >= from) &&
-        (!to || kitchenDay(order.created) <= to) &&
-        (channel === "Todos" ||
-          order.channel === channel ||
-          order.status === channel) &&
-        kitchenSearch(order, search),
+      (o) =>
+        (!from || kitchenDay(o.created) >= from) &&
+        (!to || kitchenDay(o.created) <= to) &&
+        (channel === "Todos" || o.channel === channel) &&
+        (status === "Todos" || o.status === status) &&
+        kitchenSearch(o, search),
     )
     .sort((a, b) => b.created.localeCompare(a.created));
-  const today = orders.filter(
-    (order) =>
-      kitchenDay(order.created) === kitchenDay(new Date().toISOString()),
-  );
-  const complete = today.filter((order) => order.ready && order.accepted);
-  const hourly = Array.from({ length: 15 }, (_, index) => ({
-    label: `${index + 8}h`,
-    value: today.filter(
-      (order) => new Date(order.created).getHours() === index + 8,
-    ).length,
-  }));
-  const average = Math.round(
-    complete.reduce((sum, order) => sum + kitchenDuration(order), 0) /
-      Math.max(1, complete.length),
-  );
-  const peak = hourly.reduce(
-    (best, value) => (value.value > best.value ? value : best),
-    hourly[0],
-  );
+  const exportHistory = () =>
+    downloadCsv(
+      "historial-cocina",
+      [
+        "Pedido",
+        "Canal",
+        "Cliente",
+        "Productos",
+        "Recibido",
+        "Listo",
+        "Tiempo",
+        "Estado",
+      ],
+      filtered.map((o) => [
+        o.id,
+        o.channel,
+        o.customer,
+        o.items.map((i) => `${i.count} ${i.product.name}`).join(" + "),
+        o.created,
+        o.ready || "",
+        kitchenDuration(o),
+        o.status,
+      ]),
+    );
   return (
-    <div className="kr-history-layout">
-      <Panel
-        title="Historial de pedidos"
-        action={
-          <button
-            className="ops-outline kr-export"
-            onClick={() =>
-              downloadCsv(
-                "historial-cocina",
-                [
-                  "Pedido",
-                  "Tipo",
-                  "Cliente",
-                  "Productos",
-                  "Ingreso",
-                  "Listo",
-                  "Estado",
-                ],
-                filtered.map((order) => [
-                  order.id,
-                  order.channel,
-                  order.customer,
-                  order.items
-                    .map((item) => `${item.count} ${item.product.name}`)
-                    .join(" + "),
-                  order.created,
-                  order.ready || "",
-                  order.status,
-                ]),
-              )
-            }
-          >
-            <Icon name="download" />
-            Exportar historial
-          </button>
-        }
-      >
-        <div className="kr-toolbar kr-history-filters">
-          <label>
-            Desde
-            <input
-              aria-label="Desde fecha del historial"
-              type="date"
-              value={from}
-              max={to || undefined}
-              onChange={(e) => setFrom(e.target.value)}
-            />
-          </label>
-          <label>
-            Hasta
-            <input
-              aria-label="Hasta fecha del historial"
-              type="date"
-              value={to}
-              min={from || undefined}
-              onChange={(e) => setTo(e.target.value)}
-            />
-          </label>
+    <div className="anchor-kitchen-history">
+      <div className="ops-admin-filter-bar">
+        <div className="ops-admin-search">
+          <Icon name="search" />
+          <input
+            aria-label="Buscar historial"
+            placeholder="Buscar por número de pedido, cliente o producto…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+        <label>
+          Fecha desde
+          <input
+            aria-label="Desde fecha del historial"
+            type="date"
+            value={from}
+            max={to || undefined}
+            onChange={(e) => setFrom(e.target.value)}
+          />
+        </label>
+        <label>
+          Fecha hasta
+          <input
+            aria-label="Hasta fecha del historial"
+            type="date"
+            value={to}
+            min={from || undefined}
+            onChange={(e) => setTo(e.target.value)}
+          />
+        </label>
+        <label>
+          Canal
           <select
             aria-label="Tipo o estado del historial"
             value={channel}
             onChange={(e) => setChannel(e.target.value)}
           >
-            {[
-              "Todos",
-              "Delivery",
-              "Salón",
-              "Recojo",
-              "Entregado",
-              "Cancelado",
-            ].map((value) => (
-              <option key={value} value={value}>
-                {value === "Todos" ? "Todos los tipos" : value}
-              </option>
+            {["Todos", "Delivery", "Salón", "Recojo"].map((c) => (
+              <option key={c}>{c}</option>
             ))}
           </select>
-          <label className="kr-search">
-            <Icon name="search" />
-            <input
-              aria-label="Buscar historial"
-              placeholder="Buscar por número de pedido, cliente o producto..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </label>
-        </div>
-        <div className="ops-table-wrap">
-          <OperationsTable>
-            <thead>
-              <tr>
-                {[
-                  "Pedido",
-                  "Tipo",
-                  "Cliente / Mesa",
-                  "Productos",
-                  "Hora ingreso",
-                  "Hora listo",
-                  "Estado",
-                  "Acciones",
-                ].map((label) => (
-                  <th key={label}>{label}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map((order) => (
-                <tr key={order.id}>
-                  <td>
-                    <strong>#{order.id}</strong>
-                  </td>
-                  <td>
-                    <KitchenChannel order={order} />
-                  </td>
-                  <td>
-                    {order.table ? `Mesa ${order.table}` : order.customer}
-                    <small>{order.address || "—"}</small>
-                  </td>
-                  <td>
-                    {order.items
-                      .map((item) => `${item.count} ${item.product.name}`)
-                      .join(", ")}
-                  </td>
-                  <td>{kitchenTime(order.created)}</td>
-                  <td>{kitchenTime(order.ready)}</td>
-                  <td>
-                    <span
-                      className={`kr-status ${order.status === "Entregado" ? "green" : "gray"}`}
-                    >
-                      <Icon
-                        name={order.status === "Entregado" ? "check" : "close"}
-                      />
-                      {order.status === "Entregado"
-                        ? "Completado"
-                        : "Cancelado"}
-                    </span>
-                  </td>
-                  <td>
-                    <button
-                      className="ops-outline"
-                      onClick={() => onDetail(order)}
-                    >
-                      Ver detalle
-                    </button>
-                  </td>
-                </tr>
+        </label>
+        <label>
+          Estado
+          <select
+            aria-label="Estado del historial"
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+          >
+            {["Todos", "Entregado", "Cancelado"].map((c) => (
+              <option key={c}>{c}</option>
+            ))}
+          </select>
+        </label>
+        <button type="button" className="ops-outline" onClick={exportHistory} aria-label="Exportar historial">
+          <Icon name="download" />
+          Exportar
+        </button>
+        <button
+          type="button"
+          className="ops-primary"
+          onClick={() => setSearch(search.trim())}
+        >
+          <Icon name="filter" />
+          Filtrar
+        </button>
+      </div>
+      <nav
+        className="anchor-history-tabs"
+        aria-label="Estado de pedidos del historial"
+      >
+        {[
+          ["Todos", "Todos"],
+          ["Entregado", "Entregados"],
+          ["Cancelado", "Cancelados"],
+        ].map(([value, label]) => (
+          <button
+            key={value}
+            type="button"
+            aria-pressed={status === value}
+            onClick={() => setStatus(value)}
+          >
+            {label} (
+            {value === "Todos"
+              ? history.length
+              : history.filter((o) => o.status === value).length}
+            )
+          </button>
+        ))}
+      </nav>
+      <div className="ops-table-wrap anchor-history-table">
+        <OperationsTable>
+          <thead>
+            <tr>
+              {[
+                "N° pedido",
+                "Canal",
+                "Producto",
+                "Recibido",
+                "Listo",
+                "Tiempo",
+                "Estado",
+                "Acciones",
+              ].map((h) => (
+                <th key={h}>{h}</th>
               ))}
-            </tbody>
-          </OperationsTable>
-        </div>
-        {!filtered.length && (
-          <Empty>No hay pedidos para este rango y filtros.</Empty>
-        )}
-      </Panel>
-      <aside>
-        <Panel title="Rendimiento de hoy">
-          <KitchenChart values={hourly} label="Pedidos por hora de hoy" />
-          <p>
-            Total de productos preparados:{" "}
-            <strong>
-              {complete.reduce(
-                (sum, order) =>
-                  sum +
-                  order.items.reduce((total, item) => total + item.count, 0),
-                0,
-              )}
-            </strong>
-          </p>
-        </Panel>
-        <Panel title="Resumen operativo">
-          <KitchenSummary
-            entries={[
-              {
-                label: "Pedidos completados hoy",
-                value: today.filter((order) => order.status === "Entregado")
-                  .length,
-                icon: "check",
-                tone: "green",
-              },
-              {
-                label: "Pedidos cancelados",
-                value: today.filter((order) => order.status === "Cancelado")
-                  .length,
-                icon: "close",
-              },
-              {
-                label: "Tiempo promedio de preparación",
-                value: `${average} min`,
-                icon: "clock",
-                tone: "orange",
-              },
-              {
-                label: "Hora pico",
-                value: peak.value ? peak.label : "—",
-                icon: "chart",
-                tone: "red",
-              },
-            ]}
-          />
-        </Panel>
-      </aside>
+            </tr>
+          </thead>
+          <tbody>
+            {filtered.map((o) => (
+              <tr key={o.id}>
+                <td>
+                  <strong>#{o.id}</strong>
+                </td>
+                <td>
+                  <KitchenChannel order={o} />
+                </td>
+                <td>
+                  <ProductSummary order={o} />
+                </td>
+                <td>
+                  {kitchenTime(o.created)}
+                  <small>{kitchenDay(o.created)}</small>
+                </td>
+                <td>{kitchenTime(o.ready)}</td>
+                <td>
+                  {o.ready && o.accepted ? `${kitchenDuration(o)} min` : "—"}
+                </td>
+                <td>
+                  <Badge value={o.status} />
+                </td>
+                <td>
+                  <button
+                    className="ops-outline anchor-view-button"
+                    aria-label={`Ver detalle de pedido #${o.id}`}
+                    onClick={() => onDetail(o)}
+                  >
+                    <Icon name="eye" />
+                    <span>Ver</span>
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </OperationsTable>
+      </div>
+      <div className="anchor-history-mobile">
+        {filtered.map((o) => (
+          <article key={o.id}>
+            <header>
+              <strong>#{o.id}</strong>
+              <KitchenChannel order={o} />
+              <Badge value={o.status} />
+            </header>
+            <div className="anchor-history-lines">
+              {o.items.map((i) => (
+                <p key={i.product.id}>
+                  {i.count} × {i.product.name}
+                </p>
+              ))}
+            </div>
+            <footer>
+              <span>
+                Recibido <b>{kitchenTime(o.created)}</b>
+              </span>
+              <span>
+                Listo <b>{kitchenTime(o.ready)}</b>
+              </span>
+              <span>
+                Tiempo{" "}
+                <b>
+                  {o.ready && o.accepted ? `${kitchenDuration(o)} min` : "—"}
+                </b>
+              </span>
+              <button className="ops-outline" onClick={() => onDetail(o)}>
+                <Icon name="eye" />
+                Ver
+              </button>
+            </footer>
+          </article>
+        ))}
+      </div>
+      {!filtered.length && (
+        <Empty>No hay pedidos para este rango y filtros.</Empty>
+      )}
+      <p className="anchor-record-count">
+        Mostrando {filtered.length} de {history.length} pedidos
+      </p>
     </div>
   );
 }
