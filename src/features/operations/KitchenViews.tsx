@@ -134,43 +134,18 @@ export function KitchenViews({
                       hint: "Pedidos a tiempo",
                     },
                     {
-                      label: "Mejor tiempo",
-                      value: `${completed.length ? Math.round(Math.min(...completed.map((o) => (Date.parse(o.ready!) - Date.parse(o.accepted!)) / 60000))) : 0} min`,
-                      icon: "trophy",
-                      tone: "gold",
-                      hint: "Pedidos completados",
+                      label: "Meta de preparación",
+                      value: `${state.settings.target} min`,
+                      icon: "target",
+                      tone: "blue",
+                      hint: "Tiempo objetivo por pedido",
                     },
                   ]
                 : [
-                    {
-                      label: "Pedidos pendientes",
-                      value: orders.filter((o) => o.status === "Recibido")
-                        .length,
-                      icon: "receipt",
-                      hint: "Esperando confirmación o preparación",
-                    },
-                    {
-                      label: "En preparación",
-                      value: orders.filter((o) => o.status === "En preparación")
-                        .length,
-                      icon: "chef",
-                      tone: "gold",
-                      hint: "Cocinándose actualmente",
-                    },
-                    {
-                      label: "Tiempo promedio",
-                      value: `${average} min`,
-                      icon: "clock",
-                      tone: "gray",
-                      hint: "Desde aceptación a listo",
-                    },
-                    {
-                      label: "Pedidos a tiempo",
-                      value: `${completed.length ? Math.round((completed.filter((o) => (Date.parse(o.ready!) - Date.parse(o.accepted!)) / 60000 <= state.settings.target).length / completed.length) * 100) : 0}%`,
-                      icon: "chart",
-                      tone: "green",
-                      hint: "Pedidos preparados dentro de la meta",
-                    },
+                    {label:"Nuevos",value:orders.filter(o=>o.status==="Recibido").length,icon:"receipt",hint:"Pedidos por aceptar"},
+                    {label:"En preparación",value:orders.filter(o=>o.status==="En preparación").length,icon:"chef",tone:"gold",hint:"Pedidos en cocina"},
+                    {label:"Listos",value:orders.filter(o=>["Listo","En camino"].includes(o.status)).length,icon:"check",tone:"green",hint:"Pedidos para entregar"},
+                    {label:"Tiempo promedio",value:`${average} min`,icon:"clock",tone:"blue",hint:"Desde la aceptación"},
                   ]
         }
       />
