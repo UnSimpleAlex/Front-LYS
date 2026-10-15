@@ -52,3 +52,7 @@ La comprobación de paneles recorre las 25 rutas entre 240 y 2560 px (incluye 39
 administrative-reference.spec.ts verifica cifras cero sin rellenos ficticios, cambio real de página, filtro por fecha, edición persistente del pedido existente, estados de delivery, mapa sin carga automática de direcciones e importe exacto con céntimos en caja. Las otras suites conservan flujo por roles, once denominaciones, modales, foco y formularios de producto.
 
 La muestra general también añade hasta ocho clientes ficticios con correo @preview.example y acceso local Demo2026!, sin sustituir cuentas existentes. Su historial se vincula únicamente a pedidos sintéticos de cocina por nombre, conservando los identificadores de los pedidos para poder actualizar la muestra.
+
+## Composición y altura de las referencias administrativas
+
+Ver [Referencias administrativas](REFERENCIAS_ADMINISTRATIVAS.md). La prueba `reference-layout.spec.ts` añade capturas de las 25 vistas en cinco combinaciones de ancho y alto, incluida 1366 × 591. También verifica límites de altura del menú y los indicadores, composición de configuración/inventario y modificación persistente y segura de las mesas. No sustituye la comparación visual con las imágenes.
