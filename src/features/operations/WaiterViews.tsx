@@ -67,7 +67,7 @@ export function TableMap({
           >
             <i className="ops-chair-left" aria-hidden="true" />
             <i className="ops-chair-right" aria-hidden="true" />
-            <Icon name="table" />
+            <Icon name="dining" />
             <strong>M{t.id}</strong>
             <Badge value={t.status} />
             <small>{t.seats} personas</small>

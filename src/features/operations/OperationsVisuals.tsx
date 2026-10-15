@@ -33,8 +33,13 @@ export type IconName =
   | "inventory"
   | "link"
   | "info"
-  | "funnel";
+  | "funnel"
+  | "dining"
+  | "flag";
 const linePaths: Partial<Record<IconName, string[]>> = {
+  dining: ["M6 8a6 4 0 1 0 12 0 6 4 0 1 0-12 0", "M7 11v9M17 11v9M2 8v8h3M22 8v8h-3M3 16v4M21 16v4"],
+  flag: ["M5 22V3", "M5 4c5-5 9 5 15 0v11c-6 5-10-5-15 0"],
+  receipt: ["M5 2h9l5 5v15H5Z", "M14 2v6h5", "M8 12h8M8 16h8M8 19h5"],
   info: ["M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z", "M12 11v6M12 7v1"],
   funnel: ["M3 3h18l-7 9v7l-4 2V12Z"],
   link: [

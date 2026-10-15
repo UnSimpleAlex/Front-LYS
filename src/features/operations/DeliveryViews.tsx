@@ -64,7 +64,7 @@ export function DeliveryViews({
                 o.delivered &&
                 new Date(o.delivered).toLocaleDateString() === today,
             ).length,
-            icon: "check",
+            icon: "flag",
             tone: "gold",
             hint: "Entregas completadas",
           },
