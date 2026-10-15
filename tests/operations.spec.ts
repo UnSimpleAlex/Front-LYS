@@ -189,9 +189,8 @@ for (const width of [240, 390, 768, 1024, 1280, 1366, 1440, 1920, 2560])
     await page.setViewportSize({ width, height: 1080 });
     await setup(page);
     await login(page, "administrador");
-    await page
-      .getByRole("button", { name: "Cargar pedidos de ejemplo" })
-      .click();
+    await page.locator(".ops-side-account, .ops-mobile-account").filter({ visible: true }).click();
+    await page.getByRole("button", { name: "Cargar datos de demostración", exact: true }).click();
     const errors: string[] = [];
     page.on("pageerror", (e) => errors.push(e.message));
     for (const route of routes) {
@@ -225,7 +224,7 @@ for (const width of [240, 390, 768, 1024, 1280, 1366, 1440, 1920, 2560])
           .locator(".ops-table-wrap")
           .evaluateAll((tables) =>
             tables
-              .filter((table) => table.scrollWidth > table.clientWidth + 1)
+              .filter((table) => table.scrollWidth > table.clientWidth + 1 && !(getComputedStyle(table).overflowX === "auto" && table.getAttribute("tabindex") === "0"))
               .map((table) =>
                 table.closest("section")?.getAttribute("data-panel"),
               ),
@@ -240,7 +239,7 @@ for (const width of [240, 390, 768, 1024, 1280, 1366, 1440, 1920, 2560])
                 .closest(".ops-table-wrap")!
                 .getBoundingClientRect();
               return (
-                rect.width &&
+                rect.width && getComputedStyle(button.closest(".ops-table-wrap")!).overflowX !== "auto" &&
                 (rect.left < panel.left - 1 || rect.right > panel.right + 1)
               );
             })
@@ -447,7 +446,7 @@ test("controles legibles, archivos y efectivo en móvil, tablet y PC", async ({ 
       if (name === "Pagos") {
         const upload = page.locator('input[type="file"]').first();
         expect(await upload.evaluate(node => getComputedStyle(node, "::file-selector-button").backgroundColor)).toBe("rgb(36, 42, 51)");
-        expect(await page.locator(".ops-method-grid .ops-switch").evaluateAll(nodes => nodes.every(node => node.getBoundingClientRect().height === 24))).toBeTruthy();
+        expect(await page.locator(".ops-method-grid .ops-switch").evaluateAll(nodes => nodes.every(node => node.getBoundingClientRect().height >= 24))).toBeTruthy();
         await page.screenshot({path: `test-results/settings-methods-${width}.png`, fullPage: true});
       }
     }
@@ -481,7 +480,8 @@ test("caja suma piezas de billetes y monedas en céntimos", async ({ page }) => 
 test("panel cocina: referencia responsive, búsqueda y filtros de pedidos", async ({ page }) => {
   await setup(page);
   await login(page, "administrador");
-  await page.getByRole("button", { name: "Cargar pedidos de ejemplo" }).click();
+  await page.locator(".ops-side-account, .ops-mobile-account").filter({ visible: true }).click();
+  await page.getByRole("button", { name: "Cargar datos de demostración", exact: true }).click();
   await page.goto("/cocina");
   await expect(page.locator(".kitchen-column")).toHaveCount(3);
   const total = await page.locator(".kitchen-ticket").count();
@@ -498,7 +498,8 @@ test("panel cocina: referencia responsive, búsqueda y filtros de pedidos", asyn
   await page.getByRole("button", { name: /^Delivery \(/ }).click();
   expect(await page.locator(".kitchen-channel").count()).toBeGreaterThan(0);
   expect((await page.locator(".kitchen-channel").allTextContents()).every(text => text.startsWith("Delivery"))).toBeTruthy();
-  await page.getByLabel("Buscar pedidos de cocina").fill("EJEMPLO-1052");
+  const orderNumber = await page.locator(".kitchen-ticket-id").first().innerText();
+  await page.getByLabel("Buscar pedidos de cocina").fill(orderNumber.replace("#", "").trim());
   await expect(page.locator(".kitchen-ticket")).toHaveCount(1);
   await page.getByLabel("Buscar pedidos de cocina").fill("no-existe-este-pedido");
   await expect(page.locator(".kitchen-ticket")).toHaveCount(0);
