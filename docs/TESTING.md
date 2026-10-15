@@ -56,3 +56,7 @@ La muestra general también añade hasta ocho clientes ficticios con correo @pre
 ## Composición y altura de las referencias administrativas
 
 Ver [Referencias administrativas](REFERENCIAS_ADMINISTRATIVAS.md). La prueba `reference-layout.spec.ts` añade capturas de las 25 vistas en cinco combinaciones de ancho y alto, incluida 1366 × 591. También verifica límites de altura del menú y los indicadores, composición de configuración/inventario y modificación persistente y segura de las mesas. No sustituye la comparación visual con las imágenes.
+
+## Auditoría integral de los paneles
+
+Ver [informe de auditoría administrativa](AUDITORIA_ADMINISTRATIVA.md): 25 rutas, barrido de 280 a 3840 px, formularios en pantallas bajas, teclado, controles táctiles y cobertura/limitaciones documentadas.
