@@ -119,7 +119,7 @@ test("delivery conserva estados y caja usa el importe exacto con céntimos", asy
   await started
     .getByRole("button", { name: "Marcar como entregado", exact: true })
     .click();
-  await page.getByRole("button", { name: /^Completadas/ }).click();
+  await page.getByRole("button", { name: /^Entregados/ }).click();
   await expect(
     page.locator(".ops-delivery-card").filter({ hasText: `#${id}` }),
   ).toContainText("Entregado");

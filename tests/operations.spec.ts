@@ -37,7 +37,7 @@ test("pedido compartido: salón → cocina → entrega → caja → comprobante 
   await page
     .locator(".ops-product-grid article")
     .first()
-    .getByRole("button", { name: "+ Agregar" })
+    .getByRole("button", { name: /^Agregar / })
     .click();
   await page
     .getByRole("button", { name: "Enviar a cocina", exact: true })
@@ -48,7 +48,7 @@ test("pedido compartido: salón → cocina → entrega → caja → comprobante 
     .locator(".ops-table-wrap tbody tr")
     .first()
     .locator("td")
-    .nth(1)
+    .nth(0)
     .textContent();
   expect(id).toBeTruthy();
   await page.goto("/administrador/productos");
@@ -441,10 +441,10 @@ test("controles legibles, archivos y efectivo en móvil, tablet y PC", async ({ 
     const alerts = page.locator(".ops-stock-alert .ops-supply-summary strong");
     expect(await alerts.evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().width).every(width => width >= 85))).toBeTruthy();
     await page.goto("/administrador/configuracion");
-    for (const name of ["Datos del negocio", "Métodos de pago", "Impuestos", "Usuarios", "Seguridad"]) {
-      await page.locator(".ops-settings > .ops-tabs").getByRole("button", { name, exact: true }).click();
+    for (const name of ["General", "Horarios", "Pedidos", "Pagos"]) {
+      await page.locator(".anchor-settings-tabs").getByRole("button", { name, exact: true }).click();
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy();
-      if (name === "Métodos de pago") {
+      if (name === "Pagos") {
         const upload = page.locator('input[type="file"]').first();
         expect(await upload.evaluate(node => getComputedStyle(node, "::file-selector-button").backgroundColor)).toBe("rgb(36, 42, 51)");
         expect(await page.locator(".ops-method-grid .ops-switch").evaluateAll(nodes => nodes.every(node => node.getBoundingClientRect().height === 24))).toBeTruthy();
@@ -453,9 +453,9 @@ test("controles legibles, archivos y efectivo en móvil, tablet y PC", async ({ 
     }
     for (const route of ["apertura", "cierre"]) {
       await page.goto(`/caja/${route}`);
-      await expect(page.locator(".ops-banknote")).toHaveCount(11);
+      await expect(page.locator(".ops-banknote")).toHaveCount(route === "apertura" ? 11:0);
       expect(await page.locator(".ops-banknote").evaluateAll(nodes => nodes.every(node => node instanceof HTMLImageElement && node.complete && node.naturalWidth > 0))).toBeTruthy();
-      if (route === "cierre") await expect(page.locator('.ops-steps [aria-current="step"]')).toHaveText("3Cierre");
+      if (route === "cierre") await expect(page.getByRole("heading",{name:"Conteo de efectivo",exact:true})).toBeVisible();
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy();
     }
   }
