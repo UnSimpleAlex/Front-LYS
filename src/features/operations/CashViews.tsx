@@ -294,7 +294,7 @@ export function CashViews({
                     </small>
                   </div>
                   <span
-                    className="ops-pill-badge active"
+                    className="anchor-pending-payment"
                     style={{ background: "#fef3c7", color: "#92400e" }}
                   >
                     <Icon name="clock" /> Pendiente de cobro
@@ -332,7 +332,8 @@ export function CashViews({
                   </div>
                 </div>
 
-                <div style={{ marginBottom: "16px" }}>
+                <div className="anchor-payment-options">
+                <section className="anchor-payment-method">
                   <h4
                     style={{
                       margin: "0 0 10px",
@@ -355,6 +356,17 @@ export function CashViews({
                       </button>
                     ))}
                   </div>
+                </section>
+                <section className="anchor-payment-voucher">
+                  <h4>Comprobante</h4>
+                  <label>Tipo de comprobante
+                    <select value={voucherType} onChange={(e) => setVoucherType(e.target.value)}>
+                      <option value="Boleta">Boleta</option>
+                      <option value="Factura">Factura</option>
+                      <option value="Nota de venta">Nota de venta</option>
+                    </select>
+                  </label>
+                </section>
                 </div>
 
                 <form
@@ -452,19 +464,6 @@ export function CashViews({
                     </>
                   )}
 
-                  <div style={{ marginTop: "16px" }}>
-                    <label>
-                      Tipo de comprobante
-                      <select
-                        value={voucherType}
-                        onChange={(e) => setVoucherType(e.target.value)}
-                      >
-                        <option value="Boleta">Boleta</option>
-                        <option value="Factura">Factura</option>
-                        <option value="Nota de venta">Nota de venta</option>
-                      </select>
-                    </label>
-                  </div>
 
                   <button
                     className="ops-primary"
@@ -641,7 +640,7 @@ export function CashViews({
                         </strong>
                       </td>
                       <td>
-                        <span className="ops-pill-badge active">
+                        <span className="anchor-pending-payment">
                           <span className="ops-status-dot green" /> Emitido
                         </span>
                       </td>

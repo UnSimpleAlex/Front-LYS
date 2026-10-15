@@ -355,11 +355,13 @@ export function LineChart({
 }: {
   values: { label: string; value: number }[];
 }) {
-  const max = Math.max(1, ...values.map((v) => v.value));
+  const peak = Math.max(1, ...values.map((v) => v.value));
+  const unit = 10 ** Math.floor(Math.log10(peak));
+  const max = Math.ceil(peak / unit) * unit;
   const points = values
     .map(
       (v, i) =>
-        `${25 + (i * 550) / Math.max(1, values.length - 1)},${180 - (v.value / max) * 150}`,
+        `${75 + (i * 500) / Math.max(1, values.length - 1)},${180 - (v.value / max) * 150}`,
     )
     .join(" ");
   return (
@@ -369,11 +371,16 @@ export function LineChart({
         role="img"
         aria-label="Evolución de resultados"
       >
-        <path d="M25 20V180H575" fill="none" stroke="#d9dfe8" />
-        {[30, 80, 130].map((y) => (
-          <path key={y} d={`M25 ${y}H575`} stroke="#eef0f5" />
+        <path d="M75 25V180H575" fill="none" stroke="#d9dfe8" />
+        {[0, 1, 2, 3].map((step) => (
+          <g key={step}>
+            <path d={`M75 ${180 - step * 50}H575`} stroke="#e9edf3" />
+            <text x="65" y={184 - step * 50} textAnchor="end" fontSize="11" fill="#526585">
+              {`S/ ${new Intl.NumberFormat("es-PE", { maximumFractionDigits: 0 }).format(max * step / 3)}`}
+            </text>
+          </g>
         ))}
-        <polygon points={`25,180 ${points} 575,180`} fill="#ff000011" />
+        <polygon points={`75,180 ${points} 575,180`} fill="#ff000011" />
         <polyline
           points={points}
           fill="none"
@@ -383,13 +390,15 @@ export function LineChart({
         {values.map((v, i) => (
           <g key={v.label}>
             <circle
-              cx={25 + (i * 550) / Math.max(1, values.length - 1)}
+              cx={75 + (i * 500) / Math.max(1, values.length - 1)}
               cy={180 - (v.value / max) * 150}
               r="4"
-              fill="#eb0017"
+              fill="#fff"
+              stroke="#eb0017"
+              strokeWidth="2.5"
             />
             <text
-              x={25 + (i * 550) / Math.max(1, values.length - 1)}
+              x={75 + (i * 500) / Math.max(1, values.length - 1)}
               y="207"
               textAnchor="middle"
               fontSize="11"
