@@ -240,7 +240,7 @@ export function AdminSettings({
                   </h3>
                   <button
                     type="button"
-                    className={`ops-switch ${form.methods.includes(method) ? "on" : ""}`}
+                    className={`ops-promotion-state ${form.methods.includes(method) ? "on" : ""}`}
                     aria-label={`Activar ${method}`}
                     aria-pressed={form.methods.includes(method)}
                     onClick={() =>
@@ -251,12 +251,13 @@ export function AdminSettings({
                           : [...form.methods, method],
                       })
                     }
-                  />
+                  ><span aria-hidden="true" className="ops-state-track"><span className="ops-state-thumb"/></span></button>
                 </header>
                 {(method === "Yape" || method === "Plin") && (
                   <>
-                    <label>
-                      Cambiar QR
+                    <label className="ops-qr-upload">
+                      <span>Cambiar QR</span>
+                      <span className="ops-qr-upload-button">Seleccionar archivo</span>
                       <input
                         type="file"
                         accept="image/jpeg,image/png,image/webp"
@@ -275,6 +276,7 @@ export function AdminSettings({
                         }}
                       />
                     </label>
+                    <div className="ops-settings-qr">
                     <img
                       className="ops-qr"
                       src={
@@ -283,8 +285,12 @@ export function AdminSettings({
                       }
                       alt={`QR ${form[method === "Yape" ? "yapeQr" : "plinQr"] ? "configurado" : "de muestra"} para ${method}`}
                     />
+                    <img className="ops-settings-qr-logo" src={`/images/checkout/${method.toLowerCase()}.webp`} alt=""/>
+                    </div>
                   </>
                 )}
+                {method === "Efectivo" && <div className="ops-payment-illustration"><img src="/images/operations/currency/100.webp" alt="Billete de cien soles"/></div>}
+                {method === "Tarjeta" && <div className="ops-payment-illustration"><svg viewBox="0 0 220 140" role="img" aria-label="Tarjeta de crédito o débito"><rect x="6" y="6" width="208" height="128" rx="16" fill="#18243c"/><rect x="6" y="32" width="208" height="24" fill="#42526b"/><rect x="25" y="76" width="30" height="22" rx="4" fill="#d7b56d"/><path d="M25 114h75m12 0h30" stroke="#fff" strokeWidth="5" strokeLinecap="round"/><circle cx="173" cy="101" r="14" fill="#ed0017"/><circle cx="190" cy="101" r="14" fill="#e9a324" fillOpacity=".9"/></svg></div>}
                 {method === "Transferencia" && field("bank", "Cuenta bancaria")}
               </article>
             ))}

@@ -301,3 +301,23 @@ test("pedidos: buscar desde otra página reinicia paginación y selección", asy
   const rows = await csv(page, exporter(page));
   expect(rows).toHaveLength(2); expect(rows[1]).toContain("COCINA-DEMO-001");
 });
+
+test("pagos: tarjetas uniformes, interruptores y carga de QR", async ({ page }) => {
+  await page.goto("/administrador/configuracion");
+  await page.getByRole("button", { name: "Pagos", exact: true }).click();
+  const cards = page.locator(".ops-method-grid article");
+  await expect(cards).toHaveCount(5);
+  await page.locator('input[type="file"]').first().setInputFiles("public/images/checkout/yape.webp");
+  await expect(page.getByAltText("QR configurado para Yape")).toHaveAttribute("src", /^data:image/);
+  for (const width of [280,390,768,1366,1920]) {
+    await page.setViewportSize({width,height:900});
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy();
+    const heights = await cards.evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().height));
+    expect(Math.max(...heights)-Math.min(...heights)).toBeLessThanOrEqual(1);
+    await page.screenshot({path:`test-results/settings-payments-${width}.png`,fullPage:true});
+  }
+  await page.getByRole("button", { name: "Guardar cambios", exact: true }).click();
+  await page.reload();
+  await page.getByRole("button", { name: "Pagos", exact: true }).click();
+  await expect(page.getByAltText("QR configurado para Yape")).toHaveAttribute("src", /^data:image/);
+});

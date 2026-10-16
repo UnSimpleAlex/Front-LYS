@@ -147,3 +147,20 @@
 .ops-root.ops-workspace.ops-reference[data-page="administrador/configuracion"] .anchor-settings-footer { display:grid; grid-template-columns:repeat(2,minmax(0,190px)); justify-content:center; min-width:0; }
 .ops-root.ops-workspace.ops-reference[data-page="administrador/configuracion"] .anchor-settings-footer button { width:100%; min-width:0; padding-left:8px; padding-right:8px; white-space:normal; }
 .ops-root.ops-workspace.ops-reference[data-page="administrador/configuracion"] .ops-promotion-state:focus-visible { outline:2px solid #ed0017; outline-offset:2px; }
+
+.ops-root.ops-workspace.ops-reference[data-page="administrador/configuracion"] {
+  .ops-method-grid { align-items:stretch; grid-auto-rows:1fr; }
+  .ops-method-grid article { display:flex; flex-direction:column; gap:16px; min-height:300px; height:100%; box-sizing:border-box; }
+  .ops-method-grid header { display:flex; align-items:center; justify-content:space-between; gap:10px; margin:0; }
+  .ops-method-grid h3 { display:flex; align-items:center; gap:10px; font-size:16px; margin:0; }
+  .ops-method-grid h3 :is(svg,img) { width:32px; height:32px; object-fit:contain; flex-shrink:0; }
+  .ops-qr-upload { position:relative; align-self:start; gap:8px; }
+  .ops-qr-upload-button { display:inline-flex; align-items:center; justify-content:center; min-height:36px; padding:6px 12px; border-radius:6px; background:#ed0017; color:#fff; font-weight:600; }
+  .ops-qr-upload input[type="file"] { position:absolute; inset:0; width:100%; height:100%; opacity:0; cursor:pointer; }
+  .ops-qr-upload:focus-within .ops-qr-upload-button { outline:2px solid #ed0017; outline-offset:3px; }
+  .ops-settings-qr { position:relative; width:140px; height:140px; margin:auto; flex-shrink:0; }
+  .ops-settings-qr .ops-qr { width:140px; height:140px; margin:0; object-fit:contain; }
+  .ops-settings-qr-logo { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:30px; height:30px; border:3px solid white; border-radius:6px; background:white; }
+  .ops-payment-illustration { display:flex; align-items:center; justify-content:center; flex:1; min-height:180px; }
+  .ops-payment-illustration :is(img,svg) { width:min(100%,210px); height:130px; object-fit:contain; }
+}
