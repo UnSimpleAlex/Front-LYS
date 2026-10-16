@@ -306,3 +306,6 @@
 .ops-root.ops-workspace.ops-reference[data-page="mesera/pedidos"] .ops-salon-order-actions > button[title="Ver detalle"] { display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; min-height:32px; padding:0; }
 .ops-root.ops-workspace.ops-reference[data-page="mesera/pedidos"] .ops-salon-order-actions > button[title="Ver detalle"] svg { display:block; width:18px; height:18px; margin:0; }
 .ops-root.ops-workspace.ops-reference[data-page="mesera/pedidos"] .ops-salon-order-actions > button[title="Ver detalle"] .ops-action-caption { display:none; }
+
+.ops-root.ops-workspace.ops-reference[data-page="mesera/pedidos"] .ops-responsive-table :is(th,td):last-child { text-align:center; vertical-align:middle; }
+.ops-root.ops-workspace.ops-reference[data-page="mesera/pedidos"] .ops-salon-order-actions { display:flex; flex-direction:row; align-items:center; justify-content:center; gap:6px; width:100%; }
