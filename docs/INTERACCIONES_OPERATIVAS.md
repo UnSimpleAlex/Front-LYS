@@ -40,7 +40,7 @@ La inspección estática recorrió 322 declaraciones de controles en los compone
 
 La revisión de conexiones de los controles abarcó las áreas siguientes. Los recorridos ejecutados se especifican en las suites y resultados de abajo; esta lista no representa una ejecución de todas las combinaciones posibles:
 
-- Administración: navegación, búsqueda, filtros, paginación, selección, detalles, creación/edición de productos, imágenes, vista previa, disponibilidad, promociones/copia, clientes/usuarios, roles, inventario, movimientos, proveedores, reportes, configuración, guardar/cancelar y persistencia.
+- Administración: navegación, búsqueda, filtros, paginación, selección, detalles, creación/edición de productos, imágenes, vista previa, disponibilidad, promociones/eliminación, clientes/usuarios, roles, inventario, movimientos, proveedores, reportes, configuración, guardar/cancelar y persistencia.
 - Cocina: aceptación, preparación, listo, detalle, búsqueda, origen/estado, filtros, orden, historial, periodo, alertas y exportación.
 - Salón: plano/lista, zonas/estado, búsqueda y selección de mesa, pedido/borrador, cantidades, envío a cocina, solicitud e impresión de cuenta.
 - Caja: apertura con verificación, efectivo por denominación, cobro, importe exacto/cambio, métodos habilitados, factura con validación de RUC, impresión, comprobantes, historial, filtros, exportación y cierre.
@@ -109,3 +109,12 @@ La implementación conserva la etapa frontend con almacenamiento local del proye
 Las pruebas se ejecutan en Edge/Chromium emulado; no certifican todos los dispositivos físicos, navegadores o combinaciones posibles de datos. La suite pública dependiente de imágenes externas no forma parte de esta regresión administrativa.
 
 La rama aislada aún no está integrada en la copia principal donde trabaja el otro agente. Las diferencias se pueden revisar mediante Git antes de integrarlas; no se cambió de rama ni se descartó trabajo ajeno en la copia principal.
+
+## Ajustes posteriores solicitados
+
+- Productos: categoría, disponibilidad y sucursal se aplican inmediatamente; «Limpiar filtros» restablece búsqueda y selecciones. Las pruebas ya no pulsan «Filtrar» en productos.
+- Promociones: imagen de 96 × 56 px, acciones sin fondo y eliminación con confirmación en lugar de duplicación; eliminación persistente y protegida por rol administrativo.
+- Usuarios: etiquetas de rol compactas, acciones sin fondo y estado compacto manteniendo texto legible y área de interacción.
+- Filtros Estado/Tipo: indicador centrado verticalmente.
+- Avisos compartidos: toast flotante, descartable, con cierre automático de éxito tras 4,5 segundos; los errores permanecen para poder leerlos.
+- Verificación dirigida: productos, promociones y usuarios sin desbordamientos entre 280 y 3840 px (221 anchuras por página); capturas PC, tablet y móvil revisadas. Regresión funcional de creación, edición, exportación, cancelación/eliminación y persistencia; comprobación de cierre automático del aviso.

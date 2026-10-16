@@ -19,6 +19,7 @@ import {
 import {
   useOperations,
   saveOffer,
+  deleteOffer,
   saveSupply,
   deleteSupply,
   moveSupply,
@@ -52,6 +53,7 @@ export function PromotionManager({
   const actionHost = useContext(OperationsPageActions);
   const data = useOperations();
   const [offer, setOffer] = useState(blankOffer);
+  const [deletingOffer, setDeletingOffer] = useState<Offer | null>(null);
   const [offerPage,setOfferPage] = useState(1);
   const [offerSelection,setOfferSelection] = useState<string[]>([]);
   const [editorOpen, setEditorOpen] = useState(false);
@@ -270,24 +272,8 @@ export function PromotionManager({
                     >
                       <Icon name="edit" />
                     </button>
-                    <button
-                      className="btn-view"
-                      title="Duplicar promoción"
-                      aria-label={`Duplicar ${o.name}`}
-                      onClick={() =>
-                        notify(() =>
-                          saveOffer({
-                            ...o,
-                            id: crypto.randomUUID(),
-                            name: o.name + " (copia)",
-                            code: "",
-                            used: 0,
-                            active: false,
-                          }),
-                        )
-                      }
-                    >
-                      <Icon name="copy" />
+                    <button className="btn-delete" title="Eliminar promoción" aria-label={`Eliminar ${o.name}`} onClick={() => setDeletingOffer(o)}>
+                      <Icon name="trash" />
                     </button>
                   </div>
                 </td>
@@ -300,6 +286,13 @@ export function PromotionManager({
         )}
       </div>
 
+      {deletingOffer && <OperationsDialog title="Eliminar promoción" onClose={() => setDeletingOffer(null)}>
+        <p>¿Deseas eliminar la promoción <strong>{deletingOffer.name}</strong>? Esta acción no se puede deshacer.</p>
+        <div className="ops-dialog-footer">
+          <button onClick={() => setDeletingOffer(null)}>Cancelar</button>
+          <button className="ops-primary" onClick={() => notify(() => { deleteOffer(deletingOffer.id); setOfferSelection(ids => ids.filter(id => id !== deletingOffer.id)); setDeletingOffer(null); })}><Icon name="trash"/>Eliminar promoción</button>
+        </div>
+      </OperationsDialog>}
       <OperationsPagination count={filteredOffers.length} page={visibleOfferPage} onChange={setOfferPage} label="promociones"/>
         {editorOpen && <OperationsDialog onClose={() => setEditorOpen(false)} title="Crear / Editar promoción">
           <form

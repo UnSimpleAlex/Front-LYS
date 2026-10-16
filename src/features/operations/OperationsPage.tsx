@@ -149,8 +149,15 @@ export function OperationsPage({
   const [notifications, setNotifications] = useState(false);
   const [message, setMessage] = useState("");
   const [failed, setFailed] = useState(false);
+  const [notificationVersion, setNotificationVersion] = useState(0);
+  useEffect(() => {
+    if (!message || failed) return;
+    const timer = window.setTimeout(() => setMessage(""), 4500);
+    return () => window.clearTimeout(timer);
+  }, [message, failed, notificationVersion]);
   const navigate = (path:string) => {setMenu(false);setProfile(false);setNotifications(false);setMessage("");onNavigate(path);};
   const notify = (task: () => void) => {
+    setNotificationVersion(version => version + 1);
     try {
       task();
       setFailed(false);
@@ -468,7 +475,7 @@ export function OperationsPage({
         </div>
         {message && (
           <div
-            className={`ops-message ${failed ? "error" : ""}`}
+            className={`ops-message ops-toast ${failed ? "error" : ""}`}
             role={failed ? "alert" : "status"}
           >
             {message}

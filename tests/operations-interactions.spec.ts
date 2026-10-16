@@ -238,7 +238,7 @@ test("inventario: elegir insumo y validar entrada o salida", async ({ page }) =>
   expect((await csv(page, exporter(page)))[1]).toContain('"40"');
 });
 
-test("promociones: crear, duplicar, editar, desactivar y exportar", async ({ page }) => {
+test("promociones: crear, editar, desactivar, exportar y eliminar", async ({ page }) => {
   await page.goto("/administrador/promociones");
   await page.getByRole("button", { name: "Nueva promoción", exact: true }).click();
   const dialog = page.getByRole("dialog");
@@ -248,17 +248,24 @@ test("promociones: crear, duplicar, editar, desactivar y exportar", async ({ pag
   await dialog.getByRole("button", { name: "Guardar promoción", exact: true }).click();
   await expect(dialog).toHaveCount(0);
   await page.getByLabel("Buscar promociones").fill("Promo funcional");
-  await page.getByRole("button", { name: "Duplicar Promo funcional", exact: true }).click();
-  await expect(page.locator(".ops-responsive-table tbody tr")).toHaveCount(2);
-  await page.getByRole("button", { name: "Editar Promo funcional (copia)", exact: true }).click();
+  await page.getByRole("button", { name: "Editar Promo funcional", exact: true }).click();
   await dialog.getByLabel("Código de cupón").fill("FUNC-COPIA");
   await dialog.getByRole("button", { name: "Guardar promoción", exact: true }).click();
   await page.getByRole("button", { name: "Activar Promo funcional", exact: true }).click();
   await expect(page.getByRole("button", { name: "Activar Promo funcional", exact: true })).toHaveAttribute("aria-pressed", "false");
   await page.reload(); await page.getByLabel("Buscar promociones").fill("Promo funcional");
   const rows = await csv(page, exporter(page));
-  expect(rows).toHaveLength(3);
-  expect(rows.slice(1).every(row => row.includes('"Inactiva"'))).toBeTruthy();
+  expect(rows).toHaveLength(2);
+  expect(rows[1]).toContain('"Inactiva"');
+  await page.getByRole("button", { name: "Eliminar Promo funcional", exact: true }).click();
+  await dialog.getByRole("button", { name: "Cancelar", exact: true }).click();
+  await expect(page.locator(".ops-responsive-table tbody tr")).toHaveCount(1);
+  await page.getByRole("button", { name: "Eliminar Promo funcional", exact: true }).click();
+  await dialog.getByRole("button", { name: "Eliminar promoción", exact: true }).click();
+  await expect(page.getByRole("status")).toHaveText(/Cambios guardados/);
+  await expect(page.getByRole("status")).toHaveCount(0, { timeout: 6500 });
+  await page.reload(); await page.getByLabel("Buscar promociones").fill("Promo funcional");
+  await expect(page.locator(".ops-responsive-table tbody tr")).toHaveCount(0);
 });
 
 test("pedidos: buscar desde otra página reinicia paginación y selección", async ({ page }) => {
