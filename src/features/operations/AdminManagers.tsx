@@ -6,7 +6,7 @@ import { useState, useContext } from "react";
 import { createPortal } from "react-dom";
 import { OperationsPageActions } from "./operationsPageContext";
 import { InitialsAvatar, RoleBadge } from "./AdminViews";
-import { downloadCsv } from "./operationsFiles";
+import { downloadCsv, localDateKey } from "./operationsFiles";
 import {
   createLocalUser,
   editLocalUser,
@@ -19,6 +19,7 @@ import {
 import {
   useOperations,
   saveOffer,
+  deleteOffer,
   saveSupply,
   deleteSupply,
   moveSupply,
@@ -38,7 +39,7 @@ const blankOffer = (): Offer => ({
   productId: "",
   percent: 10,
   code: "",
-  start: new Date().toISOString().slice(0, 10),
+  start: localDateKey(new Date().toISOString()),
   end: new Date(Date.now() + 30 * 86400000).toISOString().slice(0, 10),
   active: true,
   used: 0,
@@ -52,6 +53,7 @@ export function PromotionManager({
   const actionHost = useContext(OperationsPageActions);
   const data = useOperations();
   const [offer, setOffer] = useState(blankOffer);
+  const [deletingOffer, setDeletingOffer] = useState<Offer | null>(null);
   const [offerPage,setOfferPage] = useState(1);
   const [offerSelection,setOfferSelection] = useState<string[]>([]);
   const [editorOpen, setEditorOpen] = useState(false);
@@ -59,7 +61,7 @@ export function PromotionManager({
   const [statusFilter, setStatusFilter] = useState("Todos");
   const [search, setSearch] = useState("");
 
-  const activeCount = data.offers.filter((o) => o.active && o.start<=new Date().toISOString().slice(0,10) && o.end>=new Date().toISOString().slice(0,10)).length;
+  const activeCount = data.offers.filter((o) => o.active && o.start<=localDateKey(new Date().toISOString()) && o.end>=localDateKey(new Date().toISOString())).length;
   const totalUsed = data.offers.reduce((s, o) => s + o.used, 0);
 
   const action = (
@@ -114,14 +116,14 @@ export function PromotionManager({
           },
           {
             label: "Programadas",
-            value: data.offers.filter(o=>o.active && o.start>new Date().toISOString().slice(0,10)).length,
+            value: data.offers.filter(o=>o.active && o.start>localDateKey(new Date().toISOString())).length,
             icon: "clock",
             tone: "blue",
             hint: "Próximas a iniciar",
           },
           {
             label: "Finalizadas",
-            value: data.offers.filter(o=>o.end<new Date().toISOString().slice(0,10)).length,
+            value: data.offers.filter(o=>o.end<localDateKey(new Date().toISOString())).length,
             icon: "tag",
             tone: "gold",
             hint: "Histórico",
@@ -142,7 +144,7 @@ export function PromotionManager({
             aria-label="Buscar promociones"
             placeholder="Buscar por nombre o código de cupón…"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={e => { setSearch(e.target.value); setOfferSelection([]); setOfferPage(1); }}
           />
         </div>
         <div className="ops-admin-filter-group">
@@ -151,7 +153,7 @@ export function PromotionManager({
             id="promo-estado"
             aria-label="Estado"
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
+            onChange={e => { setStatusFilter(e.target.value); setOfferSelection([]); setOfferPage(1); }}
           >
             <option value="Todos">Todos</option>
             <option value="Activa">Activa</option>
@@ -164,7 +166,7 @@ export function PromotionManager({
             id="promo-tipo"
             aria-label="Tipo"
             value={filter}
-            onChange={(e) => setFilter(e.target.value)}
+            onChange={e => { setFilter(e.target.value); setOfferSelection([]); setOfferPage(1); }}
           >
             {["Todos", "Combo", "Descuento", "Cupón"].map((t) => (
               <option key={t} value={t}>
@@ -175,6 +177,19 @@ export function PromotionManager({
         </div>
         <button className="ops-btn-export" onClick={exportPromotions}>
           <Icon name="download" /> Exportar
+        </button>
+        <button
+          className="ops-btn-clear-filters"
+          type="button"
+          onClick={() => {
+            setSearch("");
+            setStatusFilter("Todos");
+            setFilter("Todos");
+            setOfferSelection([]);
+            setOfferPage(1);
+          }}
+        >
+          <Icon name="trash" /> Eliminar filtros
         </button>
       </div>
 
@@ -250,11 +265,9 @@ export function PromotionManager({
                 <td className="ops-col-center">
                   <button
                     type="button"
-                    role="switch"
                     className={`ops-switch ${o.active ? "on" : ""}`}
-                    aria-label={o.active ? `Desactivar ${o.name}` : `Activar ${o.name}`}
+                    aria-label={`Activar ${o.name}`}
                     title={o.active ? "Activa (clic para desactivar)" : "Inactiva (clic para activar)"}
-                    aria-checked={o.active}
                     aria-pressed={o.active}
                     onClick={() =>
                       notify(() => saveOffer({ ...o, active: !o.active }))
@@ -274,24 +287,8 @@ export function PromotionManager({
                     >
                       <Icon name="edit" />
                     </button>
-                    <button
-                      className="btn-view"
-                      title="Duplicar promoción"
-                      aria-label={`Duplicar ${o.name}`}
-                      onClick={() =>
-                        notify(() =>
-                          saveOffer({
-                            ...o,
-                            id: crypto.randomUUID(),
-                            name: o.name + " (copia)",
-                            code: "",
-                            used: 0,
-                            active: false,
-                          }),
-                        )
-                      }
-                    >
-                      <Icon name="copy" />
+                    <button className="btn-delete" title="Eliminar promoción" aria-label={`Eliminar ${o.name}`} onClick={() => setDeletingOffer(o)}>
+                      <Icon name="trash" />
                     </button>
                   </div>
                 </td>
@@ -304,6 +301,13 @@ export function PromotionManager({
         )}
       </div>
 
+      {deletingOffer && <OperationsDialog title="Eliminar promoción" onClose={() => setDeletingOffer(null)}>
+        <p>¿Deseas eliminar la promoción <strong>{deletingOffer.name}</strong>? Esta acción no se puede deshacer.</p>
+        <div className="ops-dialog-footer">
+          <button onClick={() => setDeletingOffer(null)}>Cancelar</button>
+          <button className="ops-primary" onClick={() => notify(() => { deleteOffer(deletingOffer.id); setOfferSelection(ids => ids.filter(id => id !== deletingOffer.id)); setDeletingOffer(null); })}><Icon name="trash"/>Eliminar promoción</button>
+        </div>
+      </OperationsDialog>}
       <OperationsPagination count={filteredOffers.length} page={visibleOfferPage} onChange={setOfferPage} label="promociones"/>
         {editorOpen && <OperationsDialog onClose={() => setEditorOpen(false)} title="Crear / Editar promoción">
           <form
@@ -419,9 +423,14 @@ export function PromotionManager({
               />
               Promoción activa
             </label>
-            <button className="ops-primary">
-              <Icon name="save" /> Guardar promoción
-            </button>
+            <div className="ops-dialog-footer">
+              <button type="button" onClick={() => setEditorOpen(false)}>
+                Cancelar
+              </button>
+              <button className="ops-primary">
+                <Icon name="save" /> Guardar promoción
+              </button>
+            </div>
           </form>
         </OperationsDialog>}
     </>
@@ -617,7 +626,7 @@ export function UserManager({
                 : "Buscar usuario por nombre o correo…"
             }
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={e => { setSearch(e.target.value); setUserSelection([]); setUserPage(1); }}
           />
         </div>
         {!clients && (
@@ -627,7 +636,7 @@ export function UserManager({
               id="user-rol"
               aria-label="Filtrar resultados"
               value={filter}
-              onChange={(e) => setFilter(e.target.value)}
+              onChange={e => { setFilter(e.target.value); setUserSelection([]); setUserPage(1); }}
             >
               <option value="Todos">Todos los roles</option>
               {Object.entries(roleNames)
@@ -646,7 +655,7 @@ export function UserManager({
             id="user-estado"
             aria-label="Estado"
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
+            onChange={e => { setStatusFilter(e.target.value); setUserSelection([]); setUserPage(1); }}
           >
             <option value="Todos">Todos</option>
             <option value="Activos">Activos</option>
@@ -655,6 +664,19 @@ export function UserManager({
         </div>
         <button className="ops-btn-export" onClick={exportUsers}>
           <Icon name="download" /> Exportar
+        </button>
+        <button
+          className="ops-btn-clear-filters"
+          type="button"
+          onClick={() => {
+            setSearch("");
+            setFilter("Todos");
+            setStatusFilter("Todos");
+            setUserSelection([]);
+            setUserPage(1);
+          }}
+        >
+          <Icon name="trash" /> Eliminar filtros
         </button>
       </div>
 
@@ -944,9 +966,14 @@ export function UserManager({
               </label>
             )}
             {error && <p role="alert">{error}</p>}
-            <button className="ops-primary">
-              {editing ? "Guardar cambios" : "Crear cuenta"}
-            </button>
+            <div className="ops-dialog-footer">
+              <button type="button" onClick={() => setEditorOpen(false)}>
+                Cancelar
+              </button>
+              <button className="ops-primary">
+                {editing ? "Guardar cambios" : "Crear cuenta"}
+              </button>
+            </div>
           </form>
         </OperationsDialog>
       )}
@@ -992,6 +1019,7 @@ export function InventoryManager({
   const [tab, setTab] = useState("Insumos");
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("Todas");
+  const [selectedSupplies, setSelectedSupplies] = useState<string[]>([]);
   const [supply, setSupply] = useState(blankSupply);
   const [editingSupply, setEditingSupply] = useState(false);
   const [movement, setMovement] = useState("");
@@ -1022,7 +1050,8 @@ export function InventoryManager({
       </button>
       <button
         className="ops-primary"
-        onClick={() => setMovement(data.supplies[0]?.id || "manual")}
+        disabled={!data.supplies.length}
+        onClick={() => setMovement(data.supplies[0]?.id || "")}
       >
         <Icon name="plus" />
         Registrar movimiento
@@ -1032,11 +1061,23 @@ export function InventoryManager({
 
   const lowStockCount = data.supplies.filter((s) => s.stock < s.min).length;
 
-  const exportInventory = () =>
+  const filteredSupplies = data.supplies.filter(s =>
+    (tab !== "Alertas" || s.stock < s.min) && (tab !== "Agotados" || s.stock <= 0) &&
+    (category === "Todas" || s.category === category) &&
+    `${s.name} ${s.category}`.toLowerCase().includes(search.toLowerCase().trim()),
+  );
+  const filteredSuppliers = data.suppliers.filter(p =>
+    `${p.name} ${p.phone} ${p.email}`.toLowerCase().includes(search.toLowerCase().trim()),
+  );
+  const exportInventory = () => {
+    if (tab === "Proveedores") {
+      downloadCsv("proveedores", ["Nombre", "Teléfono", "Correo"], filteredSuppliers.map(p => [p.name, p.phone, p.email]));
+      return;
+    }
     downloadCsv(
       "inventario",
       ["Insumo", "Categoría", "Stock actual", "Unidad", "Stock mínimo", "Costo", "Estado"],
-      data.supplies.map((s) => [
+      filteredSupplies.filter(s => !selectedSupplies.length || selectedSupplies.includes(s.id)).map((s) => [
         s.name,
         s.category,
         s.stock,
@@ -1046,6 +1087,7 @@ export function InventoryManager({
         s.stock < s.min ? "Stock bajo" : "En stock",
       ]),
     );
+  };
 
   return (
     <>
@@ -1063,15 +1105,26 @@ export function InventoryManager({
             aria-label="Buscar insumos"
             placeholder="Buscar insumos por nombre o categoría…"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => { setSearch(e.target.value); setSelectedSupplies([]); }}
           />
         </div>
-        <label>Categoría<select aria-label="Categoría de insumos" value={category} onChange={e=>setCategory(e.target.value)}><option>Todas</option>{[...new Set(data.supplies.map(s=>s.category))].map(c=><option key={c}>{c}</option>)}</select></label>
-        <label>Estado<select aria-label="Estado de insumos" value={tab} onChange={e=>setTab(e.target.value)}><option value="Insumos">Todos</option><option value="Alertas">Stock bajo</option><option value="Agotados">Agotados</option><option value="Proveedores">Proveedores</option></select></label>
+        <label>Categoría<select aria-label="Categoría de insumos" disabled={tab === "Proveedores"} value={category} onChange={e=>{ setCategory(e.target.value); setSelectedSupplies([]); }}><option>Todas</option>{[...new Set(data.supplies.map(s=>s.category))].map(c=><option key={c}>{c}</option>)}</select></label>
+        <label>Estado<select aria-label="Estado de insumos" value={tab} onChange={e=>{ setTab(e.target.value); setSelectedSupplies([]); }}><option value="Insumos">Todos</option><option value="Alertas">Stock bajo</option><option value="Agotados">Agotados</option><option value="Proveedores">Proveedores</option></select></label>
         <button className="ops-btn-export" onClick={exportInventory}>
           <Icon name="download" /> Exportar
         </button>
-        <button className="ops-primary" type="button" onClick={()=>setSearch(search.trim())}><Icon name="filter"/>Filtrar</button>
+        <button
+          className="ops-btn-clear-filters"
+          type="button"
+          onClick={() => {
+            setSearch("");
+            setCategory("Todas");
+            setTab("Insumos");
+            setSelectedSupplies([]);
+          }}
+        >
+          <Icon name="trash" /> Eliminar filtros
+        </button>
       </div>
 
       {tab === "Proveedores" ? (
@@ -1095,7 +1148,8 @@ export function InventoryManager({
               </button>
             }
           >
-            {data.suppliers.map((p) => (
+            {!filteredSuppliers.length && <Empty>No hay proveedores que coincidan con la búsqueda.</Empty>}
+            {filteredSuppliers.map((p) => (
               <p key={p.id}>
                 {p.name} · {p.phone} · {p.email}
                 <button
@@ -1159,9 +1213,14 @@ export function InventoryManager({
                     }
                   />
                 </label>
-                <button className="ops-primary">
-                  <Icon name="save" /> Guardar proveedor
-                </button>
+                <div className="ops-dialog-footer">
+                  <button type="button" onClick={() => setProviderOpen(false)}>
+                    Cancelar
+                  </button>
+                  <button className="ops-primary">
+                    <Icon name="save" /> Guardar proveedor
+                  </button>
+                </div>
               </form>
             </OperationsDialog>
           )}
@@ -1177,6 +1236,8 @@ export function InventoryManager({
                       <input
                         type="checkbox"
                         aria-label="Seleccionar todos los insumos"
+                        checked={filteredSupplies.length > 0 && filteredSupplies.every(s => selectedSupplies.includes(s.id))}
+                        onChange={e => setSelectedSupplies(e.target.checked ? filteredSupplies.map(s => s.id) : [])}
                       />
                     </th>
                     {[
@@ -1193,20 +1254,15 @@ export function InventoryManager({
                   </tr>
                 </thead>
                 <tbody>
-                  {data.supplies
-                    .filter(
-                      (s) =>
-                        (tab !== "Alertas" || s.stock < s.min) &&
-                        (tab !== "Agotados" || s.stock <= 0) &&
-                        (category === "Todas" || s.category === category) &&
-                        s.name.toLowerCase().includes(search.toLowerCase()),
-                    )
+                  {filteredSupplies
                     .map((s) => (
                       <tr key={s.id}>
                         <td>
                           <input
                             type="checkbox"
                             aria-label={`Seleccionar insumo ${s.name}`}
+                            checked={selectedSupplies.includes(s.id)}
+                            onChange={e => setSelectedSupplies(e.target.checked ? [...selectedSupplies, s.id] : selectedSupplies.filter(id => id !== s.id))}
                           />
                         </td>
                         <td>
@@ -1237,7 +1293,7 @@ export function InventoryManager({
                               <Icon name="plus" /><span>Registrar movimiento</span>
                             </button>
                             <button
-                              onClick={() => notify(() => deleteSupply(s.id))}
+                              onClick={() => notify(() => { deleteSupply(s.id); setSelectedSupplies(ids => ids.filter(id => id !== s.id)); })}
                             >
                               <Icon name="trash" /><span>Eliminar</span>
                             </button>
@@ -1248,6 +1304,7 @@ export function InventoryManager({
                 </tbody>
               </OperationsTable>
             </div>
+            {!filteredSupplies.length && <Empty>No hay insumos que coincidan con los filtros.</Empty>}
             {movement && (
               <OperationsDialog
                 title="Registrar movimiento"
@@ -1263,6 +1320,11 @@ export function InventoryManager({
                     });
                   }}
                 >
+                  <label>Insumo
+                    <select aria-label="Insumo del movimiento" value={movement} onChange={e => setMovement(e.target.value)}>
+                      {data.supplies.map(item => <option key={item.id} value={item.id}>{item.name} · {item.stock} {item.unit}</option>)}
+                    </select>
+                  </label>
                   <label>
                     Entrada (+) o salida (−)
                     <input
@@ -1272,9 +1334,14 @@ export function InventoryManager({
                       onChange={(e) => setQuantity(Number(e.target.value))}
                     />
                   </label>
-                  <button className="ops-primary">
-                    <Icon name="save" /> Guardar movimiento
-                  </button>
+                  <div className="ops-dialog-footer">
+                    <button type="button" onClick={() => setMovement("")}>
+                      Cancelar
+                    </button>
+                    <button className="ops-primary">
+                      <Icon name="save" /> Guardar movimiento
+                    </button>
+                  </div>
                 </form>
               </OperationsDialog>
             )}
@@ -1358,9 +1425,14 @@ export function InventoryManager({
                       />
                     </label>
                   ))}
-                  <button className="ops-primary">
-                    <Icon name="save" /> Guardar insumo
-                  </button>
+                  <div className="ops-dialog-footer">
+                    <button type="button" onClick={() => setEditingSupply(false)}>
+                      Cancelar
+                    </button>
+                    <button className="ops-primary">
+                      <Icon name="save" /> Guardar insumo
+                    </button>
+                  </div>
                 </form>
               </OperationsDialog>
             )}

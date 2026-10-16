@@ -30,10 +30,10 @@ export function DeliveryViews({
         ? o.status === "Entregado"
         : filter === "En camino"
           ? o.status === "En camino"
-          : ["Listo", "En camino"].includes(o.status)) &&
+          : o.status === "Listo") &&
       `${o.id} ${o.customer} ${o.address}`
         .toLowerCase()
-        .includes(search.toLowerCase()),
+        .includes(search.toLowerCase().trim()),
   );
   const destination = rows.find((o) => o.id === selected) || rows[0];
   const route = (order: Order) =>
@@ -91,7 +91,7 @@ export function DeliveryViews({
                       ? o.status === "Entregado"
                       : value === "En camino"
                         ? o.status === "En camino"
-                        : ["Listo", "En camino"].includes(o.status),
+                        : o.status === "Listo",
                   ).length
                 }
                 )
@@ -265,12 +265,14 @@ export function DeliveryViews({
                   <button
                     className="ops-primary"
                     onClick={() =>
-                      notify(() =>
+                      notify(() => {
                         changeStatus(
                           order.id,
                           order.status === "Listo" ? "En camino" : "Entregado",
-                        ),
-                      )
+                        );
+                        setFilter(order.status === "Listo" ? "En camino" : "Completadas");
+                        setSelected(order.id);
+                      })
                     }
                   >
                     <Icon

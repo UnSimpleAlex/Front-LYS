@@ -856,6 +856,10 @@ export function saveOffer(offer: Offer) {
     offers: [...state.offers.filter((o) => o.id !== offer.id), offer],
   });
 }
+export function deleteOffer(id: string) {
+  requireRole(["administrador"]);
+  publish({ ...state, offers: state.offers.filter((offer) => offer.id !== id) });
+}
 export function saveSupplier(supplier: Supplier) {
   requireRole(["administrador"]);
   if (!supplier.name.trim()) throw new Error("Ingresa el proveedor.");

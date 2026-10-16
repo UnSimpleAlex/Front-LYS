@@ -116,17 +116,23 @@ export function KitchenHistory({
             ))}
           </select>
         </label>
-        <button type="button" className="ops-outline" onClick={exportHistory} aria-label="Exportar historial">
+        <button type="button" className="ops-btn-export" onClick={exportHistory} aria-label="Exportar historial">
           <Icon name="download" />
           Exportar
         </button>
         <button
           type="button"
-          className="ops-primary"
-          onClick={() => setSearch(search.trim())}
+          className="ops-btn-clear-filters"
+          onClick={() => {
+            setSearch("");
+            setFrom("");
+            setTo("");
+            setChannel("Todos");
+            setStatus("Todos");
+          }}
         >
-          <Icon name="filter" />
-          Filtrar
+          <Icon name="trash" />
+          Eliminar filtros
         </button>
       </div>
       <nav

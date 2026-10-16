@@ -5,7 +5,7 @@ import {
   Icon,
   PaymentMark,
 } from "./OperationsVisuals";
-import { dateText, downloadCsv, printLocal } from "./operationsFiles";
+import { dateText, localDateKey, downloadCsv, printLocal } from "./operationsFiles";
 import { useState, useContext } from "react";
 import { createPortal } from "react-dom";
 import { OperationsPageActions } from "./operationsPageContext";
@@ -51,9 +51,11 @@ export function CashViews({
   const [to,setTo] = useState("");
   const [paymentState,setPaymentState] = useState("Todos");
   const [cashierFilter,setCashierFilter] = useState("Todos");
-  const [method, setMethod] = useState("Efectivo");
+  const [selectedMethod, setMethod] = useState("Efectivo");
+  const method = data.settings.methods.includes(selectedMethod) ? selectedMethod : data.settings.methods[0] || "";
   const [received, setReceived] = useState("");
   const [voucherType, setVoucherType] = useState("Boleta");
+  const [paymentVoucherType, setPaymentVoucherType] = useState("");
   const [document, setDocument] = useState("");
   const [customer, setCustomer] = useState("");
   const [detail, setDetail] = useState<Order | null>(null);
@@ -62,7 +64,7 @@ export function CashViews({
   const pending = data.orders.filter(
     (o) => !o.paid && !o.draft && o.status !== "Cancelado",
   );
-  const order = data.orders.find((o) => o.id === selected) || pending[0];
+  const order = pending.find((o) => o.id === selected) || pending[0];
   const paidOrder =
     data.orders.find((o) => o.id === selected && o.paid) ||
     data.orders.find(
@@ -75,11 +77,23 @@ export function CashViews({
       .filter((p) => p.method === label)
       .reduce((s, p) => s + p.amount, 0),
   }));
+  const filteredPayments = data.payments.filter(p =>
+    (!from || localDateKey(p.date) >= from) && (!to || localDateKey(p.date) <= to) &&
+    (paymentState === "Todos" || (paymentState === "Pagado" ? !p.refunded : p.refunded)) &&
+    (cashierFilter === "Todos" || data.shifts.find(s => s.id === p.shiftId)?.user === cashierFilter) &&
+    (filter === "Todos" || p.method === filter) &&
+    `${p.orderId} ${data.orders.find(o => o.id === p.orderId)?.customer}`.toLowerCase().includes(search.toLowerCase().trim()),
+  );
+  const filteredVouchers = data.vouchers.filter(v =>
+    (!from || localDateKey(v.date) >= from) && (!to || localDateKey(v.date) <= to) &&
+    (filter === "Todos" || v.type === filter) &&
+    `${v.id} ${v.customer}`.toLowerCase().includes(search.toLowerCase().trim()),
+  );
   const exportPayments = () =>
     downloadCsv(
       "pagos",
       ["Fecha", "Pedido", "Método", "Monto", "Vuelto", "Estado"],
-      data.payments.map((p) => [
+      filteredPayments.map((p) => [
         dateText(p.date),
         p.orderId,
         p.method,
@@ -119,17 +133,7 @@ export function CashViews({
           </tr>
         </thead>
         <tbody>
-          {data.payments
-            .filter(
-              (p) =>
-                (!from || p.date.slice(0,10)>=from) && (!to || p.date.slice(0,10)<=to) &&
-                (paymentState==="Todos" || (paymentState==="Pagado" ? !p.refunded:p.refunded)) &&
-                (cashierFilter==="Todos" || data.shifts.find(s=>s.id===p.shiftId)?.user===cashierFilter) &&
-                (filter === "Todos" || p.method === filter) &&
-                `${p.orderId} ${data.orders.find((o) => o.id === p.orderId)?.customer}`
-                  .toLowerCase()
-                  .includes(search.toLowerCase()),
-            )
+          {filteredPayments
             .map((p) => {
               const o = data.orders.find((o) => o.id === p.orderId);
               return (
@@ -171,7 +175,7 @@ export function CashViews({
             })}
         </tbody>
       </OperationsTable>
-      {!data.payments.length && <Empty>No hay pagos registrados.</Empty>}
+      {!filteredPayments.length && <Empty>No hay pagos que coincidan con los filtros.</Empty>}
     </div>
   );
   let content;
@@ -356,11 +360,13 @@ export function CashViews({
                       </button>
                     ))}
                   </div>
+                  {!data.settings.methods.length && <Empty>No hay métodos de pago activos. Solicita su activación en Configuración.</Empty>}
                 </section>
                 <section className="anchor-payment-voucher">
                   <h4>Comprobante</h4>
                   <label>Tipo de comprobante
-                    <select value={voucherType} onChange={(e) => setVoucherType(e.target.value)}>
+                    <select value={paymentVoucherType} onChange={(e) => setPaymentVoucherType(e.target.value)}>
+                      <option value="">Emitir después</option>
                       <option value="Boleta">Boleta</option>
                       <option value="Factura">Factura</option>
                       <option value="Nota de venta">Nota de venta</option>
@@ -381,8 +387,14 @@ export function CashViews({
                           ? Number(received)
                           : orderTotal(order),
                       );
-                      setSelected("");
+                      setSelected(paymentVoucherType ? order.id : "");
                       setReceived("");
+                      if (paymentVoucherType) {
+                        setVoucherType(paymentVoucherType);
+                        setCustomer(order.customer);
+                        setDocument("");
+                        setVoucherOpen(true);
+                      }
                     });
                   }}
                 >
@@ -468,6 +480,7 @@ export function CashViews({
                   <button
                     className="ops-primary"
                     aria-label="Procesar pago"
+                    disabled={!method}
                     style={{
                       width: "100%",
                       justifyContent: "center",
@@ -550,7 +563,7 @@ export function CashViews({
                   downloadCsv(
                     "comprobantes",
                     ["Número", "Pedido", "Cliente", "Tipo", "Fecha", "Monto"],
-                    data.vouchers.map((v) => [
+                    filteredVouchers.map((v) => [
                       v.id,
                       v.orderId,
                       v.customer,
@@ -582,7 +595,18 @@ export function CashViews({
             </div>
             <label>Fecha<input type="date" aria-label="Fecha de comprobantes" value={from} onChange={e=>{setFrom(e.target.value);setTo(e.target.value);}}/></label>
             <label>Tipo de comprobante<select aria-label="Filtrar tipo de comprobante" value={filter} onChange={e=>setFilter(e.target.value)}>{["Todos","Boleta","Factura","Nota de venta"].map(type=><option key={type}>{type}</option>)}</select></label>
-            <button type="button" className="ops-primary" onClick={()=>setSearch(search.trim())}><Icon name="funnel"/>Filtrar</button>
+            <button
+              type="button"
+              className="ops-btn-clear-filters"
+              onClick={() => {
+                setSearch("");
+                setFrom("");
+                setTo("");
+                setFilter("Todos");
+              }}
+            >
+              <Icon name="trash" /> Eliminar filtros
+            </button>
           </div>
           <div className="ops-table-wrap">
             <OperationsTable>
@@ -599,15 +623,7 @@ export function CashViews({
                 </tr>
               </thead>
               <tbody>
-                {data.vouchers
-                  .filter(
-                    (v) =>
-                      (!from || v.date.slice(0,10)>=from) && (!to || v.date.slice(0,10)<=to) &&
-                      (filter === "Todos" || v.type === filter) &&
-                      `${v.id} ${v.customer}`
-                        .toLowerCase()
-                        .includes(search.toLowerCase()),
-                  )
+                {filteredVouchers
                   .map((v) => (
                     <tr key={v.id}>
                       <td>
@@ -668,85 +684,12 @@ export function CashViews({
                   ))}
               </tbody>
             </OperationsTable>
-            {!data.vouchers.length && (
-              <Empty>No hay comprobantes emitidos.</Empty>
+            {!filteredVouchers.length && (
+              <Empty>No hay comprobantes que coincidan con los filtros.</Empty>
             )}
           </div>
         </Panel>
-        {voucherOpen && (
-          <OperationsDialog
-            title="Emitir comprobante"
-            onClose={() => setVoucherOpen(false)}
-          >
-            <form
-              className="ops-form"
-              onSubmit={(e) => {
-                e.preventDefault();
-                notify(() => {
-                  if (!paidOrder)
-                    throw new Error("Selecciona un pedido pagado.");
-                  issueVoucher(paidOrder.id, voucherType, customer, document);
-                  setSelected("");
-                  setVoucherOpen(false);
-                  setCustomer("");
-                  setDocument("");
-                });
-              }}
-            >
-              <label>
-                Pedido pagado
-                <select
-                  value={paidOrder?.id || ""}
-                  onChange={(e) => setSelected(e.target.value)}
-                >
-                  <option value="">Selecciona un pedido</option>
-                  {data.orders
-                    .filter(
-                      (o) =>
-                        o.paid &&
-                        !data.vouchers.some((v) => v.orderId === o.id),
-                    )
-                    .map((o) => (
-                      <option key={o.id} value={o.id}>
-                        {o.id} · {o.customer} ({money(orderTotal(o))})
-                      </option>
-                    ))}
-                </select>
-              </label>
-              <Tabs
-                options={["Boleta", "Factura", "Nota de venta"]}
-                value={voucherType}
-                onChange={setVoucherType}
-              />
-              <label>
-                Nombre / Razón social
-                <input
-                  value={customer}
-                  onChange={(e) => setCustomer(e.target.value)}
-                  placeholder={paidOrder?.customer}
-                />
-              </label>
-              <label>
-                {voucherType === "Factura"
-                  ? "RUC (11 dígitos)"
-                  : "Documento (opcional)"}
-                <input
-                  value={document}
-                  onChange={(e) => setDocument(e.target.value)}
-                  required={voucherType === "Factura"}
-                />
-              </label>
-              <div className="ops-total">
-                Total
-                <strong>{money(paidOrder ? orderTotal(paidOrder) : 0)}</strong>
-              </div>
-              <p>Comprobante de simulación local, sin valor tributario.</p>
-              <button className="ops-primary">
-                <Icon name="receipt" /> Emitir comprobante
-              </button>
-            </form>
-          </OperationsDialog>
-        )}
+
       </>
     );
   else if (section === "historial")
@@ -802,8 +745,20 @@ export function CashViews({
               <label>Método de pago<select aria-label="Filtrar resultados" value={filter} onChange={e=>setFilter(e.target.value)}>{["Todos",...paymentMethods].map(m=><option key={m}>{m}</option>)}</select></label>
               <label>Cajera<select aria-label="Cajera de los pagos" value={cashierFilter} onChange={e=>setCashierFilter(e.target.value)}>{["Todos",...new Set(data.shifts.map(shift=>shift.user))].map(name=><option key={name}>{name}</option>)}</select></label>
               <label>Estado<select aria-label="Estado del pago" value={paymentState} onChange={e=>setPaymentState(e.target.value)}>{["Todos","Pagado","Anulado"].map(v=><option key={v}>{v}</option>)}</select></label>
-              <button type="button" className="ops-outline" onClick={exportPayments}><Icon name="download"/>Exportar</button>
-              <button type="button" className="ops-primary" onClick={()=>setSearch(search.trim())}><Icon name="funnel"/>Filtrar</button>
+              <button type="button" className="ops-btn-export" onClick={exportPayments}><Icon name="download"/>Exportar</button>
+              <button
+                type="button"
+                className="ops-btn-clear-filters"
+                onClick={() => {
+                  setFrom("");
+                  setTo("");
+                  setFilter("Todos");
+                  setCashierFilter("Todos");
+                  setPaymentState("Todos");
+                }}
+              >
+                <Icon name="trash" /> Eliminar filtros
+              </button>
             </div>
             {transactions}
           </Panel>
@@ -992,6 +947,85 @@ export function CashViews({
   return (
     <>
       {content}
+      {voucherOpen && (
+        <OperationsDialog
+          title="Emitir comprobante"
+          onClose={() => setVoucherOpen(false)}
+        >
+          <form
+            className="ops-form"
+            onSubmit={(e) => {
+              e.preventDefault();
+              notify(() => {
+                if (!paidOrder)
+                  throw new Error("Selecciona un pedido pagado.");
+                issueVoucher(paidOrder.id, voucherType, customer, document);
+                setSelected("");
+                setVoucherOpen(false);
+                setCustomer("");
+                setDocument("");
+              });
+            }}
+          >
+            <label>
+              Pedido pagado
+              <select
+                value={paidOrder?.id || ""}
+                onChange={(e) => setSelected(e.target.value)}
+              >
+                <option value="">Selecciona un pedido</option>
+                {data.orders
+                  .filter(
+                    (o) =>
+                      o.paid &&
+                      !data.vouchers.some((v) => v.orderId === o.id),
+                  )
+                  .map((o) => (
+                    <option key={o.id} value={o.id}>
+                      {o.id} · {o.customer} ({money(orderTotal(o))})
+                    </option>
+                  ))}
+              </select>
+            </label>
+            <Tabs
+              options={["Boleta", "Factura", "Nota de venta"]}
+              value={voucherType}
+              onChange={setVoucherType}
+            />
+            <label>
+              Nombre / Razón social
+              <input
+                value={customer}
+                onChange={(e) => setCustomer(e.target.value)}
+                placeholder={paidOrder?.customer}
+              />
+            </label>
+            <label>
+              {voucherType === "Factura"
+                ? "RUC (11 dígitos)"
+                : "Documento (opcional)"}
+              <input
+                value={document}
+                onChange={(e) => setDocument(e.target.value)}
+                required={voucherType === "Factura"}
+              />
+            </label>
+            <div className="ops-total">
+              Total
+              <strong>{money(paidOrder ? orderTotal(paidOrder) : 0)}</strong>
+            </div>
+            <p>Comprobante de simulación local, sin valor tributario.</p>
+            <div className="ops-dialog-footer">
+              <button type="button" onClick={() => setSelected("")}>
+                Cancelar
+              </button>
+              <button className="ops-primary">
+                <Icon name="receipt" /> Emitir comprobante
+              </button>
+            </div>
+          </form>
+        </OperationsDialog>
+      )}
       {detail && (
         <OrderDetail
           order={data.orders.find((o) => o.id === detail.id) || detail}

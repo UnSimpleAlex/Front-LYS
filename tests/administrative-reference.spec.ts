@@ -67,7 +67,7 @@ test("indicadores sin cifras inventadas, paginación y edición del pedido exist
   await page.getByLabel("Fecha desde", { exact: true }).fill("2099-01-01");
   await expect(page.locator("tbody tr")).toHaveCount(0);
   await page.getByLabel("Fecha desde", { exact: true }).fill("");
-  await page.getByRole("button", { name: "Filtrar", exact: true }).click();
+  await page.getByRole("button", { name: /Eliminar filtros|Filtrar/, exact: true }).click();
   const enabledEdit = page.locator(".btn-edit:not(:disabled)").first();
   const id = (await enabledEdit.getAttribute("aria-label"))!.replace(
     "Editar pedido #",
