@@ -301,3 +301,8 @@
 
 .ops-root.ops-workspace.ops-reference[data-page="mesera/pedidos"] .ops-responsive-table .ops-badge { display:inline-flex; align-items:center; justify-content:center; gap:5px; min-height:22px; height:auto; padding:2px 8px; box-sizing:border-box; line-height:18px; font-size:12px; background:#008a4b; color:#fff; }
 .ops-root.ops-workspace.ops-reference[data-page="mesera/pedidos"] .ops-responsive-table .ops-badge svg { width:12px; height:12px; color:#fff; }
+
+.ops-root.ops-workspace.ops-reference[data-page="mesera/pedidos"] .ops-responsive-table .ops-badge[data-status="Cancelado"] { background:#ed0017; color:#fff; }
+.ops-root.ops-workspace.ops-reference[data-page="mesera/pedidos"] .ops-salon-order-actions > button[title="Ver detalle"] { display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; min-height:32px; padding:0; }
+.ops-root.ops-workspace.ops-reference[data-page="mesera/pedidos"] .ops-salon-order-actions > button[title="Ver detalle"] svg { display:block; width:18px; height:18px; margin:0; }
+.ops-root.ops-workspace.ops-reference[data-page="mesera/pedidos"] .ops-salon-order-actions > button[title="Ver detalle"] .ops-action-caption { display:none; }

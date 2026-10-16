@@ -106,7 +106,7 @@ export function Badge({ value }: { value: string }) {
           : "check";
   return (
     <span
-      className={`ops-badge ${["Entregado", "Pagado", "Libre", "Activo", "En stock", "Emitido", "Coincide", "Cuadrado", "Caja abierta", "Entrada"].includes(value) ? "green" : ["En preparación", "Reservada", "Por vencer", "Pendiente", "Salida"].includes(value) || value.startsWith("Mesa") ? "gold" : ["Listo", "En camino", "Solicita cuenta", "Recibido"].includes(value) ? "blue" : ["Stock bajo", "Retrasado", "Error", "Reembolsado"].includes(value) ? "red" : "gray"}`}
+      data-status={value} className={`ops-badge ${["Entregado", "Pagado", "Libre", "Activo", "En stock", "Emitido", "Coincide", "Cuadrado", "Caja abierta", "Entrada"].includes(value) ? "green" : ["En preparación", "Reservada", "Por vencer", "Pendiente", "Salida"].includes(value) || value.startsWith("Mesa") ? "gold" : ["Listo", "En camino", "Solicita cuenta", "Recibido"].includes(value) ? "blue" : ["Stock bajo", "Retrasado", "Error", "Reembolsado"].includes(value) ? "red" : "gray"}`}
     >
       {value.startsWith("Mesa") ||
       [
