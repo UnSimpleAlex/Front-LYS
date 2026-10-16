@@ -167,7 +167,7 @@ export function KitchenIncoming({
                     Marcar listo
                   </button>
                 ) : (
-                  <span className="ops-badge green">Listo para entregar</span>
+                  <span className="ops-badge green"><Icon name="check"/>Listo para entregar</span>
                 )}
               </div>
             </article>

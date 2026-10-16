@@ -349,3 +349,12 @@
 
 .ops-root.ops-workspace.ops-reference[data-page] .reference-dashboard [data-panel="Pedidos recientes"] :is(.ops-channel-badge,.ops-badge) { display:inline-flex; align-items:center; justify-content:center; min-height:22px; height:auto; padding:2px 7px; line-height:18px; font-size:12px; gap:5px; box-sizing:border-box; }
 .ops-root.ops-workspace.ops-reference[data-page] .reference-dashboard [data-panel="Pedidos recientes"] .ops-channel-badge svg { width:14px; height:14px; flex-shrink:0; }
+
+.ops-root.ops-workspace.ops-reference[data-page="cocina/pedidos"] .ops-incoming-actions > button:first-of-type,.ops-root.ops-workspace.ops-reference[data-page="cocina/pedidos"] .ops-incoming-actions > .ops-badge.green { display:inline-flex; align-items:center; justify-content:center; gap:6px; height:28px; min-height:28px; padding:4px 10px; line-height:20px; font-size:12px; box-sizing:border-box; }
+.ops-root.ops-workspace.ops-reference[data-page="cocina/pedidos"] .ops-incoming-actions > :is(button:first-of-type,.ops-badge.green) svg { width:15px; height:15px; flex-shrink:0; color:#fff; }
+@media(pointer:coarse) { .ops-root.ops-workspace.ops-reference[data-page="cocina/pedidos"] .ops-incoming-actions > button:first-of-type { min-height:44px; } }
+
+.ops-root.ops-workspace.ops-reference[data-page="cocina/tiempos"] .ops-responsive-table .kr-channel { min-height:22px; height:auto; padding:2px 7px; line-height:18px; font-size:12px; gap:5px; box-sizing:border-box; }
+.ops-root.ops-workspace.ops-reference[data-page="cocina/tiempos"] .ops-responsive-table .kr-channel svg { width:14px; height:14px; flex-shrink:0; }
+
+.ops-root.ops-workspace.ops-reference[data-page="mesera/mesas"] .ops-badge[data-status="Solicita cuenta"] { display:inline-flex; align-items:center; justify-content:center; min-height:22px; height:auto; padding:2px 8px; line-height:18px; font-size:12px; gap:5px; box-sizing:border-box; }
