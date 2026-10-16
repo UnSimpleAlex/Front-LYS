@@ -42,6 +42,7 @@ export function TableMap({
   list?: boolean;
 }) {
   const state = useOperations();
+  const tableQuery = query.trim().toLowerCase().replace(/^(mesa|m)\s*/, "");
   return (
     <div
       className={`ops-floor ${list ? "list" : ""}`}
@@ -51,9 +52,7 @@ export function TableMap({
         .filter(
           (t) =>
             (zone === "Todas" || t.zone === zone) &&
-            (!query ||
-              `m${t.id}`.includes(query.toLowerCase()) ||
-              `${t.id}` === query) &&
+            (!tableQuery || String(t.id).includes(tableQuery)) &&
             (filter === "Todos" || t.status === filter),
         )
         .map((t) => (
