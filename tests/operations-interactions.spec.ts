@@ -321,3 +321,11 @@ test("pagos: tarjetas uniformes, interruptores y carga de QR", async ({ page }) 
   await page.getByRole("button", { name: "Pagos", exact: true }).click();
   await expect(page.getByAltText("QR configurado para Yape")).toHaveAttribute("src", /^data:image/);
 });
+
+test("cuenta: administrador puede regresar a Administración desde cocina", async ({ page }) => {
+  await page.goto("/cocina");
+  await page.locator(".ops-side-account").click();
+  await page.getByRole("button", { name: "Administración Gestión general del negocio", exact: true }).click();
+  await expect(page).toHaveURL(/\/administrador$/);
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+});
