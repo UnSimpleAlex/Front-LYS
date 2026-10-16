@@ -725,13 +725,14 @@ export function UserManager({
                   )}
                   <td>
                     <button
-                      className={`ops-switch ${u.active ? "on" : ""}`}
+                      className={`${clients ? "ops-promotion-state" : "ops-switch"} ${u.active ? "on" : ""}`}
+                      title={u.active ? "Activo · Pulsar para desactivar" : "Inactivo · Pulsar para activar"}
                       aria-label={`Estado de ${u.name}`}
                       aria-pressed={u.active}
                       onClick={() =>
                         notify(() => editLocalUser(u.id, { active: !u.active }))
                       }
-                    ><span className="anchor-account-state">{u.active ? "Activo":"Inactivo"}</span></button>
+                    >{clients ? <span aria-hidden="true" className="ops-state-track"><span className="ops-state-thumb"/></span> : <span className="anchor-account-state">{u.active ? "Activo":"Inactivo"}</span>}</button>
                   </td>
                   <td>
                     <div className="ops-table-actions">
