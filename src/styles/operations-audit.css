@@ -369,3 +369,10 @@
   .anchor-order-context > :is(label,span) > svg { width:20px; height:20px; flex-shrink:0; }
 }
 @media(pointer:coarse) { .ops-root.ops-workspace.ops-reference[data-page="mesera/nuevo-pedido"] .anchor-order-context > :is(label,span) { min-height:44px; height:44px; } }
+
+.ops-root.ops-workspace.ops-reference[data-page] .ops-side-navigation button:hover { background:#fff0f2; color:#ed0017; }
+.ops-root.ops-workspace.ops-reference[data-page] .ops-side-navigation button:focus-visible { outline:2px solid #ed0017; outline-offset:2px; }
+.ops-root.ops-workspace.ops-reference[data-page="caja/"] [data-panel="Pagos pendientes"] .ops-channel-badge { display:inline-flex; align-items:center; justify-content:center; min-height:22px; height:auto; padding:2px 7px; line-height:18px; font-size:12px; gap:5px; box-sizing:border-box; }
+.ops-root.ops-workspace.ops-reference[data-page="caja/"] [data-panel="Pagos pendientes"] .ops-channel-badge svg { width:14px; height:14px; flex-shrink:0; }
+.ops-root.ops-workspace.ops-reference[data-page="caja/"] [data-panel="Pagos pendientes"] tbody button { height:28px; min-height:28px; padding:4px 10px; font-size:12px; line-height:20px; box-sizing:border-box; }
+@media(pointer:coarse) { .ops-root.ops-workspace.ops-reference[data-page="caja/"] [data-panel="Pagos pendientes"] tbody button { min-height:44px; } }
