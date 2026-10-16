@@ -225,3 +225,12 @@
 .ops-root.ops-workspace.ops-reference[data-page] .reference-dashboard .ops-panel > header > select { appearance:none; padding-right:32px; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; background-size:14px 14px; }
 .ops-root.ops-workspace.ops-reference[data-page] .reference-dashboard .ops-category-badge { display:inline-flex; align-items:center; gap:5px; padding:3px 7px; min-height:22px; box-sizing:border-box; border-radius:999px; background:#f1f3f5; color:#334155; line-height:16px; }
 .ops-root.ops-workspace.ops-reference[data-page] .reference-dashboard .ops-category-badge svg { color:#ed0017; width:14px; height:14px; flex-shrink:0; }
+
+.ops-root.ops-workspace.ops-reference[data-page] .kitchen-column[data-stage="Recibido"] { --kitchen-stage-color:#ed0017; }
+.ops-root.ops-workspace.ops-reference[data-page] .kitchen-column[data-stage="En preparación"] { --kitchen-stage-color:#bd5700; }
+.ops-root.ops-workspace.ops-reference[data-page] .kitchen-column[data-stage="Listo"] { --kitchen-stage-color:#008a4b; }
+.ops-root.ops-workspace.ops-reference[data-page] .kitchen-column .kitchen-column-heading { background:var(--kitchen-stage-color); }
+.ops-root.ops-workspace.ops-reference[data-page] .kitchen-column .kitchen-column-heading h2 { color:#000; }
+.ops-root.ops-workspace.ops-reference[data-page] .kitchen-column .kitchen-column-heading > svg { color:#fff; }
+.ops-root.ops-workspace.ops-reference[data-page] .ops-kitchen-ready-action { background:#bd5700; border-color:#bd5700; color:#fff; }
+.ops-root.ops-workspace.ops-reference[data-page] .ops-kitchen-ready-action:hover { background:#a34800; border-color:#a34800; color:#fff; }
