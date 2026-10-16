@@ -578,3 +578,55 @@ input[type="file"]::file-selector-button:hover {
   line-height: 18px !important;
   margin-bottom: 18px !important;
 }
+
+/* --------------------------------------------------------------------------
+   8. Perfil en Barra Lateral (.ops-side-account)
+      Garantizar que el avatar sea un círculo perfecto (1:1) sin deformarse en óvalo
+   -------------------------------------------------------------------------- */
+
+.ops-root.ops-workspace .ops-sidebar .ops-side-account {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+.ops-root.ops-workspace .ops-sidebar .ops-side-avatar,
+.ops-side-avatar {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  min-height: 40px !important;
+  max-width: 40px !important;
+  max-height: 40px !important;
+  flex: 0 0 40px !important;
+  flex-shrink: 0 !important;
+  flex-grow: 0 !important;
+  aspect-ratio: 1 / 1 !important;
+  border-radius: 50% !important;
+  box-sizing: border-box !important;
+  background: #e11d48 !important;
+  color: #ffffff !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  text-transform: uppercase !important;
+  overflow: hidden !important;
+}
+
+.ops-root.ops-workspace .ops-sidebar .ops-side-account-info {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+  overflow: hidden !important;
+}
+
+.ops-root.ops-workspace .ops-sidebar .ops-side-account-chevron {
+  flex: 0 0 16px !important;
+  width: 16px !important;
+  height: 16px !important;
+}

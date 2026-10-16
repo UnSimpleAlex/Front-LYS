@@ -18,9 +18,9 @@ test('muestra conectada, ventanas accesibles y navegación lateral por roles', a
   expect(snapshot.suppliers).toHaveLength(2);
   expect(snapshot.tables.some((t:{status:string}) => t.status === 'Ocupada')).toBeTruthy();
   await page.goto('/administrador/clientes');
-  await expect(page.locator('tbody tr')).toHaveCount(8);
-  const firstClient=page.locator('tbody tr').first();
-  await firstClient.getByRole('button',{name:/^Ver /}).click();
+  await expect(page.locator('tbody tr')).toHaveCount(9);
+  const clientWithOrders = page.locator('tbody tr').filter({ hasText: '@preview.example' }).first();
+  await clientWithOrders.getByRole('button',{name:/^Ver /}).click();
   await expect(page.getByRole('dialog')).toContainText('COCINA-DEMO-');
   await page.getByRole('dialog').press('Escape');
   await page.goto('/administrador');

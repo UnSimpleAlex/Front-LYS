@@ -32,7 +32,7 @@
 .ops-root.ops-workspace[data-page] .ops-side-navigation button:hover { background:#f6f8fb; color:#10172b; }
 .ops-root.ops-workspace[data-page] .ops-side-navigation button.active { background:#fff0f2; color:#ed0017; font-weight:600; position:relative; }
 .ops-root.ops-workspace[data-page] .ops-side-account { display:flex; align-items:center; gap:9px; margin-top:auto; padding:16px 8px 4px; border:0; border-top:1px solid #e4e9f1; border-radius:0; background:transparent; color:#10172b; text-align:left; }
-.ops-side-account span { flex:1; min-width:0; overflow-wrap:break-word; }
+.ops-side-account .ops-side-account-info { flex:1; min-width:0; overflow-wrap:break-word; }
 .ops-root.ops-workspace[data-page] .ops-side-account small { color:#62718c; }
 .ops-workspace-toolbar { min-height:64px; padding:12px 28px; display:flex; justify-content:flex-end; gap:12px; align-items:center; border-bottom:1px solid var(--ops-line); background:white; }
 .ops-workspace-toolbar button { display:flex; align-items:center; gap:8px; }
@@ -202,7 +202,7 @@
 }
 
 /* ── Sidebar account button ─────────────────────────────── */
-.ops-side-avatar { display:flex; align-items:center; justify-content:center; flex-shrink:0; width:38px; height:38px; border-radius:50%; background:#e11d48; color:#fff; font-size:.9375rem; font-weight:700; letter-spacing:-.01em; line-height:1; text-transform:uppercase; }
+.ops-side-avatar { display:flex; align-items:center; justify-content:center; flex:0 0 40px; flex-shrink:0; flex-grow:0; width:40px; height:40px; min-width:40px; max-width:40px; aspect-ratio:1/1; border-radius:50%; background:#e11d48; color:#fff; font-size:.9375rem; font-weight:700; letter-spacing:-.01em; line-height:1; text-transform:uppercase; box-sizing:border-box; }
 .ops-side-account-info { flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; overflow:hidden; }
 .ops-side-account-info strong { font-size:.875rem; font-weight:600; color:#10172b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .ops-side-account-info small { font-size:.75rem; color:#62718c; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }

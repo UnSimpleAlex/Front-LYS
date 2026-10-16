@@ -51,3 +51,23 @@ test("aside: tipografía uniforme y tamaño consistente entre Dashboard y Produc
   expect(dashFontSizeOnProd).toBe("15px");
   expect(prodFontSizeOnProd).toBe("15px");
 });
+
+test("aside: el avatar de perfil de administrador es un círculo perfecto en PC", async ({ page }) => {
+  await page.setViewportSize({ width: 1672, height: 941 });
+  await page.goto("/iniciar-sesion");
+  await page.getByLabel("Correo electrónico", { exact: true }).fill("administrador@demo.local");
+  await page.getByLabel("Contraseña", { exact: true }).fill("Demo2026!");
+  await page.getByRole("button", { name: "Iniciar sesión", exact: true }).click();
+  await expect(page).toHaveURL(/administrador$/);
+
+  const avatar = page.locator(".ops-side-avatar");
+  await expect(avatar).toBeVisible();
+  const box = await avatar.boundingBox();
+  expect(box).not.toBeNull();
+  if (box) {
+    expect(box.width).toBeCloseTo(40, 1);
+    expect(box.height).toBeCloseTo(40, 1);
+    expect(Math.abs(box.width - box.height)).toBeLessThan(1);
+  }
+});
+

@@ -21,7 +21,7 @@
       height: 16px;
       flex: 0 0 16px;
     }
-    &[data-page] .ops-side-account > span {
+    &[data-page] .ops-side-account > .ops-side-account-info {
       flex: 1 1 auto;
       min-width: 0;
       overflow-wrap: normal;
