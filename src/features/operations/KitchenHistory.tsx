@@ -2,7 +2,7 @@ import { useState } from "react";
 import { OperationsTable } from "./OperationsTable";
 import { Icon, ProductSummary } from "./OperationsVisuals";
 import { Empty, Badge } from "./OperationsUI";
-import { downloadCsv } from "./operationsFiles";
+import { downloadExcel } from "./operationsFiles";
 import type { Order } from "./operationsStore";
 import { KitchenChannel } from "./KitchenReferenceUI";
 import {
@@ -37,7 +37,7 @@ export function KitchenHistory({
     )
     .sort((a, b) => b.created.localeCompare(a.created));
   const exportHistory = () =>
-    downloadCsv(
+    downloadExcel(
       "historial-cocina",
       [
         "Pedido",
@@ -117,7 +117,7 @@ export function KitchenHistory({
           </select>
         </label>
         <button type="button" className="ops-btn-export" onClick={exportHistory} aria-label="Exportar historial">
-          <Icon name="download" />
+          <Icon name="download" data-ops-action="export"/>
           Exportar
         </button>
         <button

@@ -341,6 +341,11 @@ export function OperationsPage({
               <div className="ops-profile-section">
                 <div className="ops-profile-section-title">CAMBIAR DE ÁREA</div>
                 <div className="ops-profile-areas-grid">
+                  <button className="ops-area-card ops-area-administration" onClick={() => navigate("/administrador")}>
+                    <span className="ops-area-icon ops-area-cocina"><Icon name="shield" /></span>
+                    <div className="ops-area-text"><strong>Administración</strong><small>Gestión general del negocio</small></div>
+                    <Icon name="chevron-right" className="ops-area-chevron" />
+                  </button>
                   <button
                     className="ops-area-card"
                     onClick={() => {

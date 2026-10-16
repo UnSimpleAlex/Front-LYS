@@ -7,28 +7,14 @@ export const dateText = (date: string) =>
     dateStyle: "short",
     timeStyle: "short",
   });
-export function downloadCsv(
+export function downloadExcel(
   name: string,
   headers: string[],
-  rows: (string | number | boolean)[][],
+  rows: (string | number | boolean | Date)[][],
 ) {
-  const cell = (value: string | number | boolean) => {
-    const text = String(value);
-    const safe = typeof value === "string" && /^\s*[=+@-]/.test(text) ? "'" + text : text;
-    return `"${safe.replaceAll('"', '""')}"`;
-  };
-  const blob = new Blob(
-    [
-      "\ufeff" +
-        [headers, ...rows].map((row) => row.map(cell).join(";")).join("\r\n"),
-    ],
-    { type: "text/csv;charset=utf-8" },
-  );
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = name + ".csv";
-  link.click();
-  setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+  void import("./operationsExcel").then(({ saveOperationsExcel }) => saveOperationsExcel(name, headers, rows)).catch(() => {
+    window.alert("No se pudo generar el Excel. Intenta exportarlo nuevamente.");
+  });
 }
 export function printLocal(title: string, lines: string[]) {
   const popup = window.open("", "_blank", "width=700,height=800");

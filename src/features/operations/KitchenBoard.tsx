@@ -24,7 +24,7 @@ export function KitchenBoard({
 }) {
   const [channel, setChannel] = useState("Todos");
   const [search, setSearch] = useState("");
-  const [filtersOpen, setFiltersOpen] = useState(false);
+
   const [statusFilter, setStatusFilter] = useState("Todos");
   const [oldestFirst, setOldestFirst] = useState(true);
   const [stageTab, setStageTab] = useState<Status>("Recibido");
@@ -94,14 +94,14 @@ export function KitchenBoard({
             />
           </label>
           <button
-            aria-expanded={filtersOpen}
-            onClick={() => setFiltersOpen(!filtersOpen)}
+            className="ops-primary"
+            onClick={() => { setChannel("Todos"); setSearch(""); setStatusFilter("Todos"); setOldestFirst(true); }}
           >
             <Icon name="filter" />
-            Filtros
+            Eliminar filtros
           </button>
         </div>
-        {filtersOpen && (
+        {(
           <div id="kitchen-filters" className="kitchen-filters">
             <label>
               Estado
@@ -128,16 +128,7 @@ export function KitchenBoard({
                 <option value="recientes">Más recientes primero</option>
               </select>
             </label>
-            <button
-              onClick={() => {
-                setChannel("Todos");
-                setSearch("");
-                setStatusFilter("Todos");
-                setOldestFirst(true);
-              }}
-            >
-              Limpiar filtros
-            </button>
+
           </div>
         )}
       </details>

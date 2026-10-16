@@ -678,6 +678,7 @@ export function WaiterViews({
                 <option key={s}>{s}</option>
               ))}
             </select>
+            <button className="ops-primary" onClick={()=>{setZone("Todas");setFilter("Todos");setSearch("");}}>Eliminar filtros</button>
             <button className="ops-outline" onClick={() => setList(!list)}>
               {list ? "Vista de plano" : "Vista de lista"}
             </button>
@@ -955,6 +956,7 @@ export function WaiterViews({
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
+            <button className="ops-primary" onClick={()=>{setSearch("");setFilter("Todos");}}>Eliminar filtros</button>
             <button
               className="ops-primary"
               onClick={() => navigate("/mesera/nuevo-pedido")}

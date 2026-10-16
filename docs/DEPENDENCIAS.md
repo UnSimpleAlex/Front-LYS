@@ -25,3 +25,11 @@ Motion 14.0.0 (MIT), importado desde `motion/react`, sin Motion+ ni GSAP. Se usa
 ## Mapa de entrega
 
 Leaflet 1.9.4 (BSD-2-Clause), con @types/leaflet 1.9.21 (MIT) en desarrollo. Integración directa con el ciclo de vida de React, sin wrapper adicional. Se carga dentro del checkout diferido; el fragmento de checkout completo pesa aproximadamente 187 kB (54 kB gzip). Lockfile actualizado y auditoría sin vulnerabilidades.
+
+## Descarga de comprobantes PDF
+
+jsPDF 4.2.1, qrcode 1.5.4 y JsBarcode 3.12.3 (MIT) generan documentos con texto seleccionable, QR de identificación local y código CODE128. Tipos de QR y barcode en desarrollo. Las librerías se cargan mediante importación diferida al descargar; el fragmento principal de PDF pesa aproximadamente 494 kB (152 kB gzip), sin incluirse en la carga inicial del panel. El logo es un recurso local. Instalación auditada sin vulnerabilidades y lockfile versionado. No se usa conversión de HTML a imagen ni servicios externos para generar los documentos.
+
+## Exportaciones Excel
+
+ExcelJS 4.4.0 (MIT) genera XLSX con tablas, filtros, fórmulas, formatos numéricos, logo y paneles inmovilizados en el navegador. Se carga únicamente al exportar; el fragmento pesa aproximadamente 937 kB (260 kB gzip). No aumenta el fragmento inicial de administración. El override de uuid a 11.1.1 o superior conserva la API v4 utilizada por ExcelJS y corrige el aviso de seguridad de versiones anteriores; la instalación resultante fue auditada sin vulnerabilidades. Las exportaciones y su relectura se verifican con archivos reales. La descarga utiliza los datos actuales filtrados y seleccionados, sin enviarlos a servicios externos.

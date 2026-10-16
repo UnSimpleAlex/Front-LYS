@@ -108,6 +108,7 @@ export function DeliveryViews({
             onChange={(e) => setSearch(e.target.value)}
           />
         </label>
+        <button className="ops-primary" onClick={()=>{setSearch("");setFilter("Pendientes");setSelected("");}}>Eliminar filtros</button>
       </div>
       <div className="ops-delivery-layout">
         <div className="ops-delivery-list">

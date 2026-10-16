@@ -5,7 +5,7 @@ import {
   Icon,
   PaymentMark,
 } from "./OperationsVisuals";
-import { dateText, localDateKey, downloadCsv, printLocal } from "./operationsFiles";
+import { dateText, localDateKey, downloadExcel, printLocal } from "./operationsFiles";
 import { useState, useContext } from "react";
 import { createPortal } from "react-dom";
 import { OperationsPageActions } from "./operationsPageContext";
@@ -19,6 +19,7 @@ import {
   issueVoucher,
   refundPayment,
   type Order,
+  type Voucher,
 } from "./operationsStore";
 import {
   Panel,
@@ -41,6 +42,29 @@ export function CashViews({
   const today = new Date();
   const dateLabel = today.toLocaleDateString("es-PE", {day:"numeric",month:"long",year:"numeric"});
   const data = useOperations();
+  const [downloading, setDownloading] = useState("");
+  const downloadPdf = async (voucher: Voucher, preview = false) => {
+    const popup = preview ? window.open("", "_blank", "width=850,height=950") : null;
+    if (preview && !popup) {
+      notify(() => { throw new Error("Permite la ventana del comprobante PDF."); });
+      return;
+    }
+    if (popup) {
+      popup.document.title = voucher.id;
+      popup.document.body.textContent = "Preparando comprobante PDF...";
+    }
+    setDownloading(voucher.id);
+    try {
+      const { downloadVoucherPdf, previewVoucherPdf } = await import("./voucherPdf");
+      if (popup) await previewVoucherPdf(voucher, data, popup);
+      else await downloadVoucherPdf(voucher, data);
+    } catch (error) {
+      popup?.close();
+      notify(() => { throw error instanceof Error ? error : new Error("No se pudo descargar el PDF."); });
+    } finally {
+      setDownloading("");
+    }
+  };
   const actionHost = useContext(OperationsPageActions);
   const [selected, setSelected] = useState(() => new URLSearchParams(location.search).get("pedido") || "");
   const [voucherOpen, setVoucherOpen] = useState(false);
@@ -90,7 +114,7 @@ export function CashViews({
     `${v.id} ${v.customer}`.toLowerCase().includes(search.toLowerCase().trim()),
   );
   const exportPayments = () =>
-    downloadCsv(
+    downloadExcel(
       "pagos",
       ["Fecha", "Pedido", "Método", "Monto", "Vuelto", "Estado"],
       filteredPayments.map((p) => [
@@ -113,7 +137,7 @@ export function CashViews({
         .concat(`Total: ${money(orderTotal(o))}`),
     );
   const transactions = (
-    <div className="ops-table-wrap">
+    <div className="ops-table-wrap ops-payment-transactions">
       <OperationsTable>
         <thead>
           <tr>
@@ -155,17 +179,18 @@ export function CashViews({
                   </td>
                   <td>
                     <div className="ops-actions">
-                      <button onClick={() => o && setDetail(o)}>
-                        <Icon name="eye" /> Ver detalle
+                      <button aria-label="Ver detalle" title="Ver detalle" className="ops-payment-view" onClick={() => o && setDetail(o)}>
+                        <Icon name="eye" />
                       </button>
-                      <button onClick={() => notify(() => o && printOrder(o))}>
-                        <Icon name="print" /> Imprimir
+                      <button aria-label="Imprimir" title="Imprimir" className="ops-payment-print" onClick={() => notify(() => o && printOrder(o))}>
+                        <Icon name="print" />
                       </button>
                       {!p.refunded && shift?.id === p.shiftId && (
                         <button
+                          aria-label="Reembolsar" title="Reembolsar" className="ops-payment-refund"
                           onClick={() => notify(() => refundPayment(p.id))}
                         >
-                          <Icon name="arrow" /> Reembolsar
+                          <Icon name="arrow" />
                         </button>
                       )}
                     </div>
@@ -299,7 +324,7 @@ export function CashViews({
                   </div>
                   <span
                     className="anchor-pending-payment"
-                    style={{ background: "#fef3c7", color: "#92400e" }}
+
                   >
                     <Icon name="clock" /> Pendiente de cobro
                   </span>
@@ -560,7 +585,7 @@ export function CashViews({
               <button
                 className="ops-outline"
                 onClick={() =>
-                  downloadCsv(
+                  downloadExcel(
                     "comprobantes",
                     ["Número", "Pedido", "Cliente", "Tipo", "Fecha", "Monto"],
                     filteredVouchers.map((v) => [
@@ -574,7 +599,7 @@ export function CashViews({
                   )
                 }
               >
-                <Icon name="download" /> Exportar
+                <Icon name="download" data-ops-action="export"/> Exportar
               </button>
 
             </div>
@@ -584,7 +609,8 @@ export function CashViews({
             className="ops-admin-filter-bar"
             style={{ margin: "0 0 16px" }}
           >
-            <div className="ops-admin-search">
+            <label className="ops-voucher-search-label">Buscar
+              <div className="ops-admin-search">
               <Icon name="search" />
               <input
                 aria-label="Buscar número o cliente"
@@ -593,6 +619,7 @@ export function CashViews({
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
+            </label>
             <label>Fecha<input type="date" aria-label="Fecha de comprobantes" value={from} onChange={e=>{setFrom(e.target.value);setTo(e.target.value);}}/></label>
             <label>Tipo de comprobante<select aria-label="Filtrar tipo de comprobante" value={filter} onChange={e=>setFilter(e.target.value)}>{["Todos","Boleta","Factura","Nota de venta"].map(type=><option key={type}>{type}</option>)}</select></label>
             <button
@@ -603,6 +630,8 @@ export function CashViews({
                 setFrom("");
                 setTo("");
                 setFilter("Todos");
+                setPaymentState("Todos");
+                setCashierFilter("Todos");
               }}
             >
               <Icon name="trash" /> Eliminar filtros
@@ -656,28 +685,18 @@ export function CashViews({
                         </strong>
                       </td>
                       <td>
-                        <span className="anchor-pending-payment">
-                          <span className="ops-status-dot green" /> Emitido
-                        </span>
+                        <Badge value="Emitido"/>
                       </td>
                       <td>
                         <div className="ops-actions">
                           <button
-                            onClick={() =>
-                              notify(() =>
-                                printLocal(v.id, [
-                                  v.type,
-                                  v.customer,
-                                  v.document,
-                                  `Pedido ${v.orderId}`,
-                                  money(v.total),
-                                ]),
-                              )
-                            }
-                            title="Ver / Imprimir comprobante"
+                            onClick={() => void downloadPdf(v, true)}
+                            disabled={downloading !== ""}
+                            title="Ver / Imprimir comprobante" aria-label="Imprimir" className="ops-voucher-print"
                           >
-                            <Icon name="print" /> Imprimir
+                            <Icon name="print" />
                           </button>
+                          <button type="button" aria-label="Descargar PDF" title="Descargar PDF" className="ops-voucher-download" disabled={downloading !== ""} aria-busy={downloading === v.id} onClick={() => void downloadPdf(v)}><Icon name="download" /></button>
                         </div>
                       </td>
                     </tr>
@@ -703,7 +722,7 @@ export function CashViews({
                 <span>{dateLabel}</span>
               </div>
               <button className="ops-outline" onClick={exportPayments}>
-                <Icon name="download" /> Exportar Excel (CSV)
+                <Icon name="download" data-ops-action="export"/> Exportar Excel
               </button>
             </div>,
             actionHost,
@@ -735,7 +754,7 @@ export function CashViews({
             title="Historial de pagos"
             action={
               <button className="ops-outline" onClick={exportPayments}>
-                <Icon name="download" /> Exportar
+                <Icon name="download" data-ops-action="export"/> Exportar
               </button>
             }
           >
@@ -745,11 +764,12 @@ export function CashViews({
               <label>Método de pago<select aria-label="Filtrar resultados" value={filter} onChange={e=>setFilter(e.target.value)}>{["Todos",...paymentMethods].map(m=><option key={m}>{m}</option>)}</select></label>
               <label>Cajera<select aria-label="Cajera de los pagos" value={cashierFilter} onChange={e=>setCashierFilter(e.target.value)}>{["Todos",...new Set(data.shifts.map(shift=>shift.user))].map(name=><option key={name}>{name}</option>)}</select></label>
               <label>Estado<select aria-label="Estado del pago" value={paymentState} onChange={e=>setPaymentState(e.target.value)}>{["Todos","Pagado","Anulado"].map(v=><option key={v}>{v}</option>)}</select></label>
-              <button type="button" className="ops-btn-export" onClick={exportPayments}><Icon name="download"/>Exportar</button>
+              <button type="button" className="ops-btn-export" onClick={exportPayments}><Icon name="download" data-ops-action="export"/>Exportar</button>
               <button
                 type="button"
                 className="ops-btn-clear-filters"
                 onClick={() => {
+                  setSearch("");
                   setFrom("");
                   setTo("");
                   setFilter("Todos");

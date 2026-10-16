@@ -6,7 +6,7 @@ import { useState, useContext } from "react";
 import { createPortal } from "react-dom";
 import { OperationsPageActions } from "./operationsPageContext";
 import { InitialsAvatar, RoleBadge } from "./AdminViews";
-import { downloadCsv, localDateKey } from "./operationsFiles";
+import { downloadExcel, localDateKey } from "./operationsFiles";
 import {
   createLocalUser,
   editLocalUser,
@@ -89,7 +89,7 @@ export function PromotionManager({
 
   const visibleOfferPage=Math.min(offerPage,Math.max(1,Math.ceil(filteredOffers.length/10)));
   const exportPromotions = () =>
-    downloadCsv(
+    downloadExcel(
       "promociones",
       ["Promoción", "Tipo", "Beneficio", "Vigencia", "Canjes", "Estado"],
       filteredOffers.filter(o=>!offerSelection.length || offerSelection.includes(o.id)).map((o) => [
@@ -176,7 +176,7 @@ export function PromotionManager({
           </select>
         </div>
         <button className="ops-btn-export" onClick={exportPromotions}>
-          <Icon name="download" /> Exportar
+          <Icon name="download" data-ops-action="export"/> Exportar
         </button>
         <button
           className="ops-btn-clear-filters"
@@ -272,7 +272,7 @@ export function PromotionManager({
                     onClick={() =>
                       notify(() => saveOffer({ ...o, active: !o.active }))
                     }
-                  />
+                  ><span aria-hidden="true" className="ops-state-track"><span className="ops-state-thumb"/></span></button>
                 </td>
                 <td>
                   <div className="ops-table-actions">
@@ -513,7 +513,7 @@ export function UserManager({
   });
 
   const exportUsers = () =>
-    downloadCsv(
+    downloadExcel(
       clients ? "clientes" : "usuarios",
       clients
         ? ["Nombre", "Email", "Teléfono", "Pedidos", "Gasto Total", "Estado"]
@@ -663,7 +663,7 @@ export function UserManager({
           </select>
         </div>
         <button className="ops-btn-export" onClick={exportUsers}>
-          <Icon name="download" /> Exportar
+          <Icon name="download" data-ops-action="export"/> Exportar
         </button>
         <button
           className="ops-btn-clear-filters"
@@ -757,13 +757,14 @@ export function UserManager({
                   )}
                   <td>
                     <button
-                      className={`ops-switch ${u.active ? "on" : ""}`}
+                      className={`ops-promotion-state ${u.active ? "on" : ""}`}
+                      title={u.active ? "Activo · Pulsar para desactivar" : "Inactivo · Pulsar para activar"}
                       aria-label={`Estado de ${u.name}`}
                       aria-pressed={u.active}
                       onClick={() =>
                         notify(() => editLocalUser(u.id, { active: !u.active }))
                       }
-                    ><span className="anchor-account-state">{u.active ? "Activo":"Inactivo"}</span></button>
+                    ><span aria-hidden="true" className="ops-state-track"><span className="ops-state-thumb"/></span></button>
                   </td>
                   <td>
                     <div className="ops-table-actions">
@@ -1071,10 +1072,10 @@ export function InventoryManager({
   );
   const exportInventory = () => {
     if (tab === "Proveedores") {
-      downloadCsv("proveedores", ["Nombre", "Teléfono", "Correo"], filteredSuppliers.map(p => [p.name, p.phone, p.email]));
+      downloadExcel("proveedores", ["Nombre", "Teléfono", "Correo"], filteredSuppliers.map(p => [p.name, p.phone, p.email]));
       return;
     }
-    downloadCsv(
+    downloadExcel(
       "inventario",
       ["Insumo", "Categoría", "Stock actual", "Unidad", "Stock mínimo", "Costo", "Estado"],
       filteredSupplies.filter(s => !selectedSupplies.length || selectedSupplies.includes(s.id)).map((s) => [
@@ -1099,6 +1100,7 @@ export function InventoryManager({
       ]}/>
 
       <div className="ops-admin-filter-bar" aria-label="Filtros de inventario">
+        <label className="ops-inventory-search-label">Buscar
         <div className="ops-admin-search">
           <Icon name="search" />
           <input
@@ -1108,10 +1110,11 @@ export function InventoryManager({
             onChange={(e) => { setSearch(e.target.value); setSelectedSupplies([]); }}
           />
         </div>
+        </label>
         <label>Categoría<select aria-label="Categoría de insumos" disabled={tab === "Proveedores"} value={category} onChange={e=>{ setCategory(e.target.value); setSelectedSupplies([]); }}><option>Todas</option>{[...new Set(data.supplies.map(s=>s.category))].map(c=><option key={c}>{c}</option>)}</select></label>
         <label>Estado<select aria-label="Estado de insumos" value={tab} onChange={e=>{ setTab(e.target.value); setSelectedSupplies([]); }}><option value="Insumos">Todos</option><option value="Alertas">Stock bajo</option><option value="Agotados">Agotados</option><option value="Proveedores">Proveedores</option></select></label>
         <button className="ops-btn-export" onClick={exportInventory}>
-          <Icon name="download" /> Exportar
+          <Icon name="download" data-ops-action="export"/> Exportar
         </button>
         <button
           className="ops-btn-clear-filters"

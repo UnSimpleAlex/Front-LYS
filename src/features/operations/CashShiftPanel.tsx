@@ -9,23 +9,14 @@ import {
   openShift,
   closeShift,
 } from "./operationsStore";
-import { Icon, PaymentMark } from "./OperationsVisuals";
+import { Icon } from "./OperationsVisuals";
 import { Stats, Badge } from "./OperationsUI";
-import { downloadCsv } from "./operationsFiles";
+import { downloadExcel } from "./operationsFiles";
+import { CashOpeningContent } from "./CashOpeningContent";
+import { denominations } from "./cashDenominationValues";
+import { CashClosingContent } from "./CashClosingContent";
+import "../../styles/operations-cash-shift.css";
 
-const denominations = [
-  [200, "200"],
-  [100, "100"],
-  [50, "50"],
-  [20, "20"],
-  [10, "10"],
-  [5, "coin-5-soles"],
-  [2, "coin-2-soles"],
-  [1, "coin-1-sol"],
-  [0.5, "coin-50-centimos"],
-  [0.2, "coin-20-centimos"],
-  [0.1, "coin-10-centimos"],
-] as const;
 export function CashShiftPanel({
   closing,
   notify,
@@ -38,10 +29,11 @@ export function CashShiftPanel({
   const data = useOperations();
   const host = useContext(OperationsPageActions);
   const shift = data.shifts.find((s) => !s.closed);
-  const [amount, setAmount] = useState("300");
+  const [amount, setAmount] = useState("0");
   const [counts, setCounts] = useState<number[]>(denominations.map(() => 0));
   const [notes, setNotes] = useState("");
   const [verified, setVerified] = useState(false);
+  const [verificationError, setVerificationError] = useState(false);
   const sum =
     counts.reduce(
       (total, count, i) =>
@@ -59,7 +51,7 @@ export function CashShiftPanel({
   const day = new Date().toLocaleDateString("es-PE");
   const cashier = shift?.user || currentUser()?.name || "Sin identificar";
   const exportSummary = () =>
-    downloadCsv(
+    downloadExcel(
       "resumen-caja",
       ["Concepto", "Monto"],
       [
@@ -67,10 +59,26 @@ export function CashShiftPanel({
         ["Ingresos en efectivo", cash],
         ["Retiros", shift?.withdrawals || 0],
         ["Efectivo esperado", expected],
-        ["Efectivo contado", amount],
+        ["Efectivo contado", Number(amount)],
         ["Diferencia", difference],
       ],
     );
+  const updateCount = (index: number, value: number) => {
+    const next = counts.map((count, i) => i === index ? value : count);
+    setCounts(next);
+    setAmount(String(next.reduce((total, count, i) => total + Math.round(denominations[i][0] * 100) * count, 0) / 100));
+  };
+  const useInitial = () => {
+    let remaining = Math.round((shift?.initial || 0) * 100);
+    const next = denominations.map(([value]) => {
+      const cents = Math.round(value * 100);
+      const count = Math.floor(remaining / cents);
+      remaining -= count * cents;
+      return count;
+    });
+    setCounts(next);
+    setAmount(String(shift?.initial || 0));
+  };
   return (
     <div className={`anchor-shift ${closing ? "is-closing" : "is-opening"}`}>
       {host &&
@@ -110,6 +118,7 @@ export function CashShiftPanel({
             Fecha<strong>{day}</strong>
           </span>
         </div>
+        {closing && <Badge value={shift ? "Turno activo" : "Sin turno activo"} />}
       </div>
       {closing && (
         <Stats
@@ -146,8 +155,10 @@ export function CashShiftPanel({
         onSubmit={(e) => {
           e.preventDefault();
           notify(() => {
-            if (!closing && !verified)
+            if (!closing && !verified) {
+              setVerificationError(true);
               throw new Error("Verifica el efectivo disponible.");
+            }
             if (!closing && sum > 0 && Math.abs(sum - Number(amount)) > 0.001)
               throw new Error(
                 "El desglose debe coincidir con el monto ingresado.",
@@ -159,210 +170,34 @@ export function CashShiftPanel({
         }}
       >
         {closing ? (
-          <div className="anchor-closing-grid">
-            <section>
-              <h2>Conteo de efectivo</h2>
-              <div className="anchor-fields-two">
-                <label>
-                  Efectivo contado
-                  <input
-                    aria-label="Efectivo contado (S/)"
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    required
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                  />
-                </label>
-                <div className="anchor-difference">
-                  <span>Diferencia</span>
-                  <strong>{money(difference)}</strong>
-                  <Badge
-                    value={
-                      Math.abs(difference) < 0.001 ? "Cuadrado" : "Diferencia"
-                    }
-                  />
-                </div>
-              </div>
-            </section>
-            <section>
-              <h2>Resumen por método de pago</h2>
-              {data.settings.methods.map((method) => (
-                <div className="anchor-method-total" key={method}>
-                  <PaymentMark name={method} />
-                  <span>{method}</span>
-                  <strong>
-                    {money(
-                      payments
-                        .filter((p) => p.method === method)
-                        .reduce((sum, p) => sum + p.amount, 0),
-                    )}
-                  </strong>
-                </div>
-              ))}
-              <div className="anchor-method-total total">
-                <span>Total de ventas</span>
-                <strong>
-                  {money(payments.reduce((sum, p) => sum + p.amount, 0))}
-                </strong>
-              </div>
-            </section>
-            <section>
-              <h2>Detalle de movimientos en efectivo</h2>
-              <table className="anchor-cash-movements">
-                <thead>
-                  <tr>
-                    <th>Hora</th>
-                    <th>Tipo</th>
-                    <th>Descripción</th>
-                    <th>Monto</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {shift && (
-                    <tr>
-                      <td>
-                        {new Date(shift.opened).toLocaleTimeString("es-PE", {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </td>
-                      <td>
-                        <Badge value="Apertura" />
-                      </td>
-                      <td>Fondo inicial de caja</td>
-                      <td>{money(shift.initial)}</td>
-                    </tr>
-                  )}
-                  {payments
-                    .filter((p) => p.method === "Efectivo")
-                    .map((p) => (
-                      <tr key={p.id}>
-                        <td>
-                          {new Date(p.date).toLocaleTimeString("es-PE", {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
-                        </td>
-                        <td>
-                          <Badge value="Ingreso" />
-                        </td>
-                        <td>Pedido #{p.orderId}</td>
-                        <td>{money(p.amount)}</td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </section>
-            <section>
-              <label>
-                Observaciones (opcional)
-                <textarea
-                  maxLength={300}
-                  value={notes}
-                  onChange={(e) => setNotes(e.target.value)}
-                  placeholder="Sin observaciones. Caja cuadrada."
-                />
-              </label>
-              <small>{notes.length}/300</small>
-            </section>
-          </div>
+          <CashClosingContent counts={counts} amount={amount} expected={expected}
+            payments={payments} methods={data.settings.methods} shift={shift} notes={notes}
+            onCount={updateCount} onAmount={setAmount} onNotes={setNotes} onUseInitial={useInitial} />
         ) : (
-          <section>
-            <h2>Fondo inicial en efectivo</h2>
-            <p>
-              Ingresa la cantidad de billetes y monedas que conforman el fondo
-              inicial de la caja.
-            </p>
-            <div className="anchor-denominations">
-              <div className="anchor-denomination-head">
-                <span>Denominación</span>
-                <span>Cantidad</span>
-                <span>Subtotal</span>
-              </div>
-              {denominations.map(([value, image], i) => (
-                <div className="anchor-denomination" key={image}>
-                  <span>
-                    <img
-                      className="ops-banknote"
-                      src={`/images/operations/currency/${image}.webp`}
-                      alt=""
-                    />
-                    {value >= 1
-                      ? `S/ ${value}`
-                      : `${Math.round(value * 100)} céntimos`}
-                  </span>
-                  <input
-                    type="number"
-                    min="0"
-                    step="1"
-                    aria-label={`Cantidad de denominación ${value}`}
-                    value={counts[i]}
-                    onChange={(e) => {
-                      const next = counts.map((n, j) =>
-                        j === i ? Number(e.target.value) : n,
-                      );
-                      setCounts(next);
-                    }}
-                  />
-                  <strong>{money(counts[i] * value)}</strong>
-                </div>
-              ))}
-            </div>
-            <label className="anchor-opening-total">
-              Total fondo inicial
-              <input
-                aria-label="Fondo inicial (S/)"
-                type="number"
-                min="0"
-                step="0.01"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                required
-              />
-            </label>
-            <div className="ops-cash-total anchor-calculated-total">
-              <span>Total calculado</span>
-              <strong>{money(sum)}</strong>
-              {sum > 0 && (
-                <Badge
-                  value={
-                    Math.abs(sum - Number(amount)) < 0.001
-                      ? "Coincide"
-                      : "Revisar monto"
-                  }
-                />
-              )}
-            </div>
-            <label>
-              Observaciones (opcional)
-              <textarea
-                maxLength={300}
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                placeholder="Ej. Notas adicionales sobre el fondo inicial de la caja…"
-              />
-            </label>
-            <label className="ops-check">
-              <input
-                type="checkbox"
-                checked={verified}
-                onChange={(e) => setVerified(e.target.checked)}
-              />
-              He verificado el efectivo disponible.
-            </label>
-          </section>
+          <CashOpeningContent
+            denominations={denominations}
+            counts={counts}
+            sum={sum}
+            amount={amount}
+            verified={verified}
+            verificationError={verificationError}
+            onCount={updateCount}
+            onCalculate={() => setAmount(String(sum))}
+            onVerified={(value) => { setVerified(value); setVerificationError(false); }}
+          />
         )}
         <footer>
+          {closing && <button type="button" className="ops-outline" onClick={() => navigate("/caja")}><Icon name="close" />Cancelar</button>}
           {closing ? (
             <button
               type="button"
               className="ops-outline"
               onClick={exportSummary}
+              aria-label="Exportar resumen"
+              title="Exportar resumen"
             >
-              <Icon name="download" />
-              Exportar resumen
+              <Icon name="download" data-ops-action="export"/>
+              Exportar
             </button>
           ) : (
             <button
@@ -370,11 +205,11 @@ export function CashShiftPanel({
               className="ops-outline"
               onClick={() => navigate("/caja")}
             >
-              Cancelar
+              <Icon name="close" /> Cancelar
             </button>
           )}
           <button className="ops-primary" disabled={closing ? !shift : !!shift}>
-            <Icon name={closing ? "lock" : "cash"} />
+            <Icon name="check" />
             {closing ? "Cerrar caja" : "Abrir caja"}
           </button>
         </footer>

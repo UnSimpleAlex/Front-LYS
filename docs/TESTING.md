@@ -57,6 +57,10 @@ La muestra general también añade hasta ocho clientes ficticios con correo @pre
 
 Ver [Referencias administrativas](REFERENCIAS_ADMINISTRATIVAS.md). La prueba `reference-layout.spec.ts` añade capturas de las 25 vistas en cinco combinaciones de ancho y alto, incluida 1366 × 591. También verifica límites de altura del menú y los indicadores, composición de configuración/inventario y modificación persistente y segura de las mesas. No sustituye la comparación visual con las imágenes.
 
+## Mi cuenta: referencias PC y móvil
+
+`tests/account-reference.spec.ts` valida acceso directo sin exponer credenciales, primer nombre del navbar, ocho vistas, barrido de 280–3840 px, persistencia de perfil/foto y referencias de tarjeta, búsqueda, favoritos, avisos leídos y diálogos de baja altura. Ver [alcance, cobertura y límites](MI_CUENTA_REFERENCIA.md). `PLAYWRIGHT_EXECUTABLE_PATH` permite ejecutar con Chromium instalado sin cambiar el canal Edge por defecto.
+
 ## Auditoría integral de los paneles
 
 Ver [informe de auditoría administrativa](AUDITORIA_ADMINISTRATIVA.md): 25 rutas, barrido de 280 a 3840 px, formularios en pantallas bajas, teclado, controles táctiles y cobertura/limitaciones documentadas.
@@ -64,3 +68,21 @@ Ver [informe de auditoría administrativa](AUDITORIA_ADMINISTRATIVA.md): 25 ruta
 ## Interacciones operativas
 
 Ver [interacciones operativas verificadas](INTERACCIONES_OPERATIVAS.md): filtros, selección, edición, exportaciones reales, comprobantes, configuración y persistencia. Las pruebas pueden aislarse con `LYS_TEST_PORT`; la caché Vite es local a cada copia.
+
+### Exportaciones XLSX
+
+Las once rutas que exportaban CSV generan ahora Excel real con el diseño de la referencia suministrada: logo, título, franja roja, indicadores grises y filas alternadas. La tabla tiene filtros por columna, ordenación, encabezados fijos y totales SUBTOTAL sobre filas visibles. Productos incluye fórmulas de valor de stock y resumen por categoría de los registros exportados; se aclara que ese resumen no depende del filtrado manual posterior en la hoja principal.
+
+Se ejecutaron 20 casos de descarga y flujos relacionados: once reportes, filtros, selección, resultados vacíos, proveedores, promociones, cierre y cadenas que parecen fórmulas. Los XLSX se reabren para validar encabezado inmovilizado, filas y contenido; una revisión independiente verificó tablas, autofiltros, logo, formatos monetarios, fórmulas y valores almacenados. El render de la herramienta de hojas devolvió imágenes vacías; se revisó una representación de los valores y estilos leídos del archivo. No se afirma una prueba interactiva en Microsoft Excel ni un recálculo nativo de su motor.
+
+### Apertura, cierre y etiquetas compactas
+
+Las pruebas de interacciones cubren verificación obligatoria del efectivo, apertura persistente tras recarga, prevención de apertura duplicada, conteo por denominaciones, uso del fondo inicial en cierre, diferencias y exportación del resumen. En apertura el total se calcula desde las denominaciones, sin campo manual ni observaciones. La lista tiene desplazamiento interno y encabezado fijo. En cierre se conservan las observaciones y el ingreso manual del efectivo contado.
+
+Las vistas de apertura y cierre reproducen únicamente el contenido de las referencias; conservan la navegación existente. Se mantienen todas las denominaciones, observaciones y exportaciones. La auditoría responsive cubrió 221 anchos de 280–3840 px por vista, además de delivery, Nuevo pedido y Mesas; incluye capturas de 390, 768 y 1366 px. Se verificaron por separado los límites del precio y del botón de agregar, y la lectura completa de «Solicita cuenta» en seis anchos con ese estado activo. Esta cobertura corresponde a Chromium emulado, no a dispositivos físicos.
+
+### Boleta y factura PDF
+
+`tests/voucher-pdf.spec.ts` descarga archivos reales desde Comprobantes: boleta de 80 mm, factura A4 emitida sobre un pedido pagado y factura de 80 productos con descripción extensa. Comprueba nombre, firma PDF y ausencia de errores de navegador. La revisión adicional con pdfplumber verificó texto dentro de los límites, presencia del total, identificación local y último producto en la factura de cinco páginas; se renderizaron y revisaron el ticket completo, la factura y la última página extensa. Tipografía Courier, logo, QR y código de barras se generan localmente. El QR identifica el comprobante local; se conserva «Sin valor tributario». No se inventan RUC ni autorizaciones fiscales. La vista de descarga superó el barrido de 221 anchos de 280–3840 px.
+
+El botón Imprimir abre el mismo PDF en el visor del navegador, con sus controles de impresión y descarga. La ventana se abre directamente al pulsar para conservar compatibilidad con bloqueadores de ventanas emergentes; los errores cierran la ventana vacía y se muestran en el panel. Las pruebas comprueban que las vistas previas de boleta y factura navegan a un blob con firma PDF, en lugar de la antigua página de texto.

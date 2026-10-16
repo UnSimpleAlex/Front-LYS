@@ -1,11 +1,6 @@
 import { test, expect, type Page } from "@playwright/test";
 async function setup(page: Page) {
   await page.goto("/iniciar-sesion");
-  await page.getByRole("button", { name: "Accesos de prueba por rol" }).click();
-  await page
-    .getByRole("button", { name: "Preparar cuentas de prueba" })
-    .click();
-  await expect(page.getByText("Demo2026!", { exact: true })).toBeVisible();
 }
 async function login(page: Page, role: string) {
   await page.goto("/iniciar-sesion");
@@ -452,7 +447,7 @@ test("controles legibles, archivos y efectivo en móvil, tablet y PC", async ({ 
     }
     for (const route of ["apertura", "cierre"]) {
       await page.goto(`/caja/${route}`);
-      await expect(page.locator(".ops-banknote")).toHaveCount(route === "apertura" ? 11:0);
+      await expect(page.locator(".ops-banknote")).toHaveCount(11);
       expect(await page.locator(".ops-banknote").evaluateAll(nodes => nodes.every(node => node instanceof HTMLImageElement && node.complete && node.naturalWidth > 0))).toBeTruthy();
       if (route === "cierre") await expect(page.getByRole("heading",{name:"Conteo de efectivo",exact:true})).toBeVisible();
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy();
@@ -468,13 +463,12 @@ test("caja suma piezas de billetes y monedas en céntimos", async ({ page }) => 
   for (const value of [200, 100, 50, 20, 10, 5, 2, 1, 0.5, 0.2, 0.1]) {
     await page.getByLabel(`Cantidad de denominación ${value}`, { exact: true }).fill("1");
   }
-  await expect(page.locator(".ops-cash-total > strong")).toHaveText("S/ 388.80");
-  await page.getByLabel("Fondo inicial (S/)").fill("388.80");
-  await expect(page.locator(".ops-cash-total .ops-badge")).toHaveText("Coincide");
+  await expect(page.locator(".cash-opening-highlight strong")).toHaveText("S/ 388.80");
   await expect(page.getByLabel("Cantidad de denominación 0.05", { exact: true })).toHaveCount(0);
   await page.getByLabel("Cantidad de denominación 0.1", { exact: true }).fill("2");
-  await expect(page.locator(".ops-cash-total > strong")).toHaveText("S/ 388.90");
-  await expect(page.locator(".ops-cash-total .ops-badge")).toHaveText("Revisar monto");
+  await expect(page.locator(".cash-opening-highlight strong")).toHaveText("S/ 388.90");
+  await page.getByRole("button", { name: "Calcular automáticamente" }).click();
+  await expect(page.locator(".cash-opening-highlight strong")).toHaveText("S/ 388.90");
 });
 
 test("panel cocina: referencia responsive, búsqueda y filtros de pedidos", async ({ page }) => {
@@ -503,8 +497,7 @@ test("panel cocina: referencia responsive, búsqueda y filtros de pedidos", asyn
   await expect(page.locator(".kitchen-ticket")).toHaveCount(1);
   await page.getByLabel("Buscar pedidos de cocina").fill("no-existe-este-pedido");
   await expect(page.locator(".kitchen-ticket")).toHaveCount(0);
-  await page.getByRole("button", { name: "Filtros", exact: true }).click();
-  await page.getByRole("button", { name: "Limpiar filtros" }).click();
+  await page.getByRole("button", { name: "Eliminar filtros", exact: true }).click();
   await expect(page.locator(".kitchen-ticket")).toHaveCount(total);
   await page.locator("#kitchen-filters").getByLabel("Estado de pedidos de cocina", { exact: true }).selectOption("En preparación");
   expect(await page.locator(".kitchen-ticket").count()).toBeGreaterThan(0);

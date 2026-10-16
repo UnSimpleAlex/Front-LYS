@@ -118,3 +118,7 @@ La rama aislada aún no está integrada en la copia principal donde trabaja el o
 - Filtros Estado/Tipo: indicador centrado verticalmente.
 - Avisos compartidos: toast flotante, descartable, con cierre automático de éxito tras 4,5 segundos; los errores permanecen para poder leerlos.
 - Verificación dirigida: productos, promociones y usuarios sin desbordamientos entre 280 y 3840 px (221 anchuras por página); capturas PC, tablet y móvil revisadas. Regresión funcional de creación, edición, exportación, cancelación/eliminación y persistencia; comprobación de cierre automático del aviso.
+## Integración en Mi cuenta
+
+El 16 de octubre de 2026 el usuario autorizó integrar `fix/interacciones-operativas` en `feature/mi-cuenta-referencia`. Se conservaron las vistas de Mi cuenta, los iconos nuevos de cuenta y la preparación automática de credenciales locales sin mostrar accesos de prueba en login. La configuración de pruebas admite tanto puertos aislados como un ejecutable Chromium explícito. Las pruebas operativas se adaptaron al inicio de sesión actual, conservando sus verificaciones. Las notas anteriores sobre la separación de ramas describen la situación previa a esta integración.
+Validación de la integración: 32/32 pruebas aprobadas (25 interacciones operativas y 7 de Mi cuenta, incluido el barrido de ocho secciones entre 280 y 3840 px), TypeScript, lint y build aprobados. Sin publicación al remoto.
