@@ -265,6 +265,30 @@ test("promociones: crear, editar, desactivar, exportar y eliminar", async ({ pag
   await expect(page.locator(".ops-responsive-table tbody tr")).toHaveCount(0);
 });
 
+test("promociones: cambiar estado conserva el orden de las filas tras recargar", async ({ page }) => {
+  await page.goto("/administrador/promociones");
+  await page.getByRole("button", { name: "Nueva promoción", exact: true }).click();
+  const dialog = page.getByRole("dialog");
+  await dialog.getByLabel("Nombre", { exact: true }).fill("Segunda promoción");
+  await dialog.getByRole("combobox", { name: "Tipo", exact: true }).selectOption("Cupón");
+  await dialog.getByLabel("Código de cupón").fill("ORDEN10");
+  await dialog.getByRole("button", { name: "Guardar promoción", exact: true }).click();
+  await expect(dialog).toHaveCount(0);
+  const rows = page.locator(".ops-responsive-table tbody tr");
+  const names = rows.locator("td:nth-child(2) strong");
+  const originalOrder = await names.allTextContents();
+  expect(originalOrder.length).toBeGreaterThan(1);
+  const toggle = rows.first().getByRole("button", { name: /^Activar / });
+  await toggle.click();
+  await expect(toggle).toHaveAttribute("aria-pressed", "false");
+  expect(await names.allTextContents()).toEqual(originalOrder);
+  await page.reload();
+  await expect(names).toHaveCount(originalOrder.length);
+  expect(await names.allTextContents()).toEqual(originalOrder);
+  await rows.first().getByRole("button", { name: /^Activar / }).click();
+  expect(await names.allTextContents()).toEqual(originalOrder);
+});
+
 test("pedidos: buscar desde otra página reinicia paginación y selección", async ({ page }) => {
   await page.goto("/administrador/pedidos");
   await page.getByRole("button", { name: "Página siguiente", exact: true }).click();

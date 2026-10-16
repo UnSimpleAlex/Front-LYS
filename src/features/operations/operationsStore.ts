@@ -853,7 +853,9 @@ export function saveOffer(offer: Offer) {
     throw new Error("Revisa los datos de la promoción.");
   publish({
     ...state,
-    offers: [...state.offers.filter((o) => o.id !== offer.id), offer],
+    offers: state.offers.some((o) => o.id === offer.id)
+      ? state.offers.map((o) => o.id === offer.id ? offer : o)
+      : [...state.offers, offer],
   });
 }
 export function deleteOffer(id: string) {
