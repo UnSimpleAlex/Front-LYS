@@ -113,3 +113,7 @@
 @media(min-width:1100px) { .ops-root.ops-workspace.ops-reference[data-page="administrador/inventario"] .ops-responsive-table tbody td { padding-top:7px; padding-bottom:7px; height:auto; } }
 
 .ops-root.ops-workspace.ops-reference[data-page="administrador/inventario"] .ops-responsive-table .ops-badge { display:inline-flex; align-items:center; min-height:22px; height:auto; padding:2px 8px; line-height:18px; gap:5px; font-size:12px; }
+
+.ops-root.ops-workspace.ops-reference[data-page="administrador/inventario"] .ops-admin-filter-bar { align-items:flex-end; }
+.ops-root.ops-workspace.ops-reference[data-page="administrador/inventario"] .ops-admin-filter-bar > label { display:grid; gap:6px; margin:0; }
+.ops-root.ops-workspace.ops-reference[data-page="administrador/inventario"] .ops-admin-filter-bar :is(input,select,button) { height:40px; min-height:40px; margin:0; box-sizing:border-box; }
