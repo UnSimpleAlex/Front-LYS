@@ -251,13 +251,13 @@ export function PromotionManager({
                 </td>
                 <td>
                   <button
-                    className={`ops-switch ${o.active ? "on" : ""}`}
+                    className={`ops-promotion-state ${o.active ? "on" : ""}`}
                     aria-label={`Activar ${o.name}`}
                     aria-pressed={o.active}
                     onClick={() =>
                       notify(() => saveOffer({ ...o, active: !o.active }))
                     }
-                  />
+                  ><span aria-hidden="true" className="ops-state-dot"/>{o.active ? "Activa" : "Inactiva"}</button>
                 </td>
                 <td>
                   <div className="ops-table-actions">

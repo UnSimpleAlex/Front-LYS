@@ -78,3 +78,9 @@
 .ops-root.ops-workspace.ops-reference .ops-message.ops-toast.error { color:#991b1b; border-color:#fecaca; }
 .ops-root.ops-workspace.ops-reference .ops-toast > button { position:absolute; right:8px; top:50%; transform:translateY(-50%); width:30px; height:30px; min-height:30px; padding:0; }
 @media(max-width:600px) { .ops-root.ops-workspace.ops-reference .ops-message.ops-toast { right:16px; bottom:20px; } }
+
+.ops-root.ops-workspace.ops-reference[data-page="administrador/promociones"] .ops-promotion-state { display:inline-flex; align-items:center; justify-content:center; gap:6px; min-width:82px; min-height:30px; padding:5px 10px; border:1px solid #cbd5e1; border-radius:999px; background:#f8fafc; color:#475569; font-size:12px; font-weight:600; line-height:18px; white-space:nowrap; }
+.ops-root.ops-workspace.ops-reference[data-page="administrador/promociones"] .ops-promotion-state.on { color:#166534; background:#f0fdf4; border-color:#bbdfc5; }
+.ops-promotion-state .ops-state-dot { width:6px; height:6px; border-radius:50%; background:currentColor; flex:none; }
+.ops-root.ops-workspace.ops-reference[data-page="administrador/promociones"] .ops-promotion-state:hover { border-color:currentColor; }
+@media(pointer:coarse) { .ops-root.ops-workspace.ops-reference[data-page="administrador/promociones"] .ops-promotion-state { min-height:44px; } }
