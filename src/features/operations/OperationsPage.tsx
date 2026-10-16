@@ -54,13 +54,13 @@ const menus: Record<string, [string, string, IconName][]> = {
   ],
   administrador: [
     ["", "Dashboard", "home"],
-    ["pedidos", "Pedidos", "receipt"],
     ["productos", "Productos", "box"],
-    ["inventario", "Inventario", "inventory"],
     ["promociones", "Promociones", "tag"],
     ["clientes", "Clientes", "users"],
     ["usuarios", "Usuarios", "user"],
+    ["pedidos", "Pedidos", "receipt"],
     ["reportes", "Reportes", "chart"],
+    ["inventario", "Inventario", "inventory"],
     ["configuracion", "Configuración", "settings"],
   ],
   delivery: [["", "Entregas", "truck"]],
@@ -170,10 +170,7 @@ export function OperationsPage({
   useEffect(() => {
     document.title = `${titles[key] || "Panel de operaciones"} | Leñas y Sabores`;
   }, [key]);
-  const dashboardOrder = ["", "productos", "promociones", "clientes", "usuarios", "pedidos", "reportes", "inventario", "configuracion"];
-  const navigation = key === "administrador/"
-    ? [...menus[role]].sort((a, b) => dashboardOrder.indexOf(a[0]) - dashboardOrder.indexOf(b[0]))
-    : menus[role];
+  const navigation = menus[role];
   if (!allowed)
     return (
       <main id="contenido" className="ops-root">
@@ -218,7 +215,16 @@ export function OperationsPage({
             </button>
           ))}
         </nav>
-        <button className="ops-side-account" onClick={() => setProfile(true)}><Icon name="user" /><span>{user.role === "administrador" ? "Administrador" : roleNames[user.role]}<small>{state.settings.name}</small></span><Icon name="chevron" /></button>
+        <button className="ops-side-account" onClick={() => setProfile(true)} aria-label="Abrir perfil de cuenta">
+          <span className="ops-side-avatar" aria-hidden="true">
+            {(user.role === "administrador" ? "Administrador" : roleNames[user.role]).charAt(0)}
+          </span>
+          <span className="ops-side-account-info">
+            <strong>{user.role === "administrador" ? "Administrador" : roleNames[user.role]}</strong>
+            <small>{state.settings.name}</small>
+          </span>
+          <Icon name="chevron" className="ops-side-account-chevron" />
+        </button>
       </aside>
       <div className="ops-workspace-toolbar">
         <button className="ops-menu" aria-label="Abrir menú del panel" aria-expanded={menu} onClick={() => setMenu(true)}><Icon name="menu" /></button>
@@ -247,22 +253,204 @@ export function OperationsPage({
           ))}
         </nav>
 </OperationsDialog>}
-      {profile && <OperationsDialog title="Mi cuenta" onClose={() => setProfile(false)}>
-        <div className="ops-account-summary"><Icon name="user" /><div><strong>{user.name}</strong><p>{roleNames[user.role]}</p></div></div>
-        <div className="ops-account-actions">
-          <button onClick={() => {setProfile(false);setNotifications(true);}}><Icon name="bell" />Pedidos activos ({pending.length})</button>
-          {user.role === "administrador" && <><h3>Cambiar de área</h3>{Object.keys(menus).map(r => <button key={r} onClick={() => {setProfile(false);navigate("/" + r);}}><Icon name={menus[r][0][2]} />{roleNames[r as Role]}<Icon name="chevron" /></button>)}</>}
-          {user.role === "administrador" && <button disabled={preparingPreview} onClick={async()=>{
-            setPreparingPreview(true);
-            try { await loadWorkspacePreview(); notify(()=>setProfile(false)); }
-            catch(error) { notify(()=>{throw error;}); }
-            finally {setPreparingPreview(false);}
-          }}><Icon name="plus"/>{preparingPreview ? "Preparando datos…" : state.suppliers.some(s=>s.id==="workspace-preview-supplier") ? "Actualizar muestra de demostración":"Cargar datos de demostración"}</button>}
-          <button onClick={() => navigate("/mi-cuenta")}><Icon name="user" />Editar mi cuenta</button>
-          <button onClick={() => navigate("/")}><Icon name="home" />Ver sitio público</button>
-          <button onClick={() => {logoutLocal();navigate("/iniciar-sesion");}}><Icon name="power" />Cerrar sesión</button>
-        </div>
-      </OperationsDialog>}
+      {profile && (
+        <OperationsDialog
+          title="Mi cuenta"
+          onClose={() => setProfile(false)}
+          className="ops-profile-modal"
+        >
+          <div className="ops-profile-card">
+            <div className="ops-profile-header">
+              <div className="ops-profile-avatar" aria-hidden="true">
+                {user.role === "administrador"
+                  ? "A"
+                  : user.name
+                    ? user.name.charAt(0).toUpperCase()
+                    : "U"}
+              </div>
+              <div className="ops-profile-user">
+                <strong className="ops-profile-name">{user.name}</strong>
+                <span className="ops-profile-role-badge">
+                  {user.role === "administrador"
+                    ? "Administrador"
+                    : roleNames[user.role]}
+                </span>
+                <span className="ops-profile-brand">{state.settings.name}</span>
+              </div>
+            </div>
+
+            <div className="ops-profile-actions-list">
+              <button
+                className="ops-profile-item"
+                onClick={() => {
+                  setProfile(false);
+                  setNotifications(true);
+                }}
+              >
+                <span className="ops-profile-icon ops-icon-blue">
+                  <Icon name="clipboard-list" />
+                </span>
+                <div className="ops-profile-item-text">
+                  <strong>Pedidos activos</strong>
+                  <small>Revisa y gestiona los pedidos en curso</small>
+                </div>
+                {pending.length > 0 && (
+                  <span className="ops-profile-count-pill">{pending.length}</span>
+                )}
+                <Icon name="chevron-right" className="ops-profile-chevron" />
+              </button>
+
+              <button
+                className="ops-profile-item"
+                onClick={() => navigate("/mi-cuenta")}
+              >
+                <span className="ops-profile-icon ops-icon-orange">
+                  <Icon name="user-edit" />
+                </span>
+                <div className="ops-profile-item-text">
+                  <strong>Editar mi cuenta</strong>
+                  <small>Actualiza tu información personal</small>
+                </div>
+                <Icon name="chevron-right" className="ops-profile-chevron" />
+              </button>
+
+              <button
+                className="ops-profile-item"
+                onClick={() => window.open("/", "_blank")}
+              >
+                <span className="ops-profile-icon ops-icon-dark">
+                  <Icon name="world" />
+                </span>
+                <div className="ops-profile-item-text">
+                  <strong>Ver sitio público</strong>
+                  <small>Abre la página de tu restaurante en una nueva pestaña</small>
+                </div>
+                <Icon name="external-link" className="ops-profile-ext" />
+              </button>
+            </div>
+
+            {user.role === "administrador" && (
+              <div className="ops-profile-section">
+                <div className="ops-profile-section-title">CAMBIAR DE ÁREA</div>
+                <div className="ops-profile-areas-grid">
+                  <button
+                    className="ops-area-card"
+                    onClick={() => {
+                      setProfile(false);
+                      navigate("/cocina");
+                    }}
+                  >
+                    <span className="ops-area-icon ops-area-cocina">
+                      <Icon name="chef-hat" />
+                    </span>
+                    <div className="ops-area-text">
+                      <strong>Cocina</strong>
+                      <small>Pedidos y preparación</small>
+                    </div>
+                    <Icon name="chevron-right" className="ops-area-chevron" />
+                  </button>
+
+                  <button
+                    className="ops-area-card"
+                    onClick={() => {
+                      setProfile(false);
+                      navigate("/mesera");
+                    }}
+                  >
+                    <span className="ops-area-icon ops-area-salon">
+                      <Icon name="dining-table" />
+                    </span>
+                    <div className="ops-area-text">
+                      <strong>Salón</strong>
+                      <small>Mesas y atención</small>
+                    </div>
+                    <Icon name="chevron-right" className="ops-area-chevron" />
+                  </button>
+
+                  <button
+                    className="ops-area-card"
+                    onClick={() => {
+                      setProfile(false);
+                      navigate("/caja");
+                    }}
+                  >
+                    <span className="ops-area-icon ops-area-caja">
+                      <Icon name="cash-register" />
+                    </span>
+                    <div className="ops-area-text">
+                      <strong>Caja</strong>
+                      <small>Cobros y comprobantes</small>
+                    </div>
+                    <Icon name="chevron-right" className="ops-area-chevron" />
+                  </button>
+
+                  <button
+                    className="ops-area-card"
+                    onClick={() => {
+                      setProfile(false);
+                      navigate("/delivery");
+                    }}
+                  >
+                    <span className="ops-area-icon ops-area-delivery">
+                      <Icon name="moped" />
+                    </span>
+                    <div className="ops-area-text">
+                      <strong>Delivery</strong>
+                      <small>Rutas y entregas</small>
+                    </div>
+                    <Icon name="chevron-right" className="ops-area-chevron" />
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {user.role === "administrador" && (
+              <button
+                className="ops-profile-demo-btn"
+                disabled={preparingPreview}
+                onClick={async () => {
+                  setPreparingPreview(true);
+                  try {
+                    await loadWorkspacePreview();
+                    notify(() => setProfile(false));
+                  } catch (error) {
+                    notify(() => {
+                      throw error;
+                    });
+                  } finally {
+                    setPreparingPreview(false);
+                  }
+                }}
+              >
+                <Icon name="plus" />
+                <span>
+                  {preparingPreview
+                    ? "Preparando datos…"
+                    : state.suppliers.some(
+                          (s) => s.id === "workspace-preview-supplier",
+                        )
+                      ? "Actualizar muestra de demostración"
+                      : "Cargar datos de demostración"}
+                </span>
+              </button>
+            )}
+
+            <button
+              className="ops-profile-logout-btn"
+              onClick={() => {
+                logoutLocal();
+                navigate("/iniciar-sesion");
+              }}
+            >
+              <span className="ops-profile-logout-icon">
+                <Icon name="logout" />
+              </span>
+              <span className="ops-profile-logout-text">Cerrar sesión</span>
+              <Icon name="chevron-right" className="ops-profile-logout-chevron" />
+            </button>
+          </div>
+        </OperationsDialog>
+      )}
       {notifications && <OperationsDialog title="Pedidos activos" onClose={() => setNotifications(false)}>
         {pending.map(o => <div className="ops-notification-item" key={o.id}><strong>#{o.id}</strong><span>{o.customer}</span><span>{o.status}</span></div>)}
         {!pending.length && <Empty>No hay pedidos pendientes.</Empty>}

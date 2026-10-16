@@ -56,7 +56,7 @@
 .ops-notification-item { display:grid; grid-template-columns:auto 1fr auto; gap:12px; padding:14px 0; border-bottom:1px solid #dce0e5; }
 .ops-root.ops-workspace[data-page] .ops-manager-layout > .ops-with-sidebar { grid-template-columns:minmax(0,1fr); }
 .ops-root.ops-workspace[data-page] .ops-switch { padding:0; min-height:24px; height:24px; width:44px; }
-.ops-root.ops-workspace[data-page] .ops-badge { background:white; border:1px solid transparent; border-radius:20px; padding:5px 10px; font-size:.75rem; color:#535b65; }
+.ops-root.ops-workspace[data-page] .ops-badge { background:white; border:1px solid transparent; border-radius:20px; padding:2px 9px; min-height:24px; height:24px; box-sizing:border-box; line-height:1; display:inline-flex; align-items:center; font-size:.75rem; color:#535b65; }
 .ops-root.ops-workspace[data-page] .ops-badge.green { color:#067132; background:#def8e6; }
 .ops-root.ops-workspace[data-page] .ops-badge.red { color:#bf1528; background:#fff0f2; }
 .ops-root.ops-workspace[data-page] .ops-badge.gold { color:#8a5800; background:#fff4dd; }
@@ -199,4 +199,412 @@
   .ops-root.ops-workspace[data-page="mesera/"] [data-panel="Pedidos recientes"] time { white-space:nowrap; }
   .ops-root.ops-workspace[data-page="mesera/"] [data-panel="Pedidos recientes"] td button { display:inline-flex; flex-direction:row; align-items:center; gap:4px; padding:6px 4px; white-space:nowrap; overflow-wrap:normal; }
   .ops-root.ops-workspace[data-page="mesera/"] [data-panel="Pedidos recientes"] td button svg { width:16px; height:16px; }
+}
+
+/* ── Sidebar account button ─────────────────────────────── */
+.ops-side-avatar { display:flex; align-items:center; justify-content:center; flex-shrink:0; width:38px; height:38px; border-radius:50%; background:#e11d48; color:#fff; font-size:.9375rem; font-weight:700; letter-spacing:-.01em; line-height:1; text-transform:uppercase; }
+.ops-side-account-info { flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; overflow:hidden; }
+.ops-side-account-info strong { font-size:.875rem; font-weight:600; color:#10172b; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ops-side-account-info small { font-size:.75rem; color:#62718c; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ops-side-account-chevron { flex-shrink:0; color:#a3adb8; }
+
+/* ── Modal "Mi cuenta" ───────────────────────────────────── */
+.ops-dialog.ops-profile-modal {
+  width: min(530px, calc(100vw - 28px));
+  max-height: calc(100dvh - 32px);
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 24px 60px -12px rgba(15, 23, 42, 0.28), 0 0 0 1px rgba(0, 0, 0, 0.04);
+  background: #ffffff;
+  overflow: hidden;
+}
+.ops-dialog.ops-profile-modal > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px 14px;
+  border-bottom: 1px solid #f1f5f9;
+  background: #ffffff;
+}
+.ops-dialog.ops-profile-modal > header h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+.ops-dialog.ops-profile-modal > header button {
+  width: 32px;
+  height: 32px;
+  padding: 0 !important;
+  min-height: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #64748b;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.ops-dialog.ops-profile-modal > header button:hover {
+  background: #f1f5f9 !important;
+  color: #0f172a;
+}
+.ops-dialog.ops-profile-modal .ops-dialog-body {
+  padding: 20px 24px 22px;
+  max-height: calc(100dvh - 80px);
+  overflow-y: auto;
+}
+
+/* ── Profile Header ──────────────────────────────────────── */
+.ops-profile-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.ops-profile-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #e11d48;
+  color: #ffffff;
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+}
+.ops-profile-user {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  min-width: 0;
+}
+.ops-profile-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ops-profile-role-badge {
+  display: inline-flex;
+  align-items: center;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 9999px;
+  line-height: 1.4;
+}
+.ops-profile-brand {
+  font-size: 0.8125rem;
+  color: #64748b;
+  margin-top: 1px;
+}
+
+/* ── Profile Actions List (Pedidos, Editar, Ver sitio) ───── */
+.ops-profile-actions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 18px;
+}
+.ops-root.ops-workspace[data-page] .ops-profile-item,
+.ops-profile-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+  width: 100% !important;
+  padding: 10px 12px !important;
+  border-radius: 10px !important;
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  transition: all 0.15s ease !important;
+  min-height: 0 !important;
+}
+.ops-root.ops-workspace[data-page] .ops-profile-item:hover,
+.ops-profile-item:hover {
+  background: #f8fafc !important;
+}
+.ops-profile-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+}
+.ops-profile-icon svg {
+  width: 24px !important;
+  height: 24px !important;
+  stroke-width: 1.8;
+}
+.ops-icon-blue { color: #2563eb; }
+.ops-icon-orange { color: #ea580c; }
+.ops-icon-dark { color: #0f172a; }
+
+.ops-profile-item-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ops-profile-item-text strong {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.25;
+}
+.ops-profile-item-text small {
+  font-size: 0.8125rem;
+  color: #64748b;
+  font-weight: 400;
+  line-height: 1.3;
+}
+.ops-profile-count-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #dbeafe;
+  color: #2563eb;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 9px;
+  border-radius: 9999px;
+  margin-right: 4px;
+  flex-shrink: 0;
+  line-height: 1.3;
+}
+.ops-profile-chevron {
+  width: 16px !important;
+  height: 16px !important;
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+.ops-profile-ext {
+  width: 18px !important;
+  height: 18px !important;
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+/* ── CAMBIAR DE ÁREA Section ─────────────────────────────── */
+.ops-profile-section {
+  margin-top: 14px;
+}
+.ops-profile-section-title {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #64748b;
+  margin-bottom: 10px;
+  padding-left: 2px;
+}
+.ops-profile-areas-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.ops-root.ops-workspace[data-page] .ops-area-card,
+.ops-area-card {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 12px 14px !important;
+  border-radius: 12px !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: none !important;
+  background: #ffffff !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  transition: all 0.15s ease !important;
+  min-height: 58px !important;
+}
+.ops-root.ops-workspace[data-page] .ops-area-card:hover,
+.ops-area-card:hover {
+  background: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+}
+.ops-area-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+}
+.ops-area-icon svg {
+  width: 26px !important;
+  height: 26px !important;
+  stroke-width: 1.8;
+}
+.ops-area-cocina { color: #e11d48; }
+.ops-area-salon { color: #9333ea; }
+.ops-area-caja { color: #16a34a; }
+.ops-area-delivery { color: #0284c7; }
+
+.ops-area-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.ops-area-text strong {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.25;
+}
+.ops-area-text small {
+  font-size: 0.725rem;
+  color: #64748b;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ops-area-chevron {
+  width: 16px !important;
+  height: 16px !important;
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+/* ── Demo & Logout Buttons ───────────────────────────────── */
+.ops-root.ops-workspace[data-page] .ops-profile-demo-btn,
+.ops-profile-demo-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  width: auto !important;
+  margin: 6px auto 0 !important;
+  padding: 4px 10px !important;
+  min-height: 0 !important;
+  height: auto !important;
+  border: 1px dashed #cbd5e1 !important;
+  box-shadow: none !important;
+  border-radius: 6px !important;
+  background: transparent !important;
+  color: #94a3b8 !important;
+  font-size: 0.75rem !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  transition: all 0.15s ease !important;
+}
+.ops-root.ops-workspace[data-page] .ops-profile-demo-btn:hover,
+.ops-profile-demo-btn:hover {
+  background: #f8fafc !important;
+  color: #475569 !important;
+  border-color: #94a3b8 !important;
+}
+.ops-profile-demo-btn svg {
+  width: 13px !important;
+  height: 13px !important;
+}
+
+.ops-root.ops-workspace[data-page] .ops-profile-logout-btn,
+.ops-profile-logout-btn {
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+  width: 100% !important;
+  padding: 10px 12px !important;
+  margin-top: 6px !important;
+  border-radius: 10px !important;
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  transition: all 0.15s ease !important;
+  min-height: 0 !important;
+}
+.ops-root.ops-workspace[data-page] .ops-profile-logout-btn:hover,
+.ops-profile-logout-btn:hover {
+  background: #fef2f2 !important;
+}
+.ops-profile-logout-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  color: #dc2626;
+}
+.ops-profile-logout-icon svg {
+  width: 22px !important;
+  height: 22px !important;
+  stroke-width: 1.8;
+}
+.ops-profile-logout-text {
+  flex: 1;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #dc2626;
+}
+.ops-profile-logout-chevron {
+  width: 16px !important;
+  height: 16px !important;
+  color: #dc2626;
+  flex-shrink: 0;
+}
+
+/* ── Responsive adjustments ──────────────────────────────── */
+@media (max-width: 480px) {
+  .ops-dialog.ops-profile-modal {
+    width: calc(100vw - 20px);
+    max-height: calc(100dvh - 20px);
+    border-radius: 14px;
+  }
+  .ops-dialog.ops-profile-modal > header {
+    padding: 14px 18px 12px;
+  }
+  .ops-dialog.ops-profile-modal .ops-dialog-body {
+    padding: 16px 18px 18px;
+  }
+  .ops-profile-header {
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .ops-profile-avatar {
+    width: 48px;
+    height: 48px;
+    font-size: 1.35rem;
+  }
+  .ops-profile-areas-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .ops-root.ops-workspace[data-page] .ops-profile-item,
+  .ops-profile-item {
+    padding: 8px 10px !important;
+    gap: 10px !important;
+  }
+  .ops-root.ops-workspace[data-page] .ops-area-card,
+  .ops-area-card {
+    padding: 10px 12px !important;
+    gap: 10px !important;
+  }
 }

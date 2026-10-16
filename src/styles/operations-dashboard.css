@@ -22,7 +22,7 @@
     white-space: nowrap; padding: 8px 10px; font-size: 12px;
   }
   .reference-dashboard .ops-panel > header > button svg { width: 15px; height: 15px; transform: rotate(-90deg); }
-  .reference-dashboard .ops-panel > header > select { width: 170px; min-width: 0; margin-left: auto; }
+  .reference-dashboard .ops-panel > header > :is(select, .ops-select-wrap) { width: 170px; min-width: 0; margin-left: auto; }
   .reference-dashboard .ops-chart { padding: 0 12px 10px; height: 250px; min-height: 0; }
   .reference-dashboard .ops-chart svg { width: 100%; height: 100%; }
   .reference-dashboard .ops-table-wrap { border: 0; border-radius: 0; }
@@ -32,7 +32,16 @@
   .reference-dashboard .ops-product-cell { gap: 10px; }
   .reference-dashboard .ops-product-cell img { width: 44px; height: 36px; border-radius: 6px; }
   .reference-dashboard [data-panel="Top 5 productos más vendidos"] > header > button { display: none; }
-  .reference-dashboard .ops-badge { padding: 4px 8px; font-size: 12px; }
+  .reference-dashboard :is(.ops-badge, .ops-channel-badge) {
+    padding: 2px 9px;
+    height: 24px;
+    min-height: 24px;
+    box-sizing: border-box;
+    font-size: 11.5px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+  }
   .reference-dashboard .ops-product-cell strong { font-size: 12px; line-height: 16px; }
   .reference-dashboard .ops-table-actions { display: flex; flex-wrap: nowrap; gap: 6px; }
   .reference-dashboard .ops-table-actions button {
