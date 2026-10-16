@@ -117,3 +117,9 @@
 .ops-root.ops-workspace.ops-reference[data-page="administrador/inventario"] .ops-admin-filter-bar { align-items:flex-end; }
 .ops-root.ops-workspace.ops-reference[data-page="administrador/inventario"] .ops-admin-filter-bar > label { display:grid; gap:6px; margin:0; }
 .ops-root.ops-workspace.ops-reference[data-page="administrador/inventario"] .ops-admin-filter-bar :is(input,select,button) { height:40px; min-height:40px; margin:0; box-sizing:border-box; }
+
+.ops-root.ops-workspace.ops-reference[data-page="administrador/inventario"] .ops-admin-filter-bar > label { font-size:12px; line-height:18px; font-weight:400; color:#526581; }
+.ops-root.ops-workspace.ops-reference[data-page="administrador/inventario"] .ops-inventory-search-label { flex:1 1 280px; min-width:0; }
+.ops-root.ops-workspace.ops-reference[data-page="administrador/inventario"] .ops-inventory-search-label .ops-admin-search { min-width:0; flex:none; width:100%; }
+.ops-root.ops-workspace.ops-reference[data-page="administrador/inventario"] .ops-admin-filter-bar > label:not(.ops-inventory-search-label) { flex:0 1 180px; min-width:130px; }
+@media(max-width:540px) { .ops-root.ops-workspace.ops-reference[data-page="administrador/inventario"] .ops-admin-filter-bar > label { flex:1 1 100%; } }
