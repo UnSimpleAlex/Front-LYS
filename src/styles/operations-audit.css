@@ -241,3 +241,9 @@
 .ops-root.ops-workspace.ops-reference[data-page] .kitchen-search input:is(:hover,:focus,:focus-visible) { border:0; outline:none; box-shadow:none; }
 .ops-root.ops-workspace.ops-reference[data-page] .kitchen-toolbar .kitchen-search:focus-within { border-color:#ed0017; box-shadow:0 0 0 3px #ed00171a; outline:none; }
 @media(pointer:coarse) { .ops-root.ops-workspace.ops-reference[data-page] .kitchen-toolbar .kitchen-search { min-height:44px; } }
+
+.ops-root.ops-workspace.ops-reference[data-page] .kitchen-column[data-stage="Listo"] { --kitchen-stage-color:#079d4d; }
+.ops-root.ops-workspace.ops-reference[data-page] .kitchen-column > .kitchen-column-heading { background:var(--kitchen-stage-color) !important; }
+.ops-root.ops-workspace.ops-reference[data-page] .kitchen-column > .kitchen-column-heading :is(h2,svg) { color:#fff; }
+.ops-root.ops-workspace.ops-reference[data-page="cocina/historial"] .ops-stat-icon { display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.ops-root.ops-workspace.ops-reference[data-page="cocina/historial"] .ops-stat-icon > svg { position:static; display:block; margin:0; transform:none; width:24px; height:24px; flex-shrink:0; }
