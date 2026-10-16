@@ -311,7 +311,7 @@ button.ops-primary:disabled {
       Altura 22–24px, centrado y contraste adecuado
    -------------------------------------------------------------------------- */
 
-.ops-badge:not(.ops-product-list *),
+.ops-badge:not(.ops-product-list *):not(.ops-table-seat *),
 .ops-channel-badge,
 .kr-channel,
 .kr-status,
@@ -448,6 +448,7 @@ button.ops-primary:disabled {
 .ops-dialog footer.ops-actions,
 .anchor-settings-footer {
   display: flex !important;
+  flex-wrap: wrap !important;
   align-items: center !important;
   justify-content: center !important;
   gap: 14px !important;
@@ -459,7 +460,7 @@ button.ops-primary:disabled {
 .ops-dialog-footer button,
 .ops-dialog footer.ops-actions button,
 .anchor-settings-footer button {
-  min-width: 140px !important;
+  min-width: min(100%, 140px) !important;
   flex: 0 1 180px !important;
   height: 38px !important;
   font-size: 13.5px !important;
