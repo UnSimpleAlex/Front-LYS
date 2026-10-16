@@ -197,7 +197,7 @@ export function KitchenTimes({
           </label>
         }
       >
-        <button className="ops-primary" onClick={()=>{setChannel("Todos");setSearch("");setPeriod("Hoy");}}>Eliminar filtros</button>
+        <div className="ops-time-filter-row">
         <div className="kr-tabs">
           {["Todos", "Delivery", "Salón", "Recojo"].map((value) => (
             <button
@@ -226,6 +226,8 @@ export function KitchenTimes({
               )
             </button>
           ))}
+        </div>
+        <button className="ops-primary" onClick={()=>{setChannel("Todos");setSearch("");setPeriod("Hoy");}}>Eliminar filtros</button>
         </div>
         <div className="ops-table-wrap">
           <OperationsTable>

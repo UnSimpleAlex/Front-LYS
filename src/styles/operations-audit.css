@@ -284,3 +284,15 @@
 
 .ops-root.ops-workspace.ops-reference[data-page="cocina/historial"] .ops-responsive-table .kr-channel { min-height:22px; height:auto; padding:2px 7px; line-height:18px; font-size:12px; gap:5px; box-sizing:border-box; }
 .ops-root.ops-workspace.ops-reference[data-page="cocina/historial"] .ops-responsive-table .kr-channel svg { width:14px; height:14px; flex-shrink:0; }
+
+.ops-root.ops-workspace.ops-reference[data-page="cocina/tiempos"] {
+  .ops-time-filter-row { display:flex; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:10px; }
+  .ops-time-filter-row .kr-tabs { flex:1 1 auto; width:auto; margin:0; padding:0; border:0; }
+  .ops-time-filter-row button { height:30px; min-height:30px; padding:4px 10px; font-size:12px; line-height:20px; }
+  .ops-time-filter-row button svg { width:16px; height:16px; }
+  .ops-time-filter-row > button { margin-left:auto; flex-shrink:0; }
+  .ops-panel[data-panel="Pedidos en curso"] > header .kr-search { height:34px; min-height:34px; padding:0 10px; }
+  .ops-panel[data-panel="Pedidos en curso"] .kr-search input { height:100%; min-height:0; padding:0; border:0; outline:none; box-shadow:none; font-size:13px; }
+  .ops-panel[data-panel="Pedidos en curso"] .kr-search:focus-within { border-color:#ed0017; outline:none; box-shadow:0 0 0 3px #ed00171a; }
+}
+@media(pointer:coarse) { .ops-root.ops-workspace.ops-reference[data-page="cocina/tiempos"] .ops-time-filter-row button { min-height:44px; } }
