@@ -341,3 +341,6 @@
 .ops-root.ops-workspace.ops-reference[data-page][data-page] .anchor-pending-payment :is(svg,.ops-status-dot) { color:#fff; }
 .ops-root.ops-workspace.ops-reference[data-page][data-page] .anchor-pending-payment .ops-status-dot { background:#fff; }
 .ops-root.ops-workspace.ops-reference[data-page][data-page] .ops-profile-role-badge { background:#475569; color:#fff; }
+
+.ops-root.ops-workspace.ops-reference[data-page="administrador/promociones"] .ops-responsive-table .ops-badge { display:inline-flex; align-items:center; justify-content:center; min-height:22px; height:auto; padding:2px 8px; line-height:18px; font-size:12px; gap:5px; box-sizing:border-box; }
+.ops-root.ops-workspace.ops-reference[data-page="administrador/promociones"] .ops-responsive-table .ops-badge svg { width:14px; height:14px; flex-shrink:0; }
