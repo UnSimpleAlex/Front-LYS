@@ -166,6 +166,36 @@ test("Mi cuenta: referencias PC y móvil, selector y confirmación de salida", a
     .click();
   await expect(page).toHaveURL(/iniciar-sesion$/);
 });
+test("inicio de cuenta: panel lateral compacto y tarjetas vacías alineadas", async ({ page }) => {
+  await page.goto("/iniciar-sesion");
+  await page.getByLabel("Correo electrónico", { exact: true }).fill("administrador@demo.local");
+  await page.getByLabel("Contraseña", { exact: true }).fill("Demo2026!");
+  await page.getByRole("button", { name: "Iniciar sesión", exact: true }).click();
+  await expect(page).toHaveURL(/administrador$/);
+  await page.goto("/mi-cuenta");
+  await expect(page.getByRole("link", { name: "Ir a mi panel" })).toHaveCount(0);
+  for (const width of [1366, 1024, 390]) {
+    await page.setViewportSize({ width, height: 768 });
+    const cards = page.locator(".account-dashboard-top > section");
+    await expect(cards).toHaveCount(2);
+    const positions = await cards.evaluateAll(nodes => nodes.map(node => {
+      const card = node.getBoundingClientRect();
+      return { left: card.left, rows: [...node.querySelectorAll(".account-empty > *")].map(element => element.getBoundingClientRect().top) };
+    }));
+    if (positions[0].left !== positions[1].left) {
+      expect(positions[0].rows).toHaveLength(4);
+      positions[0].rows.forEach((top, i) => expect(Math.abs(top - positions[1].rows[i])).toBeLessThan(2));
+    }
+    await expect(cards.first().getByRole("button", { name: "Ver todos mis pedidos" })).toHaveCSS("color", "rgb(214, 0, 32)");
+    if (width > 900) {
+      expect(await page.locator(".account-sidebar").evaluate(element => element.getBoundingClientRect().bottom <= innerHeight)).toBeTruthy();
+    }
+    await page.screenshot({ path: `test-results/account-compact-${width}.png`, fullPage: true });
+  }
+  await page.getByRole("button", { name: "Ver todos mis pedidos" }).click();
+  await expect(page).toHaveURL(/mi-cuenta\/pedidos$/);
+});
+
 test("barrido de las ocho secciones entre 280 y 3840 px", async ({ page }) => {
   test.setTimeout(240000);
   await login(page);

@@ -1,5 +1,5 @@
 import { lazy, Suspense, useState } from "react";
-import { logoutLocal, useSession, roleHome } from "../services/localAuth";
+import { logoutLocal, useSession } from "../services/localAuth";
 import { displayFirstName } from "../services/displayName";
 import { Icon } from "../components/Icon";
 import { useCarta } from "../features/carta/useCarta";
@@ -99,11 +99,6 @@ export function AccountPage({
                   </h1>
                   <p>{section.description}</p>
                 </header>
-              )}
-              {user && user.role !== "cliente" && (
-                <a className="account-panel-link" href={roleHome(user.role)}>
-                  Ir a mi panel <Icon name="arrow" />
-                </a>
               )}
               <Suspense fallback={<p role="status">Cargando sección…</p>}>
                 {section.slug === "" ? (

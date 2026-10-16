@@ -56,24 +56,30 @@
   box-shadow: none;
 }
 .account-sidebar {
-  padding: 22px 12px;
+  padding: 12px;
   position: sticky;
   top: 90px;
-  min-height: 650px;
+  height: calc(100dvh - 156px);
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #c6cbd3 #fff;
+  display: flex;
+  flex-direction: column;
 }
 .account-identity {
   display: flex;
-  gap: 16px;
+  gap: 12px;
   align-items: center;
-  padding: 0 10px 24px;
-  margin: 0 10px 12px;
+  padding: 0 4px 12px;
+  margin: 0 0 10px;
   border-bottom: 1px solid var(--account-line);
 }
 .account-avatar {
   display: flex;
   flex-shrink: 0;
-  width: 72px;
-  height: 72px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   background: #e5e7eb;
   color: #535b65;
@@ -83,8 +89,8 @@
   font-size: 36px;
 }
 .account-avatar svg {
-  width: 42px;
-  height: 42px;
+  width: 30px;
+  height: 30px;
 }
 .account-avatar img {
   width: 100%;
@@ -96,37 +102,39 @@
 }
 .account-identity strong {
   display: block;
-  font-size: 20px;
+  font-size: 16px;
   color: #0a0d14;
 }
 .account-identity span:not(.account-avatar) {
   display: block;
-  font-size: 14px;
+  font-size: 12px;
   color: var(--account-muted);
   overflow-wrap: anywhere;
 }
 .account-sidebar nav {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 2px;
+  flex: 1;
 }
 .account-sidebar nav button {
   display: flex;
   gap: 16px;
   align-items: center;
   width: 100%;
-  padding: 14px 12px;
+  padding: 8px 10px;
   color: #161b24;
   background: transparent;
   border: 0;
   text-align: left;
   border-radius: 7px;
-  min-height: 50px;
-  font-size: 16px;
+  min-height: 38px;
+  font-size: 14px;
+  flex-shrink: 0;
 }
 .account-sidebar nav button svg {
-  width: 25px;
-  height: 25px;
+  width: 20px;
+  height: 20px;
 }
 .account-sidebar nav [aria-current="page"] {
   background: #fff0f1;
@@ -138,10 +146,10 @@
 }
 .account-sidebar nav .account-exit {
   color: #ed0000;
-  margin-top: 16px;
+  margin-top: auto;
   border-top: 1px solid var(--account-line);
   border-radius: 0;
-  padding-top: 22px;
+  padding-top: 10px;
 }
 .account-mobile-select {
   display: none;
@@ -223,9 +231,10 @@
   gap: 5px;
   border: 0;
   background: none;
-  color: #0866ec;
+  color: #d60020;
   font-size: 14px !important;
   padding: 4px 0;
+  white-space: nowrap;
 }
 .account-text-button svg {
   width: 16px;
@@ -316,7 +325,7 @@
 }
 .account-dashboard-top {
   display: grid;
-  grid-template-columns: 1.35fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px;
   margin-bottom: 20px;
 }
@@ -1186,6 +1195,11 @@
 .account-empty.info-card {
   border: 0;
 }
+.account-dashboard-top > section { display:flex; flex-direction:column; }
+.account-dashboard-top .account-row-heading { min-height:30px; flex-shrink:0; }
+.account-dashboard-top .account-empty { display:grid; grid-template-rows:54px 48px 42px 40px; gap:10px; justify-items:center; align-content:center; flex:1; padding:20px 8px; }
+.account-dashboard-top .account-empty :is(h2,p) { display:flex; align-items:center; justify-content:center; margin:0; width:100%; }
+.account-dashboard-top .account-empty .primary-button { min-width:170px; min-height:40px; height:40px; padding:8px 16px; font-size:14px; }
 .account-example-switch {
   display: flex;
   align-items: center;
@@ -1319,7 +1333,7 @@
 }
 .account-page :is(button, a, input, select, summary):focus-visible,
 .account-dialog :is(button, a, input, select):focus-visible {
-  outline: 3px solid #1875e8;
+  outline: 3px solid #ed0000;
   outline-offset: 3px;
 }
 @media (min-width: 1800px) {

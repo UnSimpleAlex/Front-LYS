@@ -37,6 +37,8 @@ Las pruebas están en `tests/account-reference.spec.ts` y las suites existentes 
 
 ## Límites de esta etapa
 
+El inicio ya no incluye «Ir a mi panel». El menú lateral usa controles compactos y altura limitada por la ventana, con desplazamiento si hace falta. Los enlaces de las tarjetas son rojos y breves; los dos estados vacíos principales alinean iconos, títulos, descripciones y acciones. Se verificó esa alineación en escritorio y la navegación en móvil, además del barrido existente de las ocho secciones entre 280 y 3840 px.
+
 Autenticación y datos continúan siendo locales. El mapa de las tarjetas de dirección es un esquema, no cartografía real; el enlace abre las coordenadas guardadas y el editor conserva el mapa existente. Se reutilizan fotos y precios del catálogo actual, distintos de algunos ejemplos de las referencias. Las tarjetas guardadas son referencias visuales sin procesamiento bancario; las preferencias de correo aún no envían mensajes. No se indica verificación del correo sin un servicio que la compruebe.
 
 ## Traslado a UnSimpleAlex/Front-LYS

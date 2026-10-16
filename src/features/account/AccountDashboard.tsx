@@ -80,9 +80,10 @@ export function AccountDashboard(
             <h2>Pedido activo</h2>
             <button
               className="account-text-button"
+              aria-label="Ver todos mis pedidos"
               onClick={() => props.onNavigate("/mi-cuenta/pedidos")}
             >
-              Ver todos mis pedidos <Icon name="arrow" />
+              Ver todos <Icon name="arrow" />
             </button>
           </div>
           {active ? (
@@ -116,7 +117,7 @@ export function AccountDashboard(
             <AccountEmpty
               title="No tienes pedidos en curso"
               description="Tu próximo pedido aparecerá aquí."
-              action="Ver nuestra carta"
+              action="Ver carta"
               onAction={() => props.onNavigate("/carta")}
             />
           )}
@@ -127,8 +128,9 @@ export function AccountDashboard(
             <button
               className="account-text-button"
               onClick={() => props.onNavigate("/mi-cuenta/direcciones")}
+              aria-label="Ver todas mis direcciones"
             >
-              Ver todas mis direcciones <Icon name="arrow" />
+              Ver todas <Icon name="arrow" />
             </button>
           </div>
           {address ? (
@@ -163,7 +165,7 @@ export function AccountDashboard(
           ) : (
             <AccountEmpty
               title="Agrega tu dirección"
-              description="Guárdala para preparar tus pedidos más rápido."
+              description="Guárdala para tus próximos pedidos."
               action="Nueva dirección"
               onAction={() => props.onNavigate("/mi-cuenta/direcciones")}
             />
