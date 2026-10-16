@@ -113,7 +113,7 @@ export function CashViews({
         .concat(`Total: ${money(orderTotal(o))}`),
     );
   const transactions = (
-    <div className="ops-table-wrap">
+    <div className="ops-table-wrap ops-payment-transactions">
       <OperationsTable>
         <thead>
           <tr>
@@ -155,17 +155,18 @@ export function CashViews({
                   </td>
                   <td>
                     <div className="ops-actions">
-                      <button onClick={() => o && setDetail(o)}>
-                        <Icon name="eye" /> Ver detalle
+                      <button aria-label="Ver detalle" title="Ver detalle" className="ops-payment-view" onClick={() => o && setDetail(o)}>
+                        <Icon name="eye" />
                       </button>
-                      <button onClick={() => notify(() => o && printOrder(o))}>
-                        <Icon name="print" /> Imprimir
+                      <button aria-label="Imprimir" title="Imprimir" className="ops-payment-print" onClick={() => notify(() => o && printOrder(o))}>
+                        <Icon name="print" />
                       </button>
                       {!p.refunded && shift?.id === p.shiftId && (
                         <button
+                          aria-label="Reembolsar" title="Reembolsar" className="ops-payment-refund"
                           onClick={() => notify(() => refundPayment(p.id))}
                         >
-                          <Icon name="arrow" /> Reembolsar
+                          <Icon name="arrow" />
                         </button>
                       )}
                     </div>
@@ -299,7 +300,7 @@ export function CashViews({
                   </div>
                   <span
                     className="anchor-pending-payment"
-                    style={{ background: "#fef3c7", color: "#92400e" }}
+
                   >
                     <Icon name="clock" /> Pendiente de cobro
                   </span>
@@ -584,7 +585,8 @@ export function CashViews({
             className="ops-admin-filter-bar"
             style={{ margin: "0 0 16px" }}
           >
-            <div className="ops-admin-search">
+            <label className="ops-voucher-search-label">Buscar
+              <div className="ops-admin-search">
               <Icon name="search" />
               <input
                 aria-label="Buscar número o cliente"
@@ -593,6 +595,7 @@ export function CashViews({
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
+            </label>
             <label>Fecha<input type="date" aria-label="Fecha de comprobantes" value={from} onChange={e=>{setFrom(e.target.value);setTo(e.target.value);}}/></label>
             <label>Tipo de comprobante<select aria-label="Filtrar tipo de comprobante" value={filter} onChange={e=>setFilter(e.target.value)}>{["Todos","Boleta","Factura","Nota de venta"].map(type=><option key={type}>{type}</option>)}</select></label>
             <button type="button" className="ops-primary" onClick={()=>{setSearch("");setFilter("Todos");setFrom("");setTo("");setPaymentState("Todos");setCashierFilter("Todos");}}><Icon name="funnel"/>Eliminar filtros</button>
@@ -645,9 +648,7 @@ export function CashViews({
                         </strong>
                       </td>
                       <td>
-                        <span className="anchor-pending-payment">
-                          <span className="ops-status-dot green" /> Emitido
-                        </span>
+                        <Badge value="Emitido"/>
                       </td>
                       <td>
                         <div className="ops-actions">
@@ -663,9 +664,9 @@ export function CashViews({
                                 ]),
                               )
                             }
-                            title="Ver / Imprimir comprobante"
+                            title="Ver / Imprimir comprobante" aria-label="Imprimir" className="ops-voucher-print"
                           >
-                            <Icon name="print" /> Imprimir
+                            <Icon name="print" />
                           </button>
                         </div>
                       </td>

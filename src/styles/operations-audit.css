@@ -376,3 +376,30 @@
 .ops-root.ops-workspace.ops-reference[data-page="caja/"] [data-panel="Pagos pendientes"] .ops-channel-badge svg { width:14px; height:14px; flex-shrink:0; }
 .ops-root.ops-workspace.ops-reference[data-page="caja/"] [data-panel="Pagos pendientes"] tbody button { height:28px; min-height:28px; padding:4px 10px; font-size:12px; line-height:20px; box-sizing:border-box; }
 @media(pointer:coarse) { .ops-root.ops-workspace.ops-reference[data-page="caja/"] [data-panel="Pagos pendientes"] tbody button { min-height:44px; } }
+
+.ops-root.ops-workspace.ops-reference[data-page="caja/cobros"] .ops-pending-order-item .ops-channel-badge { display:inline-flex; align-items:center; justify-content:center; min-height:22px; height:auto; padding:2px 7px; line-height:18px; font-size:12px; gap:5px; box-sizing:border-box; }
+.ops-root.ops-workspace.ops-reference[data-page="caja/cobros"] .ops-pending-order-item .ops-channel-badge svg { width:14px; height:14px; flex-shrink:0; }
+.ops-root.ops-workspace.ops-reference[data-page="caja/cobros"] .ops-pending-order-amount button { display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; min-height:28px; padding:0 !important; line-height:1; }
+.ops-root.ops-workspace.ops-reference[data-page="caja/cobros"] .ops-pending-order-amount button::after { display:block; position:static; margin:0; padding:0; width:14px; height:14px; font-size:0; background:center / 14px 14px no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 5 7 7-7 7'/%3E%3C/svg%3E"); }
+.ops-root.ops-workspace.ops-reference[data-page="caja/cobros"] .anchor-pending-payment { background:#92400e; border-color:#92400e; color:#fff; }
+
+.ops-root.ops-workspace.ops-reference[data-page] .ops-payment-transactions .ops-badge { min-height:22px; height:auto; padding:2px 8px; line-height:18px; font-size:12px; box-sizing:border-box; }
+.ops-root.ops-workspace.ops-reference[data-page] .ops-payment-transactions .ops-actions { display:flex; align-items:center; justify-content:center; gap:6px; }
+.ops-root.ops-workspace.ops-reference[data-page] .ops-payment-transactions .ops-actions button { display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; min-height:30px; padding:0; border:0; background:transparent; }
+.ops-root.ops-workspace.ops-reference[data-page] .ops-payment-transactions .ops-actions button svg { width:18px; height:18px; margin:0; }
+.ops-root.ops-workspace.ops-reference[data-page] .ops-payment-transactions .ops-payment-view { color:#0069e8; }
+.ops-root.ops-workspace.ops-reference[data-page] .ops-payment-transactions .ops-payment-print { color:#ad6400; }
+.ops-root.ops-workspace.ops-reference[data-page] .ops-payment-transactions .ops-payment-refund { color:#ed0017; }
+@media(min-width:1100px) { .ops-root.ops-workspace.ops-reference[data-page] .ops-payment-transactions :is(th,td):first-child { min-width:110px; white-space:nowrap; } }
+
+.ops-root.ops-workspace.ops-reference[data-page="caja/comprobantes"] .ops-responsive-table :is(.ops-voucher-badge,.ops-badge) { display:inline-flex; align-items:center; justify-content:center; gap:5px; min-height:22px; height:auto; padding:2px 7px; font-size:12px; line-height:18px; box-sizing:border-box; }
+.ops-root.ops-workspace.ops-reference[data-page="caja/comprobantes"] .ops-voucher-badge svg { width:14px; height:14px; }
+.ops-root.ops-workspace.ops-reference[data-page="caja/comprobantes"] .ops-voucher-print { display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; min-height:30px; padding:0; border:0; background:transparent; color:#ad6400; }
+.ops-root.ops-workspace.ops-reference[data-page="caja/comprobantes"] .ops-voucher-print svg { width:18px; height:18px; margin:0; }
+
+.ops-root.ops-workspace.ops-reference[data-page="caja/comprobantes"] .ops-admin-filter-bar { align-items:flex-end; gap:12px; }
+.ops-root.ops-workspace.ops-reference[data-page="caja/comprobantes"] .ops-admin-filter-bar > label { display:grid; gap:6px; margin:0; min-width:0; font-size:12px; line-height:18px; font-weight:400; color:#526581; }
+.ops-root.ops-workspace.ops-reference[data-page="caja/comprobantes"] .ops-voucher-search-label { flex:1 1 280px; }
+.ops-root.ops-workspace.ops-reference[data-page="caja/comprobantes"] .ops-voucher-search-label .ops-admin-search { width:100%; min-width:0; }
+.ops-root.ops-workspace.ops-reference[data-page="caja/comprobantes"] .ops-admin-filter-bar :is(input,select,button) { height:40px; min-height:40px; margin:0; box-sizing:border-box; }
+@media(max-width:600px) { .ops-root.ops-workspace.ops-reference[data-page="caja/comprobantes"] .ops-admin-filter-bar > label { flex:1 1 100%; } }
