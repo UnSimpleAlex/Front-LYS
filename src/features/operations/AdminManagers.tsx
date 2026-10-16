@@ -197,7 +197,7 @@ export function PromotionManager({
               <th>Beneficio</th>
               <th>Vigencia</th>
               <th>Uso / Límite</th>
-              <th>Estado</th>
+              <th className="ops-col-center">Estado</th>
               <th>Acciones</th>
             </tr>
           </thead>
@@ -249,10 +249,14 @@ export function PromotionManager({
                 <td>
                   <strong>{o.used}</strong> / {o.limit}
                 </td>
-                <td>
+                <td className="ops-col-center">
                   <button
+                    type="button"
+                    role="switch"
                     className={`ops-switch ${o.active ? "on" : ""}`}
-                    aria-label={`Activar ${o.name}`}
+                    aria-label={o.active ? `Desactivar ${o.name}` : `Activar ${o.name}`}
+                    title={o.active ? "Activa (clic para desactivar)" : "Inactiva (clic para activar)"}
+                    aria-checked={o.active}
                     aria-pressed={o.active}
                     onClick={() =>
                       notify(() => saveOffer({ ...o, active: !o.active }))

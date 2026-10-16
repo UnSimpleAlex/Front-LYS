@@ -89,9 +89,13 @@ const linePaths: Partial<Record<IconName, string[]>> = {
     "M6 17h12",
   ],
   "dining-table": [
-    "M4 10v9M4 14h4M8 14v5",
-    "M9 12h6M12 12v7M10 19h4",
-    "M20 10v9M16 14h4M16 14v5",
+    "M4 7v13",
+    "M4 14h3",
+    "M20 7v13",
+    "M17 14h3",
+    "M7 11h10",
+    "M12 11v9",
+    "M9 20h6",
   ],
   "cash-register": [
     "M8 4h8v3H8Z",
@@ -113,7 +117,15 @@ const linePaths: Partial<Record<IconName, string[]>> = {
     "M21 12H9",
   ],
   "chevron-right": ["m9 18 6-6-6-6"],
-  table: ["M5 7h14v10H5Z", "M8 3h8v4M8 17v4h8v-4", "M2 9v6h3M19 9h3v6h-3"],
+  table: [
+    "M4 7v13",
+    "M4 14h3",
+    "M20 7v13",
+    "M17 14h3",
+    "M7 11h10",
+    "M12 11v9",
+    "M9 20h6",
+  ],
   home: ["m3 10 9-8 9 8v12h-6v-8H9v8H3Z"],
   filter: ["M4 6h16M4 12h16M4 18h16", "M8 3v6M16 9v6M10 15v6"],
 
