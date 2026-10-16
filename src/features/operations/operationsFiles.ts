@@ -1,3 +1,7 @@
+export function localDateKey(value: string) {
+  const date = new Date(value);
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+}
 export const dateText = (date: string) =>
   new Date(date).toLocaleString("es-PE", {
     dateStyle: "short",
@@ -8,10 +12,11 @@ export function downloadCsv(
   headers: string[],
   rows: (string | number | boolean)[][],
 ) {
-  const cell = (v: string | number | boolean) =>
-    `"${String(v)
-      .replace(/^[=+@-]/, "'")
-      .replaceAll('"', '""')}"`;
+  const cell = (value: string | number | boolean) => {
+    const text = String(value);
+    const safe = typeof value === "string" && /^\s*[=+@-]/.test(text) ? "'" + text : text;
+    return `"${safe.replaceAll('"', '""')}"`;
+  };
   const blob = new Blob(
     [
       "\ufeff" +
@@ -28,6 +33,8 @@ export function downloadCsv(
 export function printLocal(title: string, lines: string[]) {
   const popup = window.open("", "_blank", "width=700,height=800");
   if (!popup) throw new Error("Permite la ventana de impresión.");
+  popup.document.title = title;
+  popup.document.documentElement.lang = "es";
   const h = popup.document.createElement("h1");
   h.textContent = title;
   popup.document.body.append(h);

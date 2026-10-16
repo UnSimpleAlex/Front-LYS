@@ -23,11 +23,11 @@ export function ProductManager({notify}:{notify:(task:()=>void)=>void}) {
   const [availability,setAvailability]=useState("Todas");
   const [branch,setBranch]=useState("Todas");
   const [page,setPage]=useState(1);
-  const [applied,setApplied]=useState({category:"Todas",availability:"Todas",branch:"Todas"});
+
   const [more,setMore]=useState<string|null>(null);
   const [mobileFilters,setMobileFilters]=useState(false);
   const actionHost=useContext(OperationsPageActions);
-  const rows=data.products.filter(p=>(applied.category==="Todas" || p.category===applied.category) && (applied.branch==="Todas" || (p.branch || "Principal")===applied.branch) && (applied.availability==="Todas" || (applied.availability==="Activos" ? p.active:applied.availability==="Inactivos" ? !p.active:(p.stock ?? 0)===0)) && normalize(`${p.name} ${productSku(p)}`).includes(normalize(search)));
+  const rows=data.products.filter(p=>(category==="Todas" || p.category===category) && (branch==="Todas" || (p.branch || "Principal")===branch) && (availability==="Todas" || (availability==="Activos" ? p.active:availability==="Inactivos" ? !p.active:(p.stock ?? 0)===0)) && normalize(`${p.name} ${productSku(p)}`).includes(normalize(search)));
   const maxPage=Math.max(1,Math.ceil(rows.length/7));
   const currentPage=Math.min(page,maxPage);
   const visible=rows.slice((currentPage-1)*7,currentPage*7);
@@ -40,10 +40,10 @@ export function ProductManager({notify}:{notify:(task:()=>void)=>void}) {
     <section className="ops-product-filters" aria-label="Filtros de productos" data-expanded={mobileFilters}>
       <label className="ops-product-search"><span>Buscar producto</span><Icon name="search"/><input aria-label="Buscar producto" placeholder="Buscar por nombre o SKU" value={search} onChange={e=>updateFilters(()=>setSearch(e.target.value))}/></label>
       <label>Categoría<select aria-label="Categoría de productos" value={category} onChange={e=>updateFilters(()=>setCategory(e.target.value))}><option value="Todas">Todas las categorías</option>{categories.map(c=><option value={c.id} key={c.id}>{c.name}</option>)}</select></label>
-      <label>Disponibilidad<select value={availability} onChange={e=>updateFilters(()=>setAvailability(e.target.value))}>{["Todas","Activos","Inactivos","Sin stock"].map(s=><option key={s}>{s}</option>)}</select></label>
-      <label>Sucursal<select value={branch} onChange={e=>updateFilters(()=>setBranch(e.target.value))}><option>Todas</option>{[...new Set(data.products.map(p=>p.branch || "Principal"))].map(s=><option key={s}>{s}</option>)}</select></label>
-      <div className="ops-mobile-export-row"><span className="ops-mobile-only">{rows.length} productos</span><button onClick={()=>downloadCsv("productos",["Producto","SKU","Categoría","Precio","Stock","Estado"],rows.map(p=>[p.name,productSku(p),categories.find(c=>c.id===p.category)?.name || p.category,p.price,p.stock ?? 0,p.active ? "Activo":"Inactivo"]))}><Icon name="download"/>Exportar</button></div>
-      <button className="ops-mobile-only ops-mobile-filter-toggle" aria-expanded={mobileFilters} onClick={()=>setMobileFilters(!mobileFilters)}><Icon name="filter"/>Filtros</button><button className="ops-primary" onClick={()=>updateFilters(()=>setApplied({category,availability,branch}))}><Icon name="filter"/>Filtrar</button>
+      <label>Disponibilidad<select aria-label="Disponibilidad" value={availability} onChange={e=>updateFilters(()=>setAvailability(e.target.value))}>{["Todas","Activos","Inactivos","Sin stock"].map(s=><option key={s}>{s}</option>)}</select></label>
+      <label>Sucursal<select aria-label="Sucursal" value={branch} onChange={e=>updateFilters(()=>setBranch(e.target.value))}><option>Todas</option>{[...new Set(data.products.map(p=>p.branch || "Principal"))].map(s=><option key={s}>{s}</option>)}</select></label>
+      <div className="ops-mobile-export-row"><span className="ops-mobile-only">{rows.length} productos</span><button onClick={()=>downloadCsv("productos",["Producto","SKU","Categoría","Precio","Stock","Estado"],rows.filter(p=>!selected.length || selected.includes(p.id)).map(p=>[p.name,productSku(p),categories.find(c=>c.id===p.category)?.name || p.category,p.price,p.stock ?? 0,p.active ? "Activo":"Inactivo"]))}><Icon name="download"/>Exportar</button></div>
+      <button className="ops-mobile-only ops-mobile-filter-toggle" aria-expanded={mobileFilters} onClick={()=>setMobileFilters(!mobileFilters)}><Icon name="filter"/>Filtros</button><button className="ops-primary" disabled={!search && category==="Todas" && availability==="Todas" && branch==="Todas"} onClick={()=>updateFilters(()=>{setSearch("");setCategory("Todas");setAvailability("Todas");setBranch("Todas");})}><Icon name="filter"/>Limpiar filtros</button>
     </section>
     <section className="ops-product-list" aria-label="Lista de productos">
       <div className="ops-product-bulk"><label><input type="checkbox" aria-label="Seleccionar productos de esta página" checked={visible.length>0 && visible.every(p=>selected.includes(p.id))} onChange={e=>setSelected(e.target.checked ? [...new Set([...selected,...visible.map(p=>p.id)])]:selected.filter(id=>!visible.some(p=>p.id===id)))}/>{selected.length} seleccionados</label><select aria-label="Cambiar estado de productos seleccionados" disabled={!selected.length} value="" onChange={e=>{if(e.target.value==="activate")notify(()=>{selectedProducts.forEach(p=>saveProduct({...p,active:true}));setSelected([]);});else if(e.target.value==="deactivate")setConfirm(selectedProducts);}}><option value="" disabled>Cambiar estado</option><option value="activate">Activar</option><option value="deactivate">Desactivar</option></select></div>

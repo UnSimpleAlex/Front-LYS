@@ -51,7 +51,7 @@ export function App() {
     setRoute(toRegistration ? '/registro' : '/iniciar-sesion');
     window.scrollTo({ top: 0, behavior: 'instant' });
   }
-  useEffect(() => { document.title = information ? `${{ '/nosotros': 'Nosotros', '/locales': 'Locales', '/contacto': 'Contacto' }[route]} | Leñas y Sabores` : account ? 'Mi cuenta | Leñas y Sabores' : checkout ? 'Tu pedido | Leñas y Sabores' : home ? 'Leñas y Sabores | Sabor peruano en cada brasa' : carta ? 'Nuestra carta | Leñas y Sabores' : promotions ? 'Promociones | Leñas y Sabores' : registration ? 'Registrarse | Leñas y Sabores' : 'Iniciar sesión | Leñas y Sabores'; }, [registration, home, carta, promotions, checkout, information, account, route]);
+  useEffect(() => { if (operational) return; document.title = information ? `${{ '/nosotros': 'Nosotros', '/locales': 'Locales', '/contacto': 'Contacto' }[route]} | Leñas y Sabores` : account ? 'Mi cuenta | Leñas y Sabores' : checkout ? 'Tu pedido | Leñas y Sabores' : home ? 'Leñas y Sabores | Sabor peruano en cada brasa' : carta ? 'Nuestra carta | Leñas y Sabores' : promotions ? 'Promociones | Leñas y Sabores' : registration ? 'Registrarse | Leñas y Sabores' : 'Iniciar sesión | Leñas y Sabores'; }, [registration, home, carta, promotions, checkout, information, account, route, operational]);
 
   function openHelp(action: 'register' | 'recover') {
     if (action === 'register') navigate(true);

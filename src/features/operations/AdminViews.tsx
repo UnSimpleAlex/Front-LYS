@@ -7,7 +7,7 @@ import {
   Icon,
   type IconName,
 } from "./OperationsVisuals";
-import { dateText, downloadCsv, printLocal } from "./operationsFiles";
+import { dateText, localDateKey, downloadCsv, printLocal } from "./operationsFiles";
 import { useContext, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { OperationsPageActions } from "./operationsPageContext";
@@ -197,13 +197,14 @@ export function AdminViews({
     const deliveredCount = orders.filter((o) => o.status === "Entregado").length;
     const filtered = orders.filter(
       (o) =>
-        (!from || o.created.slice(0,10)>=from) && (!to || o.created.slice(0,10)<=to) &&
+        (!from || localDateKey(o.created)>=from) && (!to || localDateKey(o.created)<=to) &&
         (filter === "Todos" ||
           o.channel === filter ||
           (filter === "Cancelados" && o.status === "Cancelado")) &&
         (status === "Todos" || o.status === status) &&
-        `${o.id} ${o.customer}`.toLowerCase().includes(search.toLowerCase()),
+        `${o.id} ${o.customer}`.toLowerCase().includes(search.toLowerCase().trim()),
     );
+    const visibleOrderPage = Math.min(orderPage, Math.max(1, Math.ceil(filtered.length / 10)));
 
     return (
       <>
@@ -247,7 +248,7 @@ export function AdminViews({
               aria-label="Buscar número o cliente"
               placeholder="Buscar por número de pedido o cliente…"
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={e => { setSearch(e.target.value); setOrderPage(1); setSelection([]); }}
             />
           </div>
           <div className="ops-admin-filter-group">
@@ -256,7 +257,7 @@ export function AdminViews({
               id="canal-filter"
               aria-label="Canal"
               value={filter}
-              onChange={(e) => setFilter(e.target.value)}
+              onChange={e => { setFilter(e.target.value); setOrderPage(1); setSelection([]); }}
             >
               {["Todos", "Salón", "Delivery", "Recojo"].map((c) => (
                 <option key={c} value={c}>
@@ -271,7 +272,7 @@ export function AdminViews({
               id="estado-filter"
               aria-label="Filtrar resultados"
               value={status}
-              onChange={(e) => setStatus(e.target.value)}
+              onChange={e => { setStatus(e.target.value); setOrderPage(1); setSelection([]); }}
             >
               <option value="Todos">Todos</option>
               {statuses.map((s) => (
@@ -288,7 +289,7 @@ export function AdminViews({
               type="date"
               aria-label="Fecha desde"
               value={from}
-              onChange={e=>{setFrom(e.target.value);setOrderPage(1);}}
+              onChange={e=>{setFrom(e.target.value);setOrderPage(1);setSelection([]);}}
             />
           </div>
           <div className="ops-admin-filter-group">
@@ -298,7 +299,7 @@ export function AdminViews({
               type="date"
               aria-label="Fecha hasta"
               value={to}
-              onChange={e=>{setTo(e.target.value);setOrderPage(1);}}
+              onChange={e=>{setTo(e.target.value);setOrderPage(1);setSelection([]);}}
             />
           </div>
           <button className="ops-btn-export" onClick={()=>downloadCsv("pedidos",["Pedido","Fecha","Cliente","Canal","Total","Estado"],filtered.filter(o=>!selection.length || selection.includes(o.id)).map(o=>[o.id,dateText(o.created),o.customer,o.channel,orderTotal(o),o.status]))}>
@@ -326,7 +327,7 @@ export function AdminViews({
               </tr>
             </thead>
             <tbody>
-              {filtered.slice((orderPage-1)*10,orderPage*10).map((o) => (
+              {filtered.slice((visibleOrderPage-1)*10,visibleOrderPage*10).map((o) => (
                 <tr key={o.id} className={o.id === detail?.id ? "selected-row" : ""}>
                   <td>
                     <input
@@ -411,15 +412,15 @@ export function AdminViews({
         </div>
         <div className="ops-pagination">
           <span>
-            Mostrando {filtered.length ? (orderPage-1)*10+1 : 0} a {Math.min(orderPage*10, filtered.length)} de {filtered.length} pedidos
+            Mostrando {filtered.length ? (visibleOrderPage-1)*10+1 : 0} a {Math.min(visibleOrderPage*10, filtered.length)} de {filtered.length} pedidos
           </span>
-          <button disabled={orderPage===1} onClick={()=>setOrderPage(orderPage-1)} aria-label="Página anterior">
+          <button disabled={visibleOrderPage===1} onClick={()=>setOrderPage(visibleOrderPage-1)} aria-label="Página anterior">
             <Icon name="chevron" />
           </button>
-          <span aria-current="page">{orderPage}</span>
+          <span aria-current="page">{visibleOrderPage}</span>
           <button
-            disabled={orderPage*10>=filtered.length}
-            onClick={()=>setOrderPage(orderPage+1)}
+            disabled={visibleOrderPage*10>=filtered.length}
+            onClick={()=>setOrderPage(visibleOrderPage+1)}
             aria-label="Página siguiente"
           >
             <Icon name="chevron" />

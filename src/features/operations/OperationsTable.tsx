@@ -2,6 +2,8 @@ import {
   Children,
   cloneElement,
   isValidElement,
+  useEffect,
+  useRef,
   type ReactNode,
   type ReactElement,
 } from "react";
@@ -25,6 +27,31 @@ function textOf(node: ReactNode): string {
 
 // Labels follow the actual table headings, including when columns change by role.
 export function OperationsTable({ children }: { children: ReactNode }) {
+  const ref = useRef<HTMLTableElement>(null);
+  useEffect(() => {
+    const table = ref.current;
+    const region = table?.closest<HTMLElement>(".ops-table-wrap");
+    if (!table || !region) return;
+    const update = () => {
+      const scrollable = region.scrollWidth > region.clientWidth + 1;
+      region.toggleAttribute("data-scrollable", scrollable);
+      if (scrollable) {
+        region.tabIndex = 0;
+        region.setAttribute("role", "region");
+        const title = region.closest("section")?.querySelector("h2")?.textContent;
+        region.setAttribute("aria-label", `${title || "Tabla de datos"}. Desplazamiento horizontal disponible`);
+      } else {
+        region.removeAttribute("tabindex");
+        region.removeAttribute("role");
+        region.removeAttribute("aria-label");
+      }
+    };
+    const observer = new ResizeObserver(update);
+    observer.observe(region);
+    observer.observe(table);
+    update();
+    return () => observer.disconnect();
+  }, []);
   const sections = elements(children);
   const head = sections.find((section) => section.type === "thead");
   const headings = elements(
@@ -32,6 +59,7 @@ export function OperationsTable({ children }: { children: ReactNode }) {
   ).map((cell) => textOf(cell.props.children));
   return (
     <table
+      ref={ref}
       className="ops-responsive-table"
       role="table"
       data-wide={headings.length > 9}

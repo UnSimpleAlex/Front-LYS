@@ -37,10 +37,8 @@ test('productos: edición completa, vista previa, filtros, exportación y confir
   await page.getByLabel('Buscar producto',{exact:true}).fill('REF-001');
   await expect(page.locator('tbody tr')).toHaveCount(1);
   await page.getByLabel('Categoría de productos').selectOption('bebidas');
-  await page.getByRole('button',{name:'Filtrar',exact:true}).click();
   await expect(page.getByText('No se encontraron productos. Prueba con otros filtros.')).toBeVisible();
   await page.getByLabel('Categoría de productos').selectOption('Todas');
-  await page.getByRole('button',{name:'Filtrar',exact:true}).click();
   await expect(page.locator('tbody tr')).toHaveCount(1);
   await page.getByRole('button',{name:'Ver Producto referencia',exact:true}).click();
   dialog=page.getByRole('dialog');

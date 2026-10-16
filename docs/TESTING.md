@@ -60,3 +60,11 @@ Ver [Referencias administrativas](REFERENCIAS_ADMINISTRATIVAS.md). La prueba `re
 ## Mi cuenta: referencias PC y móvil
 
 `tests/account-reference.spec.ts` valida acceso directo sin exponer credenciales, primer nombre del navbar, ocho vistas, barrido de 280–3840 px, persistencia de perfil/foto y referencias de tarjeta, búsqueda, favoritos, avisos leídos y diálogos de baja altura. Ver [alcance, cobertura y límites](MI_CUENTA_REFERENCIA.md). `PLAYWRIGHT_EXECUTABLE_PATH` permite ejecutar con Chromium instalado sin cambiar el canal Edge por defecto.
+
+## Auditoría integral de los paneles
+
+Ver [informe de auditoría administrativa](AUDITORIA_ADMINISTRATIVA.md): 25 rutas, barrido de 280 a 3840 px, formularios en pantallas bajas, teclado, controles táctiles y cobertura/limitaciones documentadas.
+
+## Interacciones operativas
+
+Ver [interacciones operativas verificadas](INTERACCIONES_OPERATIVAS.md): filtros, selección, edición, exportaciones reales, comprobantes, configuración y persistencia. Las pruebas pueden aislarse con `LYS_TEST_PORT`; la caché Vite es local a cada copia.
