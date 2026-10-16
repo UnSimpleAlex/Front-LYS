@@ -56,7 +56,7 @@
 .ops-notification-item { display:grid; grid-template-columns:auto 1fr auto; gap:12px; padding:14px 0; border-bottom:1px solid #dce0e5; }
 .ops-root.ops-workspace[data-page] .ops-manager-layout > .ops-with-sidebar { grid-template-columns:minmax(0,1fr); }
 .ops-root.ops-workspace[data-page] .ops-switch { padding:0; min-height:24px; height:24px; width:44px; }
-.ops-root.ops-workspace[data-page] .ops-badge { background:white; border:1px solid transparent; border-radius:20px; padding:5px 10px; font-size:.75rem; color:#535b65; }
+.ops-root.ops-workspace[data-page] .ops-badge { background:white; border:1px solid transparent; border-radius:20px; padding:2px 9px; min-height:24px; height:24px; box-sizing:border-box; line-height:1; display:inline-flex; align-items:center; font-size:.75rem; color:#535b65; }
 .ops-root.ops-workspace[data-page] .ops-badge.green { color:#067132; background:#def8e6; }
 .ops-root.ops-workspace[data-page] .ops-badge.red { color:#bf1528; background:#fff0f2; }
 .ops-root.ops-workspace[data-page] .ops-badge.gold { color:#8a5800; background:#fff4dd; }

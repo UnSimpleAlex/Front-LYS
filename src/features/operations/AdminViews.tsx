@@ -37,9 +37,16 @@ import {
   InventoryManager,
 } from "./AdminManagers";
 
-export function CategoryBadge({category}:{category:string}) {
-  const item=categories.find(c=>c.id===category);
-  return <span className={`ops-category-badge ${category}`}><Icon name={categoryIcon(category)}/>{item?.name || category}</span>;
+export function CategoryBadge({ category }: { category: string }) {
+  const norm = category.toLowerCase().trim();
+  const item = categories.find((c) => c.id === norm || c.name.toLowerCase() === norm);
+  const id = item?.id || norm;
+  return (
+    <span className={`ops-category-badge ${id}`}>
+      <Icon name={categoryIcon(id)} />
+      {item?.name || category}
+    </span>
+  );
 }
 
 export function ChannelBadge({ channel }: { channel: string }) {
@@ -675,23 +682,19 @@ export function AdminViews({
         <Panel
           title="Ventas de la semana"
           action={
-            <select
-              aria-label="Rango de ventas"
-              value={salesDays}
-              onChange={e=>setSalesDays(e.target.value)}
-              style={{
-                height: "36px",
-                border: "1px solid #dce3ee",
-                borderRadius: "6px",
-                padding: "4px 10px",
-                fontSize: "13px",
-                background: "#ffffff",
-              }}
-            >
-              <option value="7">Últimos 7 días</option>
-              <option value="15">Últimos 15 días</option>
-              <option value="30">Últimos 30 días</option>
-            </select>
+            <div className="ops-select-wrap">
+              <select
+                aria-label="Rango de ventas"
+                className="ops-sales-select"
+                value={salesDays}
+                onChange={(e) => setSalesDays(e.target.value)}
+              >
+                <option value="7">Últimos 7 días</option>
+                <option value="15">Últimos 15 días</option>
+                <option value="30">Últimos 30 días</option>
+              </select>
+              <Icon name="chevron" className="ops-select-chevron" />
+            </div>
           }
         >
           <LineChart values={daily} />
@@ -713,7 +716,7 @@ export function AdminViews({
                 <tr>
                   <th>#</th>
                   <th>Producto</th>
-                  <th>Categoría</th>
+                  <th className="ops-col-center">Categoría</th>
                   <th>Cantidad</th>
                   <th>Ingresos</th>
                 </tr>
@@ -728,7 +731,7 @@ export function AdminViews({
                         <div><strong>{item.label}</strong><small className="dashboard-product-category">{categories.find(c => c.id === item.category)?.name || item.category}</small></div>
                       </div>
                     </td>
-                    <td>
+                    <td className="ops-col-center">
                       <CategoryBadge category={item.category} />
                     </td>
                     <td><strong>{item.value}</strong><span className="dashboard-mobile-copy"> vendidos</span></td>

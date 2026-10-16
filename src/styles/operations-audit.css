@@ -20,6 +20,16 @@
   .ops-dialog .ops-form label { overflow-wrap: anywhere; }
   .anchor-kitchen-time-actions button { font-size: 12px; min-height: 32px; }
   .ops-stock-alert .ops-supply-summary strong { min-width: 85px; display: inline-block; }
+  .ops-table-wrap :is(.ops-badge, .ops-channel-badge) {
+    padding: 2px 9px;
+    height: 24px;
+    min-height: 24px;
+    box-sizing: border-box;
+    font-size: 11.5px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+  }
   @media (max-width: 900px) {
     .ops-content :is(td, th, small, label),
     .ops-dialog :is(label, small) { font-size: 12px !important; line-height: 1.4; }

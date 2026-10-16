@@ -198,27 +198,91 @@
 .ops-category-badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
+  gap: 5px;
+  padding: 2px 9px;
+  min-height: 24px;
+  height: 24px;
+  box-sizing: border-box;
   border-radius: 9999px;
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
 }
-.ops-category-badge.pollos { background: #fee2e2; color: #991b1b; }
-.ops-category-badge.parrillas { background: #f3e8ff; color: #6b21a8; }
-.ops-category-badge.combos,
-.ops-category-badge.complementos { background: #fef3c7; color: #92400e; }
-.ops-category-badge.bebidas { background: #e0f2fe; color: #075985; }
+.ops-category-badge svg {
+  width: 13px !important;
+  height: 13px !important;
+  flex-shrink: 0;
+}
+.ops-category-badge.pollo,
+.ops-category-badge.pollos {
+  background: #ffedd5;
+  color: #9a3412;
+  border: 1px solid #fed7aa;
+}
+.ops-category-badge.parrillas {
+  background: #f3e8ff;
+  color: #6b21a8;
+  border: 1px solid #e9d5ff;
+}
+.ops-category-badge.combos {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+.ops-category-badge.chaufas {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+.ops-category-badge.saltados {
+  background: #fff7ed;
+  color: #c2410c;
+  border: 1px solid #ffedd5;
+}
+.ops-category-badge.acompanamientos,
+.ops-category-badge.complementos {
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+.ops-category-badge.bebidas {
+  background: #e0f2fe;
+  color: #075985;
+  border: 1px solid #bae6fd;
+}
+.ops-category-badge.salsas {
+  background: #ffe4e6;
+  color: #9f1239;
+  border: 1px solid #fecdd3;
+}
+
+.ops-col-center {
+  text-align: center !important;
+}
+.ops-col-center .ops-category-badge {
+  margin: 0 auto;
+}
 
 /* Channel badges */
 .ops-channel-badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
+  gap: 5px;
+  padding: 2px 9px;
+  min-height: 24px;
+  height: 24px;
+  box-sizing: border-box;
   border-radius: 9999px;
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+}
+.ops-channel-badge svg {
+  width: 14px !important;
+  height: 14px !important;
+  flex-shrink: 0;
 }
 .ops-channel-badge.salon { background: #fee2e2; color: #991b1b; }
 .ops-channel-badge.delivery { background: #e0f2fe; color: #075985; }
@@ -587,3 +651,69 @@
 .ops-voucher-badge.boleta { background: #dcfce7; color: #166534; }
 .ops-voucher-badge.factura { background: #e0f2fe; color: #075985; }
 .ops-voucher-badge.nota { background: #f1f5f9; color: #475569; }
+
+/* Sales range selector */
+.ops-select-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-left: auto;
+}
+.ops-sales-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  height: 36px;
+  line-height: 34px;
+  padding: 0 32px 0 12px;
+  border: 1px solid #dce3ee;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  background: #ffffff;
+  color: #1e293b;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.ops-sales-select:hover {
+  border-color: #cbd5e1;
+}
+.ops-sales-select:focus {
+  border-color: #e53935;
+  box-shadow: 0 0 0 2px rgba(229, 57, 53, 0.15);
+}
+.ops-select-chevron {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px !important;
+  height: 14px !important;
+  color: #64748b;
+  pointer-events: none;
+}
+
+/* Compact status badge for administrative tables */
+.ops-root.ops-workspace[data-page] .ops-responsive-table .ops-badge,
+.ops-root.ops-workspace[data-page^="administrador"] .ops-badge,
+.ops-badge.ops-compact {
+  padding: 2px 9px !important;
+  min-height: 24px !important;
+  height: 24px !important;
+  box-sizing: border-box !important;
+  line-height: 1 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  font-size: 11.5px !important;
+  font-weight: 500 !important;
+  border-radius: 9999px !important;
+}
+.ops-root.ops-workspace[data-page] .ops-responsive-table .ops-badge svg,
+.ops-root.ops-workspace[data-page^="administrador"] .ops-badge svg {
+  width: 13px !important;
+  height: 13px !important;
+  flex-shrink: 0;
+}
+
