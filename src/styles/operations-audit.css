@@ -91,6 +91,5 @@
 .ops-root.ops-workspace.ops-reference[data-page="administrador/clientes"] .ops-table-actions button { background:transparent; border-color:transparent; box-shadow:none; }
 .ops-root.ops-workspace.ops-reference[data-page="administrador/clientes"] .ops-table-actions button:hover { background:transparent; }
 
-.ops-root.ops-workspace.ops-reference[data-page="administrador/usuarios"] .ops-roles-summary-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+.ops-root.ops-workspace.ops-reference[data-page="administrador/usuarios"] .ops-roles-summary-grid { display:grid; grid-template-columns:minmax(0,1fr); gap:12px; width:100%; }
 .ops-root.ops-workspace.ops-reference[data-page="administrador/usuarios"] .ops-roles-summary-grid > :last-child { grid-column:1 / -1; }
-@media(max-width:540px) { .ops-root.ops-workspace.ops-reference[data-page="administrador/usuarios"] .ops-roles-summary-grid { grid-template-columns:minmax(0,1fr); } }
