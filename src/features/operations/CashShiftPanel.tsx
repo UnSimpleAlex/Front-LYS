@@ -179,13 +179,10 @@ export function CashShiftPanel({
             counts={counts}
             sum={sum}
             amount={amount}
-            notes={notes}
             verified={verified}
             verificationError={verificationError}
             onCount={updateCount}
-            onAmount={setAmount}
             onCalculate={() => setAmount(String(sum))}
-            onNotes={setNotes}
             onVerified={(value) => { setVerified(value); setVerificationError(false); }}
           />
         )}

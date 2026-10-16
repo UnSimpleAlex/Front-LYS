@@ -67,9 +67,15 @@ test("caja: verificar efectivo, apertura, conteo de cierre y persistencia", asyn
   await page.getByRole("button", { name: "Abrir caja", exact: true }).click();
   await expect(page.locator("#cash-opening-verification")).toContainText("Marca la casilla");
   await expect(page).toHaveURL(/caja\/apertura$/);
+  await expect(page.getByText("Observaciones (opcional)")).toHaveCount(0);
+  await expect(page.getByLabel("Fondo inicial (S/)")).toHaveCount(0);
+  await page.setViewportSize({ width: 1366, height: 768 });
+  expect(await page.locator(".cash-opening-scroll").evaluate(el => el.scrollHeight > el.clientHeight)).toBeTruthy();
+  await page.getByLabel("Cantidad de denominación 0.1", { exact: true }).fill("1");
+  await page.getByLabel("Cantidad de denominación 0.1", { exact: true }).fill("0");
   await page.getByRole("button", { name: "Agregar S/ 200", exact: true }).click();
   await page.getByLabel("Cantidad de denominación 100", { exact: true }).fill("1");
-  await expect(page.getByLabel("Fondo inicial (S/)")).toHaveValue("300");
+  await expect(page.locator(".cash-opening-highlight strong")).toHaveText("S/ 300.00");
   await page.getByLabel("He verificado el efectivo disponible.").check();
   await page.getByRole("button", { name: "Abrir caja", exact: true }).click();
   await expect(page).toHaveURL(/caja$/);
@@ -225,7 +231,7 @@ test("CSV conserva comillas, fórmulas como texto y números negativos", async (
 
 test("caja: tipo de comprobante, RUC inválido, emisión e impresión", async ({ page }) => {
   await page.goto("/caja/apertura");
-  await page.getByLabel("Fondo inicial (S/)").fill("100");
+  await page.getByLabel("Cantidad de denominación 100", { exact: true }).fill("1");
   await page.getByLabel("He verificado el efectivo disponible.").check();
   await page.getByRole("button", { name: "Abrir caja", exact: true }).click();
   await expect(page).toHaveURL(/caja$/);

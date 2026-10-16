@@ -71,6 +71,6 @@ Ver [interacciones operativas verificadas](INTERACCIONES_OPERATIVAS.md): filtros
 
 ### Apertura, cierre y etiquetas compactas
 
-Las pruebas de interacciones cubren verificación obligatoria del efectivo, apertura persistente tras recarga, prevención de apertura duplicada, conteo por denominaciones, uso del fondo inicial en cierre, diferencias y exportación del resumen. El conteo conserva céntimos exactos y permite ingresar el total manualmente. La apertura mantiene la validación de coincidencia cuando existe desglose.
+Las pruebas de interacciones cubren verificación obligatoria del efectivo, apertura persistente tras recarga, prevención de apertura duplicada, conteo por denominaciones, uso del fondo inicial en cierre, diferencias y exportación del resumen. En apertura el total se calcula desde las denominaciones, sin campo manual ni observaciones. La lista tiene desplazamiento interno y encabezado fijo. En cierre se conservan las observaciones y el ingreso manual del efectivo contado.
 
 Las vistas de apertura y cierre reproducen únicamente el contenido de las referencias; conservan la navegación existente. Se mantienen todas las denominaciones, observaciones y exportaciones. La auditoría responsive cubrió 221 anchos de 280–3840 px por vista, además de delivery, Nuevo pedido y Mesas; incluye capturas de 390, 768 y 1366 px. Se verificaron por separado los límites del precio y del botón de agregar, y la lectura completa de «Solicita cuenta» en seis anchos con ese estado activo. Esta cobertura corresponde a Chromium emulado, no a dispositivos físicos.

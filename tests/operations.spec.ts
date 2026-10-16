@@ -464,14 +464,11 @@ test("caja suma piezas de billetes y monedas en céntimos", async ({ page }) => 
     await page.getByLabel(`Cantidad de denominación ${value}`, { exact: true }).fill("1");
   }
   await expect(page.locator(".cash-opening-highlight strong")).toHaveText("S/ 388.80");
-  await page.getByLabel("Fondo inicial (S/)").fill("388.80");
-  await expect(page.getByLabel("Fondo inicial (S/)")).toHaveValue("388.80");
   await expect(page.getByLabel("Cantidad de denominación 0.05", { exact: true })).toHaveCount(0);
   await page.getByLabel("Cantidad de denominación 0.1", { exact: true }).fill("2");
   await expect(page.locator(".cash-opening-highlight strong")).toHaveText("S/ 388.90");
-  await expect(page.getByLabel("Fondo inicial (S/)")).toHaveValue("388.9");
-  await page.getByLabel("Fondo inicial (S/)").fill("380");
-  await expect(page.getByRole("alert")).toContainText("El desglose debe coincidir");
+  await page.getByRole("button", { name: "Calcular automáticamente" }).click();
+  await expect(page.locator(".cash-opening-highlight strong")).toHaveText("S/ 388.90");
 });
 
 test("panel cocina: referencia responsive, búsqueda y filtros de pedidos", async ({ page }) => {

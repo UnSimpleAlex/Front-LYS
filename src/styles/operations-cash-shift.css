@@ -55,6 +55,14 @@
   .anchor-shift-form footer .ops-outline { border-color:#e90024; color:#e90024; background:#fff; }
   .anchor-shift-form footer svg { width:20px; height:20px; flex-shrink:0; }
   .is-opening .cash-opening-count { grid-row:1 / span 2; align-self:stretch; }
+  .is-opening .anchor-shift-form { grid-template-columns:minmax(0,1.9fr) minmax(300px,1fr); }
+  .is-opening .cash-opening-scroll { max-height:clamp(260px,calc(100dvh - 345px),530px); overflow-y:auto; overscroll-behavior:contain; scrollbar-gutter:stable; scrollbar-width:thin; scrollbar-color:#a4adbb #f2f4f8; }
+  .is-opening .anchor-denomination-head { position:sticky; top:0; z-index:1; }
+  .is-opening .anchor-denomination img { width:88px; height:44px; flex-shrink:0; }
+  .is-opening .anchor-denomination { min-height:62px; }
+  .is-opening .cash-opening-summary section { padding:18px; }
+  .is-opening .cash-opening-summary h2 { font-size:18px; }
+  .is-opening .cash-opening-summary dl { margin-bottom:0; }
   .is-closing .anchor-shift-form { grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); }
   .cash-closing-methods { width:100%; border-collapse:collapse; font-size:12px; }
   .cash-closing-methods :is(th,td) { padding:10px 6px; border-bottom:1px solid #edf0f5; }
@@ -79,7 +87,7 @@
   .cash-closing-movements table { width:100%; font-size:12px; }
   .cash-closing-movements :is(td,th) { padding:8px; text-align:left; }
   @media(max-width:1150px) {
-    .anchor-shift-form,.is-closing .anchor-shift-form { grid-template-columns:minmax(0,1fr); }
+    .anchor-shift-form,.is-opening .anchor-shift-form,.is-closing .anchor-shift-form { grid-template-columns:minmax(0,1fr); }
     .is-opening .cash-opening-count { grid-row:auto; }
     .anchor-shift-form footer { grid-column:1; }
     .cash-opening-summary { grid-template-columns:repeat(2,minmax(0,1fr)); }
@@ -91,6 +99,7 @@
     .anchor-shift-meta > div > svg { width:36px; height:36px; padding:8px; }
     .anchor-shift-meta strong { font-size:13px; }
     .cash-opening-summary { grid-template-columns:minmax(0,1fr); }
+    .is-opening .anchor-denomination img { width:58px; height:34px; }
     .anchor-shift-form section { padding:14px; }
     .anchor-shift-form h2 { font-size:18px; }
     .anchor-denomination-head,.anchor-denomination { grid-template-columns:minmax(0,1.1fr) minmax(85px,1fr) minmax(60px,.8fr); gap:8px; padding:8px 0; }
