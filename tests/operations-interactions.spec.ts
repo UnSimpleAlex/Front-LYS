@@ -254,3 +254,16 @@ test("promociones: crear, duplicar, editar, desactivar y exportar", async ({ pag
   expect(rows).toHaveLength(3);
   expect(rows.slice(1).every(row => row.includes('"Inactiva"'))).toBeTruthy();
 });
+
+test("pedidos: buscar desde otra página reinicia paginación y selección", async ({ page }) => {
+  await page.goto("/administrador/pedidos");
+  await page.getByRole("button", { name: "Página siguiente", exact: true }).click();
+  await page.getByRole("button", { name: "Página siguiente", exact: true }).click();
+  await page.locator(".ops-responsive-table tbody tr").first().getByRole("checkbox").check();
+  await page.getByLabel("Buscar número o cliente", { exact: true }).fill("COCINA-DEMO-001");
+  await expect(page.locator(".ops-responsive-table tbody tr")).toHaveCount(1);
+  await expect(page.locator('.ops-pagination [aria-current="page"]')).toHaveText("1");
+  await expect(page.getByRole("button", { name: "Página anterior", exact: true })).toBeDisabled();
+  const rows = await csv(page, exporter(page));
+  expect(rows).toHaveLength(2); expect(rows[1]).toContain("COCINA-DEMO-001");
+});
