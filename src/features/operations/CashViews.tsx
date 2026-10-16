@@ -19,6 +19,7 @@ import {
   issueVoucher,
   refundPayment,
   type Order,
+  type Voucher,
 } from "./operationsStore";
 import {
   Panel,
@@ -41,6 +42,18 @@ export function CashViews({
   const today = new Date();
   const dateLabel = today.toLocaleDateString("es-PE", {day:"numeric",month:"long",year:"numeric"});
   const data = useOperations();
+  const [downloading, setDownloading] = useState("");
+  const downloadPdf = async (voucher: Voucher) => {
+    setDownloading(voucher.id);
+    try {
+      const { downloadVoucherPdf } = await import("./voucherPdf");
+      await downloadVoucherPdf(voucher, data);
+    } catch (error) {
+      notify(() => { throw error instanceof Error ? error : new Error("No se pudo descargar el PDF."); });
+    } finally {
+      setDownloading("");
+    }
+  };
   const actionHost = useContext(OperationsPageActions);
   const [selected, setSelected] = useState(() => new URLSearchParams(location.search).get("pedido") || "");
   const [voucherOpen, setVoucherOpen] = useState(false);
@@ -668,6 +681,7 @@ export function CashViews({
                           >
                             <Icon name="print" />
                           </button>
+                          <button type="button" aria-label="Descargar PDF" title="Descargar PDF" className="ops-voucher-download" disabled={downloading !== ""} aria-busy={downloading === v.id} onClick={() => void downloadPdf(v)}><Icon name="download" /></button>
                         </div>
                       </td>
                     </tr>

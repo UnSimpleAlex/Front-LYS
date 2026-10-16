@@ -1,0 +1,49 @@
+import { expect, test } from "@playwright/test";
+import { readFile, mkdir } from "node:fs/promises";
+
+test("comprobantes: descarga PDF real de boleta y factura con detalle", async ({ page }) => {
+  test.setTimeout(60000);
+  await page.goto("/iniciar-sesion");
+  await page.getByLabel("Correo electrónico", { exact: true }).fill("administrador@demo.local");
+  await page.getByLabel("Contraseña", { exact: true }).fill("Demo2026!");
+  await page.getByRole("button", { name: "Iniciar sesión", exact: true }).click();
+  await page.locator(".ops-side-account").click();
+  await page.getByRole("button", { name: "Cargar datos de demostración", exact: true }).click();
+  await page.goto("/caja/comprobantes");
+  const errors: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
+  await mkdir("test-results/pdf", { recursive: true });
+  let pending = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Descargar PDF", exact: true }).first().click();
+  const receipt = await pending;
+  expect(receipt.suggestedFilename()).toMatch(/^boleta-.*\.pdf$/);
+  await receipt.saveAs("test-results/pdf/boleta.pdf");
+  expect((await readFile("test-results/pdf/boleta.pdf")).subarray(0, 5).toString()).toBe("%PDF-");
+  await page.evaluate(async () => {
+    const store = await import(String("/src/features/operations/operationsStore.ts")) as typeof import("../src/features/operations/operationsStore");
+    const state = store.getOperations();
+    const order = state.orders.find(order => order.paid && !state.vouchers.some(voucher => voucher.orderId === order.id));
+    if (!order) throw new Error("Falta el pedido pagado de prueba");
+    store.issueVoucher(order.id, "Factura", "Cliente de prueba S.A.C.", "20123456789");
+  });
+  await page.getByLabel("Filtrar tipo de comprobante").selectOption("Factura");
+  pending = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Descargar PDF", exact: true }).click();
+  const invoice = await pending;
+  expect(invoice.suggestedFilename()).toMatch(/^factura-F001-.*\.pdf$/);
+  await invoice.saveAs("test-results/pdf/factura.pdf");
+  expect((await readFile("test-results/pdf/factura.pdf")).subarray(0, 5).toString()).toBe("%PDF-");
+  pending = page.waitForEvent("download");
+  await page.evaluate(async () => {
+    const store = await import(String("/src/features/operations/operationsStore.ts")) as typeof import("../src/features/operations/operationsStore");
+    const pdf = await import(String("/src/features/operations/voucherPdf.ts")) as typeof import("../src/features/operations/voucherPdf");
+    const state = structuredClone(store.getOperations());
+    const voucher = state.vouchers.find(item => item.type === "Factura")!;
+    const order = state.orders.find(item => item.id === voucher.orderId)!;
+    order.items = Array.from({ length: 80 }, (_, index) => ({ ...order.items[0], product: { ...order.items[0].product, name: `Producto ${index + 1}: pollo a la brasa con papas y ensalada de verduras frescas` } }));
+    voucher.total = store.orderTotal(order);
+    await pdf.downloadVoucherPdf(voucher, state);
+  });
+  await (await pending).saveAs("test-results/pdf/factura-larga.pdf");
+  expect(errors).toEqual([]);
+});

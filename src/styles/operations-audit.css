@@ -414,3 +414,7 @@
 
 .ops-root.ops-workspace.ops-reference[data-page] :focus-visible { outline:2px solid #ed0017; outline-offset:3px; }
 .ops-root.ops-workspace.ops-reference[data-page] :is(.ops-product-upload,.ops-input-affix):focus-within { outline:2px solid #ed0017; outline-offset:2px; }
+
+.ops-root.ops-workspace.ops-reference[data-page="caja/comprobantes"] .ops-voucher-download { display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; min-height:30px; padding:0; border:0; background:transparent; color:#ed0017; }
+.ops-root.ops-workspace.ops-reference[data-page="caja/comprobantes"] .ops-voucher-download svg { width:18px; height:18px; margin:0; }
+.ops-root.ops-workspace.ops-reference[data-page="caja/comprobantes"] .ops-voucher-download:hover:not(:disabled) { background:#fff1f3; }
