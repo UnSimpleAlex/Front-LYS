@@ -103,11 +103,11 @@ export function AdminSettings({
           </span>
           <button
             type="button"
-            className={`ops-switch ${form.ownDelivery ? "on" : ""}`}
+            className={`ops-promotion-state ${form.ownDelivery ? "on" : ""}`}
             aria-label="Delivery propio"
             aria-pressed={!!form.ownDelivery}
             onClick={() => setForm({ ...form, ownDelivery: !form.ownDelivery })}
-          />
+          ><span aria-hidden="true" className="ops-state-track"><span className="ops-state-thumb"/></span></button>
         </div>
       </div>
     </section>
