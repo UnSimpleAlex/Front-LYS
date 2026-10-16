@@ -23,6 +23,77 @@ async function csv(page: Page, button: Locator, name?: string) {
   return text.slice(1).trim().split("\r\n");
 }
 const exporter = (page: Page) => page.getByRole("button", { name: /Exportar/ }).filter({ visible: true }).first();
+test("mesas: solicitud de cuenta legible en tarjeta compacta", async ({ page }) => {
+  await page.goto("/mesera/mesas");
+  await page.evaluate(async () => {
+    const store = await import(String("/src/features/operations/operationsStore.ts")) as typeof import("../src/features/operations/operationsStore");
+    store.updateTable(2, { status: "Solicita cuenta" });
+  });
+  const badge = page.locator('.ops-table-seat[data-status="Solicita cuenta"] .ops-badge');
+  for (const width of [280, 390, 768, 1024, 1366, 1920]) {
+    await page.setViewportSize({ width, height: 941 });
+    await expect(badge).toHaveText("Solicita cuenta");
+    expect(await badge.evaluate(element => {
+      const text = element.querySelector("span")!;
+      const bounds = element.getBoundingClientRect();
+      const label = text.getBoundingClientRect();
+      return label.top >= bounds.top && label.bottom <= bounds.bottom + 1 && text.scrollHeight <= text.clientHeight + 1;
+    }), `Texto completo a ${width}px`).toBeTruthy();
+  }
+  await page.setViewportSize({ width: 1366, height: 768 });
+  await page.screenshot({ path: "test-results/table-request-readable.png" });
+});
+test("nuevo pedido: precio y agregar completos dentro del producto", async ({ page }) => {
+  await page.goto("/mesera/nuevo-pedido");
+  for (const width of [280, 390, 768, 1024, 1280, 1366, 1672, 1920]) {
+    await page.setViewportSize({ width, height: 941 });
+    const clipped = await page.locator(".ops-product-grid article").evaluateAll(cards => cards.flatMap(card => {
+      const bounds = card.getBoundingClientRect();
+      return [...card.querySelectorAll("strong,button")].filter(control => {
+        const rect = control.getBoundingClientRect();
+        return rect.left < bounds.left - 1 || rect.right > bounds.right + 1 || rect.bottom > bounds.bottom + 1;
+      }).map(control => control.textContent);
+    }));
+    expect(clipped, `Recortes a ${width}px`).toEqual([]);
+    if (width === 1366) await page.screenshot({ path: "test-results/product-price-complete.png" });
+  }
+  const product = page.locator(".ops-product-grid article").first();
+  const name = await product.locator("h3").innerText();
+  await product.getByRole("button", { name: /^Agregar/ }).click();
+  await expect(page.locator(".anchor-cart-product").filter({ hasText: name })).toBeVisible();
+});
+test("caja: verificar efectivo, apertura, conteo de cierre y persistencia", async ({ page }) => {
+  await page.goto("/caja/apertura");
+  await page.getByRole("button", { name: "Abrir caja", exact: true }).click();
+  await expect(page.locator("#cash-opening-verification")).toContainText("Marca la casilla");
+  await expect(page).toHaveURL(/caja\/apertura$/);
+  await page.getByRole("button", { name: "Agregar S/ 200", exact: true }).click();
+  await page.getByLabel("Cantidad de denominación 100", { exact: true }).fill("1");
+  await expect(page.getByLabel("Fondo inicial (S/)")).toHaveValue("300");
+  await page.getByLabel("He verificado el efectivo disponible.").check();
+  await page.getByRole("button", { name: "Abrir caja", exact: true }).click();
+  await expect(page).toHaveURL(/caja$/);
+  await page.reload();
+  await page.goto("/caja/apertura");
+  await expect(page.getByRole("button", { name: "Abrir caja", exact: true })).toBeDisabled();
+  await expect(page.locator(".anchor-shift-meta")).toContainText("Caja abierta");
+  await page.goto("/caja/cierre");
+  await page.getByRole("button", { name: "Usar fondo inicial" }).click();
+  await expect(page.getByLabel("Efectivo contado (S/)")).toHaveValue("300");
+  await expect(page.locator(".cash-closing-differences > div").last()).toContainText("S/ 0.00");
+  await page.getByRole("button", { name: "Agregar S/ 5", exact: true }).click();
+  await expect(page.getByLabel("Efectivo contado (S/)")).toHaveValue("305");
+  await expect(page.locator(".cash-closing-differences > div").last()).toContainText("S/ 5.00");
+  const lines = await csv(page, exporter(page), "resumen-caja");
+  expect(lines.join("\n")).toContain('"Efectivo contado";"305"');
+  await page.getByRole("button", { name: "Cerrar caja", exact: true }).click();
+  await expect(page).toHaveURL(/caja$/);
+  await page.reload();
+  await page.goto("/caja/cierre");
+  await expect(page.getByRole("button", { name: "Cerrar caja", exact: true })).toBeDisabled();
+  await page.goto("/caja/apertura");
+  await expect(page.getByRole("button", { name: "Abrir caja", exact: true })).toBeEnabled();
+});
 for (const [route, name] of [
   ["administrador/productos", "productos"], ["administrador/promociones", "promociones"],
   ["administrador/clientes", "clientes"], ["administrador/usuarios", "usuarios"],

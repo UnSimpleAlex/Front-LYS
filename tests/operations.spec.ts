@@ -447,7 +447,7 @@ test("controles legibles, archivos y efectivo en móvil, tablet y PC", async ({ 
     }
     for (const route of ["apertura", "cierre"]) {
       await page.goto(`/caja/${route}`);
-      await expect(page.locator(".ops-banknote")).toHaveCount(route === "apertura" ? 11:0);
+      await expect(page.locator(".ops-banknote")).toHaveCount(11);
       expect(await page.locator(".ops-banknote").evaluateAll(nodes => nodes.every(node => node instanceof HTMLImageElement && node.complete && node.naturalWidth > 0))).toBeTruthy();
       if (route === "cierre") await expect(page.getByRole("heading",{name:"Conteo de efectivo",exact:true})).toBeVisible();
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy();
@@ -463,13 +463,15 @@ test("caja suma piezas de billetes y monedas en céntimos", async ({ page }) => 
   for (const value of [200, 100, 50, 20, 10, 5, 2, 1, 0.5, 0.2, 0.1]) {
     await page.getByLabel(`Cantidad de denominación ${value}`, { exact: true }).fill("1");
   }
-  await expect(page.locator(".ops-cash-total > strong")).toHaveText("S/ 388.80");
+  await expect(page.locator(".cash-opening-highlight strong")).toHaveText("S/ 388.80");
   await page.getByLabel("Fondo inicial (S/)").fill("388.80");
-  await expect(page.locator(".ops-cash-total .ops-badge")).toHaveText("Coincide");
+  await expect(page.getByLabel("Fondo inicial (S/)")).toHaveValue("388.80");
   await expect(page.getByLabel("Cantidad de denominación 0.05", { exact: true })).toHaveCount(0);
   await page.getByLabel("Cantidad de denominación 0.1", { exact: true }).fill("2");
-  await expect(page.locator(".ops-cash-total > strong")).toHaveText("S/ 388.90");
-  await expect(page.locator(".ops-cash-total .ops-badge")).toHaveText("Revisar monto");
+  await expect(page.locator(".cash-opening-highlight strong")).toHaveText("S/ 388.90");
+  await expect(page.getByLabel("Fondo inicial (S/)")).toHaveValue("388.9");
+  await page.getByLabel("Fondo inicial (S/)").fill("380");
+  await expect(page.getByRole("alert")).toContainText("El desglose debe coincidir");
 });
 
 test("panel cocina: referencia responsive, búsqueda y filtros de pedidos", async ({ page }) => {
