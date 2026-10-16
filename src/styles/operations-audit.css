@@ -234,3 +234,4 @@
 .ops-root.ops-workspace.ops-reference[data-page] .kitchen-column .kitchen-column-heading > svg { color:#fff; }
 .ops-root.ops-workspace.ops-reference[data-page] .ops-kitchen-ready-action { background:#bd5700; border-color:#bd5700; color:#fff; }
 .ops-root.ops-workspace.ops-reference[data-page] .ops-kitchen-ready-action:hover { background:#a34800; border-color:#a34800; color:#fff; }
+.ops-root.ops-workspace.ops-reference[data-page] .kitchen-column:is([data-stage="Recibido"],[data-stage="En preparación"],[data-stage="Listo"]) > .kitchen-column-heading { background:var(--kitchen-stage-color); }
