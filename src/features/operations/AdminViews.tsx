@@ -7,7 +7,7 @@ import {
   Icon,
   type IconName,
 } from "./OperationsVisuals";
-import { dateText, downloadCsv, printLocal } from "./operationsFiles";
+import { dateText, localDateKey, downloadCsv, printLocal } from "./operationsFiles";
 import { useContext, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { OperationsPageActions } from "./operationsPageContext";
@@ -197,7 +197,7 @@ export function AdminViews({
     const deliveredCount = orders.filter((o) => o.status === "Entregado").length;
     const filtered = orders.filter(
       (o) =>
-        (!from || o.created.slice(0,10)>=from) && (!to || o.created.slice(0,10)<=to) &&
+        (!from || localDateKey(o.created)>=from) && (!to || localDateKey(o.created)<=to) &&
         (filter === "Todos" ||
           o.channel === filter ||
           (filter === "Cancelados" && o.status === "Cancelado")) &&
