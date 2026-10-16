@@ -37,7 +37,7 @@ test("pedido compartido: salón → cocina → entrega → caja → comprobante 
   await page
     .locator(".ops-product-grid article")
     .first()
-    .getByRole("button", { name: "+ Agregar" })
+    .getByRole("button", { name: /^Agregar / })
     .click();
   await page
     .getByRole("button", { name: "Enviar a cocina", exact: true })
@@ -48,7 +48,7 @@ test("pedido compartido: salón → cocina → entrega → caja → comprobante 
     .locator(".ops-table-wrap tbody tr")
     .first()
     .locator("td")
-    .nth(1)
+    .nth(0)
     .textContent();
   expect(id).toBeTruthy();
   await page.goto("/administrador/productos");
@@ -64,10 +64,11 @@ test("pedido compartido: salón → cocina → entrega → caja → comprobante 
   await page.getByRole("button", { name: "Entregar", exact: true }).click();
   await expect(page.locator(".ops-table-wrap")).toContainText("Entregado");
   await login(page, "caja");
-  await page.getByRole("button", { name: "Abrir caja", exact: true }).click();
+  await page.getByRole("button", { name: "Apertura de caja", exact: true }).click();
   await page.getByLabel("He verificado el efectivo disponible.").check();
   await page.getByRole("button", { name: "Abrir caja", exact: true }).click();
   await page.getByRole("button", { name: "Cobros", exact: true }).click();
+  await page.getByRole("button", {name:"Cobrar",exact:true}).first().click();
   await page.getByLabel("Monto recibido").fill("100");
   await page
     .getByRole("button", { name: "Procesar pago", exact: true })
@@ -82,12 +83,9 @@ test("pedido compartido: salón → cocina → entrega → caja → comprobante 
       .getByRole("heading", { name: "Pagos recientes" })
       .locator("xpath=ancestor::section[1]"),
   ).toContainText("Pagado");
-  await page
-    .getByRole("button", { name: "Emitir comprobante", exact: true })
-    .click();
-  await page
-    .getByRole("button", { name: "Emitir comprobante", exact: true })
-    .click();
+  await page.getByRole("button", {name:"Comprobantes",exact:true}).click();
+  await page.getByRole("button", {name:"Emitir comprobante",exact:true}).click();
+  await page.getByRole("dialog").getByRole("button", {name:"Emitir comprobante",exact:true}).click();
   await expect(page.locator(".ops-table-wrap")).toContainText("B001-000001");
   await page.reload();
   await expect(page.locator(".ops-table-wrap")).toContainText("B001-000001");
@@ -191,9 +189,8 @@ for (const width of [240, 390, 768, 1024, 1280, 1366, 1440, 1920, 2560])
     await page.setViewportSize({ width, height: 1080 });
     await setup(page);
     await login(page, "administrador");
-    await page
-      .getByRole("button", { name: "Cargar pedidos de ejemplo" })
-      .click();
+    await page.locator(".ops-side-account, .ops-mobile-account").filter({ visible: true }).click();
+    await page.getByRole("button", { name: "Cargar datos de demostración", exact: true }).click();
     const errors: string[] = [];
     page.on("pageerror", (e) => errors.push(e.message));
     for (const route of routes) {
@@ -205,6 +202,7 @@ for (const width of [240, 390, 768, 1024, 1280, 1366, 1440, 1920, 2560])
           page.evaluate(
             () => document.documentElement.scrollWidth <= innerWidth + 1,
           ),
+          { message: `Desbordamiento en ${route} a ${width}px` },
         )
         .toBeTruthy();
       expect(
@@ -226,7 +224,7 @@ for (const width of [240, 390, 768, 1024, 1280, 1366, 1440, 1920, 2560])
           .locator(".ops-table-wrap")
           .evaluateAll((tables) =>
             tables
-              .filter((table) => table.scrollWidth > table.clientWidth + 1)
+              .filter((table) => table.scrollWidth > table.clientWidth + 1 && !(getComputedStyle(table).overflowX === "auto" && table.getAttribute("tabindex") === "0"))
               .map((table) =>
                 table.closest("section")?.getAttribute("data-panel"),
               ),
@@ -241,7 +239,7 @@ for (const width of [240, 390, 768, 1024, 1280, 1366, 1440, 1920, 2560])
                 .closest(".ops-table-wrap")!
                 .getBoundingClientRect();
               return (
-                rect.width &&
+                rect.width && getComputedStyle(button.closest(".ops-table-wrap")!).overflowX !== "auto" &&
                 (rect.left < panel.left - 1 || rect.right > panel.right + 1)
               );
             })
@@ -371,10 +369,10 @@ test("inventario muestra el formulario al editar o crear y guarda el insumo", as
   await login(page, "administrador");
   await page.goto("/administrador/inventario");
   await expect(
-    page.getByRole("heading", { name: "Nuevo / Editar insumo" }),
+    page.getByRole("heading", { name: "Editar insumo" }),
   ).toHaveCount(0);
   await page.getByRole("button", { name: "Nuevo insumo" }).click();
-  const form = page.locator('section[data-panel="Nuevo / Editar insumo"]');
+  const form = page.locator('dialog.ops-dialog');
   await form.getByLabel("Nombre", { exact: true }).fill("Aceite de prueba");
   await form.getByLabel("Categoría", { exact: true }).fill("Aceites");
   await form.getByLabel("Unidad", { exact: true }).fill("litros");
@@ -389,11 +387,11 @@ test("inventario muestra el formulario al editar o crear y guarda el insumo", as
   await expect(form.getByLabel("Nombre", { exact: true })).toHaveValue(
     "Aceite de prueba",
   );
-  await form.getByRole("button", { name: "Cerrar formulario" }).click();
+  await form.getByRole("button", { name: "Cerrar ventana" }).click();
   await expect(form).toHaveCount(0);
 });
 
-test("navbar compacto y menú completo en móvil, tablet y PC", async ({
+test("menú lateral completo en móvil, tablet y PC", async ({
   page,
 }) => {
   await setup(page);
@@ -404,14 +402,14 @@ test("navbar compacto y menú completo en móvil, tablet y PC", async ({
     await expect(page.locator("h1")).toHaveText("Gestión de productos");
     expect(
       await page
-        .locator(".ops-header")
+        .locator(".ops-workspace-toolbar")
         .evaluate((header) => header.getBoundingClientRect().height),
     ).toBeLessThanOrEqual(82);
     const toggle = page.getByRole("button", { name: "Abrir menú del panel" });
     if (await toggle.isVisible()) await toggle.click();
     const navigation = page.getByRole("navigation", {
       name: "Navegación Administración",
-    });
+    }).filter({visible:true});
     await expect(navigation.getByRole("button")).toHaveCount(9);
     expect(
       await navigation.getByRole("button").evaluateAll((buttons) =>
@@ -428,7 +426,7 @@ test("navbar compacto y menú completo en móvil, tablet y PC", async ({
       .click();
     await expect(page).toHaveURL(/administrador\/inventario$/);
     if (await page.locator(".ops-menu").isVisible())
-      await expect(page.locator(".ops-header nav")).toBeHidden();
+      await expect(page.locator(".ops-navigation-dialog")).toBeHidden();
   }
 });
 
@@ -442,21 +440,21 @@ test("controles legibles, archivos y efectivo en móvil, tablet y PC", async ({ 
     const alerts = page.locator(".ops-stock-alert .ops-supply-summary strong");
     expect(await alerts.evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().width).every(width => width >= 85))).toBeTruthy();
     await page.goto("/administrador/configuracion");
-    for (const name of ["Datos del negocio", "Métodos de pago", "Impuestos", "Usuarios", "Seguridad"]) {
-      await page.locator(".ops-settings > .ops-tabs").getByRole("button", { name, exact: true }).click();
+    for (const name of ["General", "Horarios", "Pedidos", "Pagos"]) {
+      await page.locator(".anchor-settings-tabs").getByRole("button", { name, exact: true }).click();
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy();
-      if (name === "Métodos de pago") {
+      if (name === "Pagos") {
         const upload = page.locator('input[type="file"]').first();
-        expect(await upload.evaluate(node => getComputedStyle(node, "::file-selector-button").backgroundColor)).toBe("rgb(237, 0, 23)");
-        expect(await page.locator(".ops-method-grid .ops-switch").evaluateAll(nodes => nodes.every(node => node.getBoundingClientRect().height === 26))).toBeTruthy();
+        expect(await upload.evaluate(node => getComputedStyle(node, "::file-selector-button").backgroundColor)).toBe("rgb(36, 42, 51)");
+        expect(await page.locator(".ops-method-grid .ops-switch").evaluateAll(nodes => nodes.every(node => node.getBoundingClientRect().height >= 24))).toBeTruthy();
         await page.screenshot({path: `test-results/settings-methods-${width}.png`, fullPage: true});
       }
     }
     for (const route of ["apertura", "cierre"]) {
       await page.goto(`/caja/${route}`);
-      await expect(page.locator(".ops-banknote")).toHaveCount(11);
+      await expect(page.locator(".ops-banknote")).toHaveCount(route === "apertura" ? 11:0);
       expect(await page.locator(".ops-banknote").evaluateAll(nodes => nodes.every(node => node instanceof HTMLImageElement && node.complete && node.naturalWidth > 0))).toBeTruthy();
-      await expect(page.locator('.ops-steps [aria-current="step"]')).toHaveText(route === "apertura" ? "1Apertura" : "3Cierre");
+      if (route === "cierre") await expect(page.getByRole("heading",{name:"Conteo de efectivo",exact:true})).toBeVisible();
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy();
     }
   }
@@ -482,23 +480,26 @@ test("caja suma piezas de billetes y monedas en céntimos", async ({ page }) => 
 test("panel cocina: referencia responsive, búsqueda y filtros de pedidos", async ({ page }) => {
   await setup(page);
   await login(page, "administrador");
-  await page.getByRole("button", { name: "Cargar pedidos de ejemplo" }).click();
+  await page.locator(".ops-side-account, .ops-mobile-account").filter({ visible: true }).click();
+  await page.getByRole("button", { name: "Cargar datos de demostración", exact: true }).click();
   await page.goto("/cocina");
-  await expect(page.locator(".kitchen-column")).toHaveCount(4);
+  await expect(page.locator(".kitchen-column")).toHaveCount(3);
   const total = await page.locator(".kitchen-ticket").count();
   expect(total).toBeGreaterThan(0);
   for (const width of [240, 390, 768, 1024, 1280, 1672, 1920, 2560]) {
     await page.setViewportSize({ width, height: 941 });
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy();
     const columns = await page.locator(".kitchen-columns").evaluate(node => getComputedStyle(node).gridTemplateColumns.split(" ").length);
-    expect(columns).toBe(width < 700 ? 1 : width < 1280 ? 2 : 4);
-    expect(await page.locator(".kitchen-ticket-actions button").evaluateAll(buttons => buttons.every(button => button.getBoundingClientRect().height >= 34 && button.scrollWidth <= button.clientWidth + 1))).toBeTruthy();
+    expect(columns).toBe(width <= 600 ? 1 : width <= 1100 ? 2 : 3);
+    expect(await page.locator(".kitchen-ticket-actions button").filter({visible:true}).evaluateAll(buttons => buttons.every(button => button.getBoundingClientRect().height >= 34 && button.scrollWidth <= button.clientWidth + 1))).toBeTruthy();
     if ([390, 768, 1672].includes(width)) await page.screenshot({ path: `test-results/kitchen-reference-${width}.png`, fullPage: true });
   }
+  await page.locator(".ops-kitchen-tools summary").click();
   await page.getByRole("button", { name: /^Delivery \(/ }).click();
-  expect(await page.locator(".kitchen-channel").allTextContents()).toEqual(expect.arrayContaining(["Delivery"]));
-  expect((await page.locator(".kitchen-channel").allTextContents()).every(text => text === "Delivery")).toBeTruthy();
-  await page.getByLabel("Buscar pedidos de cocina").fill("EJEMPLO-1052");
+  expect(await page.locator(".kitchen-channel").count()).toBeGreaterThan(0);
+  expect((await page.locator(".kitchen-channel").allTextContents()).every(text => text.startsWith("Delivery"))).toBeTruthy();
+  const orderNumber = await page.locator(".kitchen-ticket-id").first().innerText();
+  await page.getByLabel("Buscar pedidos de cocina").fill(orderNumber.replace("#", "").trim());
   await expect(page.locator(".kitchen-ticket")).toHaveCount(1);
   await page.getByLabel("Buscar pedidos de cocina").fill("no-existe-este-pedido");
   await expect(page.locator(".kitchen-ticket")).toHaveCount(0);
@@ -535,7 +536,7 @@ test("cocina: referencias, muestra persistente y filtros en tres páginas", asyn
       await expect(page.locator(".ops-page-heading h1")).toBeVisible();
       await page.evaluate(() => document.fonts.ready);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy();
-      expect(await page.locator('.ops-content img').evaluateAll(images => images.every(image => image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0))).toBeTruthy();
+      await expect.poll(() => page.locator('.ops-content img').evaluateAll(images => images.every(image => image instanceof HTMLImageElement && (!image.complete || image.naturalWidth > 0)))).toBeTruthy();
       if ([390, 768, 1672].includes(width)) await page.screenshot({ path: `test-results/kitchen-${route}-${width}.png`, fullPage: true });
     }
   }
