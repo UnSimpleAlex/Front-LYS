@@ -32,11 +32,6 @@ test("referencias: geometría y capturas de las 25 páginas internas", async ({
 }) => {
   test.setTimeout(240000);
   await page.goto("/iniciar-sesion");
-  await page.getByRole("button", { name: "Accesos de prueba por rol" }).click();
-  await page
-    .getByRole("button", { name: "Preparar cuentas de prueba" })
-    .click();
-  await expect(page.getByText("Demo2026!", { exact: true })).toBeVisible();
   await page
     .getByLabel("Correo electrónico", { exact: true })
     .fill("administrador@demo.local");

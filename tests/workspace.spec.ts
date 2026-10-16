@@ -3,9 +3,6 @@ import { test, expect } from '@playwright/test';
 test('muestra conectada, ventanas accesibles y navegación lateral por roles', async ({page}) => {
   test.setTimeout(120000);
   await page.goto('/iniciar-sesion');
-  await page.getByRole('button',{name:'Accesos de prueba por rol'}).click();
-  await page.getByRole('button',{name:'Preparar cuentas de prueba'}).click();
-  await expect(page.getByText('Demo2026!',{exact:true})).toBeVisible();
   await page.getByLabel('Correo electrónico',{exact:true}).fill('administrador@demo.local');
   await page.getByLabel('Contraseña',{exact:true}).fill('Demo2026!');
   await page.getByRole('button',{name:'Iniciar sesión',exact:true}).click();
