@@ -217,7 +217,7 @@ test("usuarios: crear, editar y desactivar con persistencia", async ({ page }) =
   await page.getByRole("button", { name: "Desactivar usuario Persona editada", exact: true }).click();
   await page.reload(); await page.getByLabel("Buscar nombre, correo o teléfono").fill("persona@example.com");
   await expect(page.locator(".ops-responsive-table tbody tr")).toHaveCount(1);
-  await expect(page.locator(".ops-responsive-table tbody tr")).toContainText("Inactivo");
+  await expect(page.getByRole("button", { name: "Estado de Persona editada", exact: true })).toHaveAttribute("aria-pressed", "false");
 });
 
 test("inventario: elegir insumo y validar entrada o salida", async ({ page }) => {
