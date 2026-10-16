@@ -79,8 +79,11 @@
 .ops-root.ops-workspace.ops-reference .ops-toast > button { position:absolute; right:8px; top:50%; transform:translateY(-50%); width:30px; height:30px; min-height:30px; padding:0; }
 @media(max-width:600px) { .ops-root.ops-workspace.ops-reference .ops-message.ops-toast { right:16px; bottom:20px; } }
 
-.ops-root.ops-workspace.ops-reference[data-page="administrador/promociones"] .ops-promotion-state { display:inline-flex; align-items:center; justify-content:center; gap:6px; min-width:82px; min-height:30px; padding:5px 10px; border:1px solid #cbd5e1; border-radius:999px; background:#f8fafc; color:#475569; font-size:12px; font-weight:600; line-height:18px; white-space:nowrap; }
-.ops-root.ops-workspace.ops-reference[data-page="administrador/promociones"] .ops-promotion-state.on { color:#166534; background:#f0fdf4; border-color:#bbdfc5; }
-.ops-promotion-state .ops-state-dot { width:6px; height:6px; border-radius:50%; background:currentColor; flex:none; }
-.ops-root.ops-workspace.ops-reference[data-page="administrador/promociones"] .ops-promotion-state:hover { border-color:currentColor; }
+.ops-root.ops-workspace.ops-reference[data-page="administrador/promociones"] .ops-promotion-state { display:inline-flex; align-items:center; justify-content:center; width:48px; min-width:48px; height:36px; min-height:36px; padding:0; border:0; background:transparent; box-shadow:none; border-radius:8px; }
+.ops-promotion-state .ops-state-track { display:block; width:38px; height:22px; border-radius:999px; background:#64748b; padding:3px; box-sizing:border-box; transition:background-color .15s; }
+.ops-promotion-state.on .ops-state-track { background:#008a4b; }
+.ops-promotion-state .ops-state-thumb { display:block; width:16px; height:16px; border-radius:50%; background:#fff; box-shadow:0 1px 3px #0f172a40; transition:transform .15s; }
+.ops-promotion-state.on .ops-state-thumb { transform:translateX(16px); }
+.ops-promotion-state:hover .ops-state-track { outline:2px solid #cbd5e1; outline-offset:2px; }
 @media(pointer:coarse) { .ops-root.ops-workspace.ops-reference[data-page="administrador/promociones"] .ops-promotion-state { min-height:44px; } }
+@media(prefers-reduced-motion:reduce) { .ops-promotion-state .ops-state-track,.ops-promotion-state .ops-state-thumb { transition:none; } }
