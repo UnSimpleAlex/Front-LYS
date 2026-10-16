@@ -6,7 +6,7 @@ import { useState, useContext } from "react";
 import { createPortal } from "react-dom";
 import { OperationsPageActions } from "./operationsPageContext";
 import { InitialsAvatar, RoleBadge } from "./AdminViews";
-import { downloadCsv, localDateKey } from "./operationsFiles";
+import { downloadExcel, localDateKey } from "./operationsFiles";
 import {
   createLocalUser,
   editLocalUser,
@@ -89,7 +89,7 @@ export function PromotionManager({
 
   const visibleOfferPage=Math.min(offerPage,Math.max(1,Math.ceil(filteredOffers.length/10)));
   const exportPromotions = () =>
-    downloadCsv(
+    downloadExcel(
       "promociones",
       ["Promoción", "Tipo", "Beneficio", "Vigencia", "Canjes", "Estado"],
       filteredOffers.filter(o=>!offerSelection.length || offerSelection.includes(o.id)).map((o) => [
@@ -495,7 +495,7 @@ export function UserManager({
   });
 
   const exportUsers = () =>
-    downloadCsv(
+    downloadExcel(
       clients ? "clientes" : "usuarios",
       clients
         ? ["Nombre", "Email", "Teléfono", "Pedidos", "Gasto Total", "Estado"]
@@ -1037,10 +1037,10 @@ export function InventoryManager({
   );
   const exportInventory = () => {
     if (tab === "Proveedores") {
-      downloadCsv("proveedores", ["Nombre", "Teléfono", "Correo"], filteredSuppliers.map(p => [p.name, p.phone, p.email]));
+      downloadExcel("proveedores", ["Nombre", "Teléfono", "Correo"], filteredSuppliers.map(p => [p.name, p.phone, p.email]));
       return;
     }
-    downloadCsv(
+    downloadExcel(
       "inventario",
       ["Insumo", "Categoría", "Stock actual", "Unidad", "Stock mínimo", "Costo", "Estado"],
       filteredSupplies.filter(s => !selectedSupplies.length || selectedSupplies.includes(s.id)).map((s) => [

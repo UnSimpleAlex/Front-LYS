@@ -5,7 +5,7 @@ import {
   Icon,
   PaymentMark,
 } from "./OperationsVisuals";
-import { dateText, localDateKey, downloadCsv, printLocal } from "./operationsFiles";
+import { dateText, localDateKey, downloadExcel, printLocal } from "./operationsFiles";
 import { useState, useContext } from "react";
 import { createPortal } from "react-dom";
 import { OperationsPageActions } from "./operationsPageContext";
@@ -114,7 +114,7 @@ export function CashViews({
     `${v.id} ${v.customer}`.toLowerCase().includes(search.toLowerCase().trim()),
   );
   const exportPayments = () =>
-    downloadCsv(
+    downloadExcel(
       "pagos",
       ["Fecha", "Pedido", "Método", "Monto", "Vuelto", "Estado"],
       filteredPayments.map((p) => [
@@ -585,7 +585,7 @@ export function CashViews({
               <button
                 className="ops-outline"
                 onClick={() =>
-                  downloadCsv(
+                  downloadExcel(
                     "comprobantes",
                     ["Número", "Pedido", "Cliente", "Tipo", "Fecha", "Monto"],
                     filteredVouchers.map((v) => [
@@ -709,7 +709,7 @@ export function CashViews({
                 <span>{dateLabel}</span>
               </div>
               <button className="ops-outline" onClick={exportPayments}>
-                <Icon name="download" data-ops-action="export"/> Exportar Excel (CSV)
+                <Icon name="download" data-ops-action="export"/> Exportar Excel
               </button>
             </div>,
             actionHost,

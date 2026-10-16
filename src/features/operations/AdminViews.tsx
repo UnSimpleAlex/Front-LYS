@@ -7,7 +7,7 @@ import {
   Icon,
   type IconName,
 } from "./OperationsVisuals";
-import { dateText, localDateKey, downloadCsv, printLocal } from "./operationsFiles";
+import { dateText, localDateKey, downloadExcel, printLocal } from "./operationsFiles";
 import { useContext, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { OperationsPageActions } from "./operationsPageContext";
@@ -302,7 +302,7 @@ export function AdminViews({
               onChange={e=>{setTo(e.target.value);setOrderPage(1);setSelection([]);}}
             />
           </div>
-          <button className="ops-btn-export" onClick={()=>downloadCsv("pedidos",["Pedido","Fecha","Cliente","Canal","Total","Estado"],filtered.filter(o=>!selection.length || selection.includes(o.id)).map(o=>[o.id,dateText(o.created),o.customer,o.channel,orderTotal(o),o.status]))}>
+          <button className="ops-btn-export" onClick={()=>downloadExcel("pedidos",["Pedido","Fecha","Cliente","Canal","Total","Estado"],filtered.filter(o=>!selection.length || selection.includes(o.id)).map(o=>[o.id,dateText(o.created),o.customer,o.channel,orderTotal(o),o.status]))}>
             <Icon name="download" data-ops-action="export"/> Exportar
           </button>
           <button className="ops-clear-order-filters" type="button" onClick={() => { setSearch(""); setFilter("Todos"); setStatus("Todos"); setFrom(""); setTo(""); setOrderPage(1); setSelection([]); }}>
@@ -493,7 +493,7 @@ export function AdminViews({
         <button
           className="ops-primary"
           onClick={() =>
-            downloadCsv(
+            downloadExcel(
               "reporte",
               ["Pedido", "Fecha", "Cliente", "Total", "Estado"],
               reportOrders.map((o) => [

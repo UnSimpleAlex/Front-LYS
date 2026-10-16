@@ -1,5 +1,8 @@
 import { expect, test, type Locator, type Page } from "@playwright/test";
-import { readFile } from "node:fs/promises";
+import { readFile, mkdir } from "node:fs/promises";
+import { createRequire } from "node:module";
+import type { CellValue, Buffer as ExcelBuffer } from "exceljs";
+const ExcelJS = createRequire(import.meta.url)("exceljs/dist/exceljs.min.js") as typeof import("exceljs");
 
 test.use({ timezoneId: "America/Lima" });
 test.beforeEach(async ({ page }) => {
@@ -12,15 +15,32 @@ test.beforeEach(async ({ page }) => {
   await page.getByRole("button", { name: "Cargar datos de demostración", exact: true }).click();
   await expect(page.getByRole("dialog")).toHaveCount(0);
 });
-async function csv(page: Page, button: Locator, name?: string) {
+async function excelRows(page: Page, button: Locator, name?: string) {
   const pending = page.waitForEvent("download");
   await button.click();
   const file = await pending;
-  if (name) expect(file.suggestedFilename()).toBe(name + ".csv");
+  if (name) expect(file.suggestedFilename()).toBe(name + ".xlsx");
   expect(await file.failure()).toBeNull();
-  const text = await readFile((await file.path())!, "utf8");
-  expect(text.startsWith("\ufeff")).toBeTruthy();
-  return text.slice(1).trim().split("\r\n");
+  const workbook = new ExcelJS.Workbook();
+  await workbook.xlsx.load(await readFile((await file.path())!) as unknown as ExcelBuffer);
+  const sheet = workbook.worksheets[0];
+  const table = sheet.getTable("DatosExportados");
+  expect(table).toBeTruthy();
+  expect(sheet.views[0]).toMatchObject({ state: "frozen", ySplit: 8 });
+  if (name) {
+    await mkdir("test-results/excel", { recursive: true });
+    await file.saveAs(`test-results/excel/${name}.xlsx`);
+  }
+  const output: string[] = [];
+  sheet.eachRow(row => {
+    if (row.number < 8 || (row.number > 8 && typeof row.getCell(1).value !== "number")) return;
+    const values = (row.values as CellValue[]).slice(2).map(value => {
+      const raw = value && typeof value === "object" && "formula" in value ? value.result : value;
+      return `"${String(raw ?? "").replaceAll('"', '""')}"`;
+    });
+    output.push(values.join(";"));
+  });
+  return output;
 }
 const exporter = (page: Page) => page.getByRole("button", { name: /Exportar/ }).filter({ visible: true }).first();
 test("mesas: solicitud de cuenta legible en tarjeta compacta", async ({ page }) => {
@@ -97,7 +117,7 @@ test("caja: verificar efectivo, apertura, conteo de cierre y persistencia", asyn
   await page.getByRole("button", { name: "Agregar S/ 5", exact: true }).click();
   await expect(page.getByLabel("Efectivo contado (S/)")).toHaveValue("305");
   await expect(page.locator(".cash-closing-differences > div").last()).toContainText("S/ 5.00");
-  const lines = await csv(page, exporter(page), "resumen-caja");
+  const lines = await excelRows(page, exporter(page), "resumen-caja");
   expect(lines.join("\n")).toContain('"Efectivo contado";"305"');
   await page.getByRole("button", { name: "Cerrar caja", exact: true }).click();
   await expect(page).toHaveURL(/caja$/);
@@ -116,24 +136,24 @@ for (const [route, name] of [
   ["caja/cierre", "resumen-caja"],
 ]) test(`descarga real de ${route}`, async ({ page }) => {
   await page.goto("/" + route);
-  expect((await csv(page, exporter(page), name)).length).toBeGreaterThan(1);
+  expect((await excelRows(page, exporter(page), name)).length).toBeGreaterThan(1);
 });
 
 test("inventario: filtros, selección múltiple y exportación", async ({ page }) => {
   await page.goto("/administrador/inventario");
   await page.getByLabel("Categoría de insumos").selectOption("Verduras");
-  let rows = await csv(page, exporter(page));
+  let rows = await excelRows(page, exporter(page));
   expect(rows).toHaveLength(2); expect(rows[1]).toContain('"Verduras"');
   await page.getByLabel("Categoría de insumos").selectOption("Todas");
   await page.getByLabel("Seleccionar insumo Pollo entero", { exact: true }).check();
-  rows = await csv(page, exporter(page));
+  rows = await excelRows(page, exporter(page));
   expect(rows).toHaveLength(2); expect(rows[1]).toContain("Pollo entero");
   await page.getByLabel("Seleccionar todos los insumos").check();
   await expect(page.getByLabel("Seleccionar insumo Papas nativas", { exact: true })).toBeChecked();
   await page.getByLabel("Seleccionar todos los insumos").uncheck();
   await expect(page.getByLabel("Seleccionar insumo Pollo entero", { exact: true })).not.toBeChecked();
   await page.getByLabel("Buscar insumos", { exact: true }).fill("Carnes");
-  expect(await csv(page, exporter(page))).toHaveLength(2);
+  expect(await excelRows(page, exporter(page))).toHaveLength(2);
   await page.getByLabel("Buscar insumos", { exact: true }).fill("sin coincidencias");
   await expect(page.getByText("No hay insumos que coincidan con los filtros.")).toBeVisible();
 });
@@ -149,7 +169,7 @@ test("proveedores: crear, buscar, exportar y conservar tras recarga", async ({ p
   await dialog.getByRole("button", { name: "Guardar proveedor" }).click();
   await expect(dialog).toHaveCount(0);
   await page.getByLabel("Buscar insumos", { exact: true }).fill("proveedor@example.com");
-  const rows = await csv(page, exporter(page), "proveedores");
+  const rows = await excelRows(page, exporter(page), "proveedores");
   expect(rows).toHaveLength(2); expect(rows[1]).toContain("Proveedor funcional");
   await page.reload(); await page.getByLabel("Estado de insumos").selectOption("Proveedores");
   await expect(page.locator('[data-panel="Proveedores"]')).toContainText("Proveedor funcional");
@@ -158,11 +178,11 @@ test("proveedores: crear, buscar, exportar y conservar tras recarga", async ({ p
 test("pagos: filtro exportado, vacío y fecha local cercana a medianoche", async ({ page }) => {
   await page.goto("/caja/historial");
   await page.getByLabel("Filtrar resultados").selectOption("Yape");
-  const rows = await csv(page, exporter(page));
+  const rows = await excelRows(page, exporter(page));
   expect(rows.length).toBeGreaterThan(1);
   expect(rows.slice(1).every(row => row.includes('"Yape"'))).toBeTruthy();
   await page.getByLabel("Estado del pago").selectOption("Anulado");
-  expect(await csv(page, exporter(page))).toHaveLength(1);
+  expect(await excelRows(page, exporter(page))).toHaveLength(1);
   await expect(page.getByText("No hay pagos que coincidan con los filtros.")).toBeVisible();
   await page.evaluate(async () => {
     const ops = await import(String("/src/features/operations/operationsStore.ts")) as typeof import("../src/features/operations/operationsStore");
@@ -173,26 +193,26 @@ test("pagos: filtro exportado, vacío y fecha local cercana a medianoche", async
   await page.reload();
   await page.getByLabel("Pagos desde").fill("2026-10-15");
   await page.getByLabel("Pagos hasta").fill("2026-10-15");
-  expect(await csv(page, exporter(page))).toHaveLength(2);
+  expect(await excelRows(page, exporter(page))).toHaveLength(2);
 });
 
-test("comprobantes: búsqueda y CSV contienen los mismos clientes", async ({ page }) => {
+test("comprobantes: búsqueda y Excel contienen los mismos clientes", async ({ page }) => {
   await page.goto("/caja/comprobantes");
   const customer = (await page.locator(".ops-responsive-table tbody tr").first().locator("td").nth(3).innerText()).trim();
   await page.getByLabel("Buscar número o cliente").fill(customer);
-  expect((await csv(page, exporter(page))).slice(1).every(row => row.includes(customer))).toBeTruthy();
+  expect((await excelRows(page, exporter(page))).slice(1).every(row => row.includes(customer))).toBeTruthy();
   await page.getByLabel("Buscar número o cliente").fill("sin comprobantes");
-  expect(await csv(page, exporter(page))).toHaveLength(1);
+  expect(await excelRows(page, exporter(page))).toHaveLength(1);
   await expect(page.getByText("No hay comprobantes que coincidan con los filtros.")).toBeVisible();
 });
 
 test("productos: exportar seleccionados y aplicar categoría", async ({ page }) => {
   await page.goto("/administrador/productos");
   await page.getByLabel("Seleccionar Pollo entero", { exact: true }).check();
-  expect(await csv(page, exporter(page))).toHaveLength(2);
+  expect(await excelRows(page, exporter(page))).toHaveLength(2);
   await page.getByLabel("Categoría de productos").selectOption("bebidas");
   await expect(page.getByText("0 seleccionados", { exact: true })).toBeVisible();
-  expect((await csv(page, exporter(page))).slice(1).every(row => row.includes('"Bebidas"'))).toBeTruthy();
+  expect((await excelRows(page, exporter(page))).slice(1).every(row => row.includes('"Bebidas"'))).toBeTruthy();
   await page.getByLabel("Disponibilidad", { exact: true }).selectOption("Inactivos");
   await expect(page.locator("tbody tr")).toHaveCount(0);
   await page.getByRole("button", { name: "Eliminar filtros", exact: true }).click();
@@ -225,15 +245,21 @@ test("delivery: pestañas por estado y transiciones persistentes", async ({ page
   await expect(page.locator(".ops-delivery-card").filter({ hasText: id })).toContainText("Entregado");
 });
 
-test("CSV conserva comillas, fórmulas como texto y números negativos", async ({ page }) => {
+test("Excel conserva comillas, fórmulas como texto y números negativos", async ({ page }) => {
   const pending = page.waitForEvent("download");
   await page.evaluate(async () => {
     const files = await import(String("/src/features/operations/operationsFiles.ts")) as typeof import("../src/features/operations/operationsFiles");
-    files.downloadCsv("casos", ["Texto", "Importe"], [['  =SUM(1;2)', -3.5], ['-10% "oferta"', 2]]);
+    files.downloadExcel("casos", ["Texto", "Importe", "Fecha"], [['  =SUM(1;2)', -3.5, new Date("2026-10-16T00:30:00-05:00")], ['-10% "oferta"', 2, "16/10/26, 12:30 a. m."]]);
   });
-  const text = await readFile((await (await pending).path())!, "utf8");
-  expect(text).toContain('"\'  =SUM(1;2)";"-3.5"');
-  expect(text).toContain('"\'-10% ""oferta""";"2"');
+  const workbook = new ExcelJS.Workbook();
+  await workbook.xlsx.load(await readFile((await (await pending).path())!) as unknown as ExcelBuffer);
+  const sheet = workbook.worksheets[0];
+  expect(sheet.getCell("B9").value).toBe("  =SUM(1;2)");
+  expect(sheet.getCell("B10").value).toBe('-10% "oferta"');
+  expect(sheet.getCell("C9").value).toBe(-3.5);
+  expect(sheet.getCell("B9").type).toBe(ExcelJS.ValueType.String);
+  expect((sheet.getCell("D9").value as Date).toISOString()).toBe("2026-10-16T00:30:00.000Z");
+  expect((sheet.getCell("D10").value as Date).toISOString()).toBe("2026-10-16T00:30:00.000Z");
 });
 
 test("caja: tipo de comprobante, RUC inválido, emisión e impresión", async ({ page }) => {
@@ -319,7 +345,7 @@ test("inventario: elegir insumo y validar entrada o salida", async ({ page }) =>
   await dialog.getByRole("button", { name: "Guardar movimiento" }).click();
   await expect(dialog).toHaveCount(0);
   await page.reload(); await page.getByLabel("Buscar insumos").fill("Papas nativas");
-  expect((await csv(page, exporter(page)))[1]).toContain('"40"');
+  expect((await excelRows(page, exporter(page)))[1]).toContain('"40"');
 });
 
 test("promociones: crear, editar, desactivar, exportar y eliminar", async ({ page }) => {
@@ -338,7 +364,7 @@ test("promociones: crear, editar, desactivar, exportar y eliminar", async ({ pag
   await page.getByRole("button", { name: "Activar Promo funcional", exact: true }).click();
   await expect(page.getByRole("button", { name: "Activar Promo funcional", exact: true })).toHaveAttribute("aria-pressed", "false");
   await page.reload(); await page.getByLabel("Buscar promociones").fill("Promo funcional");
-  const rows = await csv(page, exporter(page));
+  const rows = await excelRows(page, exporter(page));
   expect(rows).toHaveLength(2);
   expect(rows[1]).toContain('"Inactiva"');
   await page.getByRole("button", { name: "Eliminar Promo funcional", exact: true }).click();
@@ -385,7 +411,7 @@ test("pedidos: buscar desde otra página reinicia paginación y selección", asy
   await expect(page.locator(".ops-responsive-table tbody tr")).toHaveCount(1);
   await expect(page.locator('.ops-pagination [aria-current="page"]')).toHaveText("1");
   await expect(page.getByRole("button", { name: "Página anterior", exact: true })).toBeDisabled();
-  const rows = await csv(page, exporter(page));
+  const rows = await excelRows(page, exporter(page));
   expect(rows).toHaveLength(2); expect(rows[1]).toContain("COCINA-DEMO-001");
 });
 

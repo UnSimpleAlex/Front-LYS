@@ -2,7 +2,7 @@ import { useState } from "react";
 import { OperationsTable } from "./OperationsTable";
 import { Icon, ProductSummary } from "./OperationsVisuals";
 import { Empty, Badge } from "./OperationsUI";
-import { downloadCsv } from "./operationsFiles";
+import { downloadExcel } from "./operationsFiles";
 import type { Order } from "./operationsStore";
 import { KitchenChannel } from "./KitchenReferenceUI";
 import {
@@ -37,7 +37,7 @@ export function KitchenHistory({
     )
     .sort((a, b) => b.created.localeCompare(a.created));
   const exportHistory = () =>
-    downloadCsv(
+    downloadExcel(
       "historial-cocina",
       [
         "Pedido",

@@ -11,7 +11,7 @@ import {
 } from "./operationsStore";
 import { Icon } from "./OperationsVisuals";
 import { Stats, Badge } from "./OperationsUI";
-import { downloadCsv } from "./operationsFiles";
+import { downloadExcel } from "./operationsFiles";
 import { CashOpeningContent } from "./CashOpeningContent";
 import { denominations } from "./cashDenominationValues";
 import { CashClosingContent } from "./CashClosingContent";
@@ -51,7 +51,7 @@ export function CashShiftPanel({
   const day = new Date().toLocaleDateString("es-PE");
   const cashier = shift?.user || currentUser()?.name || "Sin identificar";
   const exportSummary = () =>
-    downloadCsv(
+    downloadExcel(
       "resumen-caja",
       ["Concepto", "Monto"],
       [
@@ -59,7 +59,7 @@ export function CashShiftPanel({
         ["Ingresos en efectivo", cash],
         ["Retiros", shift?.withdrawals || 0],
         ["Efectivo esperado", expected],
-        ["Efectivo contado", amount],
+        ["Efectivo contado", Number(amount)],
         ["Diferencia", difference],
       ],
     );

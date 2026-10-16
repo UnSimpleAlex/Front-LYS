@@ -8,7 +8,7 @@ import { ProductDetails, ProductDeactivate } from "./ProductDetails";
 import { productSku, categoryIcon } from "./productHelpers";
 import { OperationsPageActions } from "./operationsPageContext";
 import { ProductEditor } from "./ProductEditor";
-import { downloadCsv } from "./operationsFiles";
+import { downloadExcel } from "./operationsFiles";
 import { useOperations, saveProduct, deleteProduct, money, type MenuProduct } from "./operationsStore";
 
 const blankProduct=():MenuProduct=>({id:crypto.randomUUID(),name:"",description:"",category:"pollo",price:0,stock:0,active:true,image:"/images/logo.webp",size:"Personal",popular:0,isNew:false,promo:false});
@@ -42,7 +42,7 @@ export function ProductManager({notify}:{notify:(task:()=>void)=>void}) {
       <label>Categoría<select aria-label="Categoría de productos" value={category} onChange={e=>updateFilters(()=>setCategory(e.target.value))}><option value="Todas">Todas las categorías</option>{categories.map(c=><option value={c.id} key={c.id}>{c.name}</option>)}</select></label>
       <label>Disponibilidad<select aria-label="Disponibilidad" value={availability} onChange={e=>updateFilters(()=>setAvailability(e.target.value))}>{["Todas","Activos","Inactivos","Sin stock"].map(s=><option key={s}>{s}</option>)}</select></label>
       <label>Sucursal<select aria-label="Sucursal" value={branch} onChange={e=>updateFilters(()=>setBranch(e.target.value))}><option>Todas</option>{[...new Set(data.products.map(p=>p.branch || "Principal"))].map(s=><option key={s}>{s}</option>)}</select></label>
-      <div className="ops-mobile-export-row"><span className="ops-mobile-only">{rows.length} productos</span><button onClick={()=>downloadCsv("productos",["Producto","SKU","Categoría","Precio","Stock","Estado"],rows.filter(p=>!selected.length || selected.includes(p.id)).map(p=>[p.name,productSku(p),categories.find(c=>c.id===p.category)?.name || p.category,p.price,p.stock ?? 0,p.active ? "Activo":"Inactivo"]))}><Icon name="download" data-ops-action="export"/>Exportar</button></div>
+      <div className="ops-mobile-export-row"><span className="ops-mobile-only">{rows.length} productos</span><button onClick={()=>downloadExcel("productos",["Producto","SKU","Categoría","Precio","Stock","Estado"],rows.filter(p=>!selected.length || selected.includes(p.id)).map(p=>[p.name,productSku(p),categories.find(c=>c.id===p.category)?.name || p.category,p.price,p.stock ?? 0,p.active ? "Activo":"Inactivo"]))}><Icon name="download" data-ops-action="export"/>Exportar</button></div>
       <button className="ops-mobile-only ops-mobile-filter-toggle" aria-expanded={mobileFilters} onClick={()=>setMobileFilters(!mobileFilters)}><Icon name="filter"/>Filtros</button><button className="ops-primary" disabled={!search && category==="Todas" && availability==="Todas" && branch==="Todas"} onClick={()=>updateFilters(()=>{setSearch("");setCategory("Todas");setAvailability("Todas");setBranch("Todas");})}><Icon name="filter"/>Eliminar filtros</button>
     </section>
     <section className="ops-product-list" aria-label="Lista de productos">

@@ -69,6 +69,12 @@ Ver [informe de auditoría administrativa](AUDITORIA_ADMINISTRATIVA.md): 25 ruta
 
 Ver [interacciones operativas verificadas](INTERACCIONES_OPERATIVAS.md): filtros, selección, edición, exportaciones reales, comprobantes, configuración y persistencia. Las pruebas pueden aislarse con `LYS_TEST_PORT`; la caché Vite es local a cada copia.
 
+### Exportaciones XLSX
+
+Las once rutas que exportaban CSV generan ahora Excel real con el diseño de la referencia suministrada: logo, título, franja roja, indicadores grises y filas alternadas. La tabla tiene filtros por columna, ordenación, encabezados fijos y totales SUBTOTAL sobre filas visibles. Productos incluye fórmulas de valor de stock y resumen por categoría de los registros exportados; se aclara que ese resumen no depende del filtrado manual posterior en la hoja principal.
+
+Se ejecutaron 20 casos de descarga y flujos relacionados: once reportes, filtros, selección, resultados vacíos, proveedores, promociones, cierre y cadenas que parecen fórmulas. Los XLSX se reabren para validar encabezado inmovilizado, filas y contenido; una revisión independiente verificó tablas, autofiltros, logo, formatos monetarios, fórmulas y valores almacenados. El render de la herramienta de hojas devolvió imágenes vacías; se revisó una representación de los valores y estilos leídos del archivo. No se afirma una prueba interactiva en Microsoft Excel ni un recálculo nativo de su motor.
+
 ### Apertura, cierre y etiquetas compactas
 
 Las pruebas de interacciones cubren verificación obligatoria del efectivo, apertura persistente tras recarga, prevención de apertura duplicada, conteo por denominaciones, uso del fondo inicial en cierre, diferencias y exportación del resumen. En apertura el total se calcula desde las denominaciones, sin campo manual ni observaciones. La lista tiene desplazamiento interno y encabezado fijo. En cierre se conservan las observaciones y el ingreso manual del efectivo contado.
