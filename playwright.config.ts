@@ -9,5 +9,5 @@ export default defineConfig({
   reporter: 'list',
   use: { baseURL, trace: 'retain-on-failure' },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'], channel: 'msedge' } }],
-  webServer: { command: `npm run dev -- --port ${port} --strictPort`, url: baseURL, reuseExistingServer: !process.env.CI && !process.env.LYS_TEST_PORT },
+  webServer: { command: `npm run dev -- --port ${port} --strictPort`, url: baseURL, reuseExistingServer: !process.env.CI && (!process.env.LYS_TEST_PORT || process.env.LYS_TEST_REUSE === "1") },
 });
