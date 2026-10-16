@@ -164,3 +164,19 @@
   .ops-payment-illustration { display:flex; align-items:center; justify-content:center; flex:1; min-height:180px; }
   .ops-payment-illustration :is(img,svg) { width:min(100%,210px); height:130px; object-fit:contain; }
 }
+
+.ops-root.ops-workspace.ops-reference[data-page="administrador/configuracion"] .ops-method-grid { grid-template-columns:repeat(6,minmax(0,1fr)); gap:16px; width:100%; max-width:960px; margin-inline:auto; }
+.ops-root.ops-workspace.ops-reference[data-page="administrador/configuracion"] .ops-method-grid article { grid-column:span 2; min-width:0; padding:18px; }
+.ops-root.ops-workspace.ops-reference[data-page="administrador/configuracion"] .ops-method-grid article:nth-child(4) { grid-column:2 / span 2; }
+.ops-root.ops-workspace.ops-reference[data-page="administrador/configuracion"] .ops-method-grid .ops-payment-illustration { min-height:0; }
+.ops-root.ops-workspace.ops-reference[data-page="administrador/configuracion"] .ops-method-grid .ops-qr-upload { width:100%; align-self:stretch; }
+.ops-root.ops-workspace.ops-reference[data-page="administrador/configuracion"] .ops-method-grid .ops-qr-upload-button { width:100%; box-sizing:border-box; }
+@media(max-width:1100px) {
+  .ops-root.ops-workspace.ops-reference[data-page="administrador/configuracion"] .ops-method-grid { grid-template-columns:repeat(4,minmax(0,1fr)); max-width:640px; }
+  .ops-root.ops-workspace.ops-reference[data-page="administrador/configuracion"] .ops-method-grid article:nth-child(4) { grid-column:span 2; }
+  .ops-root.ops-workspace.ops-reference[data-page="administrador/configuracion"] .ops-method-grid article:last-child { grid-column:2 / span 2; }
+}
+@media(max-width:600px) {
+  .ops-root.ops-workspace.ops-reference[data-page="administrador/configuracion"] .ops-method-grid { grid-template-columns:minmax(0,1fr); max-width:340px; }
+  .ops-root.ops-workspace.ops-reference[data-page="administrador/configuracion"] .ops-method-grid article,.ops-root.ops-workspace.ops-reference[data-page="administrador/configuracion"] .ops-method-grid article:nth-child(4),.ops-root.ops-workspace.ops-reference[data-page="administrador/configuracion"] .ops-method-grid article:last-child { grid-column:auto; }
+}
