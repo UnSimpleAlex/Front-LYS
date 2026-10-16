@@ -55,8 +55,6 @@
     .ops-sidebar { width: 295px; }
     .ops-page-heading h1 { font-size: 36px; line-height: 42px; }
     .ops-page-heading p { font-size: 18px; line-height: 24px; }
-    .ops-area-label { font-size: 16px; margin-bottom: 25px; }
-    .ops-side-navigation button { min-height: 58px; font-size: 18px; }
     .reference-dashboard .ops-stat { min-height: 126px; padding: 18px 22px; gap: 22px; }
     .reference-dashboard .ops-stat-icon { width: 64px; height: 64px; flex-basis: 64px; }
     .reference-dashboard .ops-chart { height: 270px; }
