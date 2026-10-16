@@ -19,6 +19,7 @@
   .ops-dialog :is(input, select, textarea) { max-width: 100%; }
   .ops-dialog .ops-form label { overflow-wrap: anywhere; }
   .anchor-kitchen-time-actions button { font-size: 12px; min-height: 32px; }
+  .ops-stock-alert .ops-supply-summary strong { min-width: 85px; display: inline-block; }
   @media (max-width: 900px) {
     .ops-content :is(td, th, small, label),
     .ops-dialog :is(label, small) { font-size: 12px !important; line-height: 1.4; }
