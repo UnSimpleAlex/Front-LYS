@@ -16,7 +16,6 @@ for (const width of [240, 280, 320, 390, 768, 1024, 1440, 1920]) {
       await expect(page.locator('main h1')).toBeVisible();
       await page.evaluate(() => document.fonts.ready);
       if (route === '/mi-cuenta/pedidos') await page.getByLabel('Ver pedidos de ejemplo').check();
-      if (route === '/mi-cuenta/notificaciones') await page.getByLabel('Ver notificaciones de ejemplo').check();
       await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)).toBeTruthy();
       expect(await page.locator('img').evaluateAll(images => images.filter(image => image instanceof HTMLImageElement && image.complete && image.naturalWidth === 0).map(image => image.getAttribute('src')))).toEqual([]);
       if ([390, 768, 1440].includes(width)) await page.screenshot({ path: `test-results/information-${route.replaceAll('/', '-')}-${width}.png`, fullPage: true });
@@ -43,13 +42,14 @@ test('contacto prepara enlaces reales sin enviar mensajes automáticamente', asy
 });
 test('perfil, dirección y preferencia de pago se reutilizan en checkout y persisten en la pestaña', async ({ page }) => {
   await page.goto('/mi-cuenta/datos');
-  await page.getByLabel('Nombres completos').fill('Cliente Prueba');
+  await page.getByLabel('Nombre', {exact:true}).fill('Cliente')
+  await page.getByLabel('Apellidos').fill('Prueba');
   await page.getByLabel('Correo electrónico').fill('prueba@example.com');
-  await page.getByLabel('Teléfono *').fill('987654321');
+  await page.getByLabel('Celular', {exact:true}).fill('987654321');
   await page.getByRole('button', { name: 'Guardar cambios' }).click();
-  await expect(page.locator('.account-success')).toContainText('Datos guardados');
+  await expect(page.getByRole('status').filter({hasText:'Datos guardados'})).toContainText('Datos guardados');
   await page.goto('/mi-cuenta/direcciones');
-  await page.getByRole('button', { name: /Agregar dirección/ }).click();
+  await page.getByRole('button', { name: /Nueva dirección/ }).click();
   const dialog = page.getByRole('dialog');
   await dialog.getByLabel('Calle y número').fill('Av. Los Pinos 123');
   await dialog.getByLabel('Referencia').fill('Frente al parque');
@@ -57,10 +57,9 @@ test('perfil, dirección y preferencia de pago se reutilizan en checkout y persi
   await dialog.getByRole('button', { name: 'Guardar dirección' }).click();
   await expect(page.locator('.account-address')).toContainText('Av. Los Pinos 123');
   await page.reload();
-  await expect(page.locator('.account-address')).toContainText('Dirección principal');
+  await expect(page.locator('.account-address')).toContainText('Principal');
   await page.goto('/mi-cuenta/metodos-pago');
-  await page.getByRole('radio', { name: 'Yape' }).check();
-  await page.getByRole('button', { name: 'Guardar preferencia' }).click();
+  await page.locator('.account-payment-options').getByRole('button', { name: /Yape/ }).click();
   await page.evaluate(() => localStorage.setItem('lys-carta-cart', JSON.stringify({ 'pollo-01': 1 })));
   await page.goto('/carrito');
   await page.getByRole('button', { name: 'Continuar compra' }).click();
@@ -73,7 +72,7 @@ test('perfil, dirección y preferencia de pago se reutilizan en checkout y persi
 });
 test('direcciones se editan y eliminan con confirmación', async ({ page }) => {
   await page.goto('/mi-cuenta/direcciones');
-  await page.getByRole('button', { name: /Agregar dirección/ }).click();
+  await page.getByRole('button', { name: /Nueva dirección/ }).click();
   await page.getByRole('dialog').getByLabel('Calle y número').fill('Av. Los Pinos 123');
   await page.getByRole('dialog').getByLabel('Referencia').fill('Frente al parque');
   await page.getByRole('dialog').getByRole('button', { name: 'Guardar dirección' }).click();
@@ -92,7 +91,7 @@ test('pedidos de ejemplo, filtros, detalle y volver a pedir', async ({ page }) =
   await page.goto('/mi-cuenta/pedidos');
   await page.getByLabel('Ver pedidos de ejemplo').check();
   await expect(page.locator('.account-order')).toHaveCount(4);
-  await page.getByRole('button', { name: 'Entregado', exact: true }).click();
+  await page.getByRole('button', { name: /^Entregados/  }).click();
   await expect(page.locator('.account-order')).toHaveCount(2);
   await page.getByRole('button', { name: 'Ver detalle', exact: true }).first().click();
   await expect(page.getByRole('dialog')).toContainText('Pedido de ejemplo');
@@ -105,20 +104,19 @@ test('favoritos comparten catálogo y carrito, sin inventar favoritos guardados'
   await expect(page.getByRole('heading', { name: 'Aquí van tus favoritos' })).toBeVisible();
   await page.evaluate(() => localStorage.setItem('lys-carta-favorites-' + localStorage.getItem('lys-session-v1'), JSON.stringify(['pollo-01', 'parrillas-01'])));
   await page.reload();
-  await expect(page.locator('.account-favorites .product-card')).toHaveCount(2);
-  await page.locator('.product-add').first().click();
+  await expect(page.locator('.account-favorites .account-product')).toHaveCount(2);
+  await page.locator('.account-product .primary-button').first().click();
   await expect(page.getByRole('status')).toContainText('agregado');
-  await page.locator('.product-favorite').first().click();
-  await expect(page.locator('.account-favorites .product-card')).toHaveCount(1);
+  await page.locator('.account-heart').first().click();
+  await expect(page.locator('.account-favorites .account-product')).toHaveCount(1);
 });
 test('preferencias y notificaciones leídas funcionan y persisten', async ({ page }) => {
   await page.goto('/mi-cuenta/notificaciones');
-  const promos = page.getByRole('switch', { name: 'Promociones y ofertas' });
+  const promos = page.getByRole('switch', { name: 'Promociones', exact:true });
   await expect(promos).toHaveAttribute('aria-checked', 'false');
   await promos.click();
   await page.reload();
   await expect(promos).toHaveAttribute('aria-checked', 'true');
-  await page.getByLabel('Ver notificaciones de ejemplo').check();
   await page.getByRole('button', { name: 'Marcar todas como leídas' }).click();
   await expect(page.locator('.notification-dot:not(.read)')).toHaveCount(0);
 });
