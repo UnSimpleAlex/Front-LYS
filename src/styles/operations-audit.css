@@ -93,3 +93,6 @@
 
 .ops-root.ops-workspace.ops-reference[data-page="administrador/usuarios"] .ops-roles-summary-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; width:100%; }
 @media(max-width:540px) { .ops-root.ops-workspace.ops-reference[data-page="administrador/usuarios"] .ops-roles-summary-grid { grid-template-columns:minmax(0,1fr); } }
+
+.ops-root.ops-workspace.ops-reference[data-page="administrador/pedidos"] .ops-responsive-table :is(.ops-channel-badge,.ops-badge) { display:inline-flex; align-items:center; min-height:22px; height:auto; padding:2px 8px; line-height:18px; gap:5px; font-size:12px; }
+.ops-root.ops-workspace.ops-reference[data-page="administrador/pedidos"] .ops-responsive-table .ops-channel-badge svg { width:16px; height:16px; }
