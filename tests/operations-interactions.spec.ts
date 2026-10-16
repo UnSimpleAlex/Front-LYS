@@ -110,8 +110,14 @@ test("productos: exportar seleccionados y aplicar categoría", async ({ page }) 
   await page.getByLabel("Seleccionar Pollo entero", { exact: true }).check();
   expect(await csv(page, exporter(page))).toHaveLength(2);
   await page.getByLabel("Categoría de productos").selectOption("bebidas");
-  await page.getByRole("button", { name: "Filtrar", exact: true }).click();
+  await expect(page.getByText("0 seleccionados", { exact: true })).toBeVisible();
   expect((await csv(page, exporter(page))).slice(1).every(row => row.includes('"Bebidas"'))).toBeTruthy();
+  await page.getByLabel("Disponibilidad", { exact: true }).selectOption("Inactivos");
+  await expect(page.locator("tbody tr")).toHaveCount(0);
+  await page.getByRole("button", { name: "Limpiar filtros", exact: true }).click();
+  await expect(page.getByLabel("Categoría de productos")).toHaveValue("Todas");
+  await expect(page.getByLabel("Disponibilidad", { exact: true })).toHaveValue("Todas");
+  await expect(page.locator("tbody tr")).toHaveCount(7);
 });
 
 test("salón: buscar Mesa 5 y alternar plano/lista", async ({ page }) => {
