@@ -273,7 +273,7 @@ export function OrderList({
                   </button>
                 )}
                 <button
-                  className="info-button"
+                  className="info-button account-view-detail"
                   onClick={() => setSelected(order)}
                 >
                   <Icon name="eye" />

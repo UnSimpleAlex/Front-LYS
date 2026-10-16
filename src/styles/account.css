@@ -580,11 +580,14 @@
   display: none;
 }
 .account-favorite-preview .primary-button {
-  background: white;
-  color: #ed0000;
+  background: #ed0000;
+  color: white;
   padding: 6px;
   min-height: 34px;
 }
+.account-page .account-view-detail { background:#ed0000; color:#fff; border-color:#ed0000; }
+.account-page :is(.account-view-detail,.account-favorite-preview .primary-button):hover { background:#c80014; color:#fff; border-color:#c80014; }
+.account-page :is(.account-view-detail,.account-favorite-preview .primary-button) svg { color:inherit; }
 .account-favorite-preview .account-product h3 {
   font-size: 14px;
 }
