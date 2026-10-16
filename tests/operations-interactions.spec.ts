@@ -261,8 +261,11 @@ test("caja: tipo de comprobante, RUC inválido, emisión e impresión", async ({
   const popupEvent = page.waitForEvent("popup");
   await page.getByRole("button", { name: "Imprimir", exact: true }).click();
   const popup = await popupEvent;
-  await expect(popup).toHaveTitle(/^F001/);
-  await expect(popup.locator("body")).toContainText("20123456789");
+  await expect(popup).toHaveURL(/^blob:/);
+  expect(await page.evaluate(async url => {
+    const response = await fetch(url);
+    return (await response.text()).slice(0, 5);
+  }, popup.url())).toBe("%PDF-");
   await popup.close(); await page.reload();
   await page.getByLabel("Filtrar tipo de comprobante").selectOption("Factura");
   await expect(page.locator(".ops-responsive-table tbody tr")).toHaveCount(1);

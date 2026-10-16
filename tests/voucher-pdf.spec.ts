@@ -19,6 +19,12 @@ test("comprobantes: descarga PDF real de boleta y factura con detalle", async ({
   expect(receipt.suggestedFilename()).toMatch(/^boleta-.*\.pdf$/);
   await receipt.saveAs("test-results/pdf/boleta.pdf");
   expect((await readFile("test-results/pdf/boleta.pdf")).subarray(0, 5).toString()).toBe("%PDF-");
+  const preview = page.waitForEvent("popup");
+  await page.getByRole("button", { name: "Imprimir", exact: true }).first().click();
+  const popup = await preview;
+  await expect(popup).toHaveURL(/^blob:/);
+  expect(await page.evaluate(async url => (await (await fetch(url)).text()).slice(0, 5), popup.url())).toBe("%PDF-");
+  await popup.close();
   await page.evaluate(async () => {
     const store = await import(String("/src/features/operations/operationsStore.ts")) as typeof import("../src/features/operations/operationsStore");
     const state = store.getOperations();

@@ -43,12 +43,23 @@ export function CashViews({
   const dateLabel = today.toLocaleDateString("es-PE", {day:"numeric",month:"long",year:"numeric"});
   const data = useOperations();
   const [downloading, setDownloading] = useState("");
-  const downloadPdf = async (voucher: Voucher) => {
+  const downloadPdf = async (voucher: Voucher, preview = false) => {
+    const popup = preview ? window.open("", "_blank", "width=850,height=950") : null;
+    if (preview && !popup) {
+      notify(() => { throw new Error("Permite la ventana del comprobante PDF."); });
+      return;
+    }
+    if (popup) {
+      popup.document.title = voucher.id;
+      popup.document.body.textContent = "Preparando comprobante PDF...";
+    }
     setDownloading(voucher.id);
     try {
-      const { downloadVoucherPdf } = await import("./voucherPdf");
-      await downloadVoucherPdf(voucher, data);
+      const { downloadVoucherPdf, previewVoucherPdf } = await import("./voucherPdf");
+      if (popup) await previewVoucherPdf(voucher, data, popup);
+      else await downloadVoucherPdf(voucher, data);
     } catch (error) {
+      popup?.close();
       notify(() => { throw error instanceof Error ? error : new Error("No se pudo descargar el PDF."); });
     } finally {
       setDownloading("");
@@ -666,17 +677,8 @@ export function CashViews({
                       <td>
                         <div className="ops-actions">
                           <button
-                            onClick={() =>
-                              notify(() =>
-                                printLocal(v.id, [
-                                  v.type,
-                                  v.customer,
-                                  v.document,
-                                  `Pedido ${v.orderId}`,
-                                  money(v.total),
-                                ]),
-                              )
-                            }
+                            onClick={() => void downloadPdf(v, true)}
+                            disabled={downloading !== ""}
                             title="Ver / Imprimir comprobante" aria-label="Imprimir" className="ops-voucher-print"
                           >
                             <Icon name="print" />

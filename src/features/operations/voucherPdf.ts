@@ -148,3 +148,13 @@ export async function downloadVoucherPdf(voucher: Voucher, state: OperationsStat
   const doc = await createVoucherPdf(voucher, state);
   doc.save(`${voucher.type.toLowerCase().replaceAll(" ", "-")}-${voucher.id}.pdf`);
 }
+
+export async function previewVoucherPdf(voucher: Voucher, state: OperationsState, popup: Window) {
+  const doc = await createVoucherPdf(voucher, state);
+  const url = URL.createObjectURL(doc.output("blob"));
+  if (popup.closed) { URL.revokeObjectURL(url); return; }
+  popup.location.replace(url);
+  const cleanup = window.setInterval(() => {
+    if (popup.closed) { URL.revokeObjectURL(url); window.clearInterval(cleanup); }
+  }, 1000);
+}
