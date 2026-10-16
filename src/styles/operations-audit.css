@@ -309,3 +309,35 @@
 
 .ops-root.ops-workspace.ops-reference[data-page="mesera/pedidos"] .ops-responsive-table :is(th,td):last-child { text-align:center; vertical-align:middle; }
 .ops-root.ops-workspace.ops-reference[data-page="mesera/pedidos"] .ops-salon-order-actions { display:flex; flex-direction:row; align-items:center; justify-content:center; gap:6px; width:100%; }
+
+/* Solid semantic labels shared by all operational areas. Category styling is separate. */
+.ops-root.ops-workspace.ops-reference[data-page][data-page] {
+  :is(.ops-badge,.ops-role-badge,.ops-channel-badge,.kr-channel,.kr-status,.ops-voucher-badge) { background:var(--ops-label-color,#475569); color:#fff; border-color:var(--ops-label-color,#475569); }
+  :is(.ops-badge,.ops-role-badge,.ops-channel-badge,.kr-channel,.kr-status,.ops-voucher-badge) :is(svg,span) { color:inherit; }
+  .ops-badge .ops-status-dot { background:#fff; }
+  .ops-badge.green,.kr-status.green { --ops-label-color:#008a4b; }
+  .ops-badge.gold,.kr-status.orange { --ops-label-color:#ad6400; }
+  .ops-badge.blue,.kr-status.blue { --ops-label-color:#0069e8; }
+  .ops-badge.red,.kr-status.red,.ops-badge[data-status="Cancelado"] { --ops-label-color:#ed0017; }
+  .ops-badge.gray,.kr-status.gray { --ops-label-color:#475569; }
+  .ops-role-badge.admin { --ops-label-color:#991b1b; }
+  .ops-role-badge.cocina { --ops-label-color:#92400e; }
+  .ops-role-badge.caja { --ops-label-color:#075985; }
+  .ops-role-badge.mesera { --ops-label-color:#6b21a8; }
+  .ops-role-badge.delivery { --ops-label-color:#166534; }
+  .ops-channel-badge.salon { --ops-label-color:#991b1b; }
+  .ops-channel-badge.delivery { --ops-label-color:#075985; }
+  .ops-channel-badge.recojo,.ops-channel-badge.llevar { --ops-label-color:#166534; }
+  .kr-channel.channel-Delivery { --ops-label-color:#0069e8; }
+  .kr-channel.channel-Recojo { --ops-label-color:#8200dd; }
+  .kr-channel.channel-Salón { --ops-label-color:#ad6400; }
+  .ops-voucher-badge.boleta { --ops-label-color:#166534; }
+  .ops-voucher-badge.factura { --ops-label-color:#075985; }
+  .ops-voucher-badge.nota { --ops-label-color:#475569; }
+}
+.ops-root.ops-workspace.ops-reference[data-page][data-page] .ops-badge[data-status="Cancelado"] { --ops-label-color:#ed0017; }
+.ops-root.ops-workspace.ops-reference[data-page][data-page] .anchor-pending-payment { background:#ad6400; color:#fff; border-color:#ad6400; }
+.ops-root.ops-workspace.ops-reference[data-page][data-page] .anchor-pending-payment:has(.ops-status-dot.green) { background:#008a4b; border-color:#008a4b; }
+.ops-root.ops-workspace.ops-reference[data-page][data-page] .anchor-pending-payment :is(svg,.ops-status-dot) { color:#fff; }
+.ops-root.ops-workspace.ops-reference[data-page][data-page] .anchor-pending-payment .ops-status-dot { background:#fff; }
+.ops-root.ops-workspace.ops-reference[data-page][data-page] .ops-profile-role-badge { background:#475569; color:#fff; }
