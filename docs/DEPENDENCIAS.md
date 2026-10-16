@@ -25,3 +25,7 @@ Motion 14.0.0 (MIT), importado desde `motion/react`, sin Motion+ ni GSAP. Se usa
 ## Mapa de entrega
 
 Leaflet 1.9.4 (BSD-2-Clause), con @types/leaflet 1.9.21 (MIT) en desarrollo. Integración directa con el ciclo de vida de React, sin wrapper adicional. Se carga dentro del checkout diferido; el fragmento de checkout completo pesa aproximadamente 187 kB (54 kB gzip). Lockfile actualizado y auditoría sin vulnerabilidades.
+
+## Descarga de comprobantes PDF
+
+jsPDF 4.2.1, qrcode 1.5.4 y JsBarcode 3.12.3 (MIT) generan documentos con texto seleccionable, QR de identificación local y código CODE128. Tipos de QR y barcode en desarrollo. Las librerías se cargan mediante importación diferida al descargar; el fragmento principal de PDF pesa aproximadamente 494 kB (152 kB gzip), sin incluirse en la carga inicial del panel. El logo es un recurso local. Instalación auditada sin vulnerabilidades y lockfile versionado. No se usa conversión de HTML a imagen ni servicios externos para generar los documentos.
