@@ -214,4 +214,4 @@
   .ops-method-grid .ops-payment-illustration > svg:only-child { height:88px; }
 }
 
-.ops-root.ops-workspace.ops-reference[data-page="administrador/configuracion"] .ops-method-grid h3 .ops-payment-wallet-icon { color:#64748b; }
+.ops-root.ops-workspace.ops-reference[data-page="administrador/configuracion"] .ops-method-grid h3 .ops-payment-wallet-icon { color:inherit; }
