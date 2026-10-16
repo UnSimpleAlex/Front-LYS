@@ -198,3 +198,18 @@
 }
 @media(min-width:601px) and (max-width:1100px) { .ops-root.ops-workspace.ops-reference[data-page="administrador/configuracion"] .ops-method-grid { max-width:700px; } }
 @media(max-width:600px) { .ops-root.ops-workspace.ops-reference[data-page="administrador/configuracion"] .ops-method-grid { max-width:380px; } }
+
+.ops-root.ops-workspace.ops-reference[data-page="administrador/configuracion"] {
+  .ops-method-grid .ops-qr-upload { align-content:center; gap:8px; }
+  .ops-method-grid .ops-qr-upload-button { height:32px; min-height:32px; padding:4px 8px; line-height:20px; align-self:start; }
+  .ops-method-grid .ops-payment-cash,.ops-method-grid .ops-payment-cards { grid-column:1 / -1; width:100%; height:88px; position:relative; }
+  .ops-method-grid .ops-payment-cash img { position:absolute; object-fit:contain; }
+  .ops-method-grid .ops-payment-cash .cash-note-back { width:130px; height:62px; left:calc(50% - 85px); top:0; transform:rotate(-8deg); }
+  .ops-method-grid .ops-payment-cash .cash-note-front { width:130px; height:62px; left:calc(50% - 60px); top:15px; transform:rotate(3deg); }
+  .ops-method-grid .ops-payment-cash .cash-coin-one { width:32px; height:32px; left:calc(50% + 38px); top:51px; }
+  .ops-method-grid .ops-payment-cash .cash-coin-two { width:27px; height:27px; left:calc(50% + 62px); top:56px; }
+  .ops-method-grid .ops-payment-cards svg { position:absolute; width:115px; height:76px; }
+  .ops-method-grid .payment-card-back { left:calc(50% - 88px); top:0; transform:rotate(-8deg); }
+  .ops-method-grid .payment-card-front { left:calc(50% - 25px); top:12px; transform:rotate(5deg); }
+  .ops-method-grid .ops-payment-illustration > svg:only-child { height:88px; }
+}
