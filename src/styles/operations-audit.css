@@ -281,3 +281,6 @@
 .ops-root.ops-workspace.ops-reference[data-page="cocina/tiempos"] .anchor-kitchen-time-actions button:first-child { background:#008a4b; border-color:#008a4b; color:white; }
 .ops-time-action-label { display:none; }
 .ops-root.ops-workspace.ops-reference[data-page="cocina/tiempos"] .kr-time-panels > .ops-panel[data-panel="Pedidos con demora"] { background:#f3f4f6; border-color:#e2e5e9; }
+
+.ops-root.ops-workspace.ops-reference[data-page="cocina/historial"] .ops-responsive-table .kr-channel { min-height:22px; height:auto; padding:2px 7px; line-height:18px; font-size:12px; gap:5px; box-sizing:border-box; }
+.ops-root.ops-workspace.ops-reference[data-page="cocina/historial"] .ops-responsive-table .kr-channel svg { width:14px; height:14px; flex-shrink:0; }
