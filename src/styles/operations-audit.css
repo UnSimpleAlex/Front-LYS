@@ -91,5 +91,13 @@
 .ops-root.ops-workspace.ops-reference[data-page="administrador/clientes"] .ops-table-actions button { background:transparent; border-color:transparent; box-shadow:none; }
 .ops-root.ops-workspace.ops-reference[data-page="administrador/clientes"] .ops-table-actions button:hover { background:transparent; }
 
-.ops-root.ops-workspace.ops-reference[data-page="administrador/usuarios"] .ops-roles-summary-grid { display:grid; grid-template-columns:minmax(0,1fr); gap:12px; width:100%; }
+.ops-root.ops-workspace.ops-reference[data-page="administrador/usuarios"] .ops-roles-summary-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; width:100%; }
 .ops-root.ops-workspace.ops-reference[data-page="administrador/usuarios"] .ops-roles-summary-grid > :last-child { grid-column:1 / -1; }
+
+.ops-root.ops-workspace.ops-reference[data-page="administrador/usuarios"] .ops-role-card:last-child .ops-role-card-content { display:grid; grid-template-columns:minmax(100px,.6fr) minmax(90px,.4fr) minmax(0,2fr); align-items:center; gap:12px; flex:1; min-width:0; }
+.ops-root.ops-workspace.ops-reference[data-page="administrador/usuarios"] .ops-role-card:last-child .ops-role-card-content :is(strong,span,small) { margin:0; }
+@media(max-width:540px) {
+  .ops-root.ops-workspace.ops-reference[data-page="administrador/usuarios"] .ops-roles-summary-grid { grid-template-columns:minmax(0,1fr); }
+  .ops-root.ops-workspace.ops-reference[data-page="administrador/usuarios"] .ops-role-card:last-child .ops-role-card-content { grid-template-columns:minmax(0,1fr) auto; gap:6px 12px; }
+  .ops-root.ops-workspace.ops-reference[data-page="administrador/usuarios"] .ops-role-card:last-child .ops-role-card-content small { grid-column:1 / -1; }
+}
