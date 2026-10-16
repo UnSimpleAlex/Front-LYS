@@ -235,3 +235,9 @@
 .ops-root.ops-workspace.ops-reference[data-page] .ops-kitchen-ready-action { background:#bd5700; border-color:#bd5700; color:#fff; }
 .ops-root.ops-workspace.ops-reference[data-page] .ops-kitchen-ready-action:hover { background:#a34800; border-color:#a34800; color:#fff; }
 .ops-root.ops-workspace.ops-reference[data-page] .kitchen-column:is([data-stage="Recibido"],[data-stage="En preparación"],[data-stage="Listo"]) > .kitchen-column-heading { background:var(--kitchen-stage-color); }
+
+.ops-root.ops-workspace.ops-reference[data-page] .kitchen-toolbar .kitchen-search { height:36px; min-height:36px; padding:0 10px; border:1px solid #d9e0ec; border-radius:6px; box-shadow:none; outline:none; background:#fff; }
+.ops-root.ops-workspace.ops-reference[data-page] .kitchen-search input { height:100%; min-height:0; padding:0; font-size:13px; border:0; outline:none; box-shadow:none; background:transparent; }
+.ops-root.ops-workspace.ops-reference[data-page] .kitchen-search input:is(:hover,:focus,:focus-visible) { border:0; outline:none; box-shadow:none; }
+.ops-root.ops-workspace.ops-reference[data-page] .kitchen-toolbar .kitchen-search:focus-within { border-color:#ed0017; box-shadow:0 0 0 3px #ed00171a; outline:none; }
+@media(pointer:coarse) { .ops-root.ops-workspace.ops-reference[data-page] .kitchen-toolbar .kitchen-search { min-height:44px; } }

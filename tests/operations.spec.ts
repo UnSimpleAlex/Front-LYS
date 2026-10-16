@@ -498,8 +498,7 @@ test("panel cocina: referencia responsive, búsqueda y filtros de pedidos", asyn
   await expect(page.locator(".kitchen-ticket")).toHaveCount(1);
   await page.getByLabel("Buscar pedidos de cocina").fill("no-existe-este-pedido");
   await expect(page.locator(".kitchen-ticket")).toHaveCount(0);
-  await page.getByRole("button", { name: "Filtros", exact: true }).click();
-  await page.getByRole("button", { name: "Limpiar filtros" }).click();
+  await page.getByRole("button", { name: "Eliminar filtros", exact: true }).click();
   await expect(page.locator(".kitchen-ticket")).toHaveCount(total);
   await page.locator("#kitchen-filters").getByLabel("Estado de pedidos de cocina", { exact: true }).selectOption("En preparación");
   expect(await page.locator(".kitchen-ticket").count()).toBeGreaterThan(0);
