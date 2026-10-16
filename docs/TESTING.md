@@ -60,3 +60,7 @@ Ver [Referencias administrativas](REFERENCIAS_ADMINISTRATIVAS.md). La prueba `re
 ## Auditoría integral de los paneles
 
 Ver [informe de auditoría administrativa](AUDITORIA_ADMINISTRATIVA.md): 25 rutas, barrido de 280 a 3840 px, formularios en pantallas bajas, teclado, controles táctiles y cobertura/limitaciones documentadas.
+
+## Interacciones operativas
+
+Ver [interacciones operativas verificadas](INTERACCIONES_OPERATIVAS.md): filtros, selección, edición, exportaciones reales, comprobantes, configuración y persistencia. Las pruebas pueden aislarse con `LYS_TEST_PORT`; la caché Vite es local a cada copia.
