@@ -2,8 +2,9 @@
 .ops-root.ops-workspace.ops-reference {
   &[data-page] {
     --ops-muted: #52627b;
-    --ops-focus: #1756b0;
-    --ops-hover: #f6f8fb;
+    --ops-focus: #ed0017;
+    --focus: #ed0017;
+    --ops-hover: #fff1f3;
     font-variant-numeric: tabular-nums;
   }
   &[data-page] :is(.ops-area-label, .ops-page-heading p, .ops-stat small, .ops-side-account small) {
@@ -45,7 +46,7 @@
     border-color: transparent;
   }
   &[data-page] .ops-responsive-table tbody tr:focus-within {
-    background: #f0f5fc;
+    background: #fff1f3;
   }
   &[data-page] .ops-dialog,
   &[data-page] .ops-dialog-body,

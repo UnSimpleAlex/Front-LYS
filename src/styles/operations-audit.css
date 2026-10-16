@@ -8,7 +8,7 @@
     overscroll-behavior-inline: contain;
   }
   .ops-table-wrap[data-scrollable] { scrollbar-width: thin; scrollbar-color: #94a3b8 #f1f5f9; }
-  .ops-table-wrap[data-scrollable]:focus-visible { outline: 2px solid #1756b0; outline-offset: 2px; }
+  .ops-table-wrap[data-scrollable]:focus-visible { outline: 2px solid #ed0017; outline-offset: 2px; }
   .ops-dialog { max-width: calc(100vw - 24px); max-height: calc(100dvh - 24px); }
   .ops-dialog > header { gap: 12px; }
   .ops-dialog > header h2 { min-width: 0; overflow-wrap: anywhere; }
@@ -411,3 +411,6 @@
 .ops-root.ops-workspace.ops-reference[data-page="mesera/mesas"] .ops-table-seat .ops-badge[data-status="Solicita cuenta"] { display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; width:auto; max-width:100%; height:auto; min-height:22px; padding:3px 7px; gap:5px; box-sizing:border-box; line-height:16px; }
 .ops-root.ops-workspace.ops-reference[data-page="mesera/mesas"] .ops-table-seat .ops-badge[data-status="Solicita cuenta"] > span { white-space:normal; line-height:16px; overflow:visible; }
 .ops-root.ops-workspace.ops-reference[data-page="mesera/mesas"] .ops-table-seat .ops-status-dot { flex-shrink:0; }
+
+.ops-root.ops-workspace.ops-reference[data-page] :focus-visible { outline:2px solid #ed0017; outline-offset:3px; }
+.ops-root.ops-workspace.ops-reference[data-page] :is(.ops-product-upload,.ops-input-affix):focus-within { outline:2px solid #ed0017; outline-offset:2px; }

@@ -71,6 +71,13 @@ test("caja: verificar efectivo, apertura, conteo de cierre y persistencia", asyn
   await expect(page.getByLabel("Fondo inicial (S/)")).toHaveCount(0);
   await page.setViewportSize({ width: 1366, height: 768 });
   expect(await page.locator(".cash-opening-scroll").evaluate(el => el.scrollHeight > el.clientHeight)).toBeTruthy();
+  const counter = page.locator(".cash-opening-stepper").first();
+  await page.locator(".cash-opening-scroll").focus();
+  await expect(page.locator(".cash-opening-scroll")).toHaveCSS("outline-color", "rgb(237, 0, 23)");
+  await expect(counter.locator("input")).toHaveCSS("border-radius", "0px");
+  const countBottom = await page.locator(".cash-opening-count").evaluate(el => el.getBoundingClientRect().bottom);
+  const actionsBottom = await page.locator(".anchor-shift-form footer").evaluate(el => el.getBoundingClientRect().bottom);
+  expect(Math.abs(countBottom - actionsBottom)).toBeLessThan(2);
   await page.getByLabel("Cantidad de denominación 0.1", { exact: true }).fill("1");
   await page.getByLabel("Cantidad de denominación 0.1", { exact: true }).fill("0");
   await page.getByRole("button", { name: "Agregar S/ 200", exact: true }).click();
