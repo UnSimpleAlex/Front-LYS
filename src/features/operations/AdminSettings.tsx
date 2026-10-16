@@ -292,6 +292,7 @@ export function AdminSettings({
                 {method === "Efectivo" && <div className="ops-payment-illustration"><img src="/images/operations/currency/100.webp" alt="Billete de cien soles"/></div>}
                 {method === "Tarjeta" && <div className="ops-payment-illustration"><svg viewBox="0 0 220 140" role="img" aria-label="Tarjeta de crédito o débito"><rect x="6" y="6" width="208" height="128" rx="16" fill="#18243c"/><rect x="6" y="32" width="208" height="24" fill="#42526b"/><rect x="25" y="76" width="30" height="22" rx="4" fill="#d7b56d"/><path d="M25 114h75m12 0h30" stroke="#fff" strokeWidth="5" strokeLinecap="round"/><circle cx="173" cy="101" r="14" fill="#ed0017"/><circle cx="190" cy="101" r="14" fill="#e9a324" fillOpacity=".9"/></svg></div>}
                 {method === "Transferencia" && field("bank", "Cuenta bancaria")}
+                {method === "Transferencia" && <div className="ops-payment-illustration"><svg viewBox="0 0 220 140" role="img" aria-label="Transferencia bancaria"><rect x="18" y="15" width="184" height="110" rx="14" fill="#f1f5f9"/><path d="m45 47 45-24 45 24Z" fill="#334155"/><path d="M51 53v43m26-43v43m26-43v43m26-43v43M43 103h94" stroke="#334155" strokeWidth="9"/><path d="M139 63h48m-12-12 12 12-12 12M187 94h-39m12-12-12 12 12 12" stroke="#ed0017" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" fill="none"/></svg></div>}
               </article>
             ))}
           </div>

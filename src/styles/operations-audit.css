@@ -180,3 +180,21 @@
   .ops-root.ops-workspace.ops-reference[data-page="administrador/configuracion"] .ops-method-grid { grid-template-columns:minmax(0,1fr); max-width:340px; }
   .ops-root.ops-workspace.ops-reference[data-page="administrador/configuracion"] .ops-method-grid article,.ops-root.ops-workspace.ops-reference[data-page="administrador/configuracion"] .ops-method-grid article:nth-child(4),.ops-root.ops-workspace.ops-reference[data-page="administrador/configuracion"] .ops-method-grid article:last-child { grid-column:auto; }
 }
+
+/* Horizontal payment cards: controls left, supporting visual right. */
+.ops-root.ops-workspace.ops-reference[data-page="administrador/configuracion"] {
+  .ops-method-grid { max-width:1040px; grid-auto-rows:1fr; }
+  .ops-method-grid article { display:grid; grid-template-columns:minmax(0,1fr) 88px; grid-template-rows:auto 1fr; align-items:center; gap:12px; min-height:166px; padding:14px; }
+  .ops-method-grid article > header { grid-column:1 / -1; }
+  .ops-method-grid h3 { font-size:14px; }
+  .ops-method-grid h3 :is(svg,img) { width:26px; height:26px; }
+  .ops-method-grid article > label { grid-column:1; grid-row:2; align-self:center; }
+  .ops-method-grid .ops-settings-qr,.ops-method-grid .ops-payment-illustration { grid-column:2; grid-row:2; width:88px; height:88px; min-height:0; margin:0; }
+  .ops-settings-qr .ops-qr { width:88px; height:88px; }
+  .ops-settings-qr-logo { width:22px; height:22px; border-width:2px; }
+  .ops-method-grid .ops-payment-illustration :is(img,svg) { width:88px; height:72px; }
+  .ops-method-grid .ops-qr-upload-button { font-size:11px; padding:6px; min-height:32px; }
+  .ops-method-grid .anchor-field { padding:0 8px; }
+}
+@media(min-width:601px) and (max-width:1100px) { .ops-root.ops-workspace.ops-reference[data-page="administrador/configuracion"] .ops-method-grid { max-width:700px; } }
+@media(max-width:600px) { .ops-root.ops-workspace.ops-reference[data-page="administrador/configuracion"] .ops-method-grid { max-width:380px; } }
