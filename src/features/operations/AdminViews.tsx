@@ -303,7 +303,7 @@ export function AdminViews({
             />
           </div>
           <button className="ops-btn-export" onClick={()=>downloadCsv("pedidos",["Pedido","Fecha","Cliente","Canal","Total","Estado"],filtered.filter(o=>!selection.length || selection.includes(o.id)).map(o=>[o.id,dateText(o.created),o.customer,o.channel,orderTotal(o),o.status]))}>
-            <Icon name="download" /> Exportar
+            <Icon name="download" data-ops-action="export"/> Exportar
           </button>
           <button className="ops-clear-order-filters" type="button" onClick={() => { setSearch(""); setFilter("Todos"); setStatus("Todos"); setFrom(""); setTo(""); setOrderPage(1); setSelection([]); }}>
             <Icon name="filter" /> Quitar filtros
@@ -506,7 +506,7 @@ export function AdminViews({
             )
           }
         >
-          <Icon name="download" /> Exportar reporte
+          <Icon name="download" data-ops-action="export"/> Exportar reporte
         </button>
       </div>
     );

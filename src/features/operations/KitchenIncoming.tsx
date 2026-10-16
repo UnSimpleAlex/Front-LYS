@@ -108,7 +108,7 @@ export function KitchenIncoming({
                 setChannel("Todos");
               }}
             >
-              Limpiar filtros
+              <span className="ops-clear-filter-label">Limpiar filtros</span>
             </button>
           </div>
         )}

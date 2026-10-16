@@ -176,7 +176,7 @@ export function PromotionManager({
           </select>
         </div>
         <button className="ops-btn-export" onClick={exportPromotions}>
-          <Icon name="download" /> Exportar
+          <Icon name="download" data-ops-action="export"/> Exportar
         </button>
       </div>
 
@@ -644,7 +644,7 @@ export function UserManager({
           </select>
         </div>
         <button className="ops-btn-export" onClick={exportUsers}>
-          <Icon name="download" /> Exportar
+          <Icon name="download" data-ops-action="export"/> Exportar
         </button>
       </div>
 
@@ -1075,7 +1075,7 @@ export function InventoryManager({
         <label>Categoría<select aria-label="Categoría de insumos" disabled={tab === "Proveedores"} value={category} onChange={e=>{ setCategory(e.target.value); setSelectedSupplies([]); }}><option>Todas</option>{[...new Set(data.supplies.map(s=>s.category))].map(c=><option key={c}>{c}</option>)}</select></label>
         <label>Estado<select aria-label="Estado de insumos" value={tab} onChange={e=>{ setTab(e.target.value); setSelectedSupplies([]); }}><option value="Insumos">Todos</option><option value="Alertas">Stock bajo</option><option value="Agotados">Agotados</option><option value="Proveedores">Proveedores</option></select></label>
         <button className="ops-btn-export" onClick={exportInventory}>
-          <Icon name="download" /> Exportar
+          <Icon name="download" data-ops-action="export"/> Exportar
         </button>
         <button className="ops-primary" type="button" onClick={()=>setSearch(search.trim())}><Icon name="filter"/>Filtrar</button>
       </div>

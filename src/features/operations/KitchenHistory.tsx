@@ -117,7 +117,7 @@ export function KitchenHistory({
           </select>
         </label>
         <button type="button" className="ops-outline" onClick={exportHistory} aria-label="Exportar historial">
-          <Icon name="download" />
+          <Icon name="download" data-ops-action="export"/>
           Exportar
         </button>
         <button

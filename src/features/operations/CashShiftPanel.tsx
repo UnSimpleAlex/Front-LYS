@@ -361,7 +361,7 @@ export function CashShiftPanel({
               className="ops-outline"
               onClick={exportSummary}
             >
-              <Icon name="download" />
+              <Icon name="download" data-ops-action="export"/>
               Exportar resumen
             </button>
           ) : (

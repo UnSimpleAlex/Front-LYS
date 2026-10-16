@@ -574,7 +574,7 @@ export function CashViews({
                   )
                 }
               >
-                <Icon name="download" /> Exportar
+                <Icon name="download" data-ops-action="export"/> Exportar
               </button>
 
             </div>
@@ -692,7 +692,7 @@ export function CashViews({
                 <span>{dateLabel}</span>
               </div>
               <button className="ops-outline" onClick={exportPayments}>
-                <Icon name="download" /> Exportar Excel (CSV)
+                <Icon name="download" data-ops-action="export"/> Exportar Excel (CSV)
               </button>
             </div>,
             actionHost,
@@ -724,7 +724,7 @@ export function CashViews({
             title="Historial de pagos"
             action={
               <button className="ops-outline" onClick={exportPayments}>
-                <Icon name="download" /> Exportar
+                <Icon name="download" data-ops-action="export"/> Exportar
               </button>
             }
           >
@@ -734,7 +734,7 @@ export function CashViews({
               <label>Método de pago<select aria-label="Filtrar resultados" value={filter} onChange={e=>setFilter(e.target.value)}>{["Todos",...paymentMethods].map(m=><option key={m}>{m}</option>)}</select></label>
               <label>Cajera<select aria-label="Cajera de los pagos" value={cashierFilter} onChange={e=>setCashierFilter(e.target.value)}>{["Todos",...new Set(data.shifts.map(shift=>shift.user))].map(name=><option key={name}>{name}</option>)}</select></label>
               <label>Estado<select aria-label="Estado del pago" value={paymentState} onChange={e=>setPaymentState(e.target.value)}>{["Todos","Pagado","Anulado"].map(v=><option key={v}>{v}</option>)}</select></label>
-              <button type="button" className="ops-outline" onClick={exportPayments}><Icon name="download"/>Exportar</button>
+              <button type="button" className="ops-outline" onClick={exportPayments}><Icon name="download" data-ops-action="export"/>Exportar</button>
               <button type="button" className="ops-primary" onClick={()=>setSearch(search.trim())}><Icon name="funnel"/>Filtrar</button>
             </div>
             {transactions}

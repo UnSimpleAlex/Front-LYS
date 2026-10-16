@@ -102,3 +102,8 @@
 
 .ops-root.ops-workspace.ops-reference[data-page="administrador/pedidos"] .ops-clear-order-filters { display:inline-flex; align-items:center; justify-content:center; gap:6px; min-height:38px; padding:8px 12px; color:#334155; background:#fff; border:1px solid #cbd5e1; border-radius:6px; font-size:13px; line-height:20px; }
 .ops-root.ops-workspace.ops-reference[data-page="administrador/pedidos"] .ops-clear-order-filters:hover { background:#f1f5f9; color:#0f172a; }
+
+/* Shared action treatment across operational workspaces; row icon actions retain their colors. */
+.ops-root.ops-workspace.ops-reference[data-page] :is(button.ops-primary,button.ops-outline,button.ops-btn-export,button.ops-btn-filter,button.ops-clear-order-filters,button:has([data-ops-action="export"]),button:has(.ops-clear-filter-label),.ops-product-filters > button,.ops-dialog-footer > button) { background:#ed0017; color:#fff; border-color:#ed0017; }
+.ops-root.ops-workspace.ops-reference[data-page] :is(button.ops-primary,button.ops-outline,button.ops-btn-export,button.ops-btn-filter,button.ops-clear-order-filters,button:has([data-ops-action="export"]),button:has(.ops-clear-filter-label),.ops-product-filters > button,.ops-dialog-footer > button):hover:not(:disabled) { background:#c80014; color:#fff; border-color:#c80014; }
+.ops-root.ops-workspace.ops-reference[data-page] :is(button.ops-primary,button.ops-outline,button.ops-btn-export,button.ops-btn-filter,button.ops-clear-order-filters,button:has([data-ops-action="export"]),button:has(.ops-clear-filter-label),.ops-product-filters > button,.ops-dialog-footer > button):disabled { background:#e2e8f0; color:#475569; border-color:#cbd5e1; opacity:1; }
