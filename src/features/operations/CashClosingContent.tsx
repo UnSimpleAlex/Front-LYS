@@ -23,7 +23,7 @@ export function CashClosingContent(props: Props) {
     <section className="cash-closing-count">
       <div className="cash-opening-section-heading"><h2><Icon name="cash" />Conteo de efectivo</h2><button type="button" className="ops-outline" disabled={!shift} onClick={props.onUseInitial}><Icon name="cash" />Usar fondo inicial</button></div>
       <p>Ingresa la cantidad de billetes y monedas al finalizar el turno.</p>
-      <CashDenominations counts={props.counts} onCount={props.onCount} />
+      <div className="cash-opening-scroll" role="region" aria-label="Conteo de efectivo al cierre" tabIndex={0}><CashDenominations counts={props.counts} onCount={props.onCount} /></div>
       <label className="cash-closing-total"><span><Icon name="coins" />Total contado</span><input aria-label="Efectivo contado (S/)" type="number" min="0" step="0.01" required value={amount} onChange={e => props.onAmount(e.target.value)} /></label>
     </section>
     <div className="cash-closing-summary">

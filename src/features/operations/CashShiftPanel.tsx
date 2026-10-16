@@ -193,9 +193,11 @@ export function CashShiftPanel({
               type="button"
               className="ops-outline"
               onClick={exportSummary}
+              aria-label="Exportar resumen"
+              title="Exportar resumen"
             >
               <Icon name="download" data-ops-action="export"/>
-              Exportar resumen
+              Exportar
             </button>
           ) : (
             <button
