@@ -99,3 +99,6 @@
 
 .ops-root.ops-workspace.ops-reference[data-page="administrador/pedidos"] .ops-table-actions button { background:transparent; border-color:transparent; box-shadow:none; }
 .ops-root.ops-workspace.ops-reference[data-page="administrador/pedidos"] .ops-table-actions button:hover { background:transparent; }
+
+.ops-root.ops-workspace.ops-reference[data-page="administrador/pedidos"] .ops-clear-order-filters { display:inline-flex; align-items:center; justify-content:center; gap:6px; min-height:38px; padding:8px 12px; color:#334155; background:#fff; border:1px solid #cbd5e1; border-radius:6px; font-size:13px; line-height:20px; }
+.ops-root.ops-workspace.ops-reference[data-page="administrador/pedidos"] .ops-clear-order-filters:hover { background:#f1f5f9; color:#0f172a; }
