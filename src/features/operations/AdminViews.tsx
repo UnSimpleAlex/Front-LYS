@@ -312,8 +312,20 @@ export function AdminViews({
           <button className="ops-btn-export" onClick={()=>downloadCsv("pedidos",["Pedido","Fecha","Cliente","Canal","Total","Estado"],filtered.filter(o=>!selection.length || selection.includes(o.id)).map(o=>[o.id,dateText(o.created),o.customer,o.channel,orderTotal(o),o.status]))}>
             <Icon name="download" /> Exportar
           </button>
-          <button className="ops-btn-filter" type="button" onClick={() => setOrderPage(1)}>
-            <Icon name="filter" /> Filtrar
+          <button
+            className="ops-btn-clear-filters"
+            type="button"
+            onClick={() => {
+              setSearch("");
+              setFilter("Todos");
+              setStatus("Todos");
+              setFrom("");
+              setTo("");
+              setOrderPage(1);
+              setSelection([]);
+            }}
+          >
+            <Icon name="trash" /> Eliminar filtros
           </button>
         </div>
         <div className="ops-table-wrap">

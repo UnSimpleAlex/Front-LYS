@@ -595,7 +595,18 @@ export function CashViews({
             </div>
             <label>Fecha<input type="date" aria-label="Fecha de comprobantes" value={from} onChange={e=>{setFrom(e.target.value);setTo(e.target.value);}}/></label>
             <label>Tipo de comprobante<select aria-label="Filtrar tipo de comprobante" value={filter} onChange={e=>setFilter(e.target.value)}>{["Todos","Boleta","Factura","Nota de venta"].map(type=><option key={type}>{type}</option>)}</select></label>
-            <button type="button" className="ops-primary" onClick={()=>setSearch(search.trim())}><Icon name="funnel"/>Filtrar</button>
+            <button
+              type="button"
+              className="ops-btn-clear-filters"
+              onClick={() => {
+                setSearch("");
+                setFrom("");
+                setTo("");
+                setFilter("Todos");
+              }}
+            >
+              <Icon name="trash" /> Eliminar filtros
+            </button>
           </div>
           <div className="ops-table-wrap">
             <OperationsTable>
@@ -734,8 +745,20 @@ export function CashViews({
               <label>Método de pago<select aria-label="Filtrar resultados" value={filter} onChange={e=>setFilter(e.target.value)}>{["Todos",...paymentMethods].map(m=><option key={m}>{m}</option>)}</select></label>
               <label>Cajera<select aria-label="Cajera de los pagos" value={cashierFilter} onChange={e=>setCashierFilter(e.target.value)}>{["Todos",...new Set(data.shifts.map(shift=>shift.user))].map(name=><option key={name}>{name}</option>)}</select></label>
               <label>Estado<select aria-label="Estado del pago" value={paymentState} onChange={e=>setPaymentState(e.target.value)}>{["Todos","Pagado","Anulado"].map(v=><option key={v}>{v}</option>)}</select></label>
-              <button type="button" className="ops-outline" onClick={exportPayments}><Icon name="download"/>Exportar</button>
-              <button type="button" className="ops-primary" onClick={()=>setSearch(search.trim())}><Icon name="funnel"/>Filtrar</button>
+              <button type="button" className="ops-btn-export" onClick={exportPayments}><Icon name="download"/>Exportar</button>
+              <button
+                type="button"
+                className="ops-btn-clear-filters"
+                onClick={() => {
+                  setFrom("");
+                  setTo("");
+                  setFilter("Todos");
+                  setCashierFilter("Todos");
+                  setPaymentState("Todos");
+                }}
+              >
+                <Icon name="trash" /> Eliminar filtros
+              </button>
             </div>
             {transactions}
           </Panel>
@@ -992,9 +1015,14 @@ export function CashViews({
               <strong>{money(paidOrder ? orderTotal(paidOrder) : 0)}</strong>
             </div>
             <p>Comprobante de simulación local, sin valor tributario.</p>
-            <button className="ops-primary">
-              <Icon name="receipt" /> Emitir comprobante
-            </button>
+            <div className="ops-dialog-footer">
+              <button type="button" onClick={() => setSelected("")}>
+                Cancelar
+              </button>
+              <button className="ops-primary">
+                <Icon name="receipt" /> Emitir comprobante
+              </button>
+            </div>
           </form>
         </OperationsDialog>
       )}

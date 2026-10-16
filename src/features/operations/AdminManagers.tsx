@@ -178,6 +178,19 @@ export function PromotionManager({
         <button className="ops-btn-export" onClick={exportPromotions}>
           <Icon name="download" /> Exportar
         </button>
+        <button
+          className="ops-btn-clear-filters"
+          type="button"
+          onClick={() => {
+            setSearch("");
+            setStatusFilter("Todos");
+            setFilter("Todos");
+            setOfferSelection([]);
+            setOfferPage(1);
+          }}
+        >
+          <Icon name="trash" /> Eliminar filtros
+        </button>
       </div>
 
       <div className="ops-table-wrap">
@@ -252,11 +265,9 @@ export function PromotionManager({
                 <td className="ops-col-center">
                   <button
                     type="button"
-                    role="switch"
                     className={`ops-switch ${o.active ? "on" : ""}`}
-                    aria-label={o.active ? `Desactivar ${o.name}` : `Activar ${o.name}`}
+                    aria-label={`Activar ${o.name}`}
                     title={o.active ? "Activa (clic para desactivar)" : "Inactiva (clic para activar)"}
-                    aria-checked={o.active}
                     aria-pressed={o.active}
                     onClick={() =>
                       notify(() => saveOffer({ ...o, active: !o.active }))
@@ -412,9 +423,14 @@ export function PromotionManager({
               />
               Promoción activa
             </label>
-            <button className="ops-primary">
-              <Icon name="save" /> Guardar promoción
-            </button>
+            <div className="ops-dialog-footer">
+              <button type="button" onClick={() => setEditorOpen(false)}>
+                Cancelar
+              </button>
+              <button className="ops-primary">
+                <Icon name="save" /> Guardar promoción
+              </button>
+            </div>
           </form>
         </OperationsDialog>}
     </>
@@ -648,6 +664,19 @@ export function UserManager({
         </div>
         <button className="ops-btn-export" onClick={exportUsers}>
           <Icon name="download" /> Exportar
+        </button>
+        <button
+          className="ops-btn-clear-filters"
+          type="button"
+          onClick={() => {
+            setSearch("");
+            setFilter("Todos");
+            setStatusFilter("Todos");
+            setUserSelection([]);
+            setUserPage(1);
+          }}
+        >
+          <Icon name="trash" /> Eliminar filtros
         </button>
       </div>
 
@@ -937,9 +966,14 @@ export function UserManager({
               </label>
             )}
             {error && <p role="alert">{error}</p>}
-            <button className="ops-primary">
-              {editing ? "Guardar cambios" : "Crear cuenta"}
-            </button>
+            <div className="ops-dialog-footer">
+              <button type="button" onClick={() => setEditorOpen(false)}>
+                Cancelar
+              </button>
+              <button className="ops-primary">
+                {editing ? "Guardar cambios" : "Crear cuenta"}
+              </button>
+            </div>
           </form>
         </OperationsDialog>
       )}
@@ -1079,7 +1113,18 @@ export function InventoryManager({
         <button className="ops-btn-export" onClick={exportInventory}>
           <Icon name="download" /> Exportar
         </button>
-        <button className="ops-primary" type="button" onClick={()=>setSearch(search.trim())}><Icon name="filter"/>Filtrar</button>
+        <button
+          className="ops-btn-clear-filters"
+          type="button"
+          onClick={() => {
+            setSearch("");
+            setCategory("Todas");
+            setTab("Insumos");
+            setSelectedSupplies([]);
+          }}
+        >
+          <Icon name="trash" /> Eliminar filtros
+        </button>
       </div>
 
       {tab === "Proveedores" ? (
@@ -1168,9 +1213,14 @@ export function InventoryManager({
                     }
                   />
                 </label>
-                <button className="ops-primary">
-                  <Icon name="save" /> Guardar proveedor
-                </button>
+                <div className="ops-dialog-footer">
+                  <button type="button" onClick={() => setProviderOpen(false)}>
+                    Cancelar
+                  </button>
+                  <button className="ops-primary">
+                    <Icon name="save" /> Guardar proveedor
+                  </button>
+                </div>
               </form>
             </OperationsDialog>
           )}
@@ -1284,9 +1334,14 @@ export function InventoryManager({
                       onChange={(e) => setQuantity(Number(e.target.value))}
                     />
                   </label>
-                  <button className="ops-primary">
-                    <Icon name="save" /> Guardar movimiento
-                  </button>
+                  <div className="ops-dialog-footer">
+                    <button type="button" onClick={() => setMovement("")}>
+                      Cancelar
+                    </button>
+                    <button className="ops-primary">
+                      <Icon name="save" /> Guardar movimiento
+                    </button>
+                  </div>
                 </form>
               </OperationsDialog>
             )}
@@ -1370,9 +1425,14 @@ export function InventoryManager({
                       />
                     </label>
                   ))}
-                  <button className="ops-primary">
-                    <Icon name="save" /> Guardar insumo
-                  </button>
+                  <div className="ops-dialog-footer">
+                    <button type="button" onClick={() => setEditingSupply(false)}>
+                      Cancelar
+                    </button>
+                    <button className="ops-primary">
+                      <Icon name="save" /> Guardar insumo
+                    </button>
+                  </div>
                 </form>
               </OperationsDialog>
             )}

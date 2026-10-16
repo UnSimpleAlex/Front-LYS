@@ -30,6 +30,7 @@ import "../../styles/operations-reference.css";
 import "../../styles/operations-anchor-layout.css";
 import "../../styles/operations-dashboard.css";
 import "../../styles/operations-audit.css";
+import "../../styles/operations-polish-interacciones.css";
 const menus: Record<string, [string, string, IconName][]> = {
   cocina: [
     ["", "Panel de cocina", "chef"],
