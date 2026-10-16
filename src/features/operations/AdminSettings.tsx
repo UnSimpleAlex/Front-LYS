@@ -235,7 +235,7 @@ export function AdminSettings({
               <article key={method}>
                 <header>
                   <h3>
-                    <PaymentMark name={method} />
+                    {method === "Yape" || method === "Plin" ? <svg className="ops-payment-wallet-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 7V5a2 2 0 0 0-2-2L5 6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1V9a2 2 0 0 0-2-2H5"/><path d="M21 12h-5a3 3 0 0 0 0 6h5"/><path d="M16 15h.01"/></svg> : <PaymentMark name={method} />}
                     {method}
                   </h3>
                   <button
