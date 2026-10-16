@@ -56,3 +56,7 @@ La muestra general también añade hasta ocho clientes ficticios con correo @pre
 ## Composición y altura de las referencias administrativas
 
 Ver [Referencias administrativas](REFERENCIAS_ADMINISTRATIVAS.md). La prueba `reference-layout.spec.ts` añade capturas de las 25 vistas en cinco combinaciones de ancho y alto, incluida 1366 × 591. También verifica límites de altura del menú y los indicadores, composición de configuración/inventario y modificación persistente y segura de las mesas. No sustituye la comparación visual con las imágenes.
+
+## Mi cuenta: referencias PC y móvil
+
+`tests/account-reference.spec.ts` valida acceso directo sin exponer credenciales, primer nombre del navbar, ocho vistas, barrido de 280–3840 px, persistencia de perfil/foto y referencias de tarjeta, búsqueda, favoritos, avisos leídos y diálogos de baja altura. Ver [alcance, cobertura y límites](MI_CUENTA_REFERENCIA.md). `PLAYWRIGHT_EXECUTABLE_PATH` permite ejecutar con Chromium instalado sin cambiar el canal Edge por defecto.

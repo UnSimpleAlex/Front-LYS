@@ -1,11 +1,6 @@
 import { useSyncExternalStore } from "react";
 export type Role =
-  | "cliente"
-  | "mesera"
-  | "cocina"
-  | "caja"
-  | "administrador"
-  | "delivery";
+  "cliente" | "mesera" | "cocina" | "caja" | "administrador" | "delivery";
 export type LocalUser = {
   id: string;
   name: string;
@@ -134,6 +129,12 @@ export async function createLocalUser(
   return user;
 }
 export async function loginLocal(email: string, password: string) {
+  if (
+    /^(administrador|mesera|cocina|caja|delivery|cliente)@demo\.local$/i.test(
+      email.trim(),
+    )
+  )
+    await prepareDemoAccess();
   const user = readUsers().find(
     (item) => item.email === email.trim().toLowerCase() && item.active,
   );
@@ -201,7 +202,7 @@ export async function changeLocalPassword(previous: string, next: string) {
     ),
   );
 }
-// Accesos ficticios, activados explícitamente; nunca representan credenciales del negocio.
+// Cuentas de la simulación local, documentadas en README; nunca son credenciales del negocio.
 export async function prepareDemoAccess() {
   const existing = readUsers();
   const added: LocalUser[] = [];
@@ -211,13 +212,21 @@ export async function prepareDemoAccess() {
     "cocina",
     "caja",
     "delivery",
+    "cliente",
   ] as Role[]) {
     const email = `${role}@demo.local`;
     if (existing.some((user) => user.email === email)) continue;
     const salt = crypto.randomUUID();
     added.push({
       id: crypto.randomUUID(),
-      name: `Demo ${roleNames[role]}`,
+      name: {
+        administrador: "Admin Torres",
+        mesera: "Lucía Salón",
+        cocina: "Diego Cocina",
+        caja: "Carlos Caja",
+        delivery: "Luis Delivery",
+        cliente: "Ana Torres",
+      }[role],
       email,
       role,
       phone: "",

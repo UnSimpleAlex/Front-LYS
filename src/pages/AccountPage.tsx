@@ -1,35 +1,180 @@
-import { logoutLocal, useSession, roleHome } from '../services/localAuth';
-import { lazy, Suspense, useState } from 'react';
-import { Icon, type IconName } from '../components/Icon';
-import { PageHero, InformationNavigation } from '../features/information/InformationShared';
-import { useCarta } from '../features/carta/useCarta';
-import { cartProducts } from '../features/carta/cartStore';
-import { ProductCard } from '../features/carta/ProductCard';
-import { ProductDetail } from '../features/carta/CartaDialogs';
-import type { Product } from '../features/carta/catalog';
-import { AccountDashboard } from '../features/account/AccountDashboard';
-import { OrderList } from '../features/account/OrderList';
-import { AccountEmpty, AccountPromo, AccountDialog } from '../features/account/AccountShared';
-import '../styles/account.css';
-const AccountAddresses = lazy(() => import('../features/account/AccountAddresses').then(module => ({ default: module.AccountAddresses })));
-const AccountProfileForm = lazy(() => import('../features/account/AccountProfileForm').then(module => ({ default: module.AccountProfileForm })));
-const AccountPayments = lazy(() => import('../features/account/AccountPayments').then(module => ({ default: module.AccountPayments })));
-const AccountNotifications = lazy(() => import('../features/account/AccountNotifications').then(module => ({ default: module.AccountNotifications })));
-const sections: { slug: string; label: string; title: string; accent: string; description: string; icon: IconName }[] = [
-  { slug: '', label: 'Inicio', title: 'Mi', accent: 'cuenta', description: 'Gestiona tu información, pedidos y preferencias.', icon: 'home' },
-  { slug: 'pedidos', label: 'Mis pedidos', title: 'Mis', accent: 'pedidos', description: 'Revisa tus pedidos y vuelve a pedir tus favoritos.', icon: 'receipt' },
-  { slug: 'direcciones', label: 'Mis direcciones', title: 'Mis', accent: 'direcciones', description: 'Administra tus direcciones de entrega para preparar pedidos más rápidos.', icon: 'pin' },
-  { slug: 'datos', label: 'Mis datos', title: 'Mis', accent: 'datos', description: 'Mantén tu información actualizada para una mejor experiencia.', icon: 'user' },
-  { slug: 'metodos-pago', label: 'Métodos de pago', title: 'Métodos de', accent: 'pago', description: 'Elige cómo prefieres pagar tus próximos pedidos.', icon: 'card' },
-  { slug: 'notificaciones', label: 'Notificaciones', title: 'Tus', accent: 'notificaciones', description: 'Entérate del estado de tus pedidos, promociones y novedades.', icon: 'mail' },
-  { slug: 'favoritos', label: 'Favoritos', title: 'Mis', accent: 'favoritos', description: 'Los productos que más te gustan, listos para tu próximo pedido.', icon: 'heart' },
-];
-export function AccountPage({ route, onNavigate, onAction }: { route: string; onNavigate: (path: string) => void; onAction: (action: string) => void }) {
-  const user=useSession();
-  const section = sections.find(item => route === `/mi-cuenta${item.slug ? `/${item.slug}` : ''}`) || sections[0];
+import { lazy, Suspense, useState } from "react";
+import { logoutLocal, useSession, roleHome } from "../services/localAuth";
+import { displayFirstName } from "../services/displayName";
+import { Icon } from "../components/Icon";
+import { useCarta } from "../features/carta/useCarta";
+import { cartProducts } from "../features/carta/cartStore";
+import { ProductDetail } from "../features/carta/CartaDialogs";
+import type { Product } from "../features/carta/catalog";
+import { AccountDashboard } from "../features/account/AccountDashboard";
+import { OrderList } from "../features/account/OrderList";
+import { AccountDialog } from "../features/account/AccountShared";
+import { AccountNavigation } from "../features/account/AccountNavigation";
+import {
+  accountSections,
+  accountPath,
+} from "../features/account/accountSections";
+import { AccountFavorites } from "../features/account/AccountFavorites";
+import "../styles/account.css";
+const AccountAddresses = lazy(() =>
+  import("../features/account/AccountAddresses").then((m) => ({
+    default: m.AccountAddresses,
+  })),
+);
+const AccountProfileForm = lazy(() =>
+  import("../features/account/AccountProfileForm").then((m) => ({
+    default: m.AccountProfileForm,
+  })),
+);
+const AccountPayments = lazy(() =>
+  import("../features/account/AccountPayments").then((m) => ({
+    default: m.AccountPayments,
+  })),
+);
+const AccountNotifications = lazy(() =>
+  import("../features/account/AccountNotifications").then((m) => ({
+    default: m.AccountNotifications,
+  })),
+);
+export function AccountPage({
+  route,
+  onNavigate,
+}: {
+  route: string;
+  onNavigate: (path: string) => void;
+  onAction: (action: string) => void;
+}) {
+  const user = useSession();
+  const section =
+    accountSections.find((s) => accountPath(s.slug) === route) ||
+    accountSections[0];
   const carta = useCarta();
   const [detail, setDetail] = useState<Product | null>(null);
   const [leaving, setLeaving] = useState(false);
-  const favorites = cartProducts.filter(product => carta.favorites.includes(product.id));
-  return <><main id="contenido" className="information-page account-page"><div className="info-container"><nav className="account-breadcrumb" aria-label="Ruta actual"><button type="button" onClick={() => onNavigate('/')}>Inicio</button><span>›</span><button type="button" onClick={() => onNavigate('/mi-cuenta')}>Mi cuenta</button>{section.slug && <><span>›</span><span>{section.label}</span></>}</nav>{section.slug === '' && <PageHero eyebrow={section.slug ? section.label : 'Tu espacio'} title={section.title} accent={section.accent} description={section.description} />}<div className="account-layout"><aside className="account-sidebar"><nav className="info-card" aria-label="Secciones de mi cuenta">{sections.map(item => <button type="button" key={item.slug} aria-current={section.slug === item.slug ? 'page' : undefined} onClick={() => onNavigate(`/mi-cuenta${item.slug ? `/${item.slug}` : ''}`)}><Icon name={item.icon} />{item.label}</button>)}<button type="button" className="account-exit" onClick={() => setLeaving(true)}><Icon name="arrow" />Cerrar sesión</button></nav><AccountPromo onAction={onAction} /></aside><div className="account-content">{section.slug !== '' && <PageHero eyebrow={section.slug ? section.label : 'Tu espacio'} title={section.title} accent={section.accent} description={section.description} />}<div className="account-demo-banner"><Icon name="shield"/><p><strong>{user?.name}</strong> · Tus datos se guardan en este navegador.</p>{user&&user.role!=="cliente"&&<button onClick={()=>onNavigate(roleHome(user.role))}>Ir a mi panel</button>}</div><Suspense fallback={<p role="status">Cargando sección…</p>}>{section.slug === '' ? <AccountDashboard favorites={favorites.length} onNavigate={onNavigate} /> : section.slug === 'pedidos' ? <OrderList onNavigate={onNavigate} /> : section.slug === 'direcciones' ? <AccountAddresses /> : section.slug === 'datos' ? <AccountProfileForm onNavigate={onNavigate} /> : section.slug === 'metodos-pago' ? <AccountPayments /> : section.slug === 'notificaciones' ? <AccountNotifications onNavigate={onNavigate} /> : favorites.length ? <div className="account-favorites">{favorites.map(product => <ProductCard key={product.id} product={product} favorite onFavorite={() => carta.favorite(product.id)} onAdd={() => carta.add(product.id)} onDetail={() => setDetail(product)} />)}</div> : <AccountEmpty title="Aquí van tus favoritos" description="Toca el corazón de un producto de la carta para guardarlo y encontrarlo aquí." action="Explorar la carta" onAction={() => onNavigate('/carta')} />}</Suspense>{section.slug && <AccountPromo onAction={onAction} />}</div></div></div><div className="sr-only" role="status">{carta.announcement}</div></main><InformationNavigation active="Mi cuenta" onAction={onAction} /><ProductDetail product={detail} onClose={() => setDetail(null)} onAdd={carta.add} />{leaving && <AccountDialog title="Salir de Mi cuenta" onClose={() => setLeaving(false)}><p>Tus datos permanecerán guardados en este navegador.</p><button type="button" className="primary-button" onClick={() => { setLeaving(false); logoutLocal(); onNavigate('/iniciar-sesion'); }}>Cerrar sesión</button></AccountDialog>}</>;
+  const products = cartProducts.filter((p) => carta.favorites.includes(p.id));
+  const actions = {
+    products,
+    onFavorite: carta.favorite,
+    onAdd: carta.add,
+    onDetail: setDetail,
+  };
+  function requestLogout() {
+    onNavigate(accountPath("cerrar-sesion"));
+    setLeaving(true);
+  }
+  return (
+    <>
+      <main
+        id="contenido"
+        className={`account-page account-section-${section.slug || "inicio"}`}
+      >
+        <div className="account-container">
+          <nav className="account-breadcrumb" aria-label="Ruta actual">
+            <button
+              onClick={() => onNavigate("/")}
+              className="account-breadcrumb-home"
+            >
+              Inicio
+            </button>
+            <span className="account-breadcrumb-home">›</span>
+            <button onClick={() => onNavigate("/mi-cuenta")}>Mi cuenta</button>
+            <span>›</span>
+            <span aria-current="page">{section.label}</span>
+          </nav>
+          <div className="account-layout">
+            <AccountNavigation
+              slug={section.slug}
+              onNavigate={onNavigate}
+              onLogout={requestLogout}
+            />
+            <div className="account-content">
+              {section.slug !== "datos" && (
+                <header className="account-page-heading">
+                  <h1>
+                    {section.slug === ""
+                      ? `Hola, ${displayFirstName(user?.name || "")}`
+                      : section.slug === "favoritos"
+                        ? "Mis favoritos"
+                        : section.label}
+                  </h1>
+                  <p>{section.description}</p>
+                </header>
+              )}
+              {user && user.role !== "cliente" && (
+                <a className="account-panel-link" href={roleHome(user.role)}>
+                  Ir a mi panel <Icon name="arrow" />
+                </a>
+              )}
+              <Suspense fallback={<p role="status">Cargando sección…</p>}>
+                {section.slug === "" ? (
+                  <AccountDashboard {...actions} onNavigate={onNavigate} />
+                ) : section.slug === "pedidos" ? (
+                  <OrderList onNavigate={onNavigate} />
+                ) : section.slug === "direcciones" ? (
+                  <AccountAddresses />
+                ) : section.slug === "datos" ? (
+                  <AccountProfileForm onNavigate={onNavigate} />
+                ) : section.slug === "metodos-pago" ? (
+                  <AccountPayments />
+                ) : section.slug === "notificaciones" ? (
+                  <AccountNotifications onNavigate={onNavigate} />
+                ) : section.slug === "favoritos" ? (
+                  <AccountFavorites {...actions} onNavigate={onNavigate} />
+                ) : (
+                  <section className="info-card account-logout-page">
+                    <Icon name="logout" />
+                    <h2>Salir de tu cuenta</h2>
+                    <p>
+                      Podrás volver a ingresar cuando lo necesites. Tus pedidos,
+                      direcciones y preferencias permanecerán guardados.
+                    </p>
+                    <button
+                      className="primary-button"
+                      onClick={() => setLeaving(true)}
+                    >
+                      Cerrar sesión
+                    </button>
+                  </section>
+                )}
+              </Suspense>
+            </div>
+          </div>
+        </div>
+        <div className="sr-only" role="status">
+          {carta.announcement}
+        </div>
+      </main>
+      <ProductDetail
+        product={detail}
+        onClose={() => setDetail(null)}
+        onAdd={carta.add}
+      />
+      {leaving && (
+        <AccountDialog title="Cerrar sesión" onClose={() => setLeaving(false)}>
+          <div className="account-logout-confirm">
+            <span className="account-logout-symbol">
+              <Icon name="logout" />
+            </span>
+            <h3>¿Deseas cerrar tu sesión?</h3>
+            <p>Podrás volver a ingresar cuando lo necesites.</p>
+            <div className="account-dialog-actions">
+              <button className="info-button" onClick={() => setLeaving(false)}>
+                Cancelar
+              </button>
+              <button
+                className="primary-button"
+                onClick={() => {
+                  setLeaving(false);
+                  logoutLocal();
+                  onNavigate("/iniciar-sesion");
+                }}
+              >
+                Cerrar sesión
+              </button>
+            </div>
+          </div>
+        </AccountDialog>
+      )}
+    </>
+  );
 }

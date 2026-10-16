@@ -1,11 +1,6 @@
 import { test, expect, type Page } from "@playwright/test";
 async function setup(page: Page) {
   await page.goto("/iniciar-sesion");
-  await page.getByRole("button", { name: "Accesos de prueba por rol" }).click();
-  await page
-    .getByRole("button", { name: "Preparar cuentas de prueba" })
-    .click();
-  await expect(page.getByText("Demo2026!", { exact: true })).toBeVisible();
 }
 async function login(page: Page, role: string) {
   await page.goto("/iniciar-sesion");

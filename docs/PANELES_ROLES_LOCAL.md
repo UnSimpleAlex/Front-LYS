@@ -4,7 +4,7 @@ Implementación de las referencias PC/18.png a PC/41.png. Fondo de página blanc
 
 ## Acceso y recorrido
 
-1. Abrir `/iniciar-sesion`, desplegar **Accesos de prueba por rol** y pulsar **Preparar cuentas de prueba**.
+1. Abrir `/iniciar-sesion` e ingresar directamente con las cuentas locales documentadas en `README.md`. Se preparan al iniciar sesión; la interfaz no publica credenciales ni un selector de roles.
 2. Usar cualquiera de los correos siguientes con contraseña `Demo2026!`: `administrador@demo.local`, `mesera@demo.local`, `cocina@demo.local`, `caja@demo.local`, `delivery@demo.local`.
 3. Administración puede cargar pedidos ficticios mediante **Cargar pedidos de ejemplo**. Se activan explícitamente, no generan cobros ni ventas.
 4. Salón selecciona mesa, agrega productos y envía a cocina (o guarda borrador). Cocina acepta y marca listo. Salón entrega; delivery inicia y completa entregas de su canal.
