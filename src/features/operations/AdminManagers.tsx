@@ -178,6 +178,7 @@ export function PromotionManager({
         <button className="ops-btn-export" onClick={exportPromotions}>
           <Icon name="download" data-ops-action="export"/> Exportar
         </button>
+        <button className="ops-primary" onClick={()=>{setSearch("");setFilter("Todos");setStatusFilter("Todos");setOfferPage(1);setOfferSelection([]);}}>Eliminar filtros</button>
       </div>
 
       <div className="ops-table-wrap">
@@ -646,6 +647,7 @@ export function UserManager({
         <button className="ops-btn-export" onClick={exportUsers}>
           <Icon name="download" data-ops-action="export"/> Exportar
         </button>
+        <button className="ops-primary" onClick={()=>{setSearch("");setFilter("Todos");setStatusFilter("Todos");setUserPage(1);setUserSelection([]);}}>Eliminar filtros</button>
       </div>
 
       <div className="ops-table-wrap">
@@ -1079,7 +1081,7 @@ export function InventoryManager({
         <button className="ops-btn-export" onClick={exportInventory}>
           <Icon name="download" data-ops-action="export"/> Exportar
         </button>
-        <button className="ops-primary" type="button" onClick={()=>{setSearch("");setCategory("Todas");setTab("Insumos");setSelectedSupplies([]);}}><Icon name="filter"/>Limpiar filtros</button>
+        <button className="ops-primary" type="button" onClick={()=>{setSearch("");setCategory("Todas");setTab("Insumos");setSelectedSupplies([]);}}><Icon name="filter"/>Eliminar filtros</button>
       </div>
 
       {tab === "Proveedores" ? (

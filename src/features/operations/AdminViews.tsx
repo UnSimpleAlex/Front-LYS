@@ -306,7 +306,7 @@ export function AdminViews({
             <Icon name="download" data-ops-action="export"/> Exportar
           </button>
           <button className="ops-clear-order-filters" type="button" onClick={() => { setSearch(""); setFilter("Todos"); setStatus("Todos"); setFrom(""); setTo(""); setOrderPage(1); setSelection([]); }}>
-            <Icon name="filter" /> Quitar filtros
+            <Icon name="filter" /> Eliminar filtros
           </button>
         </div>
         <div className="ops-table-wrap">

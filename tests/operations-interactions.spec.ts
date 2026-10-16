@@ -111,7 +111,7 @@ test("productos: exportar seleccionados y aplicar categoría", async ({ page }) 
   expect((await csv(page, exporter(page))).slice(1).every(row => row.includes('"Bebidas"'))).toBeTruthy();
   await page.getByLabel("Disponibilidad", { exact: true }).selectOption("Inactivos");
   await expect(page.locator("tbody tr")).toHaveCount(0);
-  await page.getByRole("button", { name: "Limpiar filtros", exact: true }).click();
+  await page.getByRole("button", { name: "Eliminar filtros", exact: true }).click();
   await expect(page.getByLabel("Categoría de productos")).toHaveValue("Todas");
   await expect(page.getByLabel("Disponibilidad", { exact: true })).toHaveValue("Todas");
   await expect(page.locator("tbody tr")).toHaveCount(7);
@@ -328,4 +328,24 @@ test("cuenta: administrador puede regresar a Administración desde cocina", asyn
   await page.getByRole("button", { name: "Administración Gestión general del negocio", exact: true }).click();
   await expect(page).toHaveURL(/\/administrador$/);
   await expect(page.getByRole("dialog")).toHaveCount(0);
+});
+
+for (const [route,label] of [
+  ["administrador/promociones","Buscar promociones"],
+  ["administrador/usuarios","Buscar nombre, correo o teléfono"],
+  ["administrador/inventario","Buscar insumos"],
+  ["cocina/pedidos","Buscar pedidos entrantes"],
+  ["cocina/historial","Buscar historial"],
+  ["delivery","Buscar entrega"],
+  ["mesera/mesas","Buscar mesa"],
+  ["mesera/pedidos","Buscar pedidos de salón"],
+] as const) test(`restablecer filtros automáticos en ${route}`, async ({page}) => {
+  await page.goto('/'+route);
+  const search=page.getByLabel(label,{exact:true});
+  await search.fill("SIN-COINCIDENCIAS-123");
+  await expect(search).toHaveValue("SIN-COINCIDENCIAS-123");
+  const reset=page.getByRole("button",{name:"Eliminar filtros",exact:true});
+  await expect(reset).toHaveCSS("color","rgb(255, 255, 255)");
+  await reset.click();
+  await expect(search).toHaveValue("");
 });

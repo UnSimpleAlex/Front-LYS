@@ -123,10 +123,10 @@ export function KitchenHistory({
         <button
           type="button"
           className="ops-primary"
-          onClick={() => setSearch(search.trim())}
+          onClick={() => {setSearch("");setFrom("");setTo("");setChannel("Todos");setStatus("Todos");}}
         >
           <Icon name="filter" />
-          Filtrar
+          Eliminar filtros
         </button>
       </div>
       <nav

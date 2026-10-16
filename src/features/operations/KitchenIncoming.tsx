@@ -19,7 +19,7 @@ export function KitchenIncoming({
   const [channel, setChannel] = useState("Todos");
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("antiguos");
-  const [filters, setFilters] = useState(false);
+
   const [status, setStatus] = useState("Todos");
   const active = orders.filter(
     (o) => !["Entregado", "Cancelado", "En camino"].includes(o.status),
@@ -74,9 +74,9 @@ export function KitchenIncoming({
             <option value="antiguos">Más antiguos primero</option>
             <option value="recientes">Más recientes primero</option>
           </select>
-          <button aria-expanded={filters} onClick={() => setFilters(!filters)}>
+          <button className="ops-primary" onClick={() => { setStatus("Todos"); setSearch(""); setChannel("Todos"); setSort("antiguos"); }}>
             <Icon name="filter" />
-            Filtros
+            Eliminar filtros
           </button>
         </div>
         <div className="ops-incoming-search">
@@ -90,7 +90,7 @@ export function KitchenIncoming({
             />
           </label>
         </div>
-        {filters && (
+        {(
           <div className="kr-toolbar">
             <select
               aria-label="Estado de pedidos entrantes"
@@ -101,15 +101,7 @@ export function KitchenIncoming({
                 <option key={value}>{value}</option>
               ))}
             </select>
-            <button
-              onClick={() => {
-                setStatus("Todos");
-                setSearch("");
-                setChannel("Todos");
-              }}
-            >
-              <span className="ops-clear-filter-label">Limpiar filtros</span>
-            </button>
+
           </div>
         )}
         <div className="kr-incoming-grid">

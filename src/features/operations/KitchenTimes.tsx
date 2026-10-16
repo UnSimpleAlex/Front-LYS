@@ -197,6 +197,7 @@ export function KitchenTimes({
           </label>
         }
       >
+        <button className="ops-primary" onClick={()=>{setChannel("Todos");setSearch("");setPeriod("Hoy");}}>Eliminar filtros</button>
         <div className="kr-tabs">
           {["Todos", "Delivery", "Salón", "Recojo"].map((value) => (
             <button
@@ -275,6 +276,7 @@ export function KitchenTimes({
                       <span
                         className={`kr-status ${order.status === "Listo" ? "blue" : tone}`}
                       >
+                        <Icon name={order.status === "Listo" ? "check" : tone === "red" ? "bell" : "clock"}/>
                         {order.status === "Listo"
                           ? "Listo"
                           : tone === "red"
@@ -287,6 +289,8 @@ export function KitchenTimes({
                     <td>
                       <div className="anchor-kitchen-time-actions">
                         <button
+                          aria-label={order.status === "Listo" ? "Entregar" : order.status === "Recibido" ? "Aceptar pedido" : "Marcar listo"}
+                          title={order.status === "Listo" ? "Entregar" : order.status === "Recibido" ? "Aceptar pedido" : "Marcar listo"}
                           className={
                             order.status === "Listo"
                               ? "ops-outline"
@@ -304,13 +308,13 @@ export function KitchenTimes({
                           }
                         >
                           <Icon
-                            name={order.status === "Listo" ? "serve" : "check"}
+                            name="check"
                           />
-                          {order.status === "Listo"
+                          <span className="ops-time-action-label">{order.status === "Listo"
                             ? "Entregar"
                             : order.status === "Recibido"
                               ? "Aceptar pedido"
-                              : "Marcar listo"}
+                              : "Marcar listo"}</span>
                         </button>
                         <button
                           className="ops-outline"

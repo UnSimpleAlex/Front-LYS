@@ -247,3 +247,37 @@
 .ops-root.ops-workspace.ops-reference[data-page] .kitchen-column > .kitchen-column-heading :is(h2,svg) { color:#fff; }
 .ops-root.ops-workspace.ops-reference[data-page="cocina/historial"] .ops-stat-icon { display:flex; align-items:center; justify-content:center; flex-shrink:0; }
 .ops-root.ops-workspace.ops-reference[data-page="cocina/historial"] .ops-stat-icon > svg { position:static; display:block; margin:0; transform:none; width:24px; height:24px; flex-shrink:0; }
+
+.ops-root.ops-workspace.ops-reference[data-page="cocina/pedidos"] .ops-incoming-actions > button:first-of-type { background:#ed0017; border-color:#ed0017; color:#fff; }
+.ops-root.ops-workspace.ops-reference[data-page="cocina/pedidos"] .ops-incoming-actions > .ops-badge.green { background:#079d4d; color:#fff; }
+.ops-root.ops-workspace.ops-reference[data-page="cocina/pedidos"] .ops-incoming-actions > p { background:#f1f3f5; color:#334155; }
+.ops-root.ops-workspace.ops-reference[data-page="cocina/pedidos"] .ops-incoming-actions > p :is(strong,svg,span) { color:#334155; }
+
+.ops-root.ops-workspace.ops-reference[data-page="cocina/historial"] .ops-responsive-table .ops-badge { min-height:22px; height:auto; padding:2px 8px; line-height:18px; font-size:12px; }
+.ops-root.ops-workspace.ops-reference[data-page="cocina/historial"] .kr-channel { display:inline-flex; align-items:center; justify-content:center; gap:5px; color:white; border:0; }
+.ops-root.ops-workspace.ops-reference[data-page="cocina/historial"] .kr-channel.channel-Delivery { background:#0069e8; }
+.ops-root.ops-workspace.ops-reference[data-page="cocina/historial"] .kr-channel.channel-Recojo { background:#8200dd; }
+.ops-root.ops-workspace.ops-reference[data-page="cocina/historial"] .kr-channel.channel-Salón { background:#ad6400; }
+.ops-root.ops-workspace.ops-reference[data-page="cocina/historial"] .kr-channel svg { color:white; }
+.ops-root.ops-workspace.ops-reference[data-page="cocina/historial"] .ops-responsive-table :is(th,td):last-child { text-align:center; }
+.ops-root.ops-workspace.ops-reference[data-page="cocina/historial"] .anchor-view-button { display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; min-height:32px; padding:0; margin-inline:auto; }
+.ops-root.ops-workspace.ops-reference[data-page="cocina/historial"] .anchor-view-button svg { display:block; margin:0; width:18px; height:18px; }
+.ops-root.ops-workspace.ops-reference[data-page="cocina/tiempos"] .ops-stat-icon { display:flex; align-items:center; justify-content:center; padding:0; flex-shrink:0; }
+.ops-root.ops-workspace.ops-reference[data-page="cocina/tiempos"] .ops-stat-icon > svg { display:block; position:static; margin:0; transform:none; width:24px; height:24px; flex-shrink:0; }
+.ops-root.ops-workspace.ops-reference[data-page="cocina/tiempos"] [data-panel="Pedidos con demora"] { background:#f3f4f6; border-color:#e2e5e9; }
+
+.ops-root.ops-workspace.ops-reference[data-page="cocina/tiempos"] .ops-responsive-table .kr-channel { display:inline-flex; align-items:center; gap:5px; border:0; color:#fff; }
+.ops-root.ops-workspace.ops-reference[data-page="cocina/tiempos"] .kr-channel.channel-Delivery { background:#0069e8; }
+.ops-root.ops-workspace.ops-reference[data-page="cocina/tiempos"] .kr-channel.channel-Recojo { background:#8200dd; }
+.ops-root.ops-workspace.ops-reference[data-page="cocina/tiempos"] .kr-channel.channel-Salón { background:#ad6400; }
+.ops-root.ops-workspace.ops-reference[data-page="cocina/tiempos"] .kr-channel svg { color:#fff; }
+.ops-root.ops-workspace.ops-reference[data-page="cocina/tiempos"] .ops-responsive-table .kr-status { display:inline-flex; align-items:center; justify-content:center; gap:5px; width:104px; min-height:24px; padding:3px 6px; box-sizing:border-box; border:0; color:#fff; }
+.ops-root.ops-workspace.ops-reference[data-page="cocina/tiempos"] .kr-status.red { background:#ed0017; }
+.ops-root.ops-workspace.ops-reference[data-page="cocina/tiempos"] .kr-status.orange { background:#bd5700; }
+.ops-root.ops-workspace.ops-reference[data-page="cocina/tiempos"] .kr-status.green { background:#008a4b; }
+.ops-root.ops-workspace.ops-reference[data-page="cocina/tiempos"] .kr-status.blue { background:#0069e8; }
+.ops-root.ops-workspace.ops-reference[data-page="cocina/tiempos"] .kr-status svg { width:13px; height:13px; color:#fff; }
+.ops-root.ops-workspace.ops-reference[data-page="cocina/tiempos"] .anchor-kitchen-time-actions button { width:32px; height:32px; min-height:32px; padding:0; display:inline-flex; align-items:center; justify-content:center; }
+.ops-root.ops-workspace.ops-reference[data-page="cocina/tiempos"] .anchor-kitchen-time-actions button:first-child { background:#008a4b; border-color:#008a4b; color:white; }
+.ops-time-action-label { display:none; }
+.ops-root.ops-workspace.ops-reference[data-page="cocina/tiempos"] .kr-time-panels > .ops-panel[data-panel="Pedidos con demora"] { background:#f3f4f6; border-color:#e2e5e9; }
